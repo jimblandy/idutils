@@ -19,6 +19,7 @@
 #include <config.h>
 #include <stdio.h>
 #include <getopt.h>
+#include "xstring.h"
 #include "xnls.h"
 #include "scanners.h"
 #include "idfile.h"

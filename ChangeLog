@@ -1,3 +1,20 @@
+Tue Aug  6 22:46:16 1996  Greg McGary  <gkm@g2>
+
+	* Version 3.2 released
+
+	* src/fid.c (get_file_index): rename shadowing local decl of
+ 	file_name.
+
+	* src/lid.c (report_edit): post decrement argv when splicing in
+ 	ed_arg_buffer.
+
+	* src/xtokid.c, libidu/idfile.h: #include "xstring.h" to avoid
+	redeclaration of basename/dirname error.
+	
+Wed Jul 17 18:06:18 1996  Greg McGary  <gkm@g2>
+	
+	* Version 3.1 released
+	
 Sun Jun 30 13:06:18 1996  Greg McGary  <gkm@g2>
 
 	* src/lid.c (get_query_func): remove unreachable return stmt.

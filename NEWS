@@ -1,5 +1,9 @@
 id-utils NEWS - User visible changes.
 
+Version 3.2 - August 6, 1996, by Greg McGary
+
+* Major bug in eid fixed
+
 Version 3.1 - July 17, 1996, by Greg McGary
 
 * A few more portability bugs are fixed

@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.0 from Makefile.am
+# Makefile.in generated automatically by automake 1.1b from Makefile.am
 
 # Copyright (C) 1994, 1995, 1996 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -69,7 +69,7 @@ CFLAGS = @CFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 
-COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 LINK = $(CC) $(LDFLAGS) -o $@
 
 ANSI2KNR = @ANSI2KNR@
@@ -85,7 +85,7 @@ DATA = $(idu_DATA)
 
 HEADERS = $(noinst_HEADERS)
 
-DIST_COMMON = Makefile.am Makefile.in
+DIST_COMMON = Makefile.am Makefile.in ansi2knr.1 ansi2knr.c
 
 
 PACKAGE = @PACKAGE@
@@ -112,14 +112,14 @@ Makefile: $(top_builddir)/config.status Makefile.in
 mostlyclean-noinstLIBRARIES:
 
 clean-noinstLIBRARIES:
-	rm -f $(noinst_LIBFILES)
+	test -z "$(noinst_LIBFILES)" || rm -f $(noinst_LIBFILES)
 
 distclean-noinstLIBRARIES:
 
 maintainer-clean-noinstLIBRARIES:
 
 .c.o:
-	$(COMPILE) $<
+	$(COMPILE) -c $<
 
 mostlyclean-compile:
 	rm -f *.o core
@@ -135,15 +135,15 @@ maintainer-clean-compile:
 	$(ANSI2KNR) $< > $*.tmp && mv $*.tmp $@
 
 ._c._o:
-	@echo $(COMPILE) $<
+	@echo $(COMPILE) -c $<
 	@rm -f _$*.c
-	@ln $< _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
+	@ln $< _$*.c && $(COMPILE) -c _$*.c && mv _$*.o $@ && rm _$*.c
 
 .c._o:
 	$(ANSI2KNR) $< > $*.tmp && mv $*.tmp $*._c
-	@echo $(COMPILE) $*._c
+	@echo $(COMPILE) -c $*._c
 	@rm -f _$*.c
-	@ln $*._c _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
+	@ln $*._c _$*.c && $(COMPILE) -c _$*.c && mv _$*.o $@ && rm _$*.c
 
 ansi2knr: ansi2knr.o
 	$(LINK) ansi2knr.o $(LIBS)
@@ -195,12 +195,13 @@ mostlyclean-tags:
 clean-tags:
 
 distclean-tags:
-	rm -f TAGS ID
 
 maintainer-clean-tags:
+	rm -f TAGS ID
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
 subdir = libidu
-distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 distdir: $(DEP_DISTFILES)
 	@for file in `cd $(srcdir) && echo $(DISTFILES)`; do \
 	  test -f $(distdir)/$$file \

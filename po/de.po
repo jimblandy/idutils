@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
-"POT-Creation-Date: 1996-07-17 17:58-0400\n"
+"POT-Creation-Date: 1996-08-06 23:24-0400\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Karl Eichwalder <ke@ke.Central.DE>\n"
 "Language-Team: German <de@li.org>\n"
@@ -36,7 +36,7 @@ msgstr ""
 msgid "can't determine the io_size of a string!"
 msgstr ""
 
-#: libidu/idread.c:45 src/mkid.c:386 src/xtokid.c:213
+#: libidu/idread.c:45 src/mkid.c:386 src/xtokid.c:214
 #, c-format
 msgid "can't open `%s'"
 msgstr ""
@@ -245,7 +245,7 @@ msgstr ""
 msgid "%s: option requires an argument -- %c\n"
 msgstr ""
 
-#: src/fid.c:70 src/fnid.c:49 src/lid.c:237 src/mkid.c:120 src/xtokid.c:42
+#: src/fid.c:70 src/fnid.c:49 src/lid.c:237 src/mkid.c:120 src/xtokid.c:43
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr ""
@@ -400,7 +400,7 @@ msgstr ""
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 
-#: src/mkid.c:145 src/xtokid.c:63
+#: src/mkid.c:145 src/xtokid.c:64
 #, c-format
 msgid "Usage: %s [OPTION]... [FILE]...\n"
 msgstr ""
@@ -527,7 +527,7 @@ msgstr ""
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "level %d: %ld == %ld\n"
 
-#: src/xtokid.c:67
+#: src/xtokid.c:68
 msgid ""
 "Print all tokens found in a source file.\n"
 "  -i, --include=LANGS     include languages in LANGS (default: \"C C++ "

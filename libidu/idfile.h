@@ -25,6 +25,7 @@
 # include <sys/types.h>
 #endif
 #include <stdio.h>
+#include "xstring.h"
 #include "xobstack.h"
 #include "hash.h"
 #include "dynvec.h"

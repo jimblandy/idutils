@@ -714,7 +714,7 @@ editit:
 	if (eid_arg)
 	  {
 	    sprintf (ed_arg_buffer, eid_arg, pattern);
-	    *--argv = ed_arg_buffer;
+	    *argv-- = ed_arg_buffer;
 	  }
 	*(char const **) argv = editor;
 	execvp (editor, argv);

@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.0 from Makefile.am
+# Makefile.in generated automatically by automake 1.1b from Makefile.am
 
 # Copyright (C) 1994, 1995, 1996 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -46,7 +46,7 @@ mkinstalldirs = $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 SCRIPTS = $(elc_SCRIPTS)
 
-DIST_COMMON = Makefile.am Makefile.in
+DIST_COMMON = Makefile.am Makefile.in elisp-comp
 
 
 PACKAGE = @PACKAGE@
@@ -86,8 +86,9 @@ tags: TAGS
 TAGS:
 
 
-subdir = lisp
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = lisp
 distdir: $(DEP_DISTFILES)
 	@for file in `cd $(srcdir) && echo $(DISTFILES)`; do \
 	  test -f $(distdir)/$$file \
@@ -153,7 +154,7 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 	@echo "WARNING: Warnings can be ignored. :-)"
 	$(SHELL) $(srcdir)/elisp-comp $<
 .SUFFIXES:
-.SUFFIXES: $(SUFFIXES)
+.SUFFIXES: .el .elc
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -2,7 +2,9 @@
 # Copyright (C) 1992, 1994, 1995 Free Software Foundation, Inc.
 # François Pinard <pinard@iro.umontreal.ca>, 1992.
 
-AC_DEFUN(jm_MAINTAINER_MODE,
+# Add --enable-maintainer-mode option to configure.
+# From Jim Meyering
+AC_DEFUN(AM_MAINTAINER_MODE,
 [AC_MSG_CHECKING([whether to enable maintainer-specific portions of Makefiles])
   dnl maintainer-mode is disabled by default
   AC_ARG_ENABLE(maintainer-mode,
@@ -31,22 +33,25 @@ AC_DEFUN(md_TYPE_PTRDIFF_T,
 ])
 
 ## --------------------------------------------------------- ##
-## Use A*_PROG_INSTALL, supplementing it with INSTALL_SCRIPT ##
-## substitution.					     ##
+## Use AC_PROG_INSTALL, supplementing it with INSTALL_SCRIPT ##
+## substitution.                                             ##
+## From Franc,ois Pinard                                     ##
 ## --------------------------------------------------------- ##
 
-AC_DEFUN(fp_PROG_INSTALL,
-[AC_PROG_INSTALL
+AC_DEFUN(AM_PROG_INSTALL,
+[AC_REQUIRE([AC_PROG_INSTALL])
 test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL} -m 755'
 AC_SUBST(INSTALL_SCRIPT)dnl
 ])
 
 ## ------------------------------- ##
 ## Check for function prototypes.  ##
+## From Franc,ois Pinard           ##
 ## ------------------------------- ##
 
-AC_DEFUN(fp_C_PROTOTYPES,
-[AC_REQUIRE([fp_PROG_CC_STDC])
+AC_DEFUN(AM_C_PROTOTYPES,
+[AC_REQUIRE([AM_PROG_CC_STDC])
+AC_BEFORE([$0], [AC_C_INLINE])
 AC_MSG_CHECKING([for function prototypes])
 if test "$ac_cv_prog_cc_stdc" != no; then
   AC_MSG_RESULT(yes)
@@ -55,6 +60,9 @@ if test "$ac_cv_prog_cc_stdc" != no; then
 else
   AC_MSG_RESULT(no)
   U=_ ANSI2KNR=./ansi2knr
+  # Ensure some checks needed by ansi2knr itself.
+  AC_HEADER_STDC
+  AC_CHECK_HEADERS(string.h)
 fi
 AC_SUBST(U)dnl
 AC_SUBST(ANSI2KNR)dnl
@@ -62,6 +70,7 @@ AC_SUBST(ANSI2KNR)dnl
 
 ## ----------------------------------------- ##
 ## ANSIfy the C compiler whenever possible.  ##
+## From Franc,ois Pinard                     ##
 ## ----------------------------------------- ##
 
 # @defmac AC_PROG_CC_STDC
@@ -80,20 +89,21 @@ AC_SUBST(ANSI2KNR)dnl
 # program @code{ansi2knr}, which comes with Ghostscript.
 # @end defmac
 
-AC_DEFUN(fp_PROG_CC_STDC,
-[AC_MSG_CHECKING(for ${CC-cc} option to accept ANSI C)
+AC_DEFUN(AM_PROG_CC_STDC,
+[AC_REQUIRE([AC_PROG_CC])
+AC_MSG_CHECKING(for ${CC-cc} option to accept ANSI C)
 AC_CACHE_VAL(ac_cv_prog_cc_stdc,
 [ac_cv_prog_cc_stdc=no
-ac_save_CFLAGS="$CFLAGS"
+ac_save_CC="$CC"
 # Don't try gcc -ansi; that turns off useful extensions and
 # breaks some systems' header files.
 # AIX			-qlanglvl=ansi
 # Ultrix and OSF/1	-std1
 # HP-UX			-Aa -D_HPUX_SOURCE
-# SVR4			-Xc -D__EXTENSIONS__
-for ac_arg in "" -qlanglvl=ansi -std1 "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
+# SVR4			-Xc
+for ac_arg in "" -qlanglvl=ansi -std1 "-Aa -D_HPUX_SOURCE" -Xc
 do
-  CFLAGS="$ac_save_CFLAGS $ac_arg"
+  CC="$ac_save_CC $ac_arg"
   AC_TRY_COMPILE(
 [#if !defined(__STDC__) || __STDC__ != 1
 choke me
@@ -106,7 +116,7 @@ struct s1 {int (*f) (int a);};
 struct s2 {int (*f) (double a);};],
 [ac_cv_prog_cc_stdc="$ac_arg"; break])
 done
-CFLAGS="$ac_save_CFLAGS"
+CC="$ac_save_CC"
 ])
 AC_MSG_RESULT($ac_cv_prog_cc_stdc)
 case "x$ac_cv_prog_cc_stdc" in

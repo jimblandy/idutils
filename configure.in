@@ -19,8 +19,8 @@ AC_ARG_PROGRAM
 ##############################################################################
 
 PACKAGE=id-utils
-VERSION=3.1
-PACKAGE_VERSION="$PACKAGE-$VERSION"
+VERSION=3.2
+PACKAGE_VERSION="GNU $PACKAGE $VERSION"
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
 AC_DEFINE_UNQUOTED(PACKAGE_VERSION, "$PACKAGE_VERSION")
@@ -32,7 +32,7 @@ AC_SUBST(PACKAGE_VERSION)
 ################ Maintainer Stuff ############################################
 ##############################################################################
 
-jm_MAINTAINER_MODE
+AM_MAINTAINER_MODE
 
 ALL_LINGUAS="de fr"
 
@@ -50,7 +50,7 @@ AC_SUBST(README_ALPHA)
 
 AC_PROG_CC
 AC_PROG_LN_S
-fp_PROG_INSTALL
+AM_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_PROG_CPP
 AC_PROG_GCC_TRADITIONAL
@@ -82,7 +82,7 @@ AC_CHECK_HEADERS(malloc.h termios.h termio.h sgtty.h regex.h memory.h)
 ##############################################################################
 
 AC_C_CONST
-fp_C_PROTOTYPES
+AM_C_PROTOTYPES
 AC_TYPE_SIGNAL
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T

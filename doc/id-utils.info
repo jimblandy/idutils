@@ -1,5 +1,5 @@
-This is Info file ../../doc/id-utils.info, produced by Makeinfo-1.63
-from the input file ../../doc/id-utils.texi.
+This is Info file id-utils.info, produced by Makeinfo-1.63 from the
+input file id-utils.texi.
 
 START-INFO-DIR-ENTRY
 * ID database: (id-utils).              Identifier database utilities.
@@ -34,7 +34,7 @@ File: id-utils.info,  Node: Top,  Next: Introduction,  Up: (dir)
 ID utilities
 ************
 
-   This manual documents version 3.1 of the ID utilities.
+   This manual documents version 3.2 of the ID utilities.
 
 * Menu:
 
@@ -1147,30 +1147,30 @@ Index
 
 
 Tag Table:
-Node: Top1298
-Node: Introduction2051
-Node: Quick start4580
-Node: Common options5505
-Node: Universal options6303
-Node: Reading options6628
-Node: Writing options7745
-Node: Walker options8241
-Node: File listing options9080
-Node: Extraction options10171
-Node: Language map12721
-Node: C/C++ scanner14927
-Node: Assembler scanner16542
-Node: Text scanner18638
-Node: Defining scanners19446
-Node: mkid invocation20668
-Node: lid invocation22949
-Node: lid aliases28334
-Node: Emacs gid interface29012
-Node: eid invocation29929
-Node: fid invocation32513
-Node: fnid invocation33200
-Node: xtokid invocation33875
-Node: Past and Future34814
-Node: Index37506
+Node: Top1278
+Node: Introduction2031
+Node: Quick start4560
+Node: Common options5485
+Node: Universal options6283
+Node: Reading options6608
+Node: Writing options7725
+Node: Walker options8221
+Node: File listing options9060
+Node: Extraction options10151
+Node: Language map12701
+Node: C/C++ scanner14907
+Node: Assembler scanner16522
+Node: Text scanner18618
+Node: Defining scanners19426
+Node: mkid invocation20648
+Node: lid invocation22929
+Node: lid aliases28314
+Node: Emacs gid interface28992
+Node: eid invocation29909
+Node: fid invocation32493
+Node: fnid invocation33180
+Node: xtokid invocation33855
+Node: Past and Future34794
+Node: Index37486
 
 End Tag Table

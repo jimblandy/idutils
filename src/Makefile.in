@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.0 from Makefile.am
+# Makefile.in generated automatically by automake 1.1b from Makefile.am
 
 # Copyright (C) 1994, 1995, 1996 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -67,7 +67,7 @@ CFLAGS = @CFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 
-COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 LINK = $(CC) $(LDFLAGS) -o $@
 
 ANSI2KNR = @ANSI2KNR@
@@ -94,7 +94,7 @@ EXTRA_xtokid_SOURCES =
 xtokid_LDADD = $(LDADD)
 SCRIPTS = $(bin_SCRIPTS)
 
-DIST_COMMON = Makefile.am Makefile.in
+DIST_COMMON = Makefile.am Makefile.in ansi2knr.1 ansi2knr.c
 
 
 PACKAGE = @PACKAGE@
@@ -121,7 +121,7 @@ Makefile: $(top_builddir)/config.status Makefile.in
 mostlyclean-binPROGRAMS:
 
 clean-binPROGRAMS:
-	rm -f $(bin_PROGRAMS)
+	test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 
 distclean-binPROGRAMS:
 
@@ -141,7 +141,7 @@ uninstall-binPROGRAMS:
 	done
 
 .c.o:
-	$(COMPILE) $<
+	$(COMPILE) -c $<
 
 mostlyclean-compile:
 	rm -f *.o core
@@ -157,15 +157,15 @@ maintainer-clean-compile:
 	$(ANSI2KNR) $< > $*.tmp && mv $*.tmp $@
 
 ._c._o:
-	@echo $(COMPILE) $<
+	@echo $(COMPILE) -c $<
 	@rm -f _$*.c
-	@ln $< _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
+	@ln $< _$*.c && $(COMPILE) -c _$*.c && mv _$*.o $@ && rm _$*.c
 
 .c._o:
 	$(ANSI2KNR) $< > $*.tmp && mv $*.tmp $*._c
-	@echo $(COMPILE) $*._c
+	@echo $(COMPILE) -c $*._c
 	@rm -f _$*.c
-	@ln $*._c _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
+	@ln $*._c _$*.c && $(COMPILE) -c _$*.c && mv _$*.o $@ && rm _$*.c
 
 ansi2knr: ansi2knr.o
 	$(LINK) ansi2knr.o $(LIBS)
@@ -232,19 +232,20 @@ mostlyclean-tags:
 clean-tags:
 
 distclean-tags:
-	rm -f TAGS ID
 
 maintainer-clean-tags:
+	rm -f TAGS ID
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
 subdir = src
-distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 distdir: $(DEP_DISTFILES)
 	@for file in `cd $(srcdir) && echo $(DISTFILES)`; do \
 	  test -f $(distdir)/$$file \
 	  || ln $(srcdir)/$$file $(distdir)/$$file 2> /dev/null \
 	  || cp -p $(srcdir)/$$file $(distdir)/$$file; \
 	done
-fid$o: ../src/fid.c ../lib/xstring.h ../lib/xunistd.h \
+fid$o: fid.c ../lib/xstring.h ../lib/xunistd.h \
  ../libidu/xnls.h ../libidu/idfile.h ../lib/xobstack.h \
  ../lib/xmalloc.h ../libidu/hash.h ../libidu/dynvec.h \
  ../libidu/tokflags.h ../lib/error.h ../lib/pathmax.h \
@@ -265,11 +266,10 @@ mkid$o: ../src/mkid.c ../lib/xstdlib.h ../lib/xsysstat.h \
  ../lib/xobstack.h ../lib/xmalloc.h ../libidu/hash.h \
  ../libidu/dynvec.h ../libidu/tokflags.h ../libidu/scanners.h \
  ../lib/error.h ../lib/xalloca.h
-xtokid$o: ../src/xtokid.c ../libidu/xnls.h \
+xtokid$o: xtokid.c ../lib/xstring.h ../libidu/xnls.h \
  ../libidu/scanners.h ../lib/xobstack.h ../lib/xmalloc.h \
- ../lib/xstring.h ../libidu/idfile.h ../libidu/hash.h \
- ../libidu/dynvec.h ../libidu/tokflags.h ../lib/pathmax.h \
- ../lib/error.h
+ ../libidu/idfile.h ../libidu/hash.h ../libidu/dynvec.h \
+ ../libidu/tokflags.h ../lib/pathmax.h ../lib/error.h
 
 info:
 

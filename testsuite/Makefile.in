@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.0 from Makefile.am
+# Makefile.in generated automatically by automake 1.1b from Makefile.am
 
 # Copyright (C) 1994, 1995, 1996 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -67,8 +67,9 @@ tags: TAGS
 TAGS:
 
 
-subdir = testsuite
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = testsuite
 distdir: $(DEP_DISTFILES)
 	@for file in `cd $(srcdir) && echo $(DISTFILES)`; do \
 	  test -f $(distdir)/$$file \
@@ -82,7 +83,7 @@ check-TESTS: $(TESTS)
 	  all=`expr $$all + 1`; \
 	  if test -f $$tst; then dir=.; \
 	  else dir="$(srcdir)"; fi; \
-	  if $$dir/$$tst; then \
+	  if $(TESTS_ENVIRONMENT) $$dir/$$tst; then \
 	    echo "PASS: $$tst"; \
 	  else \
 	    failed=`expr $$failed + 1`; \
