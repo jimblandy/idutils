@@ -20,15 +20,15 @@
 #define _misc_h_
 
 #if !HAVE_BASENAME
-char const *basename (char const *path);
+char const *basename __P((char const *path));
 #endif
 #if !HAVE_DIRNAME
-char const *dirname (char const *path);
+char const *dirname __P((char const *path));
 #endif
-int fgets0 (char *buf0, int size, FILE *in_FILE);
-void filerr (char const *syscall, char const *file_name);
-int tree8_count_levels (unsigned int cardinality);
-int gets_past_00 (char *tok, FILE *input_FILE);
-int skip_past_00 (FILE *input_FILE);
+int fgets0 __P((char *buf0, int size, FILE *in_FILE));
+void filerr __P((char const *syscall, char const *file_name));
+int tree8_count_levels __P((unsigned int cardinality));
+int gets_past_00 __P((char *tok, FILE *input_FILE));
+int skip_past_00 __P((FILE *input_FILE));
 
 #endif /* not _misc_h_ */

@@ -1,14 +1,15 @@
 /* static char copyright[] = "@(#)Copyright (c) 1986, Greg McGary";
    static char sccsid[] = "@(#)idx.c	1.2 86/10/17"; */
 
-#include "config.h"
 #include <stdio.h>
 #include <string.h>
+
+#include <config.h>
 #include "misc.h"
 #include "filenames.h"
 #include "scanners.h"
 
-void idxtract (char *path);
+void idxtract __P((char *path));
 
 char const *program_name;
 

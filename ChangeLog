@@ -1,4 +1,43 @@
+Sat Feb 25 16:23:49 1995  Greg McGary  <gkm@magilla.cichlid.com>
+
+	* Version 3.0.8 released.
+
+	* configure.in, acconfig.h, Makefile.in (TOUCH, PREV_VERSION):
+	Added.  (check): Export PATH.  (TAGS): Eliminate unnecessary `-t'
+	option to etags.  (mostlyclean, clean, distclean,
+	maintainer-clean, install): Bring into conformance with GNU
+	standards.  (AWK, OLD_PATCH_LEVEL, PATCH_LEVEL, SIZEOF_LONG,
+	bump-major, bump-minor, bump-patch): Deleted.  (ANSI2KNR,
+	ansi2knr): Added.  (depend): Fixed to support ansi2knr.
+
+	* configure.in: Update stamp-h inside AC_OUTPUT.
+
+	* acconfig.h: Work harder to force #undef of HAVE_TERMIOS_H for	NeXT.
+	(__P): Added.
+
+	* bitops.c, fid.c, filenames.c, idfile.c, idx.c, iid.c, lid.c,
+	misc.c, mkid.c, scanners.c, token.c: Changed "config.h" to <config.h>.
+
+	* acconfig.h, bitops.c, bitops.h, fid.c, filenames.h, idfile.c,
+	idfile.h, idx.c, iid.c, lid.c, misc.h, mkid.c, scanners.c,
+	scanners.h, token.h: Use __P around function prototype decls.
+
+	* acconfig.h, idfile.h, idfile.c (intmin32_t, uintmin32_t):
+	Deleted in favor of long and unsigned long.
+
+	* idtest: Fixed bugs (Thanks to Francois Pinard).
+
+	* mkid.c (write_idfile): Delete erroneous remnant of old file name
+	indexing scheme (Reported by Dave Wiggins).  (assert_hits):
+	Simplified & fixed erroneous assertion.
+
+	* lid.c (grep_id): Treat '\0' as end-of-line along with '\n'.
+
+	* strerror.c (strerror): Protoize defn.
+
 Mon Feb 20 16:18:47 1995  Greg McGary  <gkm@magilla.cichlid.com>
+
+	* Version 3.0.7 released.
 
 	* scanners.c (scanners, suffixes, init_scanners, get_scanner,
 	set_scan_args, get_lang_name, get_filter, get_suffix): Fixed
@@ -25,9 +64,10 @@ Mon Feb 20 16:18:47 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
 Sun Feb 19 19:21:09 1995  Thomas Neumann  <tom@smart.ruhr.de>
  
- 	* configure.in: Check for <sgtty.h>, not <sgttyb.h>.  *
-	accconfig.h: Disbale HAVE_TERMIOS_H for NeXT, if HAVE_SGTTY_H is
-	present.  * lid.c: Depend on HAVE_SGTTY_H, not HAVE_SGTTYB_H.
+ 	* configure.in: Check for <sgtty.h>, not <sgttyb.h>.
+	* accconfig.h: Disbale HAVE_TERMIOS_H for NeXT,
+	if HAVE_SGTTY_H is present.
+	* lid.c: Depend on HAVE_SGTTY_H, not HAVE_SGTTYB_H.
 	(savetty): ANSI'fy arglist declaration.
  
 Sat Feb 18 21:44:39 1995  Greg McGary  <gkm@magilla.cichlid.com>

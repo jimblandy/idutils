@@ -16,7 +16,6 @@
    Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "config.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -29,6 +28,8 @@
 #include <assert.h>
 #include <limits.h>
 #include <regex.h>
+
+#include <config.h>
 #include "alloc.h"
 #include "idfile.h"
 #include "idarg.h"
@@ -38,43 +39,43 @@
 #include "misc.h"
 #include "filenames.h"
 
-typedef void (*doit_t) (char const *name, char **argv);
+typedef void (*doit_t) __P((char const *name, char **argv));
 
-unsigned char *tree8_to_bits (unsigned char *bits_vec, unsigned char const *hits_tree8);
-void tree8_to_bits_1 (unsigned char **bits_vec, unsigned char const **hits_tree8, int level);
-char **tree8_to_argv (unsigned char const *hits_tree8);
-char **bits_to_argv (unsigned char const *bits_vec);
+unsigned char *tree8_to_bits __P((unsigned char *bits_vec, unsigned char const *hits_tree8));
+void tree8_to_bits_1 __P((unsigned char **bits_vec, unsigned char const **hits_tree8, int level));
+char **tree8_to_argv __P((unsigned char const *hits_tree8));
+char **bits_to_argv __P((unsigned char const *bits_vec));
 
-static void usage (void);
-void look_id (char const *name, char **argv);
-void grep_id (char const *name, char **argv);
-void edit_id (char const *name, char **argv);
-int skip_to_argv (char **argv);
-int find_plain (char const *arg, doit_t doit);
-int find_anchor (char const *arg, doit_t doit);
-int find_regexp (char const *arg, doit_t doit);
-int find_number (char const *arg, doit_t doit);
-int find_non_unique (unsigned int, doit_t doit);
-int find_apropos (char const *arg, doit_t doit);
-void parse_frequency_arg (char const *arg);
-int frequency_wanted (char const *tok);
-char const *strcpos (char const *s1, char const *s2);
-char const *file_regexp (char const *name0, char const *left_delimit, char const *right_delimit);
-off_t find_token (char const *token);
-int is_regexp (char *name);
-char **vec_to_argv (int const *vec);
-int file_name_wildcard (char const *re, char const *fn);
-int match_file_names (char const *re, doit_t doit);
-int word_match (char const *name0, char const *line);
-int radix (char const *name);
-int stoi (char const *name);
-int otoi (char const *name);
-int dtoi (char const *name);
-int xtoi (char const *name);
-void savetty (void);
-void restoretty (void);
-void linetty (void);
-void chartty (void);
+static void usage __P((void));
+void look_id __P((char const *name, char **argv));
+void grep_id __P((char const *name, char **argv));
+void edit_id __P((char const *name, char **argv));
+int skip_to_argv __P((char **argv));
+int find_plain __P((char const *arg, doit_t doit));
+int find_anchor __P((char const *arg, doit_t doit));
+int find_regexp __P((char const *arg, doit_t doit));
+int find_number __P((char const *arg, doit_t doit));
+int find_non_unique __P((unsigned int, doit_t doit));
+int find_apropos __P((char const *arg, doit_t doit));
+void parse_frequency_arg __P((char const *arg));
+int frequency_wanted __P((char const *tok));
+char const *strcpos __P((char const *s1, char const *s2));
+char const *file_regexp __P((char const *name0, char const *left_delimit, char const *right_delimit));
+off_t find_token __P((char const *token));
+int is_regexp __P((char *name));
+char **vec_to_argv __P((int const *vec));
+int file_name_wildcard __P((char const *re, char const *fn));
+int match_file_names __P((char const *re, doit_t doit));
+int word_match __P((char const *name0, char const *line));
+int radix __P((char const *name));
+int stoi __P((char const *name));
+int otoi __P((char const *name));
+int dtoi __P((char const *name));
+int xtoi __P((char const *name));
+void savetty __P((void));
+void restoretty __P((void));
+void linetty __P((void));
+void chartty __P((void));
 
 enum radix {
   RADIX_OCT = 1,
@@ -369,8 +370,6 @@ look_id (char const *name, char **argv)
 void
 grep_id (char const *name, char **argv)
 {
-  FILE *gid_FILE;
-  char const *gid_name;
   char line[BUFSIZ];
   char const *re = NULL;
   int line_number;
@@ -392,10 +391,12 @@ grep_id (char const *name, char **argv)
   line[0] = ' ';		/* sentry */
   while (*argv)
     {
-      gid_FILE = fopen (gid_name = *argv++, "r");
+      char const *file_name = *argv++;
+      FILE *gid_FILE = fopen (file_name, "r");
+
       if (gid_FILE == NULL)
 	{
-	  filerr ("open", gid_name);
+	  filerr ("open", file_name);
 	  continue;
 	}
       line_number = 0;
@@ -409,7 +410,7 @@ grep_id (char const *name, char **argv)
 	    }
 	  else if (!word_match (name, line))
 	    continue;
-	  printf ("%s:%d: %s", gid_name, line_number, &line[1]);
+	  printf ("%s:%d: %s", file_name, line_number, &line[1]);
 	}
       fclose (gid_FILE);
     }
@@ -1076,7 +1077,7 @@ word_match (char const *name0, char const *line)
       /* find an initial-character match */
       while (*line != *name)
 	{
-	  if (*line == '\n')
+	  if (*line == '\0' || *line == '\n')
 	    return 0;
 	  line++;
 	}

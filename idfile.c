@@ -16,18 +16,20 @@
    Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "config.h"
 #include <stdio.h>
 #include <string.h>
+
+#include <config.h>
 #include "alloc.h"
 #include "idfile.h"
 #include "idarg.h"
 #include "strxtra.h"
 
-static int io_idhead (FILE *fp, int (*io) (FILE *, void *, unsigned int, int), struct idhead *idh);
-static int io_write (FILE *output_FILE, void *addr, unsigned int size, int is_int);
-static int io_read (FILE *input_FILE, void *addr, unsigned int size, int is_int);
-static int io_size (FILE *, void *, unsigned int size, int);
+typedef int (*iof_t) __P((FILE *, void *, unsigned int, int));
+static int io_idhead __P((FILE *fp, iof_t iof, struct idhead *idh));
+static int io_write __P((FILE *output_FILE, void *addr, unsigned int size, int is_int));
+static int io_read __P((FILE *input_FILE, void *addr, unsigned int size, int is_int));
+static int io_size __P((FILE *, void *, unsigned int size, int));
 
 extern char *program_name;
 
@@ -113,11 +115,11 @@ io_read (FILE *input_FILE, void *addr, unsigned int size, int is_int)
     {
       switch (size)
 	{
-	case 4: /* This must be a literal 4.  Don't use sizeof (uintmin32_t)! */
-	  *(uintmin32_t *)addr = getc (input_FILE);
-	  *(uintmin32_t *)addr += getc (input_FILE) << 010;
-	  *(uintmin32_t *)addr += getc (input_FILE) << 020;
-	  *(uintmin32_t *)addr += getc (input_FILE) << 030;
+	case 4: /* This must be a literal 4.  Don't use sizeof (unsigned long)! */
+	  *(unsigned long *)addr = getc (input_FILE);
+	  *(unsigned long *)addr += getc (input_FILE) << 010;
+	  *(unsigned long *)addr += getc (input_FILE) << 020;
+	  *(unsigned long *)addr += getc (input_FILE) << 030;
 	  break;
 	case 2:
 	  *(unsigned short *)addr = getc (input_FILE);
@@ -145,11 +147,11 @@ io_write (FILE *output_FILE, void *addr, unsigned int size, int is_int)
     {
       switch (size)
 	{
-	case 4: /* This must be a literal 4.  Don't use sizeof (uintmin32_t)! */
-	  putc (*(uintmin32_t *)addr, output_FILE);
-	  putc (*(uintmin32_t *)addr >> 010, output_FILE);
-	  putc (*(uintmin32_t *)addr >> 020, output_FILE);
-	  putc (*(uintmin32_t *)addr >> 030, output_FILE);
+	case 4: /* This must be a literal 4.  Don't use sizeof (unsigned long)! */
+	  putc (*(unsigned long *)addr, output_FILE);
+	  putc (*(unsigned long *)addr >> 010, output_FILE);
+	  putc (*(unsigned long *)addr >> 020, output_FILE);
+	  putc (*(unsigned long *)addr >> 030, output_FILE);
 	  break;
 	case 2:
 	  putc (*(unsigned short *)addr, output_FILE);
@@ -176,22 +178,22 @@ io_write (FILE *output_FILE, void *addr, unsigned int size, int is_int)
    (e.g., Cray) */
 
 static int
-io_idhead (FILE *fp, int (*io) (FILE *, void *, unsigned int, int), struct idhead *idh)
+io_idhead (FILE *fp, iof_t iof, struct idhead *idh)
 {
   unsigned int size = 0;
   if (fp)
     fseek (fp, 0L, 0);
-  size += io (fp, idh->idh_magic, 2, 0);
-  size += io (fp, &idh->idh_pad_1, 1, 0);
-  size += io (fp, &idh->idh_version, 1, 0);
-  size += io (fp, &idh->idh_flags, 2, 1);
-  size += io (fp, &idh->idh_args, 4, 1);
-  size += io (fp, &idh->idh_paths, 4, 1);
-  size += io (fp, &idh->idh_tokens, 4, 1);
-  size += io (fp, &idh->idh_buf_size, 4, 1);
-  size += io (fp, &idh->idh_vec_size, 4, 1);
-  size += io (fp, &idh->idh_args_offset, 4, 1);
-  size += io (fp, &idh->idh_tokens_offset, 4, 1);
-  size += io (fp, &idh->idh_end_offset, 4, 1);
+  size += iof (fp, idh->idh_magic, 2, 0);
+  size += iof (fp, &idh->idh_pad_1, 1, 0);
+  size += iof (fp, &idh->idh_version, 1, 0);
+  size += iof (fp, &idh->idh_flags, 2, 1);
+  size += iof (fp, &idh->idh_args, 4, 1);
+  size += iof (fp, &idh->idh_paths, 4, 1);
+  size += iof (fp, &idh->idh_tokens, 4, 1);
+  size += iof (fp, &idh->idh_buf_size, 4, 1);
+  size += iof (fp, &idh->idh_vec_size, 4, 1);
+  size += iof (fp, &idh->idh_args_offset, 4, 1);
+  size += iof (fp, &idh->idh_tokens_offset, 4, 1);
+  size += iof (fp, &idh->idh_end_offset, 4, 1);
   return size;
 }

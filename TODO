@@ -45,6 +45,8 @@
     enum-tag, keyword, etc.  Store caller/callee relationships between
     identifiers.  Indicate which files have defns vs. uses.  This info
     is needed to support a cscope interface.
+  - Add times(2) results to statistics output.
+  - treat \ specially for TeX files and do likewise with @ for Texinfo.
 
 * cscope
   - add a cscope work-alike query interface (this is being done by

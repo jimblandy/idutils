@@ -16,11 +16,11 @@
    Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "config.h"
+#include <config.h>
 #include "bitops.h"
 
-static int str_to_int (char *bufp, int size);
-static char *int_to_str (int i, int size);
+static int str_to_int __P((char *bufp, int size));
+static char *int_to_str __P((int i, int size));
 
 int
 vec_to_bits (char *bit_array, char *vec, int size)

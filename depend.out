@@ -1,20 +1,20 @@
-mkid.o: mkid.c config.h strxtra.h alloc.h idfile.h idarg.h token.h bitops.h misc.h \
+mkid$o: mkid.c config.h strxtra.h alloc.h idfile.h idarg.h token.h bitops.h misc.h \
   filenames.h scanners.h
-lid.o: lid.c config.h alloc.h idfile.h idarg.h token.h bitops.h strxtra.h misc.h \
+lid$o: lid.c config.h alloc.h idfile.h idarg.h token.h bitops.h strxtra.h misc.h \
   filenames.h
-fid.o: fid.c config.h idfile.h idarg.h bitops.h filenames.h misc.h strxtra.h \
+fid$o: fid.c config.h idfile.h idarg.h bitops.h filenames.h misc.h strxtra.h \
   alloc.h token.h
-idx.o: idx.c config.h misc.h filenames.h scanners.h
-misc.o: misc.c config.h strxtra.h misc.h
-scanners.o: scanners.c config.h strxtra.h token.h alloc.h scanners.h
-idfile.o: idfile.c config.h alloc.h idfile.h idarg.h strxtra.h
-filenames.o: filenames.c config.h strxtra.h filenames.h misc.h
-bitops.o: bitops.c config.h bitops.h
-token.o: token.c config.h token.h
-regex.o: regex.c regex.h
-alloca.o: alloca.c
-getopt.o: getopt.c
-getopt1.o: getopt1.c getopt.h
-strcasecmp.o: strcasecmp.c
-strerror.o: strerror.c
-iid.o: iid.c ./config.h ./strxtra.h
+idx$o: idx.c config.h misc.h filenames.h scanners.h
+misc$o: misc.c config.h strxtra.h misc.h
+scanners$o: scanners.c config.h strxtra.h token.h alloc.h scanners.h
+idfile$o: idfile.c config.h alloc.h idfile.h idarg.h strxtra.h
+filenames$o: filenames.c config.h strxtra.h filenames.h misc.h
+bitops$o: bitops.c config.h bitops.h
+token$o: token.c config.h token.h
+regex$o: regex.c config.h regex.h
+alloca$o: alloca.c
+getopt$o: getopt.c
+getopt1$o: getopt1.c getopt.h
+strcasecmp$o: strcasecmp.c
+strerror$o: strerror.c
+iid$o: iid.c ./config.h ./strxtra.h

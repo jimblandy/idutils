@@ -34,21 +34,21 @@ struct idhead
 #define	IDH_VERSION	3
   unsigned short idh_flags;
 #define IDH_COUNTS 0x0001	/* occurrence counts are included with each token */
-  uintmin32_t idh_args;		/* total # of args for mkid update */
-  uintmin32_t idh_paths;	/* total # of file names for mkid update */
-  uintmin32_t idh_tokens;	/* total # of tokens */
-  uintmin32_t idh_buf_size;	/* # of bytes in longest entry (bufsiz for lid) */
-  uintmin32_t idh_vec_size;	/* # of hits in longest entry (max vector size for lid) */
-  intmin32_t idh_args_offset;	/* file offset of args */
-  intmin32_t idh_tokens_offset;	/* file offset of tokens section */
-  intmin32_t idh_end_offset;	/* file offset beyond tokens section */
+  unsigned long idh_args;	/* total # of args for mkid update */
+  unsigned long idh_paths;	/* total # of file names for mkid update */
+  unsigned long idh_tokens;	/* total # of tokens */
+  unsigned long idh_buf_size;	/* # of bytes in longest entry (bufsiz for lid) */
+  unsigned long idh_vec_size;	/* # of hits in longest entry (max vector size for lid) */
+  long idh_args_offset;		/* file offset of args */
+  long idh_tokens_offset;	/* file offset of tokens section */
+  long idh_end_offset;		/* file offset beyond tokens section */
 };
 
 struct idarg;
 
-FILE *init_idfile (char const *id_file, struct idhead *idhp, struct idarg **id_args);
-int read_idhead (FILE *input_FILE, struct idhead *idh);
-int write_idhead (FILE *input_FILE, struct idhead *idh);
-int sizeof_idhead (void);
+FILE *init_idfile __P((char const *id_file, struct idhead *idhp, struct idarg **id_args));
+int read_idhead __P((FILE *input_FILE, struct idhead *idh));
+int write_idhead __P((FILE *input_FILE, struct idhead *idh));
+int sizeof_idhead __P((void));
 
 #endif /* not _idfile_h_ */

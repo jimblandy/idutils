@@ -33,8 +33,8 @@
 #define TOK_SHORT_COUNT	0x80	/* count is two bytes */
 
 #define tok_string(buf) (buf)
-unsigned int tok_flags (char const *buf);
-unsigned short tok_count (char const *buf);
-unsigned char const *tok_hits_addr (char const *buf);
+unsigned int tok_flags __P((char const *buf));
+unsigned short tok_count __P((char const *buf));
+unsigned char const *tok_hits_addr __P((char const *buf));
 
 #endif /* not _token_h_ */

@@ -20,8 +20,7 @@
 
 PACKAGE =	@PACKAGE@
 VERSION =	@VERSION@
-PATCH_LEVEL =	@PATCH_LEVEL@
-OLD_PATCH_LEVEL=@OLD_PATCH_LEVEL@
+PREV_VERSION =	@PREV_VERSION@
 
 SHELL =		/bin/sh
 VPATH =		@srcdir@
@@ -32,19 +31,20 @@ srcdir =	@srcdir@
 exec_prefix =	@exec_prefix@
 bindir =	$(exec_prefix)/bin
 infodir =	$(prefix)/info
-libdir =	@libdir@
+datadir =	@datadir@
 
 ##############################################################################
 
 CC =		@CC@
 YACC =		@YACC@
 LN_S =		@LN_S@
-AWK =		@AWK@
-MAKEINFO =	makeinfo
-TEXI2DVI =	texi2dvi
 INSTALL =	@INSTALL@
 INSTALL_DATA =	@INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
+ANSI2KNR =	@ANSI2KNR@
+MAKEINFO =	makeinfo
+TEXI2DVI =	texi2dvi
+TOUCH =		echo timestamp >
 
 CFLAGS =	@CFLAGS@
 LDFLAGS =	@LDFLAGS@
@@ -65,11 +65,13 @@ LID_LINKS =	eid aid gid pid
 
 ########################################
 
-MKID_OFILES =	mkid.o misc.o scanners.o idfile.o filenames.o bitops.o $(LIB_OFILES)
-LID_OFILES =	lid.o misc.o idfile.o filenames.o bitops.o token.o $(REGEXP) $(LIB_OFILES)
-FID_OFILES =	fid.o misc.o idfile.o filenames.o bitops.o token.o $(LIB_OFILES)
-IDX_OFILES =	idx.o scanners.o filenames.o misc.o $(LIB_OFILES)
-IID_OFILES =	iid.o $(STRCASECMP) $(LIB_OFILES)
+MKID_OFILES =	mkid$o misc$o scanners$o idfile$o filenames$o bitops$o $(LIB_OFILES)
+LID_OFILES =	lid$o misc$o idfile$o filenames$o bitops$o token$o $(REGEXP) $(LIB_OFILES)
+FID_OFILES =	fid$o misc$o idfile$o filenames$o bitops$o token$o $(LIB_OFILES)
+IDX_OFILES =	idx$o scanners$o filenames$o misc$o $(LIB_OFILES)
+IID_OFILES =	iid$o $(STRCASECMP) $(LIB_OFILES)
+
+ALL_OFILES =	$(MKID_OFILES) $(LID_OFILES) $(FID_OFILES) $(IDX_OFILES) $(IID_OFILES)
 
 ########################################
 
@@ -86,12 +88,12 @@ SRC_HFILES =	alloc.h bitops.h filenames.h idarg.h \
 LIB_HFILES =	regex.h getopt.h
 
 TAG_SRC_FILES =	$(SRC_HFILES) $(LIB_HFILES) $(SRC_CFILES) $(LIB_CFILES) $(SRC_YFILES)
-DIST_SRC_FILES =$(ALL_CFILES) $(SRC_HFILES) $(LIB_HFILES) $(SRC_YFILES)
+DIST_SRC_FILES= $(ALL_CFILES) $(SRC_HFILES) $(LIB_HFILES) $(SRC_YFILES)
 
 INFO_FILES =	mkid.info
-DIST_DOC_FILES =mkid.texinfo version.texi stamp-vti $(INFO_FILES) fid.1 iid.1 lid.1 mkid.1 iid.help
+DIST_DOC_FILES= mkid.texinfo version.texi stamp-vti $(INFO_FILES) fid.1 iid.1 lid.1 mkid.1 iid.help
 DIST_CONF_FILES=aclocal.m4 acconfig.h configure.in Makefile.in mkdirhier install-sh \
-		stamp-h.in config.h.in configure $(DEPEND)
+		stamp-h.in config.h.in configure $(DEPEND) ansi2knr.c ansi2knr.1
 DIST_MISC_FILES=COPYING README README.alpha-test INSTALL NEWS TODO THANKS \
 		idtest gid.el ChangeLog
 
@@ -99,33 +101,62 @@ DIST_FILES =	$(DIST_CONF_FILES) $(DIST_SRC_FILES) $(DIST_DOC_FILES) $(DIST_MISC_
 
 ########################################
 
-DIST_DIR =	$(PACKAGE)-$(VERSION).$(PATCH_LEVEL)
+DIST_DIR =	$(PACKAGE)-$(VERSION)
 DIST_TGZ =	$(DIST_DIR).tar.gz
 DIST_UU =	$(DIST_TGZ).uu
 DIST_SHAR =	$(DIST_DIR).shar
 
-OLD_DIST_DIR =	$(PACKAGE)-$(VERSION).$(OLD_PATCH_LEVEL)
+OLD_DIST_DIR =	$(PACKAGE)-$(PREV_VERSION)
 
-PATCH_C_GZ =	$(OLD_DIST_DIR)-$(VERSION).$(PATCH_LEVEL).diff.gz
-PATCH_U_GZ =	$(OLD_DIST_DIR)-$(VERSION).$(PATCH_LEVEL).udiff.gz
-PATCH_C_UU =	$(PATCH_C_GZ).uu
+CDIFF_GZ =	$(OLD_DIST_DIR)-$(VERSION).diff.gz
+UDIFF_GZ =	$(OLD_DIST_DIR)-$(VERSION).udiff.gz
+CDIFF_UU =	$(CDIFF_GZ).uu
 
 ##############################################################################
 
 .PRECIOUS: $(DEPEND) Makefile configure config.h config.h.in
 
 .SUFFIXES:
-.SUFFIXES: .c .i .o
+.SUFFIXES: .c .i ._c ._i ._o .o
 
+o =		.@U@o
 INCLUDES =	-I. -I$(srcdir)
 CC_FLAGS =	$(DEFS) $(CPPFLAGS) $(INCLUDES) $(CFLAGS)
 LINK =		$(CC) $(LDFLAGS) -o $@
+COMPILE =	$(CC) -c $(CC_FLAGS)
+PRE_PROCESS =	$(CPP) $(CC_FLAGS)
+
+########################################
 
 # This is a convenient diagnostic aid: get a cpp'ed foo.c with "make foo.i"
 .c.i:
-	$(CPP) $(CC_FLAGS) $< >$@
+	$(PRE_PROCESS) $< >$@
 .c.o:
-	$(CC) $(CC_FLAGS) -c $<
+	$(COMPILE) $<
+
+########################################
+
+.c._c:
+	$(ANSI2KNR) $< > $@.tmp && mv $@.tmp $@
+._c._o:
+	@echo $(COMPILE) $<
+	@rm -f _$*.c
+	@ln $< _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
+.c._o:
+	$(ANSI2KNR) $< > $*._c.tmp && mv $*._c.tmp $*._c
+	@echo $(COMPILE) $*._c
+	@rm -f _$*.c
+	@ln $*._c _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
+
+._c._i:
+	@echo $(PRE_PROCESS) $<
+	@rm -f _$*.c
+	@ln $< _$*.c && $(PRE_PROCESS) _$*.c >$@
+.c._i:
+	$(ANSI2KNR) $< > $*._c.tmp && mv $*._c.tmp $*._c
+	@echo $(PRE_PROCESS) $*._c
+	@rm -f _$*.c
+	@ln $*._c _$*.c && $(PRE_PROCESS) _$*.c >$@
 
 ##############################################################################
 
@@ -152,6 +183,13 @@ $(LID_LINKS): lid
 iid.c: iid.y
 	$(YACC) $(srcdir)/iid.y && mv -f y.tab.c $@
 
+########################################
+
+$(ALL_OFILES): $(ANSI2KNR)
+
+ansi2knr: ansi2knr.o
+	$(LINK) ansi2knr.o $(LIBS)
+
 ##############################################################################
 
 info: $(INFO_FILES)
@@ -170,12 +208,12 @@ stamp-vti: configure.in
 	:; else \
 	    echo "@set VERSION $(VERSION)" >$(srcdir)/version.texi; \
 	fi
-	date >stamp-vti
+	$(TOUCH) stamp-vti
 
 ##############################################################################
 
 install: all
-	$(srcdir)/mkdirhier $(bindir) $(libdir) $(infodir)
+	$(srcdir)/mkdirhier $(bindir) $(datadir) $(infodir)
 	@for file in $(PROGRAMS); do \
 	    cmd="$(INSTALL_PROGRAM) $$file $(bindir)/`echo $$file | sed '$(transform)'`"; \
 	    (echo $$cmd; eval $$cmd); \
@@ -206,71 +244,46 @@ uninstall:
 ##############################################################################
 
 check: mkid lid fid idx
-	here=`pwd`; PATH=$$here:$$PATH; cd $(srcdir) \
+	here=`pwd`; PATH=$$here:$$PATH; export PATH; cd $(srcdir) \
 	    && $$here/mkid -v -f$$here/ID $(TAG_SRC_FILES) \
 	    && $(SHELL) ./idtest -f$$here/ID $(TAG_SRC_FILES) \
 	    && rm -f $$here/ID
 
-ID: $(TAG_SRC_FILES) mkid
-	here=`pwd`; PATH=$$here:$$PATH; export PATH; cd $(srcdir) \
-	    && $$here/mkid -f$$here/ID $$here/config.h $(TAG_SRC_FILES)
+id: ID
+ID: $(TAG_SRC_FILES)
+	here=`pwd`; cd $(srcdir) \
+	    && PATH=$$here:$$PATH mkid -f$$here/ID $$here/config.h $(TAG_SRC_FILES)
 
 tags: TAGS
 TAGS: $(TAG_SRC_FILES)
-	here=`pwd`; cd $(srcdir) && etags -t $(TAG_SRC_FILES) -o $$here/TAGS
+	here=`pwd`; cd $(srcdir) && etags -o $$here/TAGS $(TAG_SRC_FILES)
 
 ##############################################################################
 
 mostlyclean:
-	rm -f $(TARGETS) a.out
-	rm -f *.o core *.core core.* *.aux *.cp *.cps *.dvi *.fn *.fns
-	rm -f *.ky *.kys *.log *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs
+	rm -f a.out *.o *._? core *.core core.* *.aux *.cp *.cps *.fn *.fns
+	rm -f *.dvi *.ky *.kys *.log *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs *.tmp
 
 clean: mostlyclean
+	rm -f $(TARGETS)
 	rm -f iid.c
 
 distclean: clean
+	rm -f ansi2knr ID TAGS
 	rm -f Makefile config.h config.status config.cache stamp-h
 
-realclean: distclean
-	rm -f *.info* TAGS ID *~
+maintainer-clean: distclean
+	@echo "This command is intended only for maintainers to use;"
+	@echo "rebuilding the deleted files may require special tools."
+	rm -f stamp-vti version.texi mkid.info*
 
 ##############################################################################
 
-dist: $(DIST_TGZ) $(PATCH_U_GZ) $(PATCH_C_GZ)
-
-bump-patch: dist
-	rm -fr $(OLD_DIST_DIR)
-	$(AWK) -F= '\
-		/^PATCH_LEVEL/ { print $$1 "=" $$2 + 1; next; } \
-		{ print; }' <configure.in >configure.new \
-	    && mv configure.new configure.in
-
-bump-minor: dist
-	rm -fr $(OLD_DIST_DIR)
-	$(AWK) -F'[=.]' '\
-		/^VERSION/ { print $$1 "=" $$2 "." $$3 + 1; next; } \
-		/^PATCH_LEVEL/ { print $$1 "=" 0; next; } \
-		{ print; }' <configure.in >configure.new \
-	    && mv configure.new configure.in
-
-bump-major: dist
-	rm -fr $(OLD_DIST_DIR)
-	$(AWK) -F'[=.]' '\
-		/^VERSION/ { print $$1 "=" $$2 + 1 ".0"; next; } \
-		/^PATCH_LEVEL/ { print $$1 "=" 0; next; } \
-		{ print; }' <configure.in >configure.new \
-	    && mv configure.new configure.in
-
-########################################
+dist: $(DIST_TGZ) $(UDIFF_GZ) $(CDIFF_GZ)
 
 shar: $(DIST_SHAR)
-$(DIST_SHAR): $(DIST_TGZ) $(PATCH_C_GZ)
-	shar $(PATCH_C_GZ) $(DIST_TGZ) >$@
-
-dist-uu: $(DIST_UU)
-$(DIST_UU): $(DIST_TGZ)
-	uuencode $(DIST_TGZ) <$(DIST_TGZ) >$@
+$(DIST_SHAR): $(DIST_TGZ) $(CDIFF_GZ)
+	shar $(CDIFF_GZ) $(DIST_TGZ) >$@
 
 dist-tgz: $(DIST_TGZ)
 $(DIST_TGZ): $(DIST_DIR)
@@ -286,18 +299,12 @@ $(DIST_DIR): $(DIST_FILES)
 
 ########################################
 
-# context-diff patches are for distribution
-patch-uu: $(PATCH_C_UU)
-$(PATCH_C_UU): $(PATCH_C_GZ)
-	uuencode $(PATCH_C_GZ) <$(PATCH_C_GZ) >$@
-
-patch patch-gz: $(PATCH_C_GZ)
-$(PATCH_C_GZ): $(OLD_DIST_DIR) $(DIST_DIR)
+cdiff: $(CDIFF_GZ)
+$(CDIFF_GZ): $(OLD_DIST_DIR) $(DIST_DIR)
 	diff -r -c --show-c-function --new-file $(OLD_DIST_DIR) $(DIST_DIR) |gzip >$@
 
-# unidiff patches are for the maintainer's information
-patchu patchu-gz: $(PATCH_U_GZ)
-$(PATCH_U_GZ): $(OLD_DIST_DIR) $(DIST_DIR)
+udiff: $(UDIFF_GZ)
+$(UDIFF_GZ): $(OLD_DIST_DIR) $(DIST_DIR)
 	diff -r -u $(OLD_DIST_DIR) $(DIST_DIR) |gzip >$@
 
 ##############################################################################
@@ -312,14 +319,15 @@ $(srcdir)/configure: configure.in aclocal.m4
 config.h: stamp-h
 stamp-h: $(srcdir)/config.h.in config.status
 	CONFIG_FILES= CONFIG_HEADERS=config.h ./config.status
-	date >stamp-h
+	$(TOUCH) stamp-h
 $(srcdir)/config.h.in: stamp-h.in
 $(srcdir)/stamp-h.in: configure.in aclocal.m4 acconfig.h 
 	cd $(srcdir) && autoheader
-	date >$(srcdir)/stamp-h.in
+	$(TOUCH) $(srcdir)/stamp-h.in
 
 depend $(DEPEND):
-	(cd $(srcdir) && $(CC) $(CC_FLAGS) -MM $(ALL_CFILES);) >$(DEPEND)
+	(cd $(srcdir) && $(CC) $(CC_FLAGS) -MM $(ALL_CFILES)) \
+	    | sed -e 's/\.o:/$$o:/' >$(DEPEND)
 
 ##############################################################################
 

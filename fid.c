@@ -16,10 +16,11 @@
    Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "config.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+
+#include <config.h>
 #include "idfile.h"
 #include "idarg.h"
 #include "bitops.h"
@@ -29,10 +30,10 @@
 #include "alloc.h"
 #include "token.h"
 
-int get_idarg_index (char const *file_name);
-int is_hit (unsigned char const *hits, int file_number);
-int is_hit_1 (unsigned char const **hits, int level, int file_number);
-void skip_hits (unsigned char const **hits, int level);
+int get_idarg_index __P((char const *file_name));
+int is_hit __P((unsigned char const *hits, int file_number));
+int is_hit_1 __P((unsigned char const **hits, int level, int file_number));
+void skip_hits __P((unsigned char const **hits, int level));
 
 FILE *id_FILE;
 struct idhead idh;

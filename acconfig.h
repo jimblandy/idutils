@@ -16,9 +16,6 @@
 /* Define to the name of the distribution.  */
 #undef PACKAGE
 
-/* Define to the patch-level of the distribution.  */
-#undef PATCH_LEVEL
-
 /* Define to 1 if ANSI function prototypes are usable.  */
 #undef PROTOTYPES
 
@@ -27,20 +24,21 @@
 
 @BOTTOM@
 
-/* (u)intmin32_t are integer types that are *at least* 32 bits.
-   Larger ints are OK.  */
-#if SIZEOF_LONG == 4
-  typedef unsigned long uintmin32_t;
-  typedef long intmin32_t;
-#else
-  typedef unsigned int uintmin32_t;
-  typedef int intmin32_t;
-#endif
+/* According to Thomas Neumann, NeXT POSIX termios support is losing,
+   and sgtty is the way to go.  Note: the comment between #undef &
+   HAVE_TERMIOS_H is necessary to defeat configure's edits.  */
 
-/* NeXT POSIX compatibility is losing.  sgtty is the way to go. */
 #if HAVE_SGTTY_H
 # ifdef NeXT
-#  undef HAVE_TERMIOS_H
+#  undef /**/ HAVE_TERMIOS_H
+# endif
+#endif
+
+#ifndef __P
+# ifndef PROTOTYPES
+#  define __P(args) ()
+# else
+#  define __P(args) args
 # endif
 #endif
 

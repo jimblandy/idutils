@@ -3,25 +3,20 @@ AC_INIT(mkid.c)
 AC_CONFIG_HEADER(config.h)
 
 PACKAGE=mkid
-VERSION=3.0
-PATCH_LEVEL=7
-OLD_PATCH_LEVEL=`expr $PATCH_LEVEL - 1`
+VERSION=3.0.8
+PREV_VERSION=3.0.7
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
-AC_DEFINE_UNQUOTED(PATCH_LEVEL, "$PATCH_LEVEL")
 AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
-AC_SUBST(PATCH_LEVEL)
-AC_SUBST(OLD_PATCH_LEVEL)
+AC_SUBST(PREV_VERSION)
 
 dnl Checks for programs.
 AC_PROG_YACC
-AC_SUBST(YACC)
 AC_PROG_CC
 AC_PROG_LN_S
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
-AC_PROG_AWK
 
 dnl Checks for libraries.
 
@@ -39,7 +34,6 @@ fp_C_PROTOTYPES
 AC_TYPE_SIGNAL
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
-AC_CHECK_SIZEOF(long)
 
 CFLAGS=${CFLAGS--g}
 LDFLAGS=${LDFLAGS--g}
@@ -64,14 +58,14 @@ if test "$ac_cv_func_strerror" = no; then STRERROR="strerror.o"; fi
 AC_SUBST(STRERROR)
 
 if test "x$prefix" != xNONE; then
-    libdir=$prefix/lib
+    datadir=$prefix/share
 else
-    libdir=$ac_default_prefix/lib
+    datadir=$ac_default_prefix/share
 fi
-IID_HELP_FILE=$libdir/iid.help
-AC_SUBST(libdir)
+IID_HELP_FILE=$datadir/iid.help
+AC_SUBST(datadir)
 AC_SUBST(IID_HELP_FILE)
-AC_DEFINE_UNQUOTED(IID_HELP_FILE, "$libdir/iid.help")
+AC_DEFINE_UNQUOTED(IID_HELP_FILE, "$datadir/iid.help")
 
 case x$srcdir in
 x) DEPEND=depend.out;;
@@ -81,5 +75,5 @@ DEPEND_FILE=$DEPEND
 AC_SUBST(DEPEND)
 AC_SUBST_FILE(DEPEND_FILE)
 
-AC_OUTPUT(Makefile)
-date >stamp-h
+AC_OUTPUT(Makefile,
+    [test -z "$CONFIG_HEADERS" || echo timestamp >stamp-h])

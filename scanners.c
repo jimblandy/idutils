@@ -17,10 +17,11 @@
    Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "config.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+
+#include <config.h>
 #include "strxtra.h"
 #include "token.h"
 #include "alloc.h"
@@ -28,24 +29,24 @@
 
 extern char const *program_name;
 
-static char const *get_token_VHIL (FILE *input_FILE, int *flags);
-static char const *get_token_c (FILE *input_FILE, int *flags);
-static void set_args_c (char const *lang_name, int op, char const *arg);
-static void set_ctype_c (char const *chars, int type);
-static void clear_ctype_c (char const *chars, int type);
-static void usage_c (char const *lang_name);
+static char const *get_token_VHIL __P((FILE *input_FILE, int *flags));
+static char const *get_token_c __P((FILE *input_FILE, int *flags));
+static void set_args_c __P((char const *lang_name, int op, char const *arg));
+static void set_ctype_c __P((char const *chars, int type));
+static void clear_ctype_c __P((char const *chars, int type));
+static void usage_c __P((char const *lang_name));
 
-static char const *get_token_asm (FILE *input_FILE, int *flags);
-static void set_ctype_asm (char const *chars, int type);
-static void clear_ctype_asm (char const *chars, int type);
-static void usage_asm (char const *lang_name);
-static void set_args_asm (char const *lang_name, int op, char const *arg);
+static char const *get_token_asm __P((FILE *input_FILE, int *flags));
+static void set_ctype_asm __P((char const *chars, int type));
+static void clear_ctype_asm __P((char const *chars, int type));
+static void usage_asm __P((char const *lang_name));
+static void set_args_asm __P((char const *lang_name, int op, char const *arg));
 
-static char const *get_token_text (FILE *input_FILE, int *flags);
-static void set_ctype_text (char const *chars, int type);
-static void clear_ctype_text (char const *chars, int type);
-static void usage_text (char const *lang_name);
-static void set_args_text (char const *lang_name, int op, char const *arg);
+static char const *get_token_text __P((FILE *input_FILE, int *flags));
+static void set_ctype_text __P((char const *chars, int type));
+static void clear_ctype_text __P((char const *chars, int type));
+static void usage_text __P((char const *lang_name));
+static void set_args_text __P((char const *lang_name, int op, char const *arg));
 
 /****************************************************************************/
 
@@ -72,7 +73,6 @@ static void usage_scan (void);
 
 struct language languages_0[] =
 {
-  /* must be sorted for bsearch(3) */
   { "C", get_token_c, set_args_c, NULL },
   { "TeX", get_token_text, set_args_text, NULL },
   { "VHIL", get_token_VHIL, set_args_c, NULL },
@@ -204,9 +204,8 @@ get_filter (char const *suffix)
   return stp->suff_language->lang_filter;
 }
 
-char const *(*
+get_token_t
 get_scanner (char const *lang)
-       ) (FILE *input_FILE, int *flags)
 {
   struct language *ltp;
 
@@ -453,7 +452,7 @@ get_token_VHIL (FILE *input_FILE, int *flags)
 }
 
 /*
-	Grab the next identifier the C source
+	Grab the next identifier from the C source
 	file opened with the handle `input_FILE'.
 	This state machine is built for speed, not elegance.
 */
@@ -1080,8 +1079,8 @@ static unsigned char ctype_text[257] =
 /*010*/ 0,	0,	0,	0,	0,	0,	0,	0,
 /*020*/ 0,	0,	0,	0,	0,	0,	0,	0,
 /*030*/ 0,	0,	0,	0,	0,	0,	0,	0,
-/*040*/ 0,	0,	0,	0,	0,	0,	0,	SQ,
-/*050*/ 0,	0,	0,	0,	0,	SQ,	SQ,	0,
+/*040*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*050*/ 0,	0,	0,	0,	0,	0,	0,	0,
 /*060*/ NM,	NM,	NM,	NM,	NM,	NM,	NM,	NM,
 /*070*/ NM,	NM,	0,	0,	0,	0,	0,	0,
 /*100*/ 0,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1,

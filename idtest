@@ -1,5 +1,7 @@
 #!/bin/sh
 
+export LANG; LANG=C
+
 case $# in
 0) 1>&2 echo Usage: $0 files...; exit 1;;
 esac
@@ -9,11 +11,10 @@ esac
 
 errors=
 
-echo "idx ..."
-idx "$@" |sort -u >ID.idx
-echo "lid ..."
-lid $idfile_arg |sed -e 's/[ 	].*//' |sort -u >ID.lid
-if cmp -s ID.idx ID.lid; then
+if idx "$@" |sort -u >ID.idx &&
+    lid $idfile_arg |sed -e 's/[ 	].*//' |sort -u >ID.lid &&
+    cmp -s ID.idx ID.lid
+then
     rm -f ID.idx ID.lid
     echo "Good.  idx and lid agree."
 else
@@ -30,9 +31,10 @@ do
     x-*) scan_args="$scan_args $file"
 	 continue;;
     esac
-    fid $idfile_arg $file >$fid_file
-    idx $scan_args $file |sort -u >$idx_file
-    if cmp -s $idx_file $fid_file; then
+    if fid $idfile_arg $file >$fid_file &&
+	idx $scan_args $file |sort -u >$idx_file &&
+	cmp -s $idx_file $fid_file;
+    then
 	echo "Good.  idx and fid agree for $file"
     else
 	1>&2 echo "Oops!  idx and fid disagree for $file"
@@ -42,6 +44,10 @@ done
 rm -f $idx_file $fid_file
 
 case x$errors in
-xt) 1>&2 echo "mkid and friends are broken."; exit 1;;
-*) echo "mkid and friends are happy."; exit 0;;
+xt) echo "Some checks failed."
+    echo "mkid and friends are broken--boo hoo!"
+    exit 1;;
+*)  echo "All checks successful."
+    echo "mkid and friends are happy!"
+    exit 0;;
 esac

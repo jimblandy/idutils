@@ -19,12 +19,12 @@
 #ifndef _scanners_h_
 #define _scanners_h_
 
-typedef char *(*get_token_t) (FILE*, int*);
+typedef char const *(*get_token_t) __P((FILE*, int*));
 
-char const *get_lang_name (char const *suffix);
-char const *get_filter (char const *suffix);
-char const *(*get_scanner (char const *lang_name)) (FILE *input_FILE, int *flags);
-void set_scan_args (int op, char *arg);
-void init_scanners (void);
+char const *get_lang_name __P((char const *suffix));
+char const *get_filter __P((char const *suffix));
+get_token_t get_scanner __P((char const *lang_name));
+void set_scan_args __P((int op, char *arg));
+void init_scanners __P((void));
 
 #endif /* not _scanners_h_ */

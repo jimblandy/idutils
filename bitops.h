@@ -25,7 +25,7 @@
 #define	BITAND(ba, bn)	((ba)[(bn) >> 3] &= (1 << ((bn) & 0x07)))
 #define	BITXOR(ba, bn)	((ba)[(bn) >> 3] ^= (1 << ((bn) & 0x07)))
 
-int vec_to_bits (char *bit_array, char *vec, int size);
-int bits_to_vec (char *vec, char *bit_array, int bit_count, int size);
+int vec_to_bits __P((char *bit_array, char *vec, int size));
+int bits_to_vec __P((char *vec, char *bit_array, int bit_count, int size));
 
 #endif /* not _bitops_h_ */

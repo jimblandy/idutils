@@ -16,7 +16,6 @@
    Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "config.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
@@ -25,9 +24,11 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
-#include "strxtra.h"
 #include <ctype.h>
 #include <errno.h>
+
+#include <config.h>
+#include "strxtra.h"
 #include "alloc.h"
 #include "idfile.h"
 #include "idarg.h"
@@ -66,43 +67,43 @@ struct token
 
 struct token **hash_table;	/* Vector of token pointers */
 
-char *bitsset (char *s1, char const *s2, int n);
-char *bitsclr (char *s1, char const *s2, int n);
-char *bitsand (char *s1, char const *s2, int n);
-char *bitsxor (char *s1, char const *s2, int n);
-int bitstst (char const *s1, char const *s2, int n);
-int bitsany (char const *s, int n);
-int round2 (int rough);
-struct token *make_token (char const *name, int);
-void scan_1_file (char const *(*get_token) (FILE*, int*), FILE *source_FILE);
-struct idarg *parse_idargs (int argc, char **argv);
-struct idarg *parse_idargs_from_FILE (FILE *arg_FILE, struct idarg *idarg);
-void init_hash_table (int file_name_count);
-void scan_files (struct idarg *idarg);
-void report_statistics (void);
+char *bitsset __P((char *s1, char const *s2, int n));
+char *bitsclr __P((char *s1, char const *s2, int n));
+char *bitsand __P((char *s1, char const *s2, int n));
+char *bitsxor __P((char *s1, char const *s2, int n));
+int bitstst __P((char const *s1, char const *s2, int n));
+int bitsany __P((char const *s, int n));
+int round2 __P((int rough));
+struct token *make_token __P((char const *name, int));
+void scan_1_file __P((char const *(*get_token) (FILE*, int*), FILE *source_FILE));
+struct idarg *parse_idargs __P((int argc, char **argv));
+struct idarg *parse_idargs_from_FILE __P((FILE *arg_FILE, struct idarg *idarg));
+void init_hash_table __P((int file_name_count));
+void scan_files __P((struct idarg *idarg));
+void report_statistics __P((void));
 
-void init_hash (long size);
-struct token **hash_lookup (char const *key);
-unsigned int string_hash_1 (char const *key);
-unsigned int string_hash_2 (char const *key);
-void rehash (void);
+void init_hash __P((long size));
+struct token **hash_lookup __P((char const *key));
+unsigned int string_hash_1 __P((char const *key));
+unsigned int string_hash_2 __P((char const *key));
+void rehash __P((void));
 
-void write_idfile (char const *id_file, struct idarg *idargs);
-void bump_current_hits_signature (void);
-void init_hits_signature (int i);
-int bit_to_index (int bit);
-int compare_tokens (void const *x, void const *y);
-void free_summary_tokens (void);
-void summarize (void);
-void assert_hits (struct summary *summary);
-void write_hits (FILE *fp, struct summary *summary, unsigned char const *tail_hits);
-void sign_token (struct token *token);
-void add_token_to_summary (struct summary *summary, struct token *token);
-void init_summary (void);
-struct summary *make_sibling_summary (struct summary *summary);
-int count_vec_size (struct summary *summary, unsigned char const *tail_hits);
-int count_buf_size (struct summary *summary, unsigned char const *tail_hits);
-void usage (void);
+void write_idfile __P((char const *id_file, struct idarg *idargs));
+void bump_current_hits_signature __P((void));
+void init_hits_signature __P((int i));
+int bit_to_index __P((int bit));
+int compare_tokens __P((void const *x, void const *y));
+void free_summary_tokens __P((void));
+void summarize __P((void));
+void assert_hits __P((struct summary *summary));
+void write_hits __P((FILE *fp, struct summary *summary, unsigned char const *tail_hits));
+void sign_token __P((struct token *token));
+void add_token_to_summary __P((struct summary *summary, struct token *token));
+void init_summary __P((void));
+struct summary *make_sibling_summary __P((struct summary *summary));
+int count_vec_size __P((struct summary *summary, unsigned char const *tail_hits));
+int count_buf_size __P((struct summary *summary, unsigned char const *tail_hits));
+void usage __P((void));
 
 /* Miscellaneous statistics */
 long input_chars;
@@ -158,8 +159,8 @@ Usage: %s [-v] [-f<idfile>] [(+|-)l[<lang>]] [(+|-)S<scanarg>] [-a<argfile>] [-]
 	-S<lang>? Print usage documentation for <lang>\n\
 	-u	 Update an existing database (unimplemented)\n\
 \n\
-Version %s.%s; Made %s %s\n",
-	   program_name, VERSION, PATCH_LEVEL, __DATE__, __TIME__);
+Version %s; Made %s %s\n",
+	   program_name, VERSION, __DATE__, __TIME__);
 
   exit (1);
 }
@@ -534,7 +535,6 @@ write_idfile (char const *file_name, struct idarg *idarg)
   struct token **tokens;
   int i;
   FILE *id_FILE;
-  int lasti;
   struct idhead idh;
   int fixup_names;
   char *lsl;
@@ -581,15 +581,9 @@ write_idfile (char const *file_name, struct idarg *idarg)
   /* write out the list of pathnames */
   fseek (id_FILE, sizeof_idhead (), 0);
   idh.idh_args_offset = ftell (id_FILE);
-  for (i = lasti = 0; idarg->ida_next; idarg = idarg->ida_next)
+  for (i = 0; idarg->ida_next; idarg = idarg->ida_next)
     {
-      if (idarg->ida_index > 0)
-	while (++lasti < idarg->ida_index)
-	  {
-	    i++;
-	    putc ('\0', id_FILE);
-	  }
-      if (fixup_names)
+      if (*idarg->ida_arg != '-' && fixup_names)
 	fputs (relative_file_name (absolute_idfile_name, span_file_name (PWD_name, idarg->ida_arg)), id_FILE);
       else
 	fputs (idarg->ida_arg, id_FILE);
@@ -988,12 +982,7 @@ assert_hits (struct summary* summary)
   struct summary **kids = summary->sum_kids;
   struct summary **end = &kids[8];
 
-  /* Some systems have broken assert() macros that expand into exposed
-     if-statements, so we need braces around them when used with if/else.  */
-  if (summary == summary_root)
-    { assert (summary->sum_hits == 0); }
-  else
-    { assert (summary->sum_hits && *summary->sum_hits == 0); }
+  assert (summary->sum_hits == NULL || *summary->sum_hits == 0);
   
   if (end[-1] == 0)
     while (*--end == 0)

@@ -19,18 +19,18 @@
 #ifndef _filenames_h_
 #define _filenames_h_
 
-char const *relative_file_name (char const *dir, char const *arg);
-char const *span_file_name (char const *dir, char const *arg);
-char const *root_name (char const *path);
-char const *suff_name (char const *path);
-int can_crunch (char const *path1, char const *path2);
-char const *look_up (char const *arg);
-void cannoname (char *n);
-char const *kshgetwd (char *pathname);
-char const *unsymlink (char *n);
-FILE *open_source_FILE (char *file_name, char const *filter);
-void close_source_FILE (FILE *fp, char const *filter);
-char const *get_sccs (char const *dir, char const *base, char const *sccs_dir);
-char const *co_rcs (char const *dir, char const *base, char const *rcs_dir);
+char const *relative_file_name __P((char const *dir, char const *arg));
+char const *span_file_name __P((char const *dir, char const *arg));
+char const *root_name __P((char const *path));
+char const *suff_name __P((char const *path));
+int can_crunch __P((char const *path1, char const *path2));
+char const *look_up __P((char const *arg));
+void cannoname __P((char *n));
+char const *kshgetwd __P((char *pathname));
+char const *unsymlink __P((char *n));
+FILE *open_source_FILE __P((char *file_name, char const *filter));
+void close_source_FILE __P((FILE *fp, char const *filter));
+char const *get_sccs __P((char const *dir, char const *base, char const *sccs_dir));
+char const *co_rcs __P((char const *dir, char const *base, char const *rcs_dir));
 
 #endif /* not _filenames_h_ */

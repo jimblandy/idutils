@@ -16,7 +16,6 @@
    Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "config.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -24,6 +23,8 @@
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#include <config.h>
 #include "strxtra.h"
 #include "filenames.h"
 #include "misc.h"

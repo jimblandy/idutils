@@ -17,13 +17,14 @@
    Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "config.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
+
+#include <config.h>
 #include "strxtra.h"
 
 #if HAVE_ALLOCA
@@ -199,31 +200,31 @@ set_type * *       TheSets = NULL ;
  */
 int                VerboseQuery ;
 
-int yyerror( char const * s ) ;
-void ScanInit( char * line ) ;
-int yylex( void ) ;
-int ArgListSize( id_list_type * idlp ) ;
-int SetListSize( set_type * sp ) ;
-void FlushFiles( void ) ;
-void fatal( char const * s ) ;
-int CountBits( set_type * sp ) ;
-void OneDescription( set_type * sp ) ;
-void DescribeSets( void ) ;
-id_list_type * SetList( id_list_type * idlp , set_type * sp ) ;
-void PrintSet( set_type * sp ) ;
-void FlushSets( void ) ;
-id_list_type * InitList( void ) ;
-id_list_type * ExtendList( id_list_type * idlp , id_type * idp ) ;
-void InitIid( void ) ;
-symtab_type * InstallFile( char const * fp ) ;
-void RunPager( char * pp , set_type * sp ) ;
-void AddSet( set_type * sp ) ;
-set_type * RunProg( char const * pp , id_list_type * idlp ) ;
-void SetDirectory( id_type * dir ) ;
-set_type * SetIntersect( set_type * sp1 , set_type * sp2 ) ;
-set_type * SetUnion( set_type * sp1 , set_type * sp2 ) ;
-set_type * SetInverse( set_type * sp ) ;
-void RunShell( char * pp , id_list_type * idlp ) ;
+int yyerror __P(( char const * s )) ;
+void ScanInit __P(( char * line )) ;
+int yylex __P(( void )) ;
+int ArgListSize __P(( id_list_type * idlp )) ;
+int SetListSize __P(( set_type * sp )) ;
+void FlushFiles __P(( void )) ;
+void fatal __P(( char const * s )) ;
+int CountBits __P(( set_type * sp )) ;
+void OneDescription __P(( set_type * sp )) ;
+void DescribeSets __P(( void )) ;
+id_list_type * SetList __P(( id_list_type * idlp , set_type * sp )) ;
+void PrintSet __P(( set_type * sp )) ;
+void FlushSets __P(( void )) ;
+id_list_type * InitList __P(( void )) ;
+id_list_type * ExtendList __P(( id_list_type * idlp , id_type * idp )) ;
+void InitIid __P(( void )) ;
+symtab_type * InstallFile __P(( char const * fp )) ;
+void RunPager __P(( char * pp , set_type * sp )) ;
+void AddSet __P(( set_type * sp )) ;
+set_type * RunProg __P(( char const * pp , id_list_type * idlp )) ;
+void SetDirectory __P(( id_type * dir )) ;
+set_type * SetIntersect __P(( set_type * sp1 , set_type * sp2 )) ;
+set_type * SetUnion __P(( set_type * sp1 , set_type * sp2 )) ;
+set_type * SetInverse __P(( set_type * sp )) ;
+void RunShell __P(( char * pp , id_list_type * idlp )) ;
 
 %}
 
