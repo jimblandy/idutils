@@ -1,5 +1,9 @@
 1999-01-27  Jim Meyering  <meyering@ascend.com> (with some changes from gkm)
 
+	* lib/Makefile.am (AUTOMAKE_OPTIONS): Use ../src/ansi2knr.
+	* libidu/Makefile.am (AUTOMAKE_OPTIONS): Likewise.
+	(ansi2knr.c): Remove rule.
+
 	* src/ansi2knr.c: Import new version.
 	* src/ansi2knr.1: Likewise.
 
