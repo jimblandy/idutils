@@ -1,6 +1,10 @@
-Thu Feb 16 12:20:38 1995  Greg McGary  <gkm@magilla.cichlid.com>
+Thu Feb 16 18:32:44 EST 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
 	* Version 3.0.3 released.
+
+	* README.alpha-test: Added.
+
+	* TODO: Updated.
 
 	* lid.c (savetty, restoretty, linetty, chartty): Handle POSIX
 	termios properly.

@@ -27,3 +27,9 @@ Send bug reports to <gkm@magilla.cichlid.com>.  Please describe your
 problem adequately: your input, what you expected, what you got, and
 why it is wrong.  Diffs are welcome, but please include a description
 of the problem as well, since this is sometimes difficult to infer.
+
+
+Local Variables:
+mode: text
+fill-column: 75
+End:

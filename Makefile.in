@@ -86,10 +86,11 @@ ID_SRC_FILES =	$(SRC_HFILES) $(LIB_HFILES) $(SRC_CFILES) $(LIB_CFILES) $(SRC_YFI
 DIST_SRC_FILES =$(ALL_CFILES) $(SRC_HFILES) $(LIB_HFILES) $(SRC_YFILES)
 
 INFO_FILES =	mkid.info
-DIST_DOC_FILES =mkid.texinfo $(INFO_FILES) fid.1 iid.1 lid.1 mkid.1
-DIST_CONF_FILES=aclocal.m4 acconfig.h configure.in Makefile.in mkdirhier \
+DIST_DOC_FILES =mkid.texinfo $(INFO_FILES) fid.1 iid.1 lid.1 mkid.1 iid.help
+DIST_CONF_FILES=aclocal.m4 acconfig.h configure.in Makefile.in mkdirhier install-sh \
 		stamp-h.in config.h.in configure $(DEPEND)
-DIST_MISC_FILES=COPYING README INSTALL NEWS TODO THANKS idtest gid.el install-sh iid.help ChangeLog
+DIST_MISC_FILES=COPYING README README.alpha-test INSTALL NEWS TODO THANKS \
+		idtest gid.el ChangeLog
 
 DIST_FILES =	$(DIST_CONF_FILES) $(DIST_SRC_FILES) $(DIST_DOC_FILES) $(DIST_MISC_FILES)
 
