@@ -72,7 +72,7 @@ INCLUDES = -I.. -I. -I$(top_srcdir)/intl -I$(top_srcdir)/lib
 
 all: all-@USE_NLS@
 
-all-yes: libintl.a
+all-yes all-gettext: libintl.a
 all-no:
 
 libintl.a: $(OBJECTS)
