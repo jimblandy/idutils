@@ -1,5 +1,5 @@
 /* scanners.c -- file & directory name manipulations
-   Copyright (C) 1986, 1995, 1996 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 1999 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -300,36 +300,40 @@ static void
 set_ushort_ctype (unsigned short *ctype, char const *chars, int type)
 {
   unsigned short *rct = &ctype[1];
+  unsigned char const *uc = (unsigned char const *) chars;
 
-  while (*chars)
-    rct[*chars++] |= type;
+  while (*uc)
+    rct[*uc++] |= type;
 }
 
 static void
 clear_ushort_ctype (unsigned short *ctype, char const *chars, int type)
 {
   unsigned short *rct = &ctype[1];
+  unsigned char const *uc = (unsigned char const *) chars;
 
-  while (*chars)
-    rct[*chars++] &= ~type;
+  while (*uc)
+    rct[*uc++] &= ~type;
 }
 
 static void
 set_uchar_ctype (unsigned char *ctype, char const *chars, int type)
 {
   unsigned char *rct = &ctype[1];
+  unsigned char const *uc = (unsigned char const *) chars;
 
-  while (*chars)
-    rct[*chars++] |= type;
+  while (*uc)
+    rct[*uc++] |= type;
 }
 
 static void
 clear_uchar_ctype (unsigned char *ctype, char const *chars, int type)
 {
   unsigned char *rct = &ctype[1];
+  unsigned char const *uc = (unsigned char const *) chars;
 
-  while (*chars)
-    rct[*chars++] &= ~type;
+  while (*uc)
+    rct[*uc++] &= ~type;
 }
 
 /*************** C & C++ ****************************************************/
@@ -473,7 +477,7 @@ parse_args_c (char **argv, int argc)
   return args;
 }
 
-static char id_0[1<<020];
+static unsigned char id_0[1<<020];
 
 /* Grab the next identifier from the C source file.  This state
    machine is built for speed, not elegance.  */
@@ -484,7 +488,7 @@ get_token_c (FILE *in_FILE, void const *args, int *flags)
 #define ARGS ((struct args_c const *) args)
   static int new_line = 1;
   unsigned short const *rct = &ARGS->ctype[1];
-  char *id = id_0;
+  unsigned char *id = id_0;
   int c;
 
   obstack_blank (&tokens_obstack, offsetof (struct token, tok_name));
@@ -869,7 +873,7 @@ get_token_asm (FILE *in_FILE, void const *args, int *flags)
 #define ARGS ((struct args_asm const *) args)
   static int new_line = 1;
   unsigned char const *rct = &ARGS->ctype[1];
-  char *id = id_0;
+  unsigned char *id = id_0;
   int c;
 
   obstack_blank (&tokens_obstack, offsetof (struct token, tok_name));
@@ -1155,7 +1159,7 @@ get_token_text (FILE *in_FILE, void const *args, int *flags)
 #define ARGS ((struct args_text const *) args)
   unsigned char const *rct = &ARGS->ctype[1];
   int c;
-  char *id = id_0;
+  unsigned char *id = id_0;
 
   obstack_blank (&tokens_obstack, offsetof (struct token, tok_name));
 
