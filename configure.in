@@ -29,7 +29,7 @@ AC_DEFINE_UNQUOTED(PACKAGE_VERSION, "GNU $PACKAGE $VERSION",
 ################ Maintainer Stuff ############################################
 ##############################################################################
 
-ALL_LINGUAS="de fr"
+ALL_LINGUAS="de fr pl nl"
 
 changequote(,)dnl
 case $VERSION in
