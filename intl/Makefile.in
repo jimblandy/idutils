@@ -85,6 +85,8 @@ libintl.a: $(OBJECTS)
 
 check install: all
 
+installcheck:
+
 # This installation goal is only used in GNU gettext.  Packages which
 # only use the library should use install instead.
 
