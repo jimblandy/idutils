@@ -149,9 +149,10 @@ main (int argc, char **argv)
   argv += optind;
   if (argc == 0)
     {
-      static char *dot = (char *) ".";
+      static char dot[] = ".";
+      static char *dotp = dot;
       argc = 1;
-      argv = &dot;
+      argv = &dotp;
     }
 
   language_getopt ();

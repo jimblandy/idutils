@@ -136,9 +136,10 @@ main (int argc, char **argv)
   argv += optind;
   if (argc == 0)
     {
-      static char *star = (char *) "*";
+      static char star[] = "*";
+      static char *starp = star;
       argc = 1;
-      argv = &star;
+      argv = &starp;
     }
 
   /* Look for the ID database up the tree */

@@ -85,8 +85,7 @@ locate_id_file_name (char const *arg)
       if (stat (file_name_buffer, &statb) != 0)
 	return NULL;
     }
-  while (!((statb.st_ino == rootb.st_ino) ||
-	   (statb.st_dev == rootb.st_dev)));
+  while (statb.st_ino != rootb.st_ino || statb.st_dev != rootb.st_dev);
   return NULL;
 }
 

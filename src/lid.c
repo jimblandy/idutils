@@ -399,9 +399,10 @@ main (int argc, char **argv)
   argv += optind;
   if (argc == 0)
     {
-      static char *dot = (char *) ".";
+      static char dot[] = ".";
+      static char *dotp = dot;
       argc = 1;
-      argv = &dot;
+      argv = &dotp;
     }
 
   /* Look for the ID database up the tree */
@@ -533,10 +534,9 @@ report_filenames (char const *name, struct file_link **flinkv)
 void
 report_grep (char const *name, struct file_link **flinkv)
 {
-  char line[BUFSIZ];
+  char line[1<<020];
   char const *pattern = 0;
   regex_t compiled;
-  int line_number;
 
   if (key_style == ks_pattern)
     {
@@ -554,32 +554,34 @@ report_grep (char const *name, struct file_link **flinkv)
 	}
     }
 
-  line[0] = ' ';		/* sentry */
+  line[0] = ' ';		/* sentinel */
   while (*flinkv)
     {
+      int line_number = 0;
       char *file_name = ALLOCA (char, PATH_MAX);
       FILE *gid_FILE;
 
       maybe_relative_file_name (file_name, *flinkv++, cw_dlink);
       gid_FILE = fopen (file_name, "r");
       if (gid_FILE == 0)
-	error (0, errno, "can't open `%s'", file_name);
+	{
+	  error (0, errno, "can't open `%s'", file_name);
+	  return;
+	}
 
-      line_number = 0;
-      while (fgets (&line[1], sizeof (line), gid_FILE))
+      while (fgets (line + 1, sizeof (line) - 1, gid_FILE))
 	{
 	  line_number++;
 	  if (pattern)
 	    {
 	      int regexec_errno = regexec (&compiled, line, 0, 0, 0);
 	      if (regexec_errno == REG_ESPACE)
-		error (0, 0, "can't match regular-expression: memory exhausted");
+		error (1, 0, "can't match regular-expression: memory exhausted");
 	      else if (regexec_errno)
 		continue;
 	    }
-	  else if (!word_match (name, line))
-	    continue;
-	  printf ("%s:%d:%s", file_name, line_number, &line[1]);
+	  else if (word_match (name, line))
+	    printf ("%s:%d:%s", file_name, line_number, line + 1);
 	}
       fclose (gid_FILE);
     }

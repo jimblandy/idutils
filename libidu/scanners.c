@@ -65,6 +65,7 @@ static void help_me_text __P((void));
 struct language languages_0[] =
 {
   { "C", parse_args_c, get_token_c, help_me_c },
+  { "C++", parse_args_c, get_token_c, help_me_c },
   { "asm", parse_args_asm, get_token_asm, help_me_asm },
   { "text", parse_args_text, get_token_text, help_me_text },
 };
