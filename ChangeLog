@@ -1,3 +1,11 @@
+1999-03-28  Greg McGary  <gkm@gnu.org>
+
+	* Makefile.am (AUTOMAKE_OPTIONS): Add macro.
+
+	* config.h.in (WITH_REGEX): Remove.
+	* configure.in (AM_WITH_REGEX): Remove.
+	* src/lid.c (rx.h): Remove #include.
+
 1999-02-11  Greg McGary  <gkm@gnu.org>
 
 	* src/lid.c (report_grep): Continue rather than return when
