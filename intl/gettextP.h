@@ -18,6 +18,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 #ifndef _GETTEXTP_H
 #define _GETTEXTP_H
 
+#include "loadinfo.h"
+
 /* @@ end of prolog @@ */
 
 #ifndef PARAMS
@@ -45,12 +47,6 @@ SWAP (i)
 
 struct loaded_domain
 {
-  struct loaded_domain *next;
-  struct loaded_domain *successor[63];
-
-  const char *filename;
-  int decided;
-
   const char *data;
   int must_swap;
   nls_uint32 nstrings;
@@ -67,12 +63,10 @@ struct binding
   char *dirname;
 };
 
-struct loaded_domain *_nl_find_domain PARAMS ((const char *__dirname,
-					       char *__locale,
-					       const char *__domainname));
-void _nl_load_domain PARAMS ((struct loaded_domain *__domain));
-
-const char *_nl_expand_alias PARAMS ((const char *__name));
+struct loaded_l10nfile *_nl_find_domain PARAMS ((const char *__dirname,
+						 char *__locale,
+						 const char *__domainname));
+void _nl_load_domain PARAMS ((struct loaded_l10nfile *__domain));
 
 /* @@ begin of epilog @@ */
 

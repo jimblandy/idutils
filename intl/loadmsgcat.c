@@ -1,5 +1,5 @@
 /* loadmsgcat.c -- load needed message catalogs
-   Copyright (C) 1995 Software Foundation, Inc.
+   Copyright (C) 1995, 1996 Free Software Foundation, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -61,8 +61,8 @@ int _nl_msg_cat_cntr;
 /* Load the message catalogs specified by FILENAME.  If it is no valid
    message catalog do nothing.  */
 void
-_nl_load_domain (domain)
-     struct loaded_domain *domain;
+_nl_load_domain (domain_file)
+     struct loaded_l10nfile *domain_file;
 {
   int fd;
   struct stat st;
@@ -71,19 +71,20 @@ _nl_load_domain (domain)
     || defined _LIBC
   int use_mmap = 0;
 #endif
+  struct loaded_domain *domain;
 
-  domain->decided = 1;
-  domain->data = NULL;
+  domain_file->decided = 1;
+  domain_file->data = NULL;
 
   /* If the record does not represent a valid locale the FILENAME
      might be NULL.  This can happen when according to the given
      specification the locale file name is different for XPG and CEN
      syntax.  */
-  if (domain->filename == NULL)
+  if (domain_file->filename == NULL)
     return;
 
   /* Try to open the addressed file.  */
-  fd = open (domain->filename, O_RDONLY);
+  fd = open (domain_file->filename, O_RDONLY);
   if (fd == -1)
     return;
 
@@ -156,6 +157,12 @@ _nl_load_domain (domain)
       return;
     }
 
+  domain_file->data
+    = (struct loaded_domain *) malloc (sizeof (struct loaded_domain));
+  if (domain_file->data == NULL)
+    return;
+
+  domain = (struct loaded_domain *) domain_file->data;
   domain->data = (char *) data;
   domain->must_swap = data->magic != _MAGIC;
 
@@ -181,11 +188,12 @@ _nl_load_domain (domain)
       else
 #endif
 	free (data);
-      domain->data = NULL;
+      free (domain);
+      domain_file->data = NULL;
       return;
     }
 
   /* Show that one domain is changed.  This might make some cached
-     translation invalid.  */
+     translations invalid.  */
   ++_nl_msg_cat_cntr;
 }

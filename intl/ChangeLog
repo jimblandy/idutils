@@ -1,3 +1,78 @@
+Thu Jun  6 01:49:52 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* Makefile.in (all): Depend on all-@USE_INCLUDED_LIBINTL@, not
+        all-@USE_NLS@.
+
+	* Makefile.in (install): intlh.inst comes from local dir, not
+        $(srcdir).
+
+	* Makefile.in (intlh.inst): Special handling of this goal.  If
+	used in gettext, this is really a rul to construct this file.  If
+	used in any other package it is defined as a .PHONY rule with
+	empty body.
+
+	* finddomain.c: Extract locale file information handling into
+	l10nfile.c.  Rename local stpcpy__ function to stpcpy.
+
+	* dcgettext.c (stpcpy): Add local definition.
+
+	* l10nflist.c: Solve some portability problems.  Patches partly by
+	Thomas Esken.  Add local definition of stpcpy.
+
+Tue Jun  4 02:47:49 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* intlh.inst.in: Don't depend including <locale.h> on
+	HAVE_LOCALE_H.  Instead configure must rewrite this fiile
+	depending on the result of the configure run.
+
+	* Makefile.in (install): libintl.inst is now called intlh.inst.
+	Add rules for updating intlh.inst from intlh.inst.in.
+
+	* libintl.inst: Renamed to intlh.inst.in.
+
+	* localealias.c, dcgettext.c [__GNUC__]: Define HAVE_ALLOCA to 1
+        because gcc has __buitlin_alloca.
+	Reported by Roland McGrath.
+
+Mon Jun  3 00:32:16 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* Makefile.in (installcheck): New goal to fulfill needs of
+        automake's distcheck.
+
+	* Makefile.in (install): Reorder commands so that VERSION is
+        found.
+
+	* Makefile.in (gettextsrcdir): Now use subdirectory intl/ in
+        @datadir@/gettext.
+	(COMSRCS): Add l10nfile.c.
+	(OBJECTS): Add l10nfile.o.
+	(DISTFILES): Rename to DISTFILE.normal.  Remove $(DISTFILES.common).
+	(DISTFILE.gettext): Remove $(DISTFILES.common).
+	(all-gettext): Remove goal.
+	(install): If $(PACKAGE) = gettext install, otherwose do nothing.  No
+	package but gettext itself should install libintl.h + headers.
+	(dist): Extend goal to work for gettext, too.
+	(dist-gettext): Remove goal.
+
+	* dcgettext.c [!HAVE_ALLOCA]: Define macro alloca by using malloc.
+
+Sun Jun  2 17:33:06 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* loadmsgcat.c (_nl_load_domain): Parameter is now comes from
+        find_l10nfile.
+
+Sat Jun  1 02:23:03 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* l10nflist.c (__argz_next): Add definition.
+
+	* dcgettext.c [!HAVE_ALLOCA]: Add code for handling missing alloca
+	code.  Use new l10nfile handling.
+
+	* localealias.c [!HAVE_ALLOCA]: Add code for handling missing
+        alloca code.
+
+	* l10nflist.c: Initial revision.
+
 Tue Apr  2 18:51:18 1996  Ulrich Drepper  <drepper@myware>
 
 	* Makefile.in (all-gettext): New goal.  Same as all-yes.
@@ -767,5 +842,3 @@ Sun Jul  2 02:06:50 1995  Ulrich Drepper  <drepper@myware>
 	which allow to use the X/Open catgets function with an interface
 	like the Uniforum gettext function.  For system which does not
 	have neither of those a complete implementation is provided.
-
-

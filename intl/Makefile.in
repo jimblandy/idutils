@@ -32,7 +32,7 @@ includedir = $(prefix)/include
 datadir = $(prefix)/@DATADIRNAME@
 localedir = $(datadir)/locale
 gnulocaledir = $(prefix)/share/locale
-gettextsrcdir = @datadir@/gettext
+gettextsrcdir = @datadir@/gettext/intl
 aliaspath = $(localedir):.
 subdir = intl
 
@@ -49,19 +49,21 @@ CFLAGS = @CFLAGS@
 
 COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
 
-HEADERS = $(COMHDRS) libgettext.h
+HEADERS = $(COMHDRS) libgettext.h loadinfo.h
 COMHDRS = gettext.h gettextP.h hash-string.h
 SOURCES = $(COMSRCS) intl-compat.c cat-compat.c
 COMSRCS = bindtextdom.c dcgettext.c dgettext.c gettext.c \
-finddomain.c loadmsgcat.c localealias.c textdomain.c
+finddomain.c loadmsgcat.c localealias.c textdomain.c l10nflist.c \
+explodename.c
 OBJECTS = @INTLOBJS@ bindtextdom.o dcgettext.o dgettext.o gettext.o \
-finddomain.o loadmsgcat.o localealias.o textdomain.o
+finddomain.o loadmsgcat.o localealias.o textdomain.o l10nflist.o \
+explodename.o
 CATOBJS = cat-compat.o ../po/cat-id-tbl.o
 GETTOBJS = intl-compat.o
 DISTFILES.common = ChangeLog Makefile.in linux-msg.sed po2tbl.sed.in \
 xopen-msg.sed $(HEADERS) $(SOURCES)
-DISTFILES = $(DISTFILES.common) VERSION
-DISTFILES.gettext = $(DISTFILES.common) libintl.glibc libintl.inst
+DISTFILES.normal = VERSION
+DISTFILES.gettext = libintl.glibc intlh.inst.in
 
 .SUFFIXES:
 .SUFFIXES: .c .o
@@ -70,9 +72,9 @@ DISTFILES.gettext = $(DISTFILES.common) libintl.glibc libintl.inst
 
 INCLUDES = -I.. -I. -I$(top_srcdir)/intl -I$(top_srcdir)/lib
 
-all: all-@USE_NLS@
+all: all-@USE_INCLUDED_LIBINTL@
 
-all-yes all-gettext: libintl.a
+all-yes: libintl.a intlh.inst
 all-no:
 
 libintl.a: $(OBJECTS)
@@ -83,9 +85,7 @@ libintl.a: $(OBJECTS)
 ../po/cat-id-tbl.o: ../po/cat-id-tbl.c $(top_srcdir)/po/$(PACKAGE).pot
 	cd ../po && $(MAKE) cat-id-tbl.o
 
-check install: all
-
-installcheck:
+check: all
 
 # This installation goal is only used in GNU gettext.  Packages which
 # only use the library should use install instead.
@@ -95,19 +95,24 @@ installcheck:
 # separate library or use the catgets interface.  A special case is
 # where configure found a previously installed GNU gettext library.
 # If you want to use the one which comes with this version of the
-# package, you have to use `configure --with-gnu-gettext'.
-install-src: install
-	$(top_srcdir)/mkinstalldirs $(libdir) $(includedir) $(gettextsrcdir)
-	if test '@INTLOBJS@' = '$(GETTOBJS)'; then \
-	  $(INSTALL_DATA) $(srcdir)/libintl.inst \
-	    $(includedir)/libintl.h; \
-	  $(INSTALL_DATA) libintl.a $(libdir)/libintl.a; \
+# package, you have to use `configure --with-included-gettext'.
+install: all
+	if test "$(PACKAGE)" = "gettext"; then \
+	  $(top_srcdir)/mkinstalldirs $(libdir) $(includedir) \
+	    $(gettextsrcdir); \
+	  if test '@INTLOBJS@' = '$(GETTOBJS)'; then \
+	    $(INSTALL_DATA) intlh.inst $(includedir)/libintl.h; \
+	    $(INSTALL_DATA) libintl.a $(libdir)/libintl.a; \
+	  fi; \
+	  $(INSTALL_DATA) VERSION $(gettextsrcdir)/VERSION; \
+	  cd $(srcdir) && \
+	  for file in $(DISTFILES.common); do \
+	    $(INSTALL_DATA) $$file $(gettextsrcdir)/$$file; \
+	  done; \
 	fi
-	cd $(srcdir) && \
-	for file in $(DISTFILES.common); do \
-	  $(INSTALL_DATA) $$file $(gettextsrcdir)/intl-$$file; \
-	done
-	$(INSTALL_DATA) VERSION $(gettextsrcdir)/intl-VERSION
+
+# Define this as empty until I found a useful application.
+installcheck:
 
 uninstall:
 	for file in $(DISTFILES); do \
@@ -117,8 +122,8 @@ uninstall:
 info dvi:
 
 $(OBJECTS): ../config.h libgettext.h
-bindtextdom.o finddomain.o loadmsgcat.o: gettextP.h gettext.h
-dcgettext.o: gettextP.h gettext.h hash-string.h
+bindtextdom.o finddomain.o loadmsgcat.o: gettextP.h gettext.h loadinfo.h
+dcgettext.o: gettextP.h gettext.h hash-string.h loadinfo.h
 
 tags: TAGS
 
@@ -144,19 +149,16 @@ maintainer-clean: distclean
 	@echo "it deletes files that may require special tools to rebuild."
 
 
-.PHONY: distdir
+# GNU gettext needs not contain the file `VERSION' but contains some
+# other files which should not be distributed in other packages.
 distdir = ../$(PACKAGE)-$(VERSION)/$(subdir)
-distdir: Makefile $(DISTFILES)
-	for file in $(DISTFILES); do \
-	  ln $(srcdir)/$$file $(distdir) 2> /dev/null \
-	    || cp -p $(srcdir)/$$file $(distdir); \
-	done
-
-# This dist goal is only used in GNU gettext.  GNU gettext needs not contain
-# the file `VERSION' but contains some other files which should not be
-# distributed in other packages.
-dist-gettext: Makefile $(DISTFILES.gettext)
-	for file in $(DISTFILES.gettext); do \
+dist distdir: Makefile $(DISTFILES)
+	if test "$(PACKAGE)" = gettext; then \
+	  additional="$(DISTFILES.gettext)"; \
+	else \
+	  additional="$(DISTFILES.normal)"; \
+	fi; \
+	for file in $(DISTFILES.common) $$additional; do \
 	  ln $(srcdir)/$$file $(distdir) 2> /dev/null \
 	    || cp -p $(srcdir)/$$file $(distdir); \
 	done
@@ -167,6 +169,16 @@ dist-libc:
 Makefile: Makefile.in ../config.status
 	cd .. \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+# The dependency for intlh.inst is different in gettext and all other
+# packages.  Because we cannot you GNU make features we have to solve
+# the problem while rewriting Makefile.in.
+@GT_YES@intlh.inst: intlh.inst.in ../config.status
+@GT_YES@	cd .. \
+@GT_YES@	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= \
+@GT_YES@	  $(SHELL) ./config.status
+@GT_NO@.PHONY: intlh.inst
+@GT_NO@inthl.inst:
 
 # Tell versions [3.59,3.63) of GNU make not to export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

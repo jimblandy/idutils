@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 
 #ifdef __GNUC__
 # define alloca __builtin_alloca
+# define HAVE_ALLOCA 1
 #else
 # if defined HAVE_ALLOCA_H || defined _LIBC
 #  include <alloca.h>
@@ -72,6 +73,41 @@ void free ();
    file and the name space must not be polluted.  */
 # define strcasecmp __strcasecmp
 #endif
+
+
+/* For those loosing systems which don't have `alloca' we have to add
+   some additional code emulating it.  */
+#ifdef HAVE_ALLOCA
+/* Nothing has to be done.  */
+# define ADD_BLOCK(list, address) /* nothing */
+# define FREE_BLOCKS(list) /* nothing */
+#else
+struct block_list
+{
+  void *address;
+  struct block_list *next;
+};
+# define ADD_BLOCK(list, addr)						      \
+  do {									      \
+    struct block_list *newp = (struct block_list *) malloc (sizeof (*newp));  \
+    /* If we cannot get a free block we cannot add the new element to	      \
+       the list.  */							      \
+    if (newp != NULL) {							      \
+      newp->address = (addr);						      \
+      newp->next = (list);						      \
+      (list) = newp;							      \
+    }									      \
+  } while (0)
+# define FREE_BLOCKS(list)						      \
+  do {									      \
+    while (list != NULL) {						      \
+      struct block_list *old = list;					      \
+      list = list->next;						      \
+      free (old);							      \
+    }									      \
+  } while (0)
+#endif	/* have alloca */
+
 
 struct alias_map
 {
@@ -147,18 +183,25 @@ read_alias_file (fname, fname_len)
      const char *fname;
      int fname_len;
 {
+#ifndef HAVE_ALLOCA
+  struct block_list *alloca_list = NULL;
+#endif
   FILE *fp;
   char *full_fname;
   size_t added;
   static const char aliasfile[] = "/locale.alias";
 
   full_fname = (char *) alloca (fname_len + sizeof aliasfile);
+  ADD_BLOCK (block_list, full_fname);
   memcpy (full_fname, fname, fname_len);
   memcpy (&full_fname[fname_len], aliasfile, sizeof aliasfile);
 
   fp = fopen (full_fname, "r");
   if (fp == NULL)
-    return 0;
+    {
+      FREE_BLOCKS (block_list);
+      return 0;
+    }
 
   added = 0;
   while (!feof (fp))
@@ -223,14 +266,20 @@ read_alias_file (fname, fname_len)
 	      len = strlen (alias) + 1;
 	      tp = (char *) malloc (len);
 	      if (tp == NULL)
-		return added;
+		{
+		  FREE_BLOCKS (block_list);
+		  return added;
+		}
 	      memcpy (tp, alias, len);
 	      map[nmap].alias = tp;
 
 	      len = strlen (value) + 1;
 	      tp = (char *) malloc (len);
 	      if (tp == NULL)
-		return added;
+		{
+		  FREE_BLOCKS (block_list);
+		  return added;
+		}
 	      memcpy (tp, value, len);
 	      map[nmap].value = tp;
 
@@ -259,6 +308,7 @@ read_alias_file (fname, fname_len)
     qsort (map, nmap, sizeof (struct alias_map),
 	   (int (*) PARAMS ((const void *, const void *))) alias_compare);
 
+  FREE_BLOCKS (block_list);
   return added;
 }
 
