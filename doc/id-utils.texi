@@ -254,7 +254,7 @@ releases, more than one ID database may be named on the command line.
 colon-separated list of ID database names.  If this variable is present,
 and no @samp{--file} options are presented on the command line, the ID
 databases named in @samp{IDPATH} are implied.@footnote{At present, this
-feature is fully implemented, since only the first of a list of ID
+feature isn't fully implemented, since only the first of a list of ID
 database names is processed.}
 
 @end table
@@ -553,7 +553,7 @@ to type so much).
 @opindex --lang-option=C:-i
 @opindex --lang-option=C:--ignore
 
-     x mkiConsider the characters in @var{character-class} as valid constituents of
+Consider the characters in @var{character-class} as valid constituents of
 identifier names, but discard all tokens containing these characters.
 For example, if some C code has identifiers containing @samp{$}, but you
 don't want these cluttering up your ID database, use
@@ -629,8 +629,8 @@ register names, you can keep these characters in the tokens by specifying
 @opindex --lang-option=asm:-i
 @opindex --lang-option=asm:--ignore
 
-Consider the characters of @var{character-class} as valid consituents of
-identifier names, but discard all tokens containing these characters.
+Consider the characters of @var{character-class} as valid constituents
+of identifier names, but discard all tokens containing these characters.
 For example, if you don't want to clutter your ID database with
 assembler directives that begin with a leading @samp{.} or with
 assembler labels that contain @samp{@@}, use
@@ -720,7 +720,7 @@ existing scanners and modify it as necessary.  For the hypothetical
 language @var{foo}, you must define the functions @code{get_token_foo},
 @code{parse_args_foo}, @code{help_me_foo}, as well as the tables
 @code{long_options_foo} and @code{args_foo}.  If your scanner is
-modelled after one of the existing scanners, you'll also need a
+modeled after one of the existing scanners, you'll also need a
 character-attribute table @code{ctype_foo}.
 
 This is not a terribly difficult programming task, but it requires
@@ -728,8 +728,7 @@ recompiling and installing the new version of @file{mkid} and @file{xtokid}.
 You should use @file{xtokid} to test the operation of the new scanner.
 
 Once these functions and tables are ready, add function prototypes and
-an entry to to the @code{languages_0} table near the beginning of the
-file.
+an entry to the @code{languages_0} table near the beginning of the file.
 
 Be warned that the existing scanners are built for speed, not elegance
 or readability.  You might wish to create a new scanner that's easier to
@@ -757,8 +756,8 @@ and exhibits excellent locality-of-reference, and so is capable of
 operating with a working-set size that is only half the size of its
 virtual address space.  A typical @sc{UNIX}-like operating system with
 16 megabytes of system memory should be able to build an ID database
-covering approximately 12,000-14,000 source files totalling
-approximately 50--100 Megabytes.  A 66 Mhz 486 computer can build such
+covering approximately 12,000-14,000 source files totaling
+approximately 50--100 Megabytes.  A 66 MHz 486 computer can build such
 a large ID database in approximately 10-15 minutes.
 
 @pindex cron
@@ -862,8 +861,8 @@ faster).
 @opindex -w
 @opindex --word
 
-Match @var{pattern} using a word-delimited (non substring) search.  This is the default
-for literal searches.
+Match @var{pattern} using a word-delimited (non substring) search.  This
+is the default for literal searches.
 
 @item -s
 @itemx --substring
@@ -1133,7 +1132,7 @@ are passed on the command line, @file{fid} prints the tokens that are
 common to both files (i.e., the @emph{set intersection} of the two token
 sets).
 
-@file{lid} reads the ID database, therefore it accepts the @samp{--file}
+@file{fid} reads the ID database, therefore it accepts the @samp{--file}
 option, and consults the @samp{IDPATH} environment variable, as
 described in @ref{Reading options}.
 
@@ -1148,12 +1147,12 @@ separated by spaces.  Otherwise, the tokens are printed one per line.
 @cindex filenames, matching
 @cindex matching filenames
 
-@code{fnid} queries the list of file names stored in the ID database.
+@file{fnid} queries the list of file names stored in the ID database.
 It accepts shell @emph{wildcard} patterns on the command line.  If no
 pattern is supplied, @file{*} is implied.  @file{fnid} prints the
 file names that match the given patterns.
 
-@code{fnid} prints file names, and as such accepts the
+@file{fnid} prints file names, and as such accepts the
 @samp{--separator} option as described in @ref{File listing options}.
 
 For example, the command:
@@ -1220,7 +1219,7 @@ versions.  A first release of the renamed @file{mkid} @w{version 2} was
 posted to @file{alt.sources} near the end of 1990.  At that time, Tom
 wrote a Texinfo manual with the encouragement the net community.
 (Tom especially thanks Doug Scofield and Bill Leonard whom he dragooned
-into helping poorfraed and edit---they found several problems in the
+into helping proofread and edit---they found several problems in the
 initial version.)  Karl Berry revamped the manual for Texinfo style,
 indexing, and organization in 1995.
 
