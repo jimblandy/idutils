@@ -555,17 +555,17 @@ report_grep (char const *name, struct file_link **flinkv)
   while (*flinkv)
     {
       int line_number = 0;
-      FILE *gid_FILE;
+      FILE *source_FILE;
 
       maybe_relative_file_name (file_name, *flinkv++, cw_dlink);
-      gid_FILE = fopen (file_name, "r");
-      if (gid_FILE == 0)
+      source_FILE = fopen (file_name, "r");
+      if (source_FILE == 0)
 	{
 	  error (0, errno, "can't open `%s'", file_name);
 	  continue;
 	}
 
-      while (fgets (line + 1, sizeof (line) - 1, gid_FILE))
+      while (fgets (line + 1, sizeof (line) - 1, source_FILE))
 	{
 	  line_number++;
 	  if (pattern)
@@ -579,7 +579,7 @@ report_grep (char const *name, struct file_link **flinkv)
 	  else if (word_match (name, line))
 	    printf ("%s:%d:%s", file_name, line_number, line + 1);
 	}
-      fclose (gid_FILE);
+      fclose (source_FILE);
     }
 }
 

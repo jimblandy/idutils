@@ -1,5 +1,5 @@
 /* idread.c -- functions to read ID database files
-   Copyright (C) 1995, 1996 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1996, 1999 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -55,7 +55,7 @@ struct file_link **
 maybe_read_id_file (char const *id_file_name, struct idhead *idhp)
 {
   obstack_init (&idhp->idh_file_link_obstack);
-  idhp->idh_FILE = fopen (id_file_name, "r");
+  idhp->idh_FILE = fopen (id_file_name, "rb");
   if (idhp->idh_FILE == 0)
     return 0;
 
