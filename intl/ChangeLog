@@ -1,4 +1,38 @@
+Tue Jun 11 17:05:13 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* l10nflist.c, localealias.c, dcgettext.c: Define _GNU_SOURCE to
+        get prototype for stpcpy and strcasecmp.
+
+	* intlh.inst.in, libgettext.h: Move declaration of
+	`_nl_msg_cat_cntr' outside __extension__ block to prevent warning
+	from gcc's -Wnested-extern option.
+
+Fri Jun  7 01:58:00 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* Makefile.in (install): Remove comment.
+
+Thu Jun  6 17:28:17 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* Makefile.in (install): Work around for another Buglix stupidity.
+	Always use an `else' close for `if's.  Reported by Nelson Beebe.
+
+	* Makefile.in (intlh.inst): Correct typo in phony rule.
+	Reported by Nelson Beebe.
+
 Thu Jun  6 01:49:52 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* dcgettext.c (read_alias_file): Rename variable alloca_list to
+	block_list as the macro calls assume.
+	Patch by Eric Backus.
+
+	* localealias.c [!HAVE_ALLOCA]: Define alloca as macro using
+        malloc.
+	(read_alias_file): Rename varriabe alloca_list to block_list as the
+	macro calls assume.
+	Patch by Eric Backus.
+
+	* l10nflist.c: Correct conditional for <argz.h> inclusion.
+	Reported by Roland McGrath.
 
 	* Makefile.in (all): Depend on all-@USE_INCLUDED_LIBINTL@, not
         all-@USE_NLS@.

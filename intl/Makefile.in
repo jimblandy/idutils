@@ -109,6 +109,8 @@ install: all
 	  for file in $(DISTFILES.common); do \
 	    $(INSTALL_DATA) $$file $(gettextsrcdir)/$$file; \
 	  done; \
+	else \
+	  : ; \
 	fi
 
 # Define this as empty until I found a useful application.
@@ -178,7 +180,7 @@ Makefile: Makefile.in ../config.status
 @GT_YES@	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= \
 @GT_YES@	  $(SHELL) ./config.status
 @GT_NO@.PHONY: intlh.inst
-@GT_NO@inthl.inst:
+@GT_NO@intlh.inst:
 
 # Tell versions [3.59,3.63) of GNU make not to export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

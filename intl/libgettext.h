@@ -1,5 +1,5 @@
 /* libgettext.h -- Message catalogs for internationalization.
-   Copyright (C) 1995 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1996 Free Software Foundation, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -128,20 +128,24 @@ extern char *bindtextdomain__ PARAMS ((const char *__domainname,
    has dcgettext.  */
 # if !HAVE_CATGETS && (!HAVE_GETTEXT || HAVE_DCGETTEXT)
 
-#  define gettext(Msgid) \
+#  define gettext(Msgid)						      \
      dgettext (NULL, Msgid)
 
-#  define dgettext(Domainname, Msgid) \
+#  define dgettext(Domainname, Msgid)					      \
      dcgettext (Domainname, Msgid, LC_MESSAGES)
 
 #  if defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ >= 7
-#   define dcgettext(Domainname, Msgid, Category) \
+/* This global variable is defined in loadmsgcat.c.  We need a sign,
+   whether a new catalog was loaded, which can be associated with all
+   translations.  */
+extern int _nl_msg_cat_cntr;
+
+#   define dcgettext(Domainname, Msgid, Category)			      \
   (__extension__							      \
    ({									      \
      char *result;							      \
      if (__builtin_constant_p (Msgid))					      \
        {								      \
-	 extern int _nl_msg_cat_cntr;					      \
 	 static char *__translation__;					      \
 	 static int __catalog_counter__;				      \
 	 if (! __translation__ || __catalog_counter__ != _nl_msg_cat_cntr)    \

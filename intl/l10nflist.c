@@ -21,7 +21,8 @@ Boston, MA 02111-1307, USA.  */
 # include <config.h>
 #endif
 
-#if defined _LIBC && (defined __ARGZ_COUNT || defined __ARGZ_STRINGIFY)
+#if defined _LIBC || \
+    defined __ARGZ_COUNT || defined __ARGZ_STRINGIFY || defined __ARGZ_NEXT
 # include <argz.h>
 #endif
 #include <ctype.h>
@@ -31,6 +32,9 @@ Boston, MA 02111-1307, USA.  */
 #endif
 
 #if defined HAVE_STRING_H || defined _LIBC
+# ifndef _GNU_SOURCE
+#  define _GNU_SOURCE	1
+# endif
 # include <string.h>
 #else
 # include <strings.h>
