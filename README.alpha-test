@@ -1,0 +1,43 @@
+`mkid' README.alpha-test
+
+Special instructions for alpha testers:
+
+* The code is pretty solid, so I expect most problems to be portability
+  issues.
+
+* At least do this:
+
+	./configure --prefix test; make all; make check; make install.
+
+  Make check should "echo OK" if it succeeded.  This is not a very rigorous
+  test, but it at least ensures sanity for the core tools.
+  If all goes well and you want to start using it, reconfigure to install
+  in a normal place, e.g.,
+
+	 # put things in /usr/local/{bin,lib,info} (the default)
+	./configure; make install
+		-or-
+	 # put things in /usr/{bin,lib,info}
+	./configure --prefix /usr; make install
+
+  The ID file format is incompatible with mkid2, so you'll have to rebuild
+  your ID files.  You should notice that the new mkid is faster.
+
+* If you run into build problems, please help by emailing me the following:
+  * A brilliant, elegant patch to fix it. ;-)
+  -- or, if you don't have time for that... --
+  * The output of "make -k all", to show me where it's dying.
+  * The output of "uname -a"
+  * The output of "nm" on your system's libc.
+  * An ID file of the .h files in your system's /usr/include (I know--it's
+    a checken and egg problem.  Use mkid2.  You don't have mkid2?  It's ok,
+    don't knock yourself out.)
+
+* Be aware that this is still work in progress.  See TODO for a list of
+  things yet undone.
+
+
+Local Variables:
+mode: text
+fill-column: 75
+End:
