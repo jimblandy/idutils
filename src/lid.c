@@ -26,6 +26,9 @@
 #include <sys/wait.h>
 #include <assert.h>
 #include <getopt.h>
+#if HAVE_LIMITS_H
+# include <limits.h>
+#endif
 #include <regex.h>
 #include "xstring.h"
 #include "xunistd.h"
@@ -36,9 +39,6 @@
 #include "error.h"
 #include "pathmax.h"
 #include "xalloca.h"
-#if HAVE_LIMITS_H
-# include <limits.h>
-#endif
 
 typedef void (*report_func_t) __P((char const *name, struct file_link **flinkv));
 typedef int (*query_func_t) __P((char const *arg, report_func_t));
@@ -758,9 +758,13 @@ search_flinkv (struct file_link **flinkv)
   char pattern[BUFSIZ];
   unsigned int count;
   char *file_name = ALLOCA (char, PATH_MAX);
+  char *eol;
 
   if (fgets (pattern, sizeof (pattern), stdin) == 0)
     return -1;
+  eol = strchr(pattern, '\n');
+  if (eol)
+    *eol = 0;
 
   for (count = 0; *flinkv; count++, flinkv++)
     {

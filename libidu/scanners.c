@@ -483,6 +483,17 @@ unsigned char *scanner_buffer;
 #define SCAN_CPP_DIRECTIVE						\
   do									\
     {									\
+      new_line = 0;							\
+      /* Cope with leading whitespace before CPP lines */		\
+      while (c == ' ' || c == '\t')					\
+	c = getc (in_FILE);						\
+      if (c == '\n')							\
+	{								\
+	  new_line = 1;							\
+	  goto top;							\
+	}								\
+      else if (c != '#')						\
+	goto next;							\
       c = getc (in_FILE);						\
       while (ISBORING (c))						\
 	c = getc (in_FILE);						\
@@ -506,7 +517,7 @@ unsigned char *scanner_buffer;
 	  if (c == '"')							\
 	    {								\
 	      c = getc (in_FILE);					\
-	      while (c != '\n' && c != EOF && c != '"')			\
+	      while (c != '\n' && c != '"' && c != EOF)			\
 		{							\
 		  *id++ = c;						\
 		  c = getc (in_FILE);					\
@@ -516,7 +527,7 @@ unsigned char *scanner_buffer;
 	  else if (c == '<')						\
 	    {								\
 	      c = getc (in_FILE);					\
-	      while (c != '\n' && c != EOF && c != '>')			\
+	      while (c != '\n' && c != '>' && c != EOF)			\
 		{							\
 		  *id++ = c;						\
 		  c = getc (in_FILE);					\
@@ -573,12 +584,7 @@ get_token_c (FILE *in_FILE, void const *args, int *flags)
 top:
   c = getc (in_FILE);
   if (new_line)
-    {
-      new_line = 0;
-      if (c != '#')
-	goto next;
-      SCAN_CPP_DIRECTIVE;
-    }
+    SCAN_CPP_DIRECTIVE;
 
 next:
   while (ISBORING (c))
@@ -890,12 +896,7 @@ get_token_asm (FILE *in_FILE, void const *args, int *flags)
 top:
   c = getc (in_FILE);
   if (ARGS->handle_cpp > 0 && new_line)
-    {
-      new_line = 0;
-      if (c != '#')
-	goto next;
-      SCAN_CPP_DIRECTIVE;
-    }
+    SCAN_CPP_DIRECTIVE;
 
 next:
   while (ISBORING (c))
