@@ -1275,10 +1275,6 @@ tree8_to_argv (unsigned char const *hits_tree8)
   return bits_to_argv (tree8_to_bits (bits_vec, hits_tree8));
 }
 
-#if HAVE_SYS_IOCTL_H
-#include <sys/ioctl.h>
-#endif
-
 #if HAVE_TERMIOS_H
 
 #include <termios.h>
@@ -1289,6 +1285,10 @@ struct termios savemode;
 #define SET_TTY_MODES(modes) tcsetattr(0, TCSANOW, (modes))
 
 #else /* not HAVE_TERMIOS_H */
+
+#if HAVE_SYS_IOCTL_H
+#include <sys/ioctl.h>
+#endif
 
 #if HAVE_TERMIO_H
 #include <termio.h>

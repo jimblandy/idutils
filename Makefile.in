@@ -238,7 +238,7 @@ $(DIST_TGZ): $(DIST_DIR)
 
 dist-dir: $(DIST_DIR)
 dist-dir-links: $(OLD_DIST_DIR) $(DIST_DIR)
-	cd $(DIST_DIR); \
+	@cd $(DIST_DIR); \
 	for file in $(DIST_FILES); do \
 	    if cmp -s $$file ../$(OLD_DIST_DIR)/$$file; then \
 		rm -f $$file; \

@@ -1596,9 +1596,8 @@ int
 main( int argc , char * argv [ ] )
 {
    int         c ;                     /* current option */
-   char *      CmdPtr ;                /* Points to the command string */
+   char *      CmdPtr = NULL ;         /* Points to the command string */
    char        Command [ MAXCMD ] ;    /* Buffer for reading commands */
-   int         Do1 = 0 ;           /* 1 if should only do 1 command */
    int         DoPrompt ;              /* 1 if should write a prompt */
    int         errors = 0 ;            /* error count */
 
@@ -1610,7 +1609,6 @@ main( int argc , char * argv [ ] )
          break ;
       case 'c':
          CmdPtr = optarg ;
-         Do1 = 1 ;
          break ;
       case 'H':
          fputs("\
@@ -1644,7 +1642,7 @@ To get help after starting program type 'help'.\n\
 
    /* run the parser */
 
-   if (Do1) {           
+   if (CmdPtr) {           
       ScanInit(CmdPtr) ;
       exit(yyparse()) ;
    } else {

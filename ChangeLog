@@ -1,18 +1,33 @@
-Thu Feb 16 18:32:44 EST 1995  Greg McGary  <gkm@magilla.cichlid.com>
+Thu Feb 16 23:55:44 EST 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
-	* Version 3.0.3 released.
+	* Version 3.0.5 released.
+
+	* iid.y (main): Eliminate useless Do1 variable.
+
+	* filenames.c (kshgetwd): Conditionally getcwd or getwd.
+
+	* acconfig.h: Added typedefs of uint8_t, uint16_t, uint32_t,
+	int32_t.
+
+	* idfile.c (io_read, io_write): Use uint8_t, uint16_t, uint32_t,
+	int32_t.
+
+	* idfile.h (struct idhead): Use uint8_t, uint16_t, uint32_t,
+	int32_t.
 
 	* README.alpha-test: Added.
 
 	* TODO: Updated.
 
 	* lid.c (savetty, restoretty, linetty, chartty): Handle POSIX
-	termios properly.
+	termios properly.  (HAVE_SYS_IOCTL_H): #include <sys/ioctl.h> if
+	!HAVE_TERMIOS_H.
 
 	* README: Updated.
 
 	* configure.in (OLD_PATCH_LEVEL, MAJOR_VERSION, MINOR_VERSION,
-	FULL_VERSION): Added.
+	FULL_VERSION, AC_CHECK_SIZEOF(int, long, short, char),
+	AC_CHECK_HEADERS(regex.h), AC_CHECK_FUNCS(regcomp regcmp): Added.
 
 	* mkdirhier: Added.
 

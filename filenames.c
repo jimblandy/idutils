@@ -471,8 +471,15 @@ kshgetwd (char *pathname)
 	/* By golly, that name is the same file as "." ! */
 	return strcpy (pathname, kshname);
     }
+
   /* Oh well, something did not work out right, do it the hard way */
+#if HAVE_GETCWD
+  return getcwd (pathname, BUFSIZ);
+#else
+#if HAVE_GETWD
   return getwd (pathname);
+#endif
+#endif
 }
 
 /* unsymlink is a routine that resolves all symbolic links in

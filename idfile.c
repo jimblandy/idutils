@@ -48,7 +48,7 @@ init_idfile (char const *id_file, struct idhead *idh, struct idarg **id_args)
     return NULL;
 
   read_idhead (id_FILE, idh);
-  if (!strnequ (idh->idh_magic, IDH_MAGIC, sizeof (idh->idh_magic)))
+  if (idh->idh_magic[0] != IDH_MAGIC_0 || idh->idh_magic[1] != IDH_MAGIC_1)
     {
       fprintf (stderr, "%s: Not an id file: `%s'\n", program_name, id_file);
       exit (1);
@@ -111,15 +111,18 @@ io_read (FILE *input_FILE, void *addr, unsigned int size, int is_int)
     {
       switch (size)
 	{
-	case sizeof (long):
-	  *(long *)addr = getc (input_FILE);
-	  *(long *)addr += getc (input_FILE) << 010;
-	  *(long *)addr += getc (input_FILE) << 020;
-	  *(long *)addr += getc (input_FILE) << 030;
+	case sizeof (uint32_t):
+	  *(uint32_t *)addr = getc (input_FILE);
+	  *(uint32_t *)addr += getc (input_FILE) << 010;
+	  *(uint32_t *)addr += getc (input_FILE) << 020;
+	  *(uint32_t *)addr += getc (input_FILE) << 030;
 	  break;
-	case sizeof (short):
-	  *(short *)addr = getc (input_FILE);
-	  *(short *)addr += getc (input_FILE) << 010;
+	case sizeof (uint16_t):
+	  *(uint16_t *)addr = getc (input_FILE);
+	  *(uint16_t *)addr += getc (input_FILE) << 010;
+	  break;
+	case sizeof (uint8_t):
+	  *(uint8_t *)addr = getc (input_FILE);
 	  break;
 	default:
 	  fprintf (stderr, "Unsupported size in io_write (): %d\n", size);
@@ -140,15 +143,18 @@ io_write (FILE *output_FILE, void *addr, unsigned int size, int is_int)
     {
       switch (size)
 	{
-	case sizeof (long):
-	  putc (*(long *)addr, output_FILE);
-	  putc (*(long *)addr >> 010, output_FILE);
-	  putc (*(long *)addr >> 020, output_FILE);
-	  putc (*(long *)addr >> 030, output_FILE);
+	case sizeof (uint32_t):
+	  putc (*(uint32_t *)addr, output_FILE);
+	  putc (*(uint32_t *)addr >> 010, output_FILE);
+	  putc (*(uint32_t *)addr >> 020, output_FILE);
+	  putc (*(uint32_t *)addr >> 030, output_FILE);
 	  break;
-	case sizeof (short):
-	  putc (*(short *)addr, output_FILE);
-	  putc (*(short *)addr >> 010, output_FILE);
+	case sizeof (uint16_t):
+	  putc (*(uint16_t *)addr, output_FILE);
+	  putc (*(uint16_t *)addr >> 010, output_FILE);
+	  break;
+	case sizeof (uint8_t):
+	  putc (*(uint8_t *)addr, output_FILE);
 	  break;
 	default:
 	  fprintf (stderr, "Unsupported size in io_write (): %d\n", size);
@@ -182,4 +188,3 @@ io_idhead (FILE *fp, int (*io) (FILE *, void *, unsigned int, int), struct idhea
   size += io (fp, &idh->idh_end_offset, sizeof (idh->idh_end_offset), 1);
   return size;
 }
-

@@ -560,7 +560,8 @@ write_idfile (char const *file_name, struct idarg *idarg)
       filerr ("create", file_name);
       exit (1);
     }
-  strncpy (idh.idh_magic, IDH_MAGIC, sizeof (idh.idh_magic));
+  idh.idh_magic[0] = IDH_MAGIC_0;
+  idh.idh_magic[1] = IDH_MAGIC_1;
   idh.idh_version = IDH_VERSION;
   idh.idh_pad_1 = 0;
   idh.idh_flags = IDH_COUNTS;

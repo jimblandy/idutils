@@ -26,21 +26,22 @@
 
 struct idhead
 {
-  char idh_magic[2];
-#define	IDH_MAGIC "\311\304"	/* ("ID" with hi bits set) */
-  char idh_pad_1;
-  char idh_version;
+  uint8_t idh_magic[2];
+#define	IDH_MAGIC_0 ('I'|0x80)
+#define	IDH_MAGIC_1 ('D'|0x80)
+  uint8_t idh_pad_1;
+  uint8_t idh_version;
 #define	IDH_VERSION	3
-  unsigned short idh_flags;
+  uint16_t short idh_flags;
 #define IDH_COUNTS 0x0001	/* occurrence counts are included with each token */
-  unsigned long idh_args;	/* total # of args for mkid update */
-  unsigned long idh_paths;	/* total # of file names for mkid update */
-  unsigned long idh_tokens;	/* total # of tokens */
-  unsigned long idh_buf_size;	/* # of bytes in longest entry (bufsiz for lid) */
-  unsigned long idh_vec_size;	/* # of hits in longest entry (max vector size for lid) */
-  off_t idh_args_offset;	/* file offset of args */
-  off_t idh_tokens_offset;	/* file offset of tokens section */
-  off_t idh_end_offset;		/* file offset beyond tokens section */
+  uint32_t idh_args;		/* total # of args for mkid update */
+  uint32_t idh_paths;		/* total # of file names for mkid update */
+  uint32_t idh_tokens;		/* total # of tokens */
+  uint32_t idh_buf_size;	/* # of bytes in longest entry (bufsiz for lid) */
+  uint32_t idh_vec_size;	/* # of hits in longest entry (max vector size for lid) */
+  int32_t idh_args_offset;	/* file offset of args */
+  int32_t idh_tokens_offset;	/* file offset of tokens section */
+  int32_t idh_end_offset;	/* file offset beyond tokens section */
 };
 
 struct idarg;

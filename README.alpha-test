@@ -20,12 +20,21 @@ Special instructions for alpha testers:
 	 # put things in /usr/{bin,lib,info}
 	./configure --prefix /usr; make install
 
-  The ID file format is incompatible with mkid2, so you'll have to rebuild
-  your ID files.  You should notice that the new mkid is faster.
+  If you have the time, patience and software, please build using both your
+  vendor-supplied compiler and gcc.  By default, configure will use gcc if
+  it is available.  You can override this by doing this:
+
+	rm config.cache
+	CC=vendor-supplied-cc ./configure	# bourne-shell syntax
+		-or-
+	setenv CC vendor-supplied-cc; ./configure # csh syntax
+
 
 * If you run into build problems, please help by emailing me the following:
   * A brilliant, elegant patch to fix it. ;-)
   -- or, if you don't have time for that... --
+  * The version of mkid you're trying to build
+    (type ./mkid to get the usage banner which includes the version)
   * The output of "make -k all", to show me where it's dying.
   * The output of "uname -a"
   * The output of "nm" on your system's libc.
@@ -36,6 +45,8 @@ Special instructions for alpha testers:
 * Be aware that this is still work in progress.  See TODO for a list of
   things yet undone.
 
+* Note that ID file format is incompatible with mkid2, so you'll have to
+  rebuild your ID files.  You should notice that the new mkid is faster.
 
 Local Variables:
 mode: text
