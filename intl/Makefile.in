@@ -123,7 +123,8 @@ install: all
 installcheck:
 
 uninstall:
-	for file in $(DISTFILES); do \
+	dists="$(DISTFILES)"; \
+	for file in $$dists; do \
 	  rm -f $(gettextsrcdir)/intl-$$file; \
 	done
 
