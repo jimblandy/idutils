@@ -1,9 +1,28 @@
-`mkid' README.alpha-test
+id-utils README-alpha
 
-Special instructions for alpha testers:
+Special instructions for pre-release testers:
 
-* The code is pretty solid, so I expect most problems to be portability
-  issues.
+* The code is pretty solid, but portability problems might remain.
+
+  I have already successfully configured, built and run `make check' on the
+  following systems, so if you have limited time, you needn't go out of
+  your way to retest them:
+
+  sparc-sun-solaris2.6		gcc
+  sparc-sun-solaris2.5.1	gcc
+  sparc-sun-sunos4.1.4		gcc & vendor cc (k&r)
+  i386-pc-solaris2.5.1		gcc
+  i386-pc-solaris2.6		gcc
+  i586-pc-linux-gnu		gcc
+  i386-pc-bsdi4.0		gcc
+  i386-unknown-freebsd2.2.7	gcc
+  i386-unknown-netbsd1.3.1	gcc
+  hppa1.1-hp-hpux9.04		gcc & vendor cc
+  mips-sgi-irix6.2		gcc & vendor cc
+
+  I always used GNU make.  The vendor-supplied make failed on HP/UX and
+  IRIX.  I didn't debug the vendor make failures, which is properly the
+  domain of automake.
 
 * At least do this:
 
@@ -39,11 +58,17 @@ Special instructions for alpha testers:
   * The output of "uname -a"
   * The output of "nm" on your system's libc, if applicable.
 
+  Send bug reports directly to me: gkm@gnu.org
+
 * Be aware that this is still work in progress.  See TODO for a list of
   things yet undone.
 
-* Note that ID file format is incompatible with mkid2, so you'll have to
-  rebuild your ID files.  You should notice that the new mkid is faster.
+* If you have contributed enhacements or fixes but don't find yourself
+  mentioned in the THANKS file, please bring it to my attention.
+
+Thanks!
+Greg
+
 
 Local Variables:
 mode: text

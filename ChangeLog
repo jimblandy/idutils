@@ -1,3 +1,22 @@
+1999-04-06  Greg McGary  <gkm@gnu.org>
+
+	* Version 3.2d released.
+
+	* libidu/idfile.h (largest_member_file): Add variable decl.
+	(MAX_LARGEST_MEMBER_FILE): Add constant.
+	* libidu/scanners.h (scanner_buffer): Add variable decl.
+	* libidu/scanners.c (scanner_buffer): Rename from id_0.
+	* libidu/walker.c (largest_member_file): Add veriable defn.
+	(walk_flink): Maintain largest_member_file.
+	Call print_member_file.
+	(maybe_get_member_file): Don't call print_member_file.
+	(classify_link): Return 0 if file size is zero.
+	* src/mkid.c (scan_files): Report size of largest file.
+	Cap scanner_buffer size at MAX_LARGEST_MEMBER_FILE.
+	Allocate scanner_buffer.
+	* src/xtokid.c (scan_files): Cap scanner_buffer size at
+	MAX_LARGEST_MEMBER_FILE.  Allocate scanner_buffer.
+
 1999-04-04  Greg McGary  <gkm@gnu.org>
 
 	* configure.in: Check for regcomp and compile lib/regex.c

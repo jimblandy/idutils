@@ -23,18 +23,19 @@ id-utils TODO - Future directions
   - reset access times
 
 * mkid
+  - Reinstate "-" on command-line, meaning read stdin for newline-separated args.
+  - Add times(2) results to statistics output.
+  - Scale statistics base unit (KB, MB, GB)
+  - detect and avoid cycles in the tree induced by symlinks to /.
+  - report dangling symlinks as such, rather than just saying "can't stat"
+  - don't gripe about dangling symlinks if file won't be scanned anyway
   - (Optinally?) store tokenized contents of comments.
   - Store attributes with symbols: type, func, variable struct-tag
     enum-tag, keyword, etc.  Store caller/callee relationships between
     identifiers.  Indicate which files have defns vs. uses.  This info
     is needed to support a cscope interface.
-  - Add times(2) results to statistics output.
-  - Scale statistics base unit (KB, MB, GB)
   - treat \ specially for TeX files and do likewise with @ for Texinfo.
-  - report dangling symlinks as such, rather than just saying "can't stat"
-  - don't gripe about dangling symlinks if file won't be scanned anyway
-  - Reinstate "-" on command-line, meaning read stdin for newline-separated args.
-  - detect and avoid cycles in the tree induced by symlinks to /.
+  - line-buffer verbose output
 
 * gscope
   - add a cscope work-alike query interface
