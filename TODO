@@ -3,6 +3,9 @@ id-utils TODO - Future directions
 * General
   - Add comments to all substantive functions
 
+* i18n
+  - integrate nl and pl translations.
+
 * Portability
   - Fix file name handling for non-UNIX file systems
     (notably DOS, Windoze & OS/2).

@@ -2,7 +2,7 @@ id-utils NEWS - User visible changes.
 
 Version 3.2d - April 6, 1999, by Greg McGary
 
-* Mondernize lisp/Makefile.am, replace gets with fgets.
+* Modernize lisp/Makefile.am, replace gets with fgets.
 
 * Allocate larger scanner buffer: MIN (2MB, largest file)
 
