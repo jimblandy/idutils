@@ -1,3 +1,17 @@
+1999-04-08  Greg McGary  <gkm@gnu.org>
+
+	* src/lid.c (limits.h): Include earlier to avoid RE_DUP_MAX
+	conflict. [From Erick.Branderhorst@asml.nl]
+	(search_flinkv): Bash terminating newline.  [From marc@snafu.org]
+	* lisp/elisp-comp: Import more recent version from automake.
+	* libidu/scanners.c (SCAN_CPP_DIRECTIVE): Tolerate
+	leading whitespace before first '#' [From rodneybrown@pmsc.com]
+	(get_token_asm, get_token_c): Move some common leading context
+	into SCAN_CPP_DIRECTIVE.
+
+	* po/pl.po, po/nl.po: Add files.
+	* configure.in (ALL_LINGUAS): Add pl & nl.
+
 1999-04-06  Greg McGary  <gkm@gnu.org>
 
 	* Version 3.2d released.
