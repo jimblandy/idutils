@@ -1,5 +1,8 @@
 1999-01-27  Jim Meyering  <meyering@ascend.com> (with some changes from gkm)
 
+	* src/ansi2knr.c: Import new version.
+	* src/ansi2knr.1: Likewise.
+
 	* lib/Makefile.am (EXTRA_DIST): Remove getopt.c and getopt1.c.
 
 	* configure.in: Require autoconf-2.13.
