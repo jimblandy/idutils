@@ -1,0 +1,23 @@
+`mkid' is a simple, fast, high-capacity, language-independent
+identifier database tool.  Actually, the term `identifier' is too
+limiting--`mkid' stores tokens, be they program identifiers of any
+form, literal numbers, or words of human-readable text.
+
+`mkid' was originally written by Greg McGary <gkm@magilla.cichlid.com>
+and posted to comp.sources.unix in September 1987.  It was then
+maintained and enhanced by a loose knit group of programmers on the
+Internet led by Tom Horsley <Tom.Horsley@mail.hcsc.com>.  Tom released
+`mkid2' on comp.sources.unix in February 1991.  Since then, Greg
+McGary has resumed maintenance and is working on a greatly enhanced
+version 3 under GPL.
+
+See file `COPYING' for copying conditions.
+See file `INSTALL' for compilation and installation instructions.
+See file `NEWS' for a list of major changes in the current release.
+See file `THANKS' for a list of contributors.
+See file `TODO' for planned enhancements.
+
+Send bug reports to <gkm@magilla.cichlid.com>.  A bug report is an
+adequate description of the problem: your input, what you expected,
+what you got, and why this is wrong.  Diffs are welcome, but they only
+describe a solution, from which the problem might be uneasy to infer.

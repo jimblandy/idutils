@@ -1,0 +1,264 @@
+# Main Makefile for `mkid'.
+
+# Copyright (C) 1986, 1995 Greg McGary
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; see the file COPYING.  If not, write to the
+# Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+##############################################################################
+
+PRODUCT =	@PRODUCT@
+MAJOR_VERSION =	@MAJOR_VERSION@
+MINOR_VERSION =	@MINOR_VERSION@
+PATCH_LEVEL =	@PATCH_LEVEL@
+VERISON =	@VERSION@
+FULL_VERSION =	@FULL_VERSION@
+
+SHELL =		/bin/sh
+VPATH =		@srcdir@
+@SET_MAKE@
+
+prefix =	@prefix@
+srcdir =	@srcdir@
+exec_prefix =	@exec_prefix@
+bindir =	$(exec_prefix)/bin
+infodir =	$(prefix)/info
+libdir =	@libdir@
+
+##############################################################################
+
+CC =		@CC@
+YACC =		@YACC@
+LN_S =		@LN_S@
+MAKEINFO =	makeinfo
+TEXI2DVI =	texi2dvi
+INSTALL =	@INSTALL@
+INSTALL_DATA =	@INSTALL_DATA@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+
+CFLAGS =	@CFLAGS@
+LDFLAGS =	@LDFLAGS@
+LIBS =		@LIBS@
+IID_HELP_FILE =	@IID_HELP_FILE@
+DEPEND =	@DEPEND@
+
+REGEXP =	@REGEXP@
+STRCASECMP =	@STRCASECMP@
+LIB_OFILES =	@ALLOCA@ @GETOPT@ @STRERROR@
+
+##############################################################################
+
+TARGETS =	$(PROGRAMS) $(LID_LINKS)
+PROGRAMS =	mkid lid fid idx iid
+LID_LINKS =	eid aid gid pid
+
+MKID_OFILES =	mkid.o misc.o scanners.o idfile.o filenames.o bitops.o $(LIB_OFILES)
+LID_OFILES =	lid.o misc.o idfile.o filenames.o bitops.o token.o $(REGEXP) $(LIB_OFILES)
+FID_OFILES =	fid.o misc.o idfile.o filenames.o bitops.o token.o $(LIB_OFILES)
+IDX_OFILES =	idx.o scanners.o filenames.o misc.o $(LIB_OFILES)
+IID_OFILES =	iid.o $(STRCASECMP) $(LIB_OFILES)
+
+SRC_YFILES =	iid.y
+
+SRC_CFILES =	mkid.c lid.c fid.c idx.c misc.c scanners.c idfile.c \
+		filenames.c bitops.c token.c
+GEN_CFILES =	$(SRC_YFILES:.y=.c)
+LIB_CFILES =	regex.c alloca.c getopt.c getopt1.c strcasecmp.c strerror.c
+ALL_CFILES =	$(SRC_CFILES) $(LIB_CFILES) $(GEN_CFILES)
+
+SRC_HFILES =	alloc.h bitops.h filenames.h idarg.h \
+		idfile.h misc.h scanners.h strxtra.h token.h
+LIB_HFILES =	regex.h getopt.h
+GEN_HFILES =	config.h
+
+ID_SRC_FILES =	$(SRC_HFILES) $(GEN_HFILES) $(LIB_HFILES) $(SRC_CFILES) $(LIB_CFILES) $(SRC_YFILES)
+DIST_SRC_FILES =$(ALL_CFILES) $(SRC_HFILES) $(LIB_HFILES) $(SRC_YFILES)
+
+DIST_DOC_FILES =mkid.texinfo mkid.info fid.1 iid.1 lid.1 mkid.1
+DIST_CONF_FILES=aclocal.m4 acconfig.h configure.in Makefile.in mkdirhier \
+		stamp-h.in config.h.in configure $(DEPEND)
+DIST_MISC_FILES=COPYING README INSTALL NEWS TODO THANKS idtest gid.el install-sh iid.help
+
+DIST_FILES =	$(DIST_CONF_FILES) $(DIST_SRC_FILES) $(DIST_DOC_FILES) $(DIST_MISC_FILES)
+
+DIST_DIR =	$(PRODUCT)-$(FULL_VERSION)
+DIST_TGZ =	$(DIST_DIR).tar.gz
+DIST_UU =	$(DIST_TGZ).uu
+
+# Note: OLD_DIST_DIR must be passed in through the environment
+# do "OLD_DIST_DIR=mkid-X.X.X make patch"
+PATCH_GZ =	$(OLD_DIST_DIR)-$(FULL_VERSION).diff.gz
+PATCH_UU =	$(PATCH_GZ).uu
+
+##############################################################################
+
+.SUFFIXES:
+.SUFFIXES: .c .i .o
+
+INCLUDES =	-I$(srcdir)
+CC_FLAGS =	$(DEFS) $(CPPFLAGS) $(INCLUDES) $(CFLAGS)
+LINK =		$(CC) $(LDFLAGS) -o $@
+
+# This is a convenient diagnostic aid: get a cpp'ed foo.c with "make foo.i"
+.c.i:
+	$(CPP) $(CC_FLAGS) $< >$@
+.c.o:
+	$(CC) $(CC_FLAGS) -c $<
+
+##############################################################################
+
+all: $(TARGETS)
+
+mkid: $(MKID_OFILES)
+	$(LINK) $(MKID_OFILES) $(LIBS)
+
+lid: $(LID_OFILES)
+	$(LINK) $(LID_OFILES) $(LIBS)
+
+fid: $(FID_OFILES)
+	$(LINK) $(FID_OFILES) $(LIBS)
+
+idx: $(IDX_OFILES)
+	$(LINK) $(IDX_OFILES) $(LIBS)
+
+iid: $(IID_OFILES)
+	$(LINK) $(IID_OFILES) $(LIBS)
+
+$(LID_LINKS): lid
+	rm -f $@; $(LN_S) lid $@
+
+iid.c: iid.y
+	$(YACC) $(srcdir)/iid.y && mv -f y.tab.c $@
+
+##############################################################################
+
+info: mkid.info
+
+mkid.info: mkid.texinfo version.texi
+	cd $(srcdir) && $(MAKEINFO) mkid.texinfo
+
+dvi: mkid.dvi
+
+mkid.dvi: mkid.texinfo version.texi
+	$(TEXI2DVI) $(srcdir)/mkid.texinfo
+
+version.texi: configure.in
+	echo "@set VERSION $(VERSION)" >version.tmp
+	if cmp -s version.tmp $(srcdir)/version.texi; then rm version.tmp; \
+	else mv version.tmp $(srcdir)/version.texi; fi
+
+##############################################################################
+
+install: all
+	$(srcdir)/mkdirhier $(bindir) $(libdir) $(infodir)
+	@for file in $(PROGRAMS); do \
+	    cmd="$(INSTALL_PROGRAM) $$file $(bindir)/`echo $$file | sed '$(transform)'`"; \
+	    echo $$cmd; eval $$cmd; \
+	done
+	@for file in $(LID_LINKS); do \
+	    lid=`echo lid |sed '$(transform)'`; \
+	    file=`echo $$file |sed '$(transform)'`; \
+	    cmd="rm -f $(bindir)/$$file; $(LN_S) $(bindir)/$$lid $(bindir)/$$file"; \
+	    echo $$cmd; eval $$cmd; \
+	done
+	$(INSTALL_DATA) $(srcdir)/iid.help $(IID_HELP_FILE)
+	@for file in `cd $(srcdir) && echo mkid.info*`; do \
+	    cmd="$(INSTALL_DATA) $(srcdir)/$$file $(infodir)/$$file"; \
+	    echo $$cmd; eval $$cmd; \
+	done
+
+uninstall:
+	@for file in $(TARGETS); do \
+	    cmd="rm -f $(bindir)/`echo $$file |sed '$(transform)'`"; \
+	    echo $$cmd; eval $$cmd; \
+	done
+	@for file in `cd $(infodir) && echo mkid.info*`; do \
+	    cmd="rm -f $(infodir)/$$file"; \
+	    echo $$cmd; eval $$cmd; \
+	done
+
+##############################################################################
+
+check: mkid lid fid idx
+	here=`pwd`; PATH=$$here:$$PATH; cd $(srcdir) \
+	    && $$here/mkid -v -f$$here/ID $(SRC_FILES) \
+	    && $(srcdir)/idtest -f$$here/ID $(SRC_FILES)
+
+ID: $(SRC_FILES) mkid
+	./mkid $(SRC_FILES)
+
+tags: TAGS
+
+TAGS: $(SRC_FILES)
+	cd $(srcdir) && etags -t $(SRC_FILES)
+
+##############################################################################
+
+mostlyclean:
+	rm -f $(TARGETS) a.out
+	rm -f *.o core *.core core.* *.aux *.cp *.cps *.dvi *.fn *.fns
+	rm -f *.ky *.kys *.log *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs
+
+clean: mostlyclean
+	rm -f iid.c
+
+distclean: clean
+	rm -f Makefile config.h config.status config.cache stamp-h
+
+realclean: distclean
+	rm -f *.info* TAGS ID
+
+##############################################################################
+
+dist-dir: $(DIST_DIR)
+$(DIST_DIR): $(DIST_FILES)
+	rm -fr $@
+	mkdir $@
+	chmod 777 $@
+	distdir=`pwd`/$@; cd $(srcdir); ln $(DIST_FILES) $$distdir
+	chmod -R a+r $@
+
+dist dist-tgz: $(DIST_TGZ)
+$(DIST_TGZ): $(DIST_DIR)
+	tar cfzho $@ $(DIST_DIR)
+
+dist-uu: $(DIST_UU)
+$(DIST_UU): $(DIST_TGZ)
+	uuencode $(DIST_TGZ) <$(DIST_TGZ) >$@
+
+patch patch-gz: $(PATCH_GZ)
+$(PATCH_GZ): $(OLD_DIST_DIR) $(DIST_DIR)
+	diff -r -c --show-c-function --new-file $(OLD_DIST_DIR) $(DIST_DIR) |gzip >$@
+
+patch-uu: $(PATCH_UU)
+$(PATCH_UU): $(PATCH_GZ)
+	uuencode $(PATCH_GZ) <$(PATCH_GZ) >$@
+
+##############################################################################
+
+Makefile: Makefile.in config.status $(DEPEND)
+	CONFIG_FILES=$@ CONFIG_HEADERS= ./config.status
+config.status: configure
+	./config.status --recheck
+$(srcdir)/configure: configure.in aclocal.m4
+	cd $(srcdir) && autoconf
+
+config.h: stamp-h
+stamp-h: $(srcdir)/config.h.in config.status
+	CONFIG_FILES= CONFIG_HEADERS=config.h ./config.status
+	date >stamp-h
+$(srcdir)/config.h.in: stamp-h.in
+$(srcdir)/stamp-h.in: configure.in aclocal.m4 acconfig.h 
+	cd $(srcdir) && autoheader
+	date >$(srcdir)/stamp-h.in

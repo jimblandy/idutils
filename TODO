@@ -1,0 +1,51 @@
+mkid TODO - Future directions
+
+* Bring all code into conformance with GNU project coding standards.
+  - Use command-line arguments, not the name of the program in argv[0]
+    to determine lid's behavior
+  - Use getopt_long () to parse command-line arguments.
+
+* Portability
+  - Fix filenames.c to handle non-UNIX file names properly.
+  - Fix sizeof (int) == sizeof (long) assumptions.
+  - The configure script tests for lots of things, but the code doesn't
+    use all of the results that it should.
+
+* lid
+  - change the name of the program to something a bit more
+    descriptive, e.g., "findid".
+  - use "long long" (if the compiler supports it) integer comparisons
+    in find_number().
+  - generalize the command-line interface for different behaviors.
+    User passes a command-format string for operating on the results
+    of a query:
+    %t = token, %f = crunched file list, %F = uncrunched file list
+    Recommend the following aliases to emulate old behavior:
+      alias lid="findid -e 'echo %t %f'"
+      alias eid="findid -e 'vi +/\\<%t\\>/ %F'" # for vi users
+      alias gid="findid -e 'egrep \\<%t\\> %F'"
+
+* mkid & lid
+  - store & retrieve floating point literals
+
+* mkid
+  - add a recursive file tree walker, so a complete list of file names
+    need not be supplied.
+  - Store attributes with symbols: type, func, variable struct-tag
+    enum-tag, keyword, etc.  Store caller/callee relationships between
+    identifiers.  Indicate which files have defns vs. uses.  This info
+    is needed to support a cscope interface.
+
+* cscope
+  - add a cscope work-alike query interface (this is being done by
+    Maureen Lecuona <lecuona@paul.rutgers.edu>)
+
+* grep
+  - Hack GNU grep to use a mkid database for hints about which files to
+    search. 
+
+
+Local Variables:
+mode: text
+fill-column: 75
+End:

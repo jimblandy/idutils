@@ -1,0 +1,17 @@
+mkid THANKS file
+
+mkid and lid were originally written by Greg McGary.  iid was written
+by Tom Horsley, who also maintained the programs for a time and
+released mkid2 to comp.sources.unix.
+
+Many people further contributed to GNU m4 by reporting problems,
+suggesting improvements, or submitting actual code.  Here is a list of
+these people.  If you contributed, but don't see your name here,
+please notify me at the address in the README file.  Help me keep this
+list complete and error-free.
+
+Wolfgang Rupprecht		wolfgang@wsrcc.com
+Tom Horsley			Tom.Horsley@mail.hcsc.com
+Marty Leisner			leisner@sdsp.mc.xerox.com
+
+... (I'm not done with this yet --gkm) ...

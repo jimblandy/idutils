@@ -1,0 +1,92 @@
+The iid program is an interactive shell on  top of the  mkid, lid, aid
+database programs. It allows interactive queries of  an ID database in
+a fashion similar to a DIALOG session. Iid remembers the sets of files
+that were reported by any  lid or aid request.  These sets are refered
+to by set numbers. The commands available are:
+
+BEGIN <directory>    cd to directory (presumably containing an ID file).
+B                    short for BEGIN
+SS <query>           run query displaying the sets generated
+FILES <query>        run query listing the files in the final set
+F                    short for FILES
+SHOW <set number>    run pager program on files in set
+P                    short for SHOW
+SETS                 show currently defined sets
+HELP                 run pager on this file
+? or H               short commands for HELP
+OFF                  exit iid
+<cmd>                run a shell command as a file name query
+!<cmd>               run a shell command
+
+A <set number> is the letter 's' (or 'S')  followed (with no space) by
+a number. Set numbers may be used as terms in a query.
+
+A <query> is:
+   <set number>
+   <identifier>
+   lid <identifier list>
+   aid <identifier list>
+   match <wild card list>
+   <query> or <query>
+   <query> and <query>
+
+The words  "lid", "aid", "match",  "or", and "and" are keywords, along
+with any word that looks like a set number. If you  have to use one of
+these (or in arguments to lid, aid  or match, shell escape characters)
+then quote the name.
+
+The  "match" operator constructs a set  of  files by running the "pid"
+program with the wild card  pattern as  an argument. This  is the only
+operator    which constructs sets   based  on file  names rather  than
+contents.
+
+An identifier by itself is  simply shorthand for "lid identifier". (If
+the -a  option was used  to invoke iid,  then  a simple  identifier is
+shorthand for "aid identifier").
+
+Example run:
+
+===> iid
+===> ss lid "^get" or lid "Arg$"
+   S0     14  lid -kmn "^get"
+   S1      3  lid -kmn "Arg$"
+   S2     15  (lid -kmn "^get") OR (lid -kmn "Arg$")
+===> f s1
+lid.c
+paths.c
+init.c
+===> ls *.c
+   S3     28  ls *.c
+===> ls s*
+   S4      9  ls s*
+===> ss s3 and s4
+   S5      4  (ls *.c) AND (ls s*)
+===> !grep vhil s5
+scan-c.c:				setCArgs("vhil",'+',"v");
+scan-c.c:			setCArgs("vhil",'+',"v");
+===> off
+
+In  this example  the 'ss' command  displays  the sets it creats as it
+does the parts of the  query. In this case  3 sets are created, set S0
+has 14 files in it, set S1 has 3 files and the  union of the two sets,
+S2, has 15 files.  A description of the  query that created any  given
+set is kept along with the set and displayed when sets are printed.
+
+The 'f s1' command says list the files in set S1, and  the three files
+in the set are displayed.
+
+The 'ls'  commands are examples of using  arbitrary  shell commands to
+generate lists  of files. In  this case the  'ls' command. (This could
+have been done as part of another query using the 'match' operator).
+
+The '!grep vhil s5' command runs  the 'grep'  shell command passing as
+arguments 'vhil' and the names of all the files in s5.
+
+The 'off' command terminated the example session.
+
+Keywords, commands, and set numbers are recognized  regardless of case
+(and is And is aNd). Other parameters are case sensitive.
+
+The iid program can  also be run in a  batch mode using the -c option.
+For more information on command line options, run "iid -H", or use the
+Unix 'man' command.

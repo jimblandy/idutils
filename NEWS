@@ -1,0 +1,25 @@
+mkid NEWS - User visible changes.
+
+Version 3.0 - February 1995, by Greg McGary
+
+* mkid uses a new efficient algorithm for building the database.  The old
+algorithm was O(n^2) for space and would exhaust memory or lead to page
+thrashing on very large programs.  The new algorithm is linear with the
+size of the input for both time and space.  It is now possible to build
+very large mkid databases covering many thousands of files totalling tens
+of megabytes and containing hundreds of thousands of unique tokens.
+
+* The database header is now byte-order and word-size independent.  ID
+files may be shared across networks of dissimilar architectures.
+
+Version 2.0 - February 1991, by Tom Horsley
+
+
+Version 1.0 - September 1987, by Greg McGary
+
+* Initial release to comp.sources.unix
+
+Local Variables:
+mode: text
+fill-column: 75
+End:
