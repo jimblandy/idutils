@@ -1,3 +1,20 @@
+Mon Mar 10 06:51:17 1997  Ulrich Drepper  <drepper@cygnus.com>
+
+	* Makefile.in: Implement handling of libtool.
+
+	* gettextP.h: Change data structures for use of generic lowlevel
+	i18n file handling.
+
+Wed Dec  4 20:21:18 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* textdomain.c: Put parentheses around arguments of memcpy macro
+	definition.
+	* localealias.c: Likewise.
+	* l10nflist.c: Likewise.
+	* finddomain.c: Likewise.
+	* bindtextdom.c: Likewise.
+	Reported by Thomas Esken.
+
 Mon Nov 25 22:57:51 1996  Ulrich Drepper  <drepper@cygnus.com>
 
 	* textdomain.c: Move definition of `memcpy` macro to right
