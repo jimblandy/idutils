@@ -4,7 +4,7 @@
 	(clear_ushort_ctype): Likewise.
 	(set_uchar_ctype): Likewise.
 	(clear_uchar_ctype): Likewise.
-	(id_0): Add `unsigned' to declaration of this file-scope static var..
+	(id_0): Add `unsigned' to declaration of this file-scope static var.
 	(get_token_c): Add `unsigned' to declaration of `id'.
 	(get_token_asm): Likewise.
 	(get_token_text): Likewise.
