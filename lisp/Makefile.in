@@ -10,7 +10,6 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -77,7 +76,6 @@ INTLLIBS = @INTLLIBS@
 INTLOBJS = @INTLOBJS@
 LANGUAGE_MAP_FILE = @LANGUAGE_MAP_FILE@
 LDFLAGS = @LDFLAGS@
-LIBOBJS = @LIBOBJS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MKINSTALLDIRS = @MKINSTALLDIRS@
@@ -94,10 +92,13 @@ VERSION = @VERSION@
 l = @l@
 lispdir = @lispdir@
 
+
 EXTRA_DIST = id-utils.el elisp-comp
 elc_SCRIPTS = id-utils.elc
 elcdir = @LISPDIR@
 SUFFIXES = .el .elc
+
+DISTCLEANFILES = id-utils.elc
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -200,6 +201,7 @@ clean-generic:
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES)
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-generic

@@ -6,6 +6,8 @@ id-utils TODO - Future directions
   - Fix assumption that (sizeof (int) == sizeof (long))
   - Integrate changes for MSDOS via djgpp
   - Port to cygwin
+  - configure gcc warning flags
+  - remove arbitrary buffer-size limits and unsafe libc functions (e.g., gets)
 
 * lid
   - use "long long" (if available) integer comparisons
@@ -17,7 +19,6 @@ id-utils TODO - Future directions
     you can index and search archived source without having to unpack it.
 
 * mkid
-  - relax static limit on maximum number of files (currently 32768)
   - (Optinally?) store tokenized contents of comments.
   - Store attributes with symbols: type, func, variable struct-tag
     enum-tag, keyword, etc.  Store caller/callee relationships between
@@ -26,6 +27,7 @@ id-utils TODO - Future directions
   - Add times(2) results to statistics output.
   - treat \ specially for TeX files and do likewise with @ for Texinfo.
   - report dangling symlinks as such, rather than just saying "can't stat"
+  - don't gripe about dangling symlinks if file won't be scanned anyway
   - Reinstate "-" on command-line, meaning read stdin for newline-separated args.
 
 * gscope

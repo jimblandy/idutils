@@ -1,5 +1,7 @@
 1999-03-29  Greg McGary  <gkm@gnu.org>
 
+	* Version 3.2b released.
+
 	* libidu/idfile.h (struct member_file) [mf_index]: Change
 	type to long.
 	* libidu/scanners.h (MAX_LEVELS): Remove constant.
