@@ -1,4 +1,5 @@
 ## Process this file with automake to produce Makefile.in
+AUTOMAKE_OPTIONS = gnits 1.2h
 
 SUBDIRS = lib libidu intl src lisp m4 po doc testsuite
 
