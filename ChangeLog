@@ -9,6 +9,7 @@
 	(get_token_asm): Likewise.
 	(get_token_text): Likewise.
 
+	* testsuite/Makefile.am (DISTCLEANFILES): Arrange to remove ID.
 	* libidu/Makefile.am (EXTRA_DIST): Arrange to distribute id-lang.map.
 	* lisp/Makefile.am (DISTCLEANFILES): Arrange to remove id-utils.elc.
 	* doc/Makefile.am (DISTCLEANFILES): Arrange to remove id-utils.cm
