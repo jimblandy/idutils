@@ -360,11 +360,11 @@ scan_member_file (struct member_file const *member)
   source_FILE = fopen (flink->fl_name, "r");
   if (source_FILE)
     {
+      char *file_name = ALLOCA (char, PATH_MAX);
       if (statistics_flag)
 	{
 	  if (fstat (fileno (source_FILE), &st) < 0)
 	    {
-	      char *file_name = ALLOCA (char, PATH_MAX);
 	      maybe_relative_file_name (file_name, flink, cw_dlink);
 	      error (0, errno, _("can't stat `%s'"), file_name);
 	    }
@@ -373,7 +373,6 @@ scan_member_file (struct member_file const *member)
 	}
       if (verbose_flag)
 	{
-	  char *file_name = ALLOCA (char, PATH_MAX);
 	  maybe_relative_file_name (file_name, flink, cw_dlink);
 	  printf ("%d: %s: %s", member->mf_index, lang->lg_name, file_name);
 	  fflush (stdout);

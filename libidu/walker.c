@@ -171,7 +171,6 @@ walk_flink (struct file_link *flink, struct dynvec *sub_dirs_vec)
 	     (FL_IS_FILE (old_flags) ? _("file") : _("directory")),
 	     (FL_IS_FILE (new_flags) ? _("file") : _("directory")));
     }
-  
 
   flink->fl_flags = (old_flags & ~(FL_TYPE_MASK|FL_SYM_LINK)) | new_flags;
   if (FL_IS_DIR (new_flags))
@@ -413,12 +412,12 @@ struct lang_args *
 get_lang_args (struct file_link const *flink)
 {
   struct lang_args *args = lang_args_list;
+  char *file_name = ALLOCA (char, PATH_MAX);
 
   while (args)
     {
       if (strchr (args->la_pattern, SLASH_CHAR))
 	{
-	  char *file_name = ALLOCA (char, PATH_MAX);
 	  absolute_file_name (file_name, flink);
 	  if (fnmatch (args->la_pattern, file_name, MAYBE_FNM_CASEFOLD | FNM_FILE_NAME) == 0)
 	    return (args->la_language ? args : 0);
@@ -480,7 +479,7 @@ append_strings_to_vector (char **vector_0, char *string, char *delimiter_class)
     }
   else
     vector = vector_0 = MALLOC (char *, 2 + strlen (string) / 2);
-  
+
   *vector = strtok (string, delimiter_class);
   while (*vector)
     *++vector = strtok (0, delimiter_class);
@@ -655,7 +654,7 @@ vectorize_string (char *string, char *delimiter_class)
 {
   char **vector_0 = MALLOC (char *, 2 + strlen (string) / 2);
   char **vector = vector_0;
-  
+
   *vector = strtok (string, delimiter_class);
   while (*vector)
     *++vector = strtok (0, delimiter_class);

@@ -80,6 +80,7 @@ print_filenames (struct file_link **flinkv, enum separator_style separator_style
   struct file_link const *arg;
   struct file_link const *dlink;
   int brace_is_open = 0;
+  char *file_name = ALLOCA (char, PATH_MAX);
 
   while (*flinkv)
     {
@@ -94,7 +95,6 @@ print_filenames (struct file_link **flinkv, enum separator_style separator_style
 	      dlink = arg->fl_parent;
 	      if (dlink && dlink != cw_dlink)
 		{
-		  char *file_name = ALLOCA (char, PATH_MAX);
 		  maybe_relative_file_name (file_name, dlink, cw_dlink);
 		  fputs (file_name, stdout);
 		  putchar ('/');
@@ -109,7 +109,6 @@ print_filenames (struct file_link **flinkv, enum separator_style separator_style
 	    printf (",%s}%s", root_name (arg->fl_name), suff_name (arg->fl_name));
 	  else
 	    {
-	      char *file_name = ALLOCA (char, PATH_MAX);
 	      maybe_relative_file_name (file_name, arg, cw_dlink);
 	      fputs (file_name, stdout);
 	    }

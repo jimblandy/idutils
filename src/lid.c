@@ -537,6 +537,7 @@ report_grep (char const *name, struct file_link **flinkv)
   char line[1<<020];
   char const *pattern = 0;
   regex_t compiled;
+  char *file_name = ALLOCA (char, PATH_MAX);
 
   if (key_style == ks_pattern)
     {
@@ -558,7 +559,6 @@ report_grep (char const *name, struct file_link **flinkv)
   while (*flinkv)
     {
       int line_number = 0;
-      char *file_name = ALLOCA (char, PATH_MAX);
       FILE *gid_FILE;
 
       maybe_relative_file_name (file_name, *flinkv++, cw_dlink);
@@ -761,13 +761,13 @@ search_flinkv (struct file_link **flinkv)
 {
   char pattern[BUFSIZ];
   unsigned int count;
+  char *file_name = ALLOCA (char, PATH_MAX);
 
   if (gets (pattern) == 0)
     return -1;
 
   for (count = 0; *flinkv; count++, flinkv++)
     {
-      char *file_name = ALLOCA (char, PATH_MAX);
       maybe_relative_file_name (file_name, *flinkv, cw_dlink);
       if (strcasestr (file_name, pattern))
 	return count;

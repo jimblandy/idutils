@@ -1,10 +1,19 @@
+1998-11-20  Greg McGary  <gkm@gnu.org>
+
+	* libidu/fnprint.c (print_filenames): Move ALLOCA outside loop.
+	libidu/walker.c (get_lang_args): Ditto.
+	src/fnid.c (main): Ditto.
+	src/lid.c (report_grep, search_flinkv): Ditto.
+	src/mkid.c (scan_member_file): Consolidate two ALLOCA buffers
+	at inner scopes to a single buffer at an outer scope.
+
 1998-11-18  Greg McGary  <gkm@gnu.org>
 
 	* missing: Add file.
 
 	* configure.in, lib/Makefile.am, libidu/Makefile.am:
 	Conform macro names to automake-1.3 conventions.
-	
+
 	* libidu/scanners.c (id_0): Increase size and make file static.
 
 Tue Aug  6 22:46:16 1996  Greg McGary  <gkm@g2>

@@ -159,6 +159,7 @@ main (int argc, char **argv)
     char **patv_0 = MALLOC (char *, argc * 2);
     char **patv_N;
     char **patv = patv_0;
+    char *file_name = ALLOCA (char, PATH_MAX);
 
     for ( ; argc; argc--, argv++)
       {
@@ -175,7 +176,6 @@ main (int argc, char **argv)
 
     for ( ; members < members_N; members++)
       {
-	char *file_name = ALLOCA (char, PATH_MAX);
 	maybe_relative_file_name (file_name, *members, cw_dlink);
 	for (patv = patv_0; patv < patv_N; patv++)
 	  {
