@@ -1,5 +1,5 @@
 
-/*  A Bison parser, made from iid.y with Bison version GNU Bison version 1.22
+/*  A Bison parser, made from ./iid.y with Bison version GNU Bison version 1.22
   */
 
 #define YYBISON 1  /* Identify Bison output.  */
@@ -22,7 +22,7 @@
 #define	AND	273
 #define	NOT	274
 
-#line 1 "iid.y"
+#line 1 "./iid.y"
 
 /* iid.y -- interactive mkid query language
    Copyright (C) 1991 Tom Horsley
@@ -251,7 +251,7 @@ set_type * SetInverse( set_type * sp ) ;
 void RunShell( char * pp , id_list_type * idlp ) ;
 
 
-#line 230 "iid.y"
+#line 230 "./iid.y"
 typedef union {
    set_type *     setdef ;   
    id_type *      strdef ;
@@ -968,7 +968,7 @@ yyreduce:
   switch (yyn) {
 
 case 1:
-#line 258 "iid.y"
+#line 258 "./iid.y"
 {
          /* cd to the directory specified as argument, flush sets */
 
@@ -977,7 +977,7 @@ case 1:
       ;
     break;}
 case 3:
-#line 266 "iid.y"
+#line 266 "./iid.y"
 {
          /* print the list of files resulting from Query */
 
@@ -985,7 +985,7 @@ case 3:
       ;
     break;}
 case 4:
-#line 272 "iid.y"
+#line 272 "./iid.y"
 {
          /* run PAGER on the list of files in SET */
 
@@ -993,7 +993,7 @@ case 4:
       ;
     break;}
 case 5:
-#line 278 "iid.y"
+#line 278 "./iid.y"
 {
          /* describe sets created so far */
 
@@ -1001,7 +1001,7 @@ case 5:
       ;
     break;}
 case 6:
-#line 284 "iid.y"
+#line 284 "./iid.y"
 {
          /* run PAGER on the help file */
 
@@ -1009,13 +1009,13 @@ case 6:
       ;
     break;}
 case 7:
-#line 290 "iid.y"
+#line 290 "./iid.y"
 {
          exit(0) ;
       ;
     break;}
 case 8:
-#line 294 "iid.y"
+#line 294 "./iid.y"
 {
          /* run the shell command and eat the results as a file set */
 
@@ -1024,7 +1024,7 @@ case 8:
       ;
     break;}
 case 9:
-#line 301 "iid.y"
+#line 301 "./iid.y"
 {
          /* run the shell command */
 
@@ -1033,7 +1033,7 @@ case 9:
       ;
     break;}
 case 10:
-#line 311 "iid.y"
+#line 311 "./iid.y"
 {
          /* Turn on verbose query flag */
 
@@ -1041,7 +1041,7 @@ case 10:
       ;
     break;}
 case 11:
-#line 320 "iid.y"
+#line 320 "./iid.y"
 {
          /* Turn off verbose query flag */
 
@@ -1049,7 +1049,7 @@ case 11:
       ;
     break;}
 case 12:
-#line 329 "iid.y"
+#line 329 "./iid.y"
 {
          /* value of query is set associated with primitive */
 
@@ -1057,7 +1057,7 @@ case 12:
       ;
     break;}
 case 13:
-#line 335 "iid.y"
+#line 335 "./iid.y"
 {
          /* value of query is intersection of the two query sets */
 
@@ -1068,7 +1068,7 @@ case 13:
       ;
     break;}
 case 14:
-#line 344 "iid.y"
+#line 344 "./iid.y"
 {
          /* value of query is union of the two query sets */
 
@@ -1079,7 +1079,7 @@ case 14:
       ;
     break;}
 case 15:
-#line 353 "iid.y"
+#line 353 "./iid.y"
 {
          /* value of query is inverse of other query */
          
@@ -1090,7 +1090,7 @@ case 15:
       ;
     break;}
 case 16:
-#line 365 "iid.y"
+#line 365 "./iid.y"
 {
          /* Value of primitive is value of recorded set */
 
@@ -1098,7 +1098,7 @@ case 16:
       ;
     break;}
 case 17:
-#line 371 "iid.y"
+#line 371 "./iid.y"
 {
          /* Value of primitive is obtained by running an lid query */
 
@@ -1109,7 +1109,7 @@ case 17:
       ;
     break;}
 case 18:
-#line 380 "iid.y"
+#line 380 "./iid.y"
 {
          /* Value of primitive is obtained by running an aid query */
 
@@ -1120,7 +1120,7 @@ case 18:
       ;
     break;}
 case 19:
-#line 389 "iid.y"
+#line 389 "./iid.y"
 {
          /* Match names from database against pattern */
          yyval. setdef  = RunProg("pid -kmn", yyvsp[0]. listdef ) ;
@@ -1130,7 +1130,7 @@ case 19:
       ;
     break;}
 case 20:
-#line 397 "iid.y"
+#line 397 "./iid.y"
 {
          /* value of primitive is value of query */
 
@@ -1138,7 +1138,7 @@ case 20:
       ;
     break;}
 case 21:
-#line 406 "iid.y"
+#line 406 "./iid.y"
 {
          /* make arg list holding single ID */
 
@@ -1148,7 +1148,7 @@ case 21:
       ;
     break;}
 case 22:
-#line 414 "iid.y"
+#line 414 "./iid.y"
 {
          /* arg list is Id_list */
 
@@ -1157,7 +1157,7 @@ case 22:
       ;
     break;}
 case 23:
-#line 424 "iid.y"
+#line 424 "./iid.y"
 {
          /* arg list is Id_list */
 
@@ -1165,7 +1165,7 @@ case 23:
       ;
     break;}
 case 24:
-#line 433 "iid.y"
+#line 433 "./iid.y"
 {
          /* make arg list holding single ID */
 
@@ -1174,7 +1174,7 @@ case 24:
       ;
     break;}
 case 25:
-#line 440 "iid.y"
+#line 440 "./iid.y"
 {
          /* make arg list holding names from set */
 
@@ -1183,7 +1183,7 @@ case 25:
       ;
     break;}
 case 26:
-#line 447 "iid.y"
+#line 447 "./iid.y"
 {
          /* extend arg list with additional ID */
 
@@ -1191,7 +1191,7 @@ case 26:
       ;
     break;}
 case 27:
-#line 453 "iid.y"
+#line 453 "./iid.y"
 {
          /* extend arg list with additional file names */
 
@@ -1199,7 +1199,7 @@ case 27:
       ;
     break;}
 case 28:
-#line 462 "iid.y"
+#line 462 "./iid.y"
 {
          /* make arg list holding single ID */
 
@@ -1208,7 +1208,7 @@ case 28:
       ;
     break;}
 case 29:
-#line 469 "iid.y"
+#line 469 "./iid.y"
 {
          /* extend arg list with additional ID */
 
@@ -1439,7 +1439,7 @@ yyerrhandle:
   yystate = yyn;
   goto yynewstate;
 }
-#line 476 "iid.y"
+#line 476 "./iid.y"
 
 
 /* ScanLine - a global variable holding a pointer to the current

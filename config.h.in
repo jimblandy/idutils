@@ -46,8 +46,17 @@
 /* Define to 1 if ANSI function prototypes are usable.  */
 #undef PROTOTYPES
 
-/* Define to the version of the distribution.  */
+/* Define to the major version # of the distribution.  */
+#undef MAJOR_VERSION
+
+/* Define to the minor version # of the distribution.  */
+#undef MINOR_VERSION
+
+/* Define to the minor.minor version # of the distribution.  */
 #undef VERSION
+
+/* Define to the minor.minor.patch_level # of the distribution.  */
+#undef FULL_VERSION
 
 /* Define to the patch level of the distribution.  */
 #undef PATCH_LEVEL
