@@ -219,6 +219,8 @@ extern struct member_file *find_member_file __P((struct file_link const *flink))
 
 extern struct idhead idh;
 
+extern int walker_verbose_flag;
+
 #define DEFAULT_ID_FILE_NAME "ID"
 
 #endif /* not _idfile_h_ */

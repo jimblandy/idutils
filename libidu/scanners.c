@@ -480,6 +480,81 @@ parse_args_c (char **argv, int argc)
 
 static unsigned char id_0[1<<020];
 
+#define SCAN_CPP_DIRECTIVE						\
+  do									\
+    {									\
+      c = getc (in_FILE);						\
+      while (ISBORING (c))						\
+	c = getc (in_FILE);						\
+      if (!ISID1ST (c))							\
+	goto next;							\
+      id = id_0;							\
+      *id++ = c;							\
+      while (ISIDREST (c = getc (in_FILE)))				\
+	*id++ = c;							\
+      *id = '\0';							\
+      if (strequ (id_0, "include"))					\
+	{								\
+	  while (c == ' ' || c == '\t')					\
+	    c = getc (in_FILE);						\
+	  if (c == '\n')						\
+	    {								\
+	      new_line = 1;						\
+	      goto top;							\
+	    }								\
+	  id = id_0;							\
+	  if (c == '"')							\
+	    {								\
+	      c = getc (in_FILE);					\
+	      while (c != '\n' && c != EOF && c != '"')			\
+		{							\
+		  *id++ = c;						\
+		  c = getc (in_FILE);					\
+		}							\
+	      *flags = TOK_STRING;					\
+	    }								\
+	  else if (c == '<')						\
+	    {								\
+	      c = getc (in_FILE);					\
+	      while (c != '\n' && c != EOF && c != '>')			\
+		{							\
+		  *id++ = c;						\
+		  c = getc (in_FILE);					\
+		}							\
+	      *flags = TOK_STRING;					\
+	    }								\
+	  else if (ISID1ST (c))						\
+	    {								\
+	      *id++ = c;						\
+	      while (ISIDREST (c = getc (in_FILE)))			\
+		*id++ = c;						\
+	      *flags = TOK_NAME;					\
+	    }								\
+	  else								\
+	    {								\
+	      while (c != '\n' && c != EOF)				\
+		c = getc (in_FILE);					\
+	      new_line = 1;						\
+	      goto top;							\
+	    }								\
+	  while (c != '\n' && c != EOF)					\
+	    c = getc (in_FILE);						\
+	  new_line = 1;							\
+	  obstack_grow0 (&tokens_obstack, id_0, id - id_0);		\
+	  return (struct token *) obstack_finish (&tokens_obstack);	\
+	}								\
+      if (strnequ (id_0, "if", 2)					\
+	  || strequ (id_0, "define")					\
+	  || strequ (id_0, "elif")	/* ansi C */			\
+	  || strequ (id_0, "undef"))					\
+	goto next;							\
+      while ((c != '\n') && (c != EOF))					\
+	c = getc (in_FILE);						\
+      new_line = 1;							\
+      goto top;								\
+  } while (0)
+
+
 /* Grab the next identifier from the C source file.  This state
    machine is built for speed, not elegance.  */
 
@@ -501,75 +576,7 @@ top:
       new_line = 0;
       if (c != '#')
 	goto next;
-      c = getc (in_FILE);
-      while (ISBORING (c))
-	c = getc (in_FILE);
-      if (!ISID1ST (c))
-	goto next;
-      id = id_0;
-      *id++ = c;
-      while (ISIDREST (c = getc (in_FILE)))
-	*id++ = c;
-      *id = '\0';
-      if (strequ (id_0, "include"))
-	{
-	  while (c == ' ' || c == '\t')
-	    c = getc (in_FILE);
-	  if (c == '\n')
-	    {
-	      new_line = 1;
-	      goto top;
-	    }
-	  id = id_0;
-	  if (c == '"')
-	    {
-	      c = getc (in_FILE);
-	      while (c != '\n' && c != EOF && c != '"')
-		{
-		  *id++ = c;
-		  c = getc (in_FILE);
-		}
-	      *flags = TOK_STRING;
-	    }
-	  else if (c == '<')
-	    {
-	      c = getc (in_FILE);
-	      while (c != '\n' && c != EOF && c != '>')
-		{
-		  *id++ = c;
-		  c = getc (in_FILE);
-		}
-	      *flags = TOK_STRING;
-	    }
-	  else if (ISID1ST (c))
-	    {
-	      *id++ = c;
-	      while (ISIDREST (c = getc (in_FILE)))
-		*id++ = c;
-	      *flags = TOK_NAME;
-	    }
-	  else
-	    {
-	      while (c != '\n' && c != EOF)
-		c = getc (in_FILE);
-	      new_line = 1;
-	      goto top;
-	    }
-	  while (c != '\n' && c != EOF)
-	    c = getc (in_FILE);
-	  new_line = 1;
-	  obstack_grow0 (&tokens_obstack, id_0, id - id_0);
-	  return (struct token *) obstack_finish (&tokens_obstack);
-	}
-      if (strnequ (id_0, "if", 2)
-	  || strequ (id_0, "define")
-	  || strequ (id_0, "elif")	/* ansi C */
-	  || strequ (id_0, "undef"))
-	goto next;
-      while ((c != '\n') && (c != EOF))
-	c = getc (in_FILE);
-      new_line = 1;
-      goto top;
+      SCAN_CPP_DIRECTIVE;
     }
 
 next:
@@ -886,35 +893,7 @@ top:
       new_line = 0;
       if (c != '#')
 	goto next;
-      while (ISBORING (c))
-	c = getc (in_FILE);
-      if (!ISID1ST (c))
-	goto next;
-      id = id_0;
-      *id++ = c;
-      while (ISIDREST (c = getc (in_FILE)))
-	*id++ = c;
-      *id = '\0';
-      if (strequ (id_0, "include"))
-	{
-	  while (c != '"' && c != '<')
-	    c = getc (in_FILE);
-	  id = id_0;
-	  *id++ = c = getc (in_FILE);
-	  while ((c = getc (in_FILE)) != '"' && c != '>')
-	    *id++ = c;
-	  *flags = TOK_STRING;
-	  obstack_grow0 (&tokens_obstack, id_0, id - id_0);
-	  return (struct token *) obstack_finish (&tokens_obstack);
-	}
-      if (strnequ (id_0, "if", 2)
-	  || strequ (id_0, "define")
-	  || strequ (id_0, "undef"))
-	goto next;
-      while (c != '\n')
-	c = getc (in_FILE);
-      new_line = 1;
-      goto top;
+      SCAN_CPP_DIRECTIVE;
     }
 
 next:

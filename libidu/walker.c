@@ -35,9 +35,12 @@
 #include "pathmax.h"
 #include "xalloca.h"
 
+int walker_verbose_flag = 0;
+
 int walk_dir __P((struct file_link *dir_link));
 struct member_file *get_member_file __P((struct file_link *flink));
 struct lang_args *get_lang_args __P((struct file_link const *flink));
+void print_member_file (struct member_file *member);
 int walk_sub_dirs __P((struct dynvec *sub_dirs_vec));
 void reparent_children __P((struct file_link *dlink, struct file_link *slink));
 int classify_link __P((struct file_link *flink, struct stat *stp));
@@ -302,6 +305,8 @@ maybe_get_member_file (struct file_link *flink, struct stat *stp)
 	  alias_member->mf_link->fl_flags &= ~FL_MEMBER;
 	}
     }
+  if (member && walker_verbose_flag)
+    print_member_file (member);
   return member;
 }
 
@@ -431,6 +436,15 @@ get_lang_args (struct file_link const *flink)
     }
   return ((lang_args_default && lang_args_default->la_language)
 	  ? lang_args_default : 0);
+}
+
+void
+print_member_file (struct member_file *member)
+{
+  char *file_name = ALLOCA (char, PATH_MAX);
+  absolute_file_name (file_name, member->mf_link);
+  printf ("%ld: %s: %s\n", idh.idh_member_file_table.ht_fill - 1,
+	  member->mf_lang_args->la_language->lg_name, file_name);
 }
 
 

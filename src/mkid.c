@@ -59,6 +59,7 @@ void usage __P((void));
 static void help_me __P((void));
 int main __P((int argc, char **argv));
 int ceil_log_8 __P((unsigned long n));
+int ceil_log_2 __P((unsigned long n));
 void assert_writeable __P((char const *file_name));
 void scan_files __P((struct idhead *idhp));
 void scan_member_file __P((struct member_file const *member));
@@ -193,7 +194,7 @@ main (int argc, char **argv)
 
   for (;;)
     {
-      int optc = getopt_long (argc, argv, "o:f:i:x:l:m:d:p:vs",
+      int optc = getopt_long (argc, argv, "o:f:i:x:l:m:d:p:vVs",
 			      long_options, (int *) 0);
       if (optc < 0)
 	break;
@@ -233,11 +234,10 @@ main (int argc, char **argv)
 	  prune_file_names (optarg, cw_dlink);
 	  break;
 
+	case 'V':
+	  walker_verbose_flag = 1;
 	case 'v':
 	  verbose_flag = 1;
-	  statistics_flag = 1;
-	  break;
-
 	case 's':
 	  statistics_flag = 1;
 	  break;
@@ -258,6 +258,8 @@ main (int argc, char **argv)
 
   argc -= optind;
   argv += optind;
+
+  /* If no file or directory options exist, walk the current directory.  */
   if (argc == 0)
     {
       static char dot[] = ".";
@@ -272,6 +274,7 @@ main (int argc, char **argv)
     cw_dlink = init_walker (&idh);
   parse_language_map (lang_map_file_name);
 
+  /* Walk the file and directory names given on the command line.  */
   while (argc--)
     {
       struct file_link *flink = parse_file_name (*argv++, cw_dlink);
@@ -283,6 +286,8 @@ main (int argc, char **argv)
   mark_member_file_links (&idh);
   log_8_member_files = ceil_log_8 (idh.idh_member_file_table.ht_fill);
   current_hits_signature = MALLOC (char, log_8_member_files);
+
+  /* If scannable files were given, then scan them.  */
   if (idh.idh_member_file_table.ht_fill)
     {
       scan_files (&idh);
@@ -318,6 +323,26 @@ ceil_log_8 (unsigned long n)
   return log_8;
 }
 
+/* Return the integer ceiling of the base-8 logarithm of N.  */
+
+int
+ceil_log_2 (unsigned long n)
+{
+  int log_2 = 0;
+
+  n--;
+  while (n)
+    {
+      log_2++;
+      n >>= 1;
+    }
+  return log_2;
+}
+
+/* Ensure that FILE_NAME can be written.  If it exists, make sure it's
+   writable.  If it doesn't exist, make sure it can be created.  Exit
+   with a diagnostic if this is not so.  */
+
 void
 assert_writeable (char const *file_name)
 {
@@ -337,6 +362,9 @@ assert_writeable (char const *file_name)
     }
 }
 
+/* Iterate over all eligible files (the members of the set of scannable files).
+   Create a tree8 to store the set of files where a token occurs.  */
+
 void
 scan_files (struct idhead *idhp)
 {
@@ -345,9 +373,19 @@ scan_files (struct idhead *idhp)
 					 0, member_file_qsort_compare);
   struct member_file **end = &members_0[idhp->idh_member_file_table.ht_fill];
   struct member_file **members = members_0;
+  int n = idhp->idh_member_file_table.ht_fill;
 
-  hash_init (&token_table, idhp->idh_member_file_table.ht_fill * 64,
-	     token_hash_1, token_hash_2, token_hash_cmp);
+  n = n * ceil_log_2 (n) * 16;
+  if (n == 0)
+    n = 1024;
+  else if (n > 1024*1024)
+    n = 1024*1024;
+
+  hash_init (&token_table, n, token_hash_1, token_hash_2, token_hash_cmp);
+  if (verbose_flag)
+    printf ("member files=%ld, token table slots=%ld\n",
+	    idhp->idh_member_file_table.ht_fill,
+	    token_table.ht_size);
   init_hits_signature (0);
   init_summary ();
   obstack_init (&tokens_obstack);
@@ -365,6 +403,8 @@ scan_files (struct idhead *idhp)
 
   free (members_0);
 }
+
+/* Open a file and scan it.  */
 
 void
 scan_member_file (struct member_file const *member)
@@ -405,6 +445,9 @@ scan_member_file (struct member_file const *member)
   else
     error (0, errno, _("can't open `%s'"), flink->fl_name);
 }
+
+/* Iterate over all tokens in the file, and merge the file's tree8
+   signature into the token table entry.  */
 
 void
 scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_FILE)
@@ -486,6 +529,7 @@ report_statistics (void)
    (This would be a common useage if you want to make a database for a
    directory which you have no write access to, so you cannot create
    the ID file.)  */
+
 void
 write_id_file (struct idhead *idhp)
 {
@@ -576,6 +620,9 @@ write_id_file (struct idhead *idhp)
   fclose (idhp->idh_FILE);
 }
 
+/* Define primary and secondary hash and comparison functions for the
+   token table.  */
+
 unsigned long
 token_hash_1 (void const *key)
 {
@@ -605,6 +652,9 @@ token_qsort_cmp (void const *x, void const *y)
 
 /****************************************************************************/
 
+/* Advance the tree8 hit signature that corresponds to the file
+   we are now scanning.  */
+
 void
 bump_current_hits_signature (void)
 {
@@ -613,6 +663,8 @@ bump_current_hits_signature (void)
     *hits++ = 1;
   *hits <<= 1;
 }
+
+/* Initialize the tree8 hit signature for the first file we scan.  */
 
 void
 init_hits_signature (int i)
