@@ -1,3 +1,14 @@
+1999-01-26  Greg McGary  <gkm@gnu.org>
+
+	* hash.h (struct hash_table) [ht_empty_slots]: Add struct member.
+	* hash.c (hash_init): Initialize ht_empty_slots.  Don't halve
+	ht_size.  (hash_find_slot) Return deleted slot, if available.
+	(hash_insert_at): Decrement ht_empty_slots if one is consumed.
+	Rehash if emtpy slots become too scarce.  (hash_free_items,
+	hash_deleted_item, hash_free): Re-initialize ht_empty_slots.
+	(hash_rehash): Don't double table size if rehashing only because
+	table is clogged with deleted slots.
+
 1998-11-20  Greg McGary  <gkm@gnu.org>
 
 	* libidu/fnprint.c (print_filenames): Move ALLOCA outside loop.

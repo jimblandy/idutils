@@ -31,6 +31,7 @@ struct hash_table
   unsigned long ht_size;	/* total number of slots (power of 2) */
   unsigned long ht_capacity;	/* usable slots, limited by loading-factor */
   unsigned long ht_fill;	/* items in table */
+  unsigned long ht_empty_slots;	/* empty slots not including deleted slots */
   unsigned long ht_collisions;	/* # of failed calls to comparison function */
   unsigned long ht_lookups;	/* # of queries */
   unsigned int ht_rehashes;	/* # of times we've expanded table */

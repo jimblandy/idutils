@@ -45,8 +45,7 @@ hash_init (struct hash_table* ht, unsigned long size,
 	   hash_func_t hash_1, hash_func_t hash_2, hash_cmp_func_t hash_cmp)
 {
   ht->ht_size = round_up_2 (size);
-  if (ht->ht_size > (128 * 1024)) /* prevent size from getting out of hand */
-    ht->ht_size /= 2;
+  ht->ht_empty_slots = ht->ht_size;
   ht->ht_vec = (void**) CALLOC (struct token *, ht->ht_size);
   if (ht->ht_vec == 0)
     error (1, 0, _("can't allocate %ld bytes for hash table: memory exhausted"),
@@ -94,7 +93,7 @@ hash_find_slot (struct hash_table* ht, void const *key)
       slot = &ht->ht_vec[hash_1];
 
       if (*slot == 0)
-	return slot;
+	return (deleted_slot ? deleted_slot : slot);
       if (*slot == hash_deleted_item)
 	{
 	  if (deleted_slot == 0)
@@ -135,10 +134,12 @@ hash_insert_at (struct hash_table* ht, void *item, void const *slot)
   if (HASH_VACANT (old_item))
     {
       ht->ht_fill++;
+      if (old_item == 0)
+	ht->ht_empty_slots--;
       old_item = item;
     }
   *(void const **) slot = item;
-  if (ht->ht_fill >= ht->ht_capacity)
+  if (ht->ht_empty_slots < ht->ht_size - ht->ht_capacity)
     hash_rehash (ht);
   return old_item;
 }
@@ -177,6 +178,7 @@ hash_free_items (struct hash_table* ht)
       *vec = 0;
     }
   ht->ht_fill = 0;
+  ht->ht_empty_slots = ht->ht_size;
 }
 
 void
@@ -190,6 +192,7 @@ hash_delete_items (struct hash_table* ht)
   ht->ht_collisions = 0;
   ht->ht_lookups = 0;
   ht->ht_rehashes = 0;
+  ht->ht_empty_slots = ht->ht_size;
 }
 
 void
@@ -197,9 +200,13 @@ hash_free (struct hash_table* ht, int free_items)
 {
   if (free_items)
     hash_free_items (ht);
+  else
+    {
+      ht->ht_fill = 0;
+      ht->ht_empty_slots = ht->ht_size;
+    }
   free (ht->ht_vec);
   ht->ht_vec = 0;
-  ht->ht_fill = 0;
   ht->ht_capacity = 0;
 }
 
@@ -224,20 +231,24 @@ hash_rehash (struct hash_table* ht)
   unsigned long old_ht_size = ht->ht_size;
   void **old_vec = ht->ht_vec;
   void **ovp;
-  void **slot;
 
-  ht->ht_size *= 2;
+  if (ht->ht_fill >= ht->ht_capacity)
+    {
+      ht->ht_size *= 2;
+      ht->ht_capacity = ht->ht_size - (ht->ht_size >> 4);
+    }
   ht->ht_rehashes++;
-  ht->ht_capacity = ht->ht_size - (ht->ht_size >> 4);
   ht->ht_vec = (void **) CALLOC (struct token *, ht->ht_size);
 
   for (ovp = old_vec; ovp < &old_vec[old_ht_size]; ovp++)
     {
-      if (*ovp == 0)
-	continue;
-      slot = hash_find_slot (ht, *ovp);
-      *slot = *ovp;
+      if (! HASH_VACANT (*ovp))
+	{
+	  void **slot = hash_find_slot (ht, *ovp);
+	  *slot = *ovp;
+	}
     }
+  ht->ht_empty_slots = ht->ht_size - ht->ht_fill;
   free (old_vec);
 }
 
