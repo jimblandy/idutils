@@ -1,0 +1,9 @@
+src/fid.c
+src/mkid.c
+src/lid.c
+src/idx.c
+lib/filenames.c
+lib/getopt.c
+lib/idfile.c
+lib/misc.c
+lib/scanners.c

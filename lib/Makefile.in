@@ -1,0 +1,325 @@
+# Makefile.in generated automatically by automake 1.0 from Makefile.am
+
+# Copyright (C) 1994, 1995, 1996 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy, distribute and modify it.
+
+
+SHELL = /bin/sh
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+top_builddir = ..
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
+
+AUTOMAKE_OPTIONS = ansi2knr
+
+noinst_LIBRARIES = idu
+
+EXTRA_DIST = alloca.c error.c getopt.c getopt1.c regex.c rx.c \
+	strcasecmp.c strdup.c strndup.c strtok.c \
+	obstack.c basename.c dirname.c fnmatch.c \
+	ansi2knr.1 ansi2knr.c 
+
+idu_SOURCES = misc.c scanners.c idfile.c filenames.c bitops.c token.c \
+	idwalk.c hash.c dynvec.c xmalloc.c xgetcwd.c
+
+idudir = $(prefix)/share
+idu_DATA = language.map
+
+noinst_HEADERS = alloc.h bitops.h error.h filenames.h getopt.h idarg.h \
+	idfile.h misc.h regex.h rx.h scanners.h strxtra.h \
+	token.h system.h hash.h obstack.h pathmax.h dynvec.h \
+	xmalloc.h fnmatch.h ansidecl.h
+
+INCLUDES = -I. -I$(srcdir) \
+	   -I../lib -I$(top_srcdir)/lib \
+	   -I../intl -I$(top_srcdir)/intl \
+	   -I.. -I$(top_srcdir) 
+DEFS = -DLOCALEDIR=\"$(localedir)\" -DLANGUAGE_MAP=\"$(idudir)/language.map\" @DEFS@
+idu_LIBADD = @REGEXOBJ@ @LIBOBJS@ @ALLOCA@
+mkinstalldirs = $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = ../config.h
+LIBRARIES = $(noinst_LIBRARIES)
+
+noinst_LIBFILES = libidu.a
+
+CC = @CC@
+LEX = @LEX@
+YACC = @YACC@
+CPPFLAGS = @CPPFLAGS@
+CFLAGS = @CFLAGS@
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@
+
+COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+LINK = $(CC) $(LDFLAGS) -o $@
+
+ANSI2KNR = @ANSI2KNR@
+o = .@U@o
+idu_OBJECTS = misc$o scanners$o idfile$o filenames$o bitops$o token$o \
+idwalk$o hash$o dynvec$o xmalloc$o xgetcwd$o
+EXTRA_idu_SOURCES =
+LIBFILES =  libidu.a
+AR = ar
+RANLIB = @RANLIB@
+DATA = $(idu_DATA)
+
+HEADERS = $(noinst_HEADERS)
+
+DIST_COMMON = Makefile.am Makefile.in
+
+
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
+	$(TEXINFOS) $(INFOS) $(MANS) $(EXTRA_DIST) $(DATA)
+DEP_DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
+	$(TEXINFOS) $(INFO_DEPS) $(MANS) $(EXTRA_DIST) $(DATA)
+
+TAR = tar
+SOURCES = $(idu_SOURCES)
+OBJECTS = $(idu_OBJECTS)
+
+default: all
+
+
+$(srcdir)/Makefile.in: @MAINT@Makefile.am $(top_srcdir)/configure.in
+	cd $(top_srcdir) && automake $(subdir)/Makefile
+
+Makefile: $(top_builddir)/config.status Makefile.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= ./config.status
+
+mostlyclean-noinstLIBRARIES:
+
+clean-noinstLIBRARIES:
+	rm -f $(noinst_LIBFILES)
+
+distclean-noinstLIBRARIES:
+
+maintainer-clean-noinstLIBRARIES:
+
+.c.o:
+	$(COMPILE) $<
+
+mostlyclean-compile:
+	rm -f *.o core
+
+clean-compile:
+
+distclean-compile:
+	rm -f *.tab.c
+
+maintainer-clean-compile:
+
+.c._c:
+	$(ANSI2KNR) $< > $*.tmp && mv $*.tmp $@
+
+._c._o:
+	@echo $(COMPILE) $<
+	@rm -f _$*.c
+	@ln $< _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
+
+.c._o:
+	$(ANSI2KNR) $< > $*.tmp && mv $*.tmp $*._c
+	@echo $(COMPILE) $*._c
+	@rm -f _$*.c
+	@ln $*._c _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
+
+ansi2knr: ansi2knr.o
+	$(LINK) ansi2knr.o $(LIBS)
+
+$(OBJECTS): $(ANSI2KNR)
+ansi2knr.o: $(CONFIG_HEADER)
+
+mostlyclean-kr:
+	rm -f *._o *._c _*.c _*.o
+
+clean-kr:
+
+distclean-kr:
+	rm -f ansi2knr
+
+maintainer-clean-kr:
+$(idu_OBJECTS): ../config.h
+
+libidu.a: $(idu_OBJECTS) $(idu_LIBADD)
+	rm -f libidu.a
+	$(AR) cru libidu.a $(idu_OBJECTS) $(idu_LIBADD)
+	$(RANLIB) libidu.a
+
+install-iduDATA: $(idu_DATA)
+	$(mkinstalldirs) $(idudir)
+	list="$(idu_DATA)"; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(idudir)/$$p; \
+	  else if test -f $$p; then \
+	    $(INSTALL_DATA) $$p $(idudir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-iduDATA:
+	list="$(idu_DATA)"; for p in $$list; do \
+	  rm -f $(idudir)/$$p; \
+	done
+
+ID: $(HEADERS) $(SOURCES)
+	here=`pwd` && cd $(srcdir) && mkid -f$$here/ID $(SOURCES) $(HEADERS)
+
+tags: TAGS
+
+TAGS: $(HEADERS) $(SOURCES) $(TAGS_DEPENDENCIES)
+	here=`pwd` && cd $(srcdir) && etags $(ETAGS_ARGS) $(SOURCES) $(HEADERS) -o $$here/TAGS
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	rm -f TAGS ID
+
+maintainer-clean-tags:
+
+subdir = lib
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+distdir: $(DEP_DISTFILES)
+	@for file in `cd $(srcdir) && echo $(DISTFILES)`; do \
+	  test -f $(distdir)/$$file \
+	  || ln $(srcdir)/$$file $(distdir)/$$file 2> /dev/null \
+	  || cp -p $(srcdir)/$$file $(distdir)/$$file; \
+	done
+alloca.o: alloca.c
+basename.o: basename.c
+bitops.o: bitops.c bitops.h
+dirname.o: dirname.c strxtra.h
+dynvec.o: dynvec.c dynvec.h alloc.h
+error.o: error.c
+filenames$o: filenames.c system.h \
+ strxtra.h filenames.h misc.h \
+ error.h
+fnmatch.o: fnmatch.c
+getopt.o: getopt.c
+getopt1.o: getopt1.c getopt.h
+hash.o: hash.c hash.h alloc.h \
+ error.h
+idfile.o: idfile.c alloc.h idfile.h \
+ hash.h strxtra.h error.h
+idwalk$o: idwalk.c system.h idfile.h \
+ hash.h error.h alloc.h \
+ dynvec.h strxtra.h scanners.h \
+ pathmax.h
+memcpy.o: memcpy.c
+memset.o: memset.c
+misc.o: misc.c system.h strxtra.h \
+ misc.h
+scanners$o: scanners.c system.h error.h \
+ strxtra.h token.h alloc.h \
+ scanners.h
+strcasecmp.o: strcasecmp.c
+strdup.o: strdup.c
+strerror.o: strerror.c
+strndup$o: strndup.c
+strtok.o: strtok.c
+token.o: token.c token.h
+xgetcwd.o: xgetcwd.c pathmax.h
+xmalloc.o: xmalloc.c error.h
+
+info:
+
+dvi:
+
+check: all
+
+installcheck:
+
+install-exec: 
+
+install-data: install-iduDATA
+
+install: install-exec install-data all
+	@:
+
+uninstall: uninstall-iduDATA
+
+all: $(LIBFILES) $(DATA) $(HEADERS) Makefile
+
+install-strip:
+	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' install
+installdirs:
+	$(mkinstalldirs)  $(idudir)
+
+
+mostlyclean-generic:
+	test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
+
+clean-generic:
+	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+
+distclean-generic:
+	rm -f Makefile $(DISTCLEANFILES)
+	rm -f config.cache config.log $(CONFIG_HEADER) stamp-h
+
+maintainer-clean-generic:
+	test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
+	test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+mostlyclean:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
+		mostlyclean-kr mostlyclean-tags mostlyclean-generic
+
+clean:  clean-noinstLIBRARIES clean-compile clean-kr clean-tags \
+		clean-generic mostlyclean 
+
+distclean:  distclean-noinstLIBRARIES distclean-compile distclean-kr \
+		distclean-tags distclean-generic clean 
+	rm -f config.status
+
+maintainer-clean:  maintainer-clean-noinstLIBRARIES \
+		maintainer-clean-compile maintainer-clean-kr \
+		maintainer-clean-tags maintainer-clean-generic \
+		distclean 
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+.PHONY: default mostlyclean-noinstLIBRARIES distclean-noinstLIBRARIES \
+clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
+mostlyclean-compile distclean-compile clean-compile \
+maintainer-clean-compile mostlyclean-kr distclean-kr clean-kr \
+maintainer-clean-kr uninstall-iduDATA install-iduDATA tags \
+mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
+distdir info dvi check installcheck install-exec install-data install \
+uninstall all installdirs mostlyclean-generic distclean-generic \
+clean-generic maintainer-clean-generic clean mostlyclean distclean \
+maintainer-clean
+
+.SUFFIXES:
+.SUFFIXES: .c .o ._c ._o
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

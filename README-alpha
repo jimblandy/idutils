@@ -1,0 +1,54 @@
+`mkid' README.alpha-test
+
+Special instructions for testers:
+
+* The file-tree walking code is new.  It passes purify tests, and seems to
+  work pretty well.  So far, I've only compiled and built on Linux
+  (libc-5.2.4), SunOS 4.1.4 and BSDI 2.0.1.  I expect some portability
+  problems on other systems.
+
+* At least do this:
+
+	./configure --prefix=test; make all; make check; make install.
+
+  This is not a very rigorous test, but it at least ensures sanity for the
+  core tools.  If all goes well and you want to start using it, reconfigure
+  to install in a normal place, e.g.,
+
+	 # put things in /usr/local/{bin,lib,info} (the default)
+	./configure; make install
+		-or-
+	 # put things in /usr/{bin,lib,info}
+	./configure --prefix=/usr; make install
+
+  If you have the time, patience and software, please build using both your
+  vendor-supplied *ANSI* C compiler and gcc.  (non-ANSI compilation is
+  broken for now...) By default, configure will use gcc if it is available.
+  You can override this by doing this:
+
+	make distclean
+	CC=vendor-supplied-cc ./configure	# bourne-shell syntax
+		-or-
+	setenv CC vendor-supplied-cc; ./configure # csh syntax
+
+
+* If you run into build problems, please help by emailing me the following:
+  * A brilliant, elegant patch to fix it. ;-)
+  -- or, if you don't have time for that... --
+  * The version of mkid you're trying to build
+    (type ./mkid to get the usage banner which includes the version)
+  * The output of "make -k all", to show me where it's dying.
+  * The output of "uname -a"
+  * The output of "nm" on your system's libc, if applicable.
+
+* Be aware that this is still work in progress.  See TODO for a list of
+  things yet undone.
+
+* Note that ID file format is incompatible with all previous versions of
+  mkid, so you'll have to rebuild your ID files.
+
+
+Local Variables:
+mode: text
+fill-column: 75
+End:
