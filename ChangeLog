@@ -1,0 +1,19 @@
+Thu Feb 16 12:20:38 1995  Greg McGary  <gkm@magilla.cichlid.com>
+
+	* Version 3.0.3 released.
+
+	* lid.c (savetty, restoretty, linetty, chartty): Handle POSIX
+	termios properly.
+
+	* README: Updated.
+
+	* configure.in (OLD_PATCH_LEVEL, MAJOR_VERSION, MINOR_VERSION,
+	FULL_VERSION): Added.
+
+	* mkdirhier: Added.
+
+	* Makefile.in (DIST_MISC_FILES): Added ChangeLog.
+	(depend): $(DEPEND) and Makefile are now .PRECIOUS.
+	(dist-dir-links): Added.
+	(check, install, uninstall): Fixed.
+	(install): Use mkdirhier.
