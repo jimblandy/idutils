@@ -1,3 +1,15 @@
+2000-04-26  Greg McGary  <gkm@gnu.org>
+
+	* lid.c (add_regexp_word_delimiters): Rename from
+	maybe_add_word_delimiters--action is now unconditional.
+	(query_literal_word): Call query_literal_substring if ignoring case.
+	(query_literal_prefix): Call query_regexp if ignoring case.
+	(query_regexp): Test delimiter_style before calling
+	add_regexp_word_delimiters.
+	(query_literal_substring): Add local var arg_length.
+	Handle word matches which can happen when ignoring case.
+	Add local var match.
+
 1999-04-10  Greg McGary  <gkm@gnu.org>
 
 	* walker.c (classify_link): Only return 0 for zero-length files.

@@ -1,5 +1,5 @@
 /* lid.c -- primary query interface for mkid database
-   Copyright (C) 1986, 1995, 1996, 1999 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 1999, 2000 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -100,7 +100,7 @@ int search_flinkv __P((struct file_link **flinkv));
 int query_literal_word __P((char const *pattern, report_func_t report_func));
 int query_literal_prefix __P((char const *pattern, report_func_t report_func));
 int query_regexp __P((char const *pattern_0, report_func_t report_func));
-char const *maybe_add_word_delimiters __P((char const *pattern_0));
+char const *add_regexp_word_delimiters __P((char const *pattern_0));
 int query_number __P((char const *pattern, report_func_t report_func));
 int query_ambiguous_prefix __P((unsigned int, report_func_t report_func));
 int query_literal_substring __P((char const *pattern, report_func_t report_func));
@@ -778,6 +778,9 @@ search_flinkv (struct file_link **flinkv)
 int
 query_literal_word (char const *arg, report_func_t report_func)
 {
+  if (ignore_case_flag)
+    return query_literal_substring (arg, report_func);
+
   if (query_binary_search (arg) == 0)
     return 0;
   gets_past_00 (hits_buf_1, idh.idh_FILE);
@@ -793,6 +796,9 @@ query_literal_prefix (char const *arg, report_func_t report_func)
 {
   int count;
   unsigned int length;
+
+  if (ignore_case_flag)
+    return query_regexp (arg, report_func);
 
   if (query_binary_search (++arg) == 0)
     return 0;
@@ -828,7 +834,8 @@ query_regexp (char const *pattern_0, report_func_t report_func)
   int regcomp_errno;
   char const *pattern = pattern_0;
 
-  pattern = maybe_add_word_delimiters (pattern);
+  if (delimiter_style == ds_word)
+    pattern = add_regexp_word_delimiters (pattern);
   regcomp_errno = regcomp (&compiled, pattern,
 			   ignore_case_flag | REG_EXTENDED);
   if (regcomp_errno)
@@ -869,32 +876,27 @@ query_regexp (char const *pattern_0, report_func_t report_func)
 }
 
 char const *
-maybe_add_word_delimiters (char const *pattern_0)
+add_regexp_word_delimiters (char const *pattern_0)
 {
-  if (delimiter_style != ds_word)
+  int length = strlen (pattern_0);
+  int has_left = has_left_delimiter (pattern_0);
+  int has_right = has_right_delimiter (&pattern_0[length]);
+  if (has_left && has_right)
     return pattern_0;
   else
     {
-      int length = strlen (pattern_0);
-      int has_left = has_left_delimiter (pattern_0);
-      int has_right = has_right_delimiter (&pattern_0[length]);
-      if (has_left && has_right)
-	return pattern_0;
+      char *pattern = MALLOC (char, length + 4);
+      if (has_left)
+	strcpy (pattern, pattern_0);
       else
 	{
-	  char *pattern = MALLOC (char, length + 4);
-	  if (has_left)
-	    strcpy (pattern, pattern_0);
-	  else
-	    {
-	      length += 2;
-	      strcpy (pattern, "\\<");
-	      strcpy (pattern + 2, pattern_0);
-	    }
-	  if (!has_right)
-	    strcpy (pattern + length, "\\>");
-	  return pattern;
+	  length += 2;
+	  strcpy (pattern, "\\<");
+	  strcpy (pattern + 2, pattern_0);
 	}
+      if (!has_right)
+	strcpy (pattern + length, "\\>");
+      return pattern;
     }
 }
 
@@ -1003,21 +1005,30 @@ int
 query_literal_substring (char const *arg, report_func_t report_func)
 {
   int count;
+  int arg_length = 0;
   char *(*strstr_func) __P((char const *, char const *));
 
   fseek (idh.idh_FILE, idh.idh_tokens_offset, SEEK_SET);
 
+  if (delimiter_style == ds_word)
+    arg_length = strlen (arg);
   count = 0;
   if (key_style != ks_token)
     memset (bits_vec, 0, bits_vec_size);
   strstr_func = (ignore_case_flag ? strcasestr : strstr);
   while (gets_past_00 (hits_buf_1, idh.idh_FILE) > 0)
     {
+      char *match;
       assert (*hits_buf_1);
       if (!desired_frequency (hits_buf_1))
 	continue;
-      if ((*strstr_func) (hits_buf_1, arg) == 0)
+      match = (*strstr_func) (hits_buf_1, arg);
+      if (match == 0)
 	continue;
+      if (delimiter_style == ds_word &&
+	  (match > hits_buf_1 || strlen (hits_buf_1) > arg_length))
+	continue;
+
       if (key_style == ks_token)
 	(*report_func) (hits_buf_1, tree8_to_flinkv (token_hits_addr (hits_buf_1)));
       else
