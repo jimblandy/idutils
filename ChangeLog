@@ -1,3 +1,8 @@
+1999-04-04  Greg McGary  <gkm@gnu.org>
+
+	* lisp/Makefile.am (lisp_LISP): Add variable.  Remove all
+	other obsolete contents.
+
 1999-04-03  Greg McGary  <gkm@gnu.org>
 
 	* Version 3.2c released.
