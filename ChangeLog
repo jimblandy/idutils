@@ -1,5 +1,8 @@
 1999-04-08  Greg McGary  <gkm@gnu.org>
 
+	* src/mkid.c (write_id_file): Complain if fclose fails.
+	[From jbb6@acpub.duke.edu]
+
 	* src/lid.c (limits.h): Include earlier to avoid RE_DUP_MAX
 	conflict. [From Erick.Branderhorst@asml.nl]
 	(search_flinkv): Bash terminating newline.  [From marc@snafu.org]
