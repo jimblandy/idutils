@@ -94,19 +94,12 @@ VERSION = @VERSION@
 l = @l@
 lispdir = @lispdir@
 
-EXTRA_DIST = id-utils.el elisp-comp
-elc_SCRIPTS = id-utils.elc
-elcdir = @LISPDIR@
-SUFFIXES = .el .elc
+EXTRA_DIST = README Makefile.am.in assert.m4 check-decl.m4 check-type.m4 chown.m4 const.m4 d-ino.m4 d-type.m4 decl.m4 error.m4 fnmatch.m4 fstypename.m4 getgroups.m4 getline.m4 getloadavg.m4 gettext.m4 glibc.m4 inttypes_h.m4 isc-posix.m4 jm-glibc-io.m4 jm-macros.m4 jm-mktime.m4 jm-winsz1.m4 jm-winsz2.m4 lchown.m4 lcmessage.m4 lfs.m4 ls-mntd-fs.m4 lstat.m4 malloc.m4 memcmp.m4 mktime.m4 perl.m4 prereq.m4 progtest.m4 putenv.m4 readdir.m4 realloc.m4 regex.m4 st_dm_mode.m4 st_mtim.m4 stat.m4 strftime.m4 uintmax_t.m4 uptime.m4 utimbuf.m4 utime.m4 utimes.m4
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
-SCRIPTS =  $(elc_SCRIPTS)
-
-COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
-DIST_COMMON =  Makefile.am Makefile.in elisp-comp
+DIST_COMMON =  Makefile.am Makefile.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -115,47 +108,27 @@ TAR = gtar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .el .elc
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnits lisp/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnits m4/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-
-install-elcSCRIPTS: $(elc_SCRIPTS)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(elcdir)
-	@list='$(elc_SCRIPTS)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(elcdir)/`echo $$p|sed '$(transform)'`"; \
-	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(elcdir)/`echo $$p|sed '$(transform)'`; \
-	  else if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(elcdir)/`echo $$p|sed '$(transform)'`"; \
-	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(elcdir)/`echo $$p|sed '$(transform)'`; \
-	  else :; fi; fi; \
-	done
-
-uninstall-elcSCRIPTS:
-	@$(NORMAL_UNINSTALL)
-	list='$(elc_SCRIPTS)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(elcdir)/`echo $$p|sed '$(transform)'`; \
-	done
 tags: TAGS
 TAGS:
 
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = lisp
+subdir = m4
 
 distdir: $(DISTFILES)
 	here=`cd $(top_builddir) && pwd`; \
 	top_distdir=`cd $(top_distdir) && pwd`; \
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnits lisp/Makefile
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnits m4/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -177,20 +150,19 @@ installcheck: installcheck-am
 install-exec-am:
 install-exec: install-exec-am
 
-install-data-am: install-elcSCRIPTS
+install-data-am:
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-elcSCRIPTS
+uninstall-am:
 uninstall: uninstall-am
-all-am: Makefile $(SCRIPTS)
+all-am: Makefile
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(elcdir)
 
 
 mostlyclean-generic:
@@ -220,17 +192,24 @@ maintainer-clean-am:  maintainer-clean-generic distclean-am
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: uninstall-elcSCRIPTS install-elcSCRIPTS tags distdir info-am \
-info dvi-am dvi check check-am installcheck-am installcheck \
-install-exec-am install-exec install-data-am install-data install-am \
-install uninstall-am uninstall all-redirect all-am all installdirs \
-mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+.PHONY: tags distdir info-am info dvi-am dvi check check-am \
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
 
 
-.el.elc:
-	@echo "WARNING: Warnings can be ignored. :-)"
-	$(SHELL) $(srcdir)/elisp-comp $<
+Makefile.am: Makefile.am.in
+	rm -f $@ $@t
+	sed -n '1,/^##m4-files-begin/p' $< > $@t
+	( (echo EXTRA_DIST = README Makefile.am.in | tr '\012' @); \
+	  (echo *.m4|tr ' ' @) ) \
+	  |sed 's/@$$/%/;s/@/ \\@/g' |tr @% '\012\012' \
+	  >> $@t
+	sed -n '/^##m4-files-end/,$$p' $< >> $@t
+	chmod a-w $@t
+	mv $@t $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

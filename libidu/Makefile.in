@@ -1,11 +1,17 @@
-# Makefile.in generated automatically by automake 1.1b from Makefile.am
+# Makefile.in generated automatically by automake 1.4a from Makefile.am
 
-# Copyright (C) 1994, 1995, 1996 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
-# gives unlimited permission to copy, distribute and modify it.
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
 
 
-SHELL = /bin/sh
+SHELL = @SHELL@
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -26,295 +32,376 @@ mandir = @mandir@
 includedir = @includedir@
 oldincludedir = /usr/include
 
+DESTDIR =
+
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 top_builddir = ..
 
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 transform = @program_transform_name@
 
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+CATALOGS = @CATALOGS@
+CATOBJEXT = @CATOBJEXT@
+CC = @CC@
+CFLAGS = @CFLAGS@
+CPP = @CPP@
+DATADIRNAME = @DATADIRNAME@
+EMACS = @EMACS@
+GENCAT = @GENCAT@
+GMOFILES = @GMOFILES@
+GMSGFMT = @GMSGFMT@
+GT_NO = @GT_NO@
+GT_YES = @GT_YES@
+INCLUDE_LOCALE_H = @INCLUDE_LOCALE_H@
+INSTOBJEXT = @INSTOBJEXT@
+INTLDEPS = @INTLDEPS@
+INTLLIBS = @INTLLIBS@
+INTLOBJS = @INTLOBJS@
+LANGUAGE_MAP_FILE = @LANGUAGE_MAP_FILE@
+LDFLAGS = @LDFLAGS@
+LIBOBJS = @LIBOBJS@
+LN_S = @LN_S@
+MAINT = @MAINT@
+MAKEINFO = @MAKEINFO@
+MKINSTALLDIRS = @MKINSTALLDIRS@
+MSGFMT = @MSGFMT@
+PACKAGE = @PACKAGE@
+POFILES = @POFILES@
+POSUB = @POSUB@
+RANLIB = @RANLIB@
+README_ALPHA = @README_ALPHA@
+U = @U@
+USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
+USE_NLS = @USE_NLS@
+VERSION = @VERSION@
+l = @l@
+lispdir = @lispdir@
+
 AUTOMAKE_OPTIONS = ansi2knr
 
-noinst_LIBRARIES = idu
+noinst_LIBRARIES = libidu.a
 
-idu_SOURCES = dynvec.c hash.c idfile.c idread.c idwrite.c fnprint.c \
-	scanners.c walker.c
+libidu_a_SOURCES = dynvec.c hash.c idfile.c idread.c idwrite.c fnprint.c 	scanners.c walker.c
+
 
 idudir = $(prefix)/share
 idu_DATA = id-lang.map
 
 noinst_HEADERS = dynvec.h hash.h idfile.h scanners.h tokflags.h xnls.h
 
-INCLUDES = -I. -I$(srcdir) \
-	   -I../lib -I$(top_srcdir)/lib \
-	   -I../intl -I$(top_srcdir)/intl \
-	   -I.. -I$(top_srcdir) 
+INCLUDES = -I. -I$(srcdir) 	   -I../lib -I$(top_srcdir)/lib 	   -I../intl -I$(top_srcdir)/intl 	   -I.. -I$(top_srcdir) 
+
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
-mkinstalldirs = $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
-LIBRARIES = $(noinst_LIBRARIES)
+CONFIG_CLEAN_FILES = 
+LIBRARIES =  $(noinst_LIBRARIES)
 
-noinst_LIBFILES = libidu.a
-
-CC = @CC@
-LEX = @LEX@
-YACC = @YACC@
 CPPFLAGS = @CPPFLAGS@
-CFLAGS = @CFLAGS@
-LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-
-COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
-LINK = $(CC) $(LDFLAGS) -o $@
-
 ANSI2KNR = @ANSI2KNR@
-o = .@U@o
-idu_LIBADD =
-idu_OBJECTS = dynvec$o hash$o idfile$o idread$o idwrite$o fnprint$o \
-scanners$o walker$o
-EXTRA_idu_SOURCES =
-LIBFILES =  libidu.a
+libidu_a_LIBADD = 
+libidu_a_OBJECTS =  dynvec$U.o hash$U.o idfile$U.o idread$U.o \
+idwrite$U.o fnprint$U.o scanners$U.o walker$U.o
 AR = ar
-RANLIB = @RANLIB@
-DATA = $(idu_DATA)
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+DATA =  $(idu_DATA)
 
-HEADERS = $(noinst_HEADERS)
+HEADERS =  $(noinst_HEADERS)
 
-DIST_COMMON = Makefile.am Makefile.in ansi2knr.1 ansi2knr.c
-
-
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
-
-DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
-	$(TEXINFOS) $(INFOS) $(MANS) $(EXTRA_DIST) $(DATA)
-DEP_DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
-	$(TEXINFOS) $(INFO_DEPS) $(MANS) $(EXTRA_DIST) $(DATA)
-
-TAR = tar
-SOURCES = $(idu_SOURCES)
-OBJECTS = $(idu_OBJECTS)
-
-default: all
+DIST_COMMON =  Makefile.am Makefile.in ansi2knr.1 ansi2knr.c
 
 
-$(srcdir)/Makefile.in: @MAINT@Makefile.am $(top_srcdir)/configure.in
-	cd $(top_srcdir) && automake $(subdir)/Makefile
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-Makefile: $(top_builddir)/config.status Makefile.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= ./config.status
+TAR = gtar
+GZIP_ENV = --best
+DEP_FILES =  .deps/dynvec.P .deps/fnprint.P .deps/hash.P .deps/idfile.P \
+.deps/idread.P .deps/idwrite.P .deps/scanners.P .deps/walker.P
+SOURCES = $(libidu_a_SOURCES)
+OBJECTS = $(libidu_a_OBJECTS)
+
+all: all-redirect
+.SUFFIXES:
+.SUFFIXES: .S .c .o .s
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnits libidu/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
 
 mostlyclean-noinstLIBRARIES:
 
 clean-noinstLIBRARIES:
-	test -z "$(noinst_LIBFILES)" || rm -f $(noinst_LIBFILES)
+	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
 
 distclean-noinstLIBRARIES:
 
 maintainer-clean-noinstLIBRARIES:
 
-.c.o:
+.s.o:
+	$(COMPILE) -c $<
+
+.S.o:
 	$(COMPILE) -c $<
 
 mostlyclean-compile:
-	rm -f *.o core
+	-rm -f *.o core *.core
 
 clean-compile:
 
 distclean-compile:
-	rm -f *.tab.c
+	-rm -f *.tab.c
 
 maintainer-clean-compile:
 
-.c._c:
-	$(ANSI2KNR) $< > $*.tmp && mv $*.tmp $@
+mostlyclean-krextra:
 
-._c._o:
-	@echo $(COMPILE) -c $<
-	@rm -f _$*.c
-	@ln $< _$*.c && $(COMPILE) -c _$*.c && mv _$*.o $@ && rm _$*.c
+clean-krextra:
+	-rm -f ansi2knr
 
-.c._o:
-	$(ANSI2KNR) $< > $*.tmp && mv $*.tmp $*._c
-	@echo $(COMPILE) -c $*._c
-	@rm -f _$*.c
-	@ln $*._c _$*.c && $(COMPILE) -c _$*.c && mv _$*.o $@ && rm _$*.c
+distclean-krextra:
 
+maintainer-clean-krextra:
 ansi2knr: ansi2knr.o
 	$(LINK) ansi2knr.o $(LIBS)
-
-$(OBJECTS): $(ANSI2KNR)
 ansi2knr.o: $(CONFIG_HEADER)
 
+
 mostlyclean-kr:
-	rm -f *._o *._c _*.c _*.o
+	-rm -f *_.c
 
 clean-kr:
 
 distclean-kr:
-	rm -f ansi2knr
 
 maintainer-clean-kr:
-$(idu_OBJECTS): ../config.h
 
-libidu.a: $(idu_OBJECTS) $(idu_LIBADD)
-	rm -f libidu.a
-	$(AR) cru libidu.a $(idu_OBJECTS) $(idu_LIBADD)
+libidu.a: $(libidu_a_OBJECTS) $(libidu_a_DEPENDENCIES)
+	-rm -f libidu.a
+	$(AR) cru libidu.a $(libidu_a_OBJECTS) $(libidu_a_LIBADD)
 	$(RANLIB) libidu.a
+dynvec_.c: dynvec.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/dynvec.c; then echo $(srcdir)/dynvec.c; else echo dynvec.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > dynvec_.c
+fnprint_.c: fnprint.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/fnprint.c; then echo $(srcdir)/fnprint.c; else echo fnprint.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > fnprint_.c
+hash_.c: hash.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/hash.c; then echo $(srcdir)/hash.c; else echo hash.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > hash_.c
+idfile_.c: idfile.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/idfile.c; then echo $(srcdir)/idfile.c; else echo idfile.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > idfile_.c
+idread_.c: idread.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/idread.c; then echo $(srcdir)/idread.c; else echo idread.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > idread_.c
+idwrite_.c: idwrite.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/idwrite.c; then echo $(srcdir)/idwrite.c; else echo idwrite.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > idwrite_.c
+scanners_.c: scanners.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/scanners.c; then echo $(srcdir)/scanners.c; else echo scanners.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > scanners_.c
+walker_.c: walker.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/walker.c; then echo $(srcdir)/walker.c; else echo walker.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > walker_.c
+dynvec_.o fnprint_.o hash_.o idfile_.o idread_.o idwrite_.o scanners_.o \
+walker_.o : $(ANSI2KNR)
 
 install-iduDATA: $(idu_DATA)
-	$(mkinstalldirs) $(idudir)
-	list="$(idu_DATA)"; for p in $$list; do \
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(idudir)
+	@list='$(idu_DATA)'; for p in $$list; do \
 	  if test -f $(srcdir)/$$p; then \
-	    $(INSTALL_DATA) $(srcdir)/$$p $(idudir)/$$p; \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(idudir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(idudir)/$$p; \
 	  else if test -f $$p; then \
-	    $(INSTALL_DATA) $$p $(idudir)/$$p; \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(idudir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(idudir)/$$p; \
 	  fi; fi; \
 	done
 
 uninstall-iduDATA:
-	list="$(idu_DATA)"; for p in $$list; do \
-	  rm -f $(idudir)/$$p; \
+	@$(NORMAL_UNINSTALL)
+	list='$(idu_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(idudir)/$$p; \
 	done
-
-ID: $(HEADERS) $(SOURCES)
-	here=`pwd` && cd $(srcdir) && mkid -f$$here/ID $(SOURCES) $(HEADERS)
 
 tags: TAGS
 
-TAGS: $(HEADERS) $(SOURCES) $(TAGS_DEPENDENCIES)
-	here=`pwd` && cd $(srcdir) && etags $(ETAGS_ARGS) $(SOURCES) $(HEADERS) -o $$here/TAGS
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
 
 mostlyclean-tags:
 
 clean-tags:
 
 distclean-tags:
+	-rm -f TAGS ID
 
 maintainer-clean-tags:
-	rm -f TAGS ID
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
 subdir = libidu
-distdir: $(DEP_DISTFILES)
-	@for file in `cd $(srcdir) && echo $(DISTFILES)`; do \
-	  test -f $(distdir)/$$file \
-	  || ln $(srcdir)/$$file $(distdir)/$$file 2> /dev/null \
-	  || cp -p $(srcdir)/$$file $(distdir)/$$file; \
+
+distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnits libidu/Makefile
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
 	done
-dynvec$o: ../libidu/dynvec.c ../libidu/dynvec.h \
- ../lib/xmalloc.h ../lib/xstring.h
-fnprint$o: ../libidu/fnprint.c ../lib/xstdlib.h \
- ../lib/xalloca.h ../lib/xunistd.h ../libidu/idfile.h \
- ../lib/xobstack.h ../lib/xmalloc.h ../lib/xstring.h \
- ../libidu/hash.h ../libidu/dynvec.h ../libidu/tokflags.h \
- ../libidu/xnls.h ../lib/pathmax.h ../lib/error.h
-hash$o: ../libidu/hash.c ../lib/xstdlib.h ../libidu/hash.h \
- ../libidu/xnls.h ../lib/xmalloc.h ../lib/xstring.h \
- ../lib/error.h
-idfile$o: ../libidu/idfile.c ../lib/xstdlib.h \
- ../lib/xstring.h ../lib/xsysstat.h ../libidu/xnls.h \
- ../lib/xobstack.h ../lib/xmalloc.h ../libidu/idfile.h \
- ../libidu/hash.h ../libidu/dynvec.h ../libidu/tokflags.h \
- ../lib/error.h
-idread$o: ../libidu/idread.c ../libidu/idfile.h \
- ../lib/xobstack.h ../lib/xmalloc.h ../lib/xstring.h \
- ../libidu/hash.h ../libidu/dynvec.h ../libidu/tokflags.h \
- ../lib/xstddef.h ../lib/error.h ../libidu/xnls.h
-idwrite$o: ../libidu/idwrite.c ../libidu/idfile.h \
- ../lib/xobstack.h ../lib/xmalloc.h ../lib/xstring.h \
- ../libidu/hash.h ../libidu/dynvec.h ../libidu/tokflags.h \
- ../libidu/xnls.h ../lib/error.h
-scanners$o: ../libidu/scanners.c ../lib/xstdlib.h \
- ../lib/xstddef.h ../lib/xunistd.h ../lib/xsysstat.h \
- ../lib/xstring.h ../lib/xmalloc.h ../libidu/xnls.h \
- ../lib/error.h ../libidu/scanners.h ../lib/xobstack.h \
- ../libidu/tokflags.h
-walker$o: ../libidu/walker.c ../lib/xsysstat.h \
- ../lib/xstdlib.h ../lib/xstddef.h ../lib/xunistd.h \
- ../lib/xstring.h ../lib/xfnmatch.h ../lib/xdirent.h \
- ../libidu/xnls.h ../libidu/idfile.h ../lib/xobstack.h \
- ../lib/xmalloc.h ../libidu/hash.h ../libidu/dynvec.h \
- ../libidu/tokflags.h ../lib/error.h ../libidu/scanners.h \
- ../lib/pathmax.h ../lib/xalloca.h
 
-info:
+DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
 
-dvi:
+-include $(DEP_FILES)
 
-check: all
+mostlyclean-depend:
 
-installcheck:
+clean-depend:
 
-install-exec: 
+distclean-depend:
+	-rm -rf .deps
 
-install-data: install-iduDATA
+maintainer-clean-depend:
 
-install: install-exec install-data all
-	@:
+%.o: %.c
+	@echo '$(COMPILE) -c $<'; \
+	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-cp .deps/$(*F).pp .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm .deps/$(*F).pp
 
-uninstall: uninstall-iduDATA
+%.lo: %.c
+	@echo '$(LTCOMPILE) -c $<'; \
+	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
+	  < .deps/$(*F).pp > .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm -f .deps/$(*F).pp
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am:
+install-exec: install-exec-am
 
-all: $(LIBFILES) $(DATA) $(HEADERS) Makefile
+install-data-am: install-iduDATA
+install-data: install-data-am
 
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am: uninstall-iduDATA
+uninstall: uninstall-am
+all-am: Makefile $(ANSI2KNR) $(LIBRARIES) $(DATA) $(HEADERS)
+all-redirect: all-am
 install-strip:
-	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' install
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(idudir)
+	$(mkinstalldirs)  $(DESTDIR)$(idudir)
 
 
 mostlyclean-generic:
-	test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
 
 clean-generic:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
-	rm -f Makefile $(DISTCLEANFILES)
-	rm -f config.cache config.log $(CONFIG_HEADER) stamp-h
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-	test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
-	test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
-mostlyclean:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
-		mostlyclean-kr mostlyclean-tags mostlyclean-generic
+mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
+		mostlyclean-krextra mostlyclean-kr mostlyclean-tags \
+		mostlyclean-depend mostlyclean-generic
 
-clean:  clean-noinstLIBRARIES clean-compile clean-kr clean-tags \
-		clean-generic mostlyclean 
+mostlyclean: mostlyclean-am
 
-distclean:  distclean-noinstLIBRARIES distclean-compile distclean-kr \
-		distclean-tags distclean-generic clean 
-	rm -f config.status
+clean-am:  clean-noinstLIBRARIES clean-compile clean-krextra clean-kr \
+		clean-tags clean-depend clean-generic mostlyclean-am
 
-maintainer-clean:  maintainer-clean-noinstLIBRARIES \
-		maintainer-clean-compile maintainer-clean-kr \
-		maintainer-clean-tags maintainer-clean-generic \
-		distclean 
+clean: clean-am
+
+distclean-am:  distclean-noinstLIBRARIES distclean-compile \
+		distclean-krextra distclean-kr distclean-tags \
+		distclean-depend distclean-generic clean-am
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-noinstLIBRARIES \
+		maintainer-clean-compile maintainer-clean-krextra \
+		maintainer-clean-kr maintainer-clean-tags \
+		maintainer-clean-depend maintainer-clean-generic \
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
-.PHONY: default mostlyclean-noinstLIBRARIES distclean-noinstLIBRARIES \
+maintainer-clean: maintainer-clean-am
+
+.PHONY: mostlyclean-noinstLIBRARIES distclean-noinstLIBRARIES \
 clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
 mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile mostlyclean-kr distclean-kr clean-kr \
-maintainer-clean-kr uninstall-iduDATA install-iduDATA tags \
+maintainer-clean-compile mostlyclean-krextra distclean-krextra \
+clean-krextra maintainer-clean-krextra mostlyclean-kr distclean-kr \
+clean-kr maintainer-clean-kr uninstall-iduDATA install-iduDATA tags \
 mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
-distdir info dvi check installcheck install-exec install-data install \
-uninstall all installdirs mostlyclean-generic distclean-generic \
-clean-generic maintainer-clean-generic clean mostlyclean distclean \
-maintainer-clean
+distdir mostlyclean-depend distclean-depend clean-depend \
+maintainer-clean-depend info-am info dvi-am dvi check check-am \
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
 
 
 ansi2knr.c: $(top_srcdir)/src/ansi2knr.c
 	ln $(top_srcdir)/src/ansi2knr.c .
-.SUFFIXES:
-.SUFFIXES: .c .o ._c ._o
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

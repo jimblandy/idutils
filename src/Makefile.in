@@ -1,11 +1,17 @@
-# Makefile.in generated automatically by automake 1.1b from Makefile.am
+# Makefile.in generated automatically by automake 1.4a from Makefile.am
 
-# Copyright (C) 1994, 1995, 1996 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
-# gives unlimited permission to copy, distribute and modify it.
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
 
 
-SHELL = /bin/sh
+SHELL = @SHELL@
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -26,17 +32,67 @@ mandir = @mandir@
 includedir = @includedir@
 oldincludedir = /usr/include
 
+DESTDIR =
+
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 top_builddir = ..
 
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+CATALOGS = @CATALOGS@
+CATOBJEXT = @CATOBJEXT@
+CC = @CC@
+CFLAGS = @CFLAGS@
+CPP = @CPP@
+DATADIRNAME = @DATADIRNAME@
+EMACS = @EMACS@
+GENCAT = @GENCAT@
+GMOFILES = @GMOFILES@
+GMSGFMT = @GMSGFMT@
+GT_NO = @GT_NO@
+GT_YES = @GT_YES@
+INCLUDE_LOCALE_H = @INCLUDE_LOCALE_H@
+INSTOBJEXT = @INSTOBJEXT@
+INTLDEPS = @INTLDEPS@
+INTLLIBS = @INTLLIBS@
+INTLOBJS = @INTLOBJS@
+LANGUAGE_MAP_FILE = @LANGUAGE_MAP_FILE@
+LDFLAGS = @LDFLAGS@
+LIBOBJS = @LIBOBJS@
+LN_S = @LN_S@
+MAINT = @MAINT@
+MAKEINFO = @MAKEINFO@
+MKINSTALLDIRS = @MKINSTALLDIRS@
+MSGFMT = @MSGFMT@
+PACKAGE = @PACKAGE@
+POFILES = @POFILES@
+POSUB = @POSUB@
+RANLIB = @RANLIB@
+README_ALPHA = @README_ALPHA@
+U = @U@
+USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
+USE_NLS = @USE_NLS@
+VERSION = @VERSION@
+l = @l@
+lispdir = @lispdir@
 
 AUTOMAKE_OPTIONS = ansi2knr
 
@@ -47,299 +103,345 @@ EXTRA_DIST = ansi2knr.1 ansi2knr.c $(bin_SCRIPTS)
 
 localedir = $(datadir)/locale
 
-INCLUDES = -I. -I$(srcdir) \
-	   -I../libidu -I$(top_srcdir)/libidu \
-	   -I../lib -I$(top_srcdir)/lib \
-	   -I../intl -I$(top_srcdir)/intl \
-	   -I.. -I$(top_srcdir) 
+INCLUDES = -I. -I$(srcdir) 	   -I../libidu -I$(top_srcdir)/libidu 	   -I../lib -I$(top_srcdir)/lib 	   -I../intl -I$(top_srcdir)/intl 	   -I.. -I$(top_srcdir) 
+
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 LDADD = @INTLLIBS@ ../libidu/libidu.a ../lib/libsys.a
-mkinstalldirs = $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
-PROGRAMS = $(bin_PROGRAMS)
+CONFIG_CLEAN_FILES = 
+PROGRAMS =  $(bin_PROGRAMS)
 
-
-CC = @CC@
-LEX = @LEX@
-YACC = @YACC@
 CPPFLAGS = @CPPFLAGS@
-CFLAGS = @CFLAGS@
-LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-
-COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
-LINK = $(CC) $(LDFLAGS) -o $@
-
 ANSI2KNR = @ANSI2KNR@
-o = .@U@o
 mkid_SOURCES = mkid.c
-mkid_OBJECTS = mkid$o
-EXTRA_mkid_SOURCES =
+mkid_OBJECTS =  mkid$U.o
 mkid_LDADD = $(LDADD)
+mkid_DEPENDENCIES =  ../libidu/libidu.a ../lib/libsys.a
+mkid_LDFLAGS = 
 lid_SOURCES = lid.c
-lid_OBJECTS = lid$o
-EXTRA_lid_SOURCES =
+lid_OBJECTS =  lid$U.o
 lid_LDADD = $(LDADD)
+lid_DEPENDENCIES =  ../libidu/libidu.a ../lib/libsys.a
+lid_LDFLAGS = 
 fid_SOURCES = fid.c
-fid_OBJECTS = fid$o
-EXTRA_fid_SOURCES =
+fid_OBJECTS =  fid$U.o
 fid_LDADD = $(LDADD)
+fid_DEPENDENCIES =  ../libidu/libidu.a ../lib/libsys.a
+fid_LDFLAGS = 
 fnid_SOURCES = fnid.c
-fnid_OBJECTS = fnid$o
-EXTRA_fnid_SOURCES =
+fnid_OBJECTS =  fnid$U.o
 fnid_LDADD = $(LDADD)
+fnid_DEPENDENCIES =  ../libidu/libidu.a ../lib/libsys.a
+fnid_LDFLAGS = 
 xtokid_SOURCES = xtokid.c
-xtokid_OBJECTS = xtokid$o
-EXTRA_xtokid_SOURCES =
+xtokid_OBJECTS =  xtokid$U.o
 xtokid_LDADD = $(LDADD)
-SCRIPTS = $(bin_SCRIPTS)
+xtokid_DEPENDENCIES =  ../libidu/libidu.a ../lib/libsys.a
+xtokid_LDFLAGS = 
+SCRIPTS =  $(bin_SCRIPTS)
 
-DIST_COMMON = Makefile.am Makefile.in ansi2knr.1 ansi2knr.c
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+DIST_COMMON =  Makefile.am Makefile.in ansi2knr.1 ansi2knr.c
 
 
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
-	$(TEXINFOS) $(INFOS) $(MANS) $(EXTRA_DIST) $(DATA)
-DEP_DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
-	$(TEXINFOS) $(INFO_DEPS) $(MANS) $(EXTRA_DIST) $(DATA)
-
-TAR = tar
+TAR = gtar
+GZIP_ENV = --best
+DEP_FILES =  .deps/fid.P .deps/fnid.P .deps/lid.P .deps/mkid.P \
+.deps/xtokid.P
 SOURCES = mkid.c lid.c fid.c fnid.c xtokid.c
-OBJECTS = mkid$o lid$o fid$o fnid$o xtokid$o
+OBJECTS = mkid$U.o lid$U.o fid$U.o fnid$U.o xtokid$U.o
 
-default: all
+all: all-redirect
+.SUFFIXES:
+.SUFFIXES: .S .c .o .s
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnits src/Makefile
 
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(srcdir)/Makefile.in: @MAINT@Makefile.am $(top_srcdir)/configure.in
-	cd $(top_srcdir) && automake $(subdir)/Makefile
-
-Makefile: $(top_builddir)/config.status Makefile.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= ./config.status
 
 mostlyclean-binPROGRAMS:
 
 clean-binPROGRAMS:
-	test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 
 distclean-binPROGRAMS:
 
 maintainer-clean-binPROGRAMS:
 
 install-binPROGRAMS: $(bin_PROGRAMS)
-	$(mkinstalldirs) $(bindir)
-	list="$(bin_PROGRAMS)"; for p in $$list; do \
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
+	    echo "  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+	     $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	  else :; fi; \
 	done
 
 uninstall-binPROGRAMS:
-	list="$(bin_PROGRAMS)"; for p in $$list; do \
-	  rm -f $(bindir)/`echo $$p|sed '$(transform)'`; \
+	@$(NORMAL_UNINSTALL)
+	list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	done
 
-.c.o:
+.s.o:
+	$(COMPILE) -c $<
+
+.S.o:
 	$(COMPILE) -c $<
 
 mostlyclean-compile:
-	rm -f *.o core
+	-rm -f *.o core *.core
 
 clean-compile:
 
 distclean-compile:
-	rm -f *.tab.c
+	-rm -f *.tab.c
 
 maintainer-clean-compile:
 
-.c._c:
-	$(ANSI2KNR) $< > $*.tmp && mv $*.tmp $@
+mostlyclean-krextra:
 
-._c._o:
-	@echo $(COMPILE) -c $<
-	@rm -f _$*.c
-	@ln $< _$*.c && $(COMPILE) -c _$*.c && mv _$*.o $@ && rm _$*.c
+clean-krextra:
+	-rm -f ansi2knr
 
-.c._o:
-	$(ANSI2KNR) $< > $*.tmp && mv $*.tmp $*._c
-	@echo $(COMPILE) -c $*._c
-	@rm -f _$*.c
-	@ln $*._c _$*.c && $(COMPILE) -c _$*.c && mv _$*.o $@ && rm _$*.c
+distclean-krextra:
 
+maintainer-clean-krextra:
 ansi2knr: ansi2knr.o
 	$(LINK) ansi2knr.o $(LIBS)
-
-$(OBJECTS): $(ANSI2KNR)
 ansi2knr.o: $(CONFIG_HEADER)
 
+
 mostlyclean-kr:
-	rm -f *._o *._c _*.c _*.o
+	-rm -f *_.c
 
 clean-kr:
 
 distclean-kr:
-	rm -f ansi2knr
 
 maintainer-clean-kr:
-$(mkid_OBJECTS): ../config.h
 
 mkid: $(mkid_OBJECTS) $(mkid_DEPENDENCIES)
-	$(LINK) $(mkid_OBJECTS) $(mkid_LDADD) $(LIBS)
-$(lid_OBJECTS): ../config.h
+	@rm -f mkid
+	$(LINK) $(mkid_LDFLAGS) $(mkid_OBJECTS) $(mkid_LDADD) $(LIBS)
 
 lid: $(lid_OBJECTS) $(lid_DEPENDENCIES)
-	$(LINK) $(lid_OBJECTS) $(lid_LDADD) $(LIBS)
-$(fid_OBJECTS): ../config.h
+	@rm -f lid
+	$(LINK) $(lid_LDFLAGS) $(lid_OBJECTS) $(lid_LDADD) $(LIBS)
 
 fid: $(fid_OBJECTS) $(fid_DEPENDENCIES)
-	$(LINK) $(fid_OBJECTS) $(fid_LDADD) $(LIBS)
-$(fnid_OBJECTS): ../config.h
+	@rm -f fid
+	$(LINK) $(fid_LDFLAGS) $(fid_OBJECTS) $(fid_LDADD) $(LIBS)
 
 fnid: $(fnid_OBJECTS) $(fnid_DEPENDENCIES)
-	$(LINK) $(fnid_OBJECTS) $(fnid_LDADD) $(LIBS)
-$(xtokid_OBJECTS): ../config.h
+	@rm -f fnid
+	$(LINK) $(fnid_LDFLAGS) $(fnid_OBJECTS) $(fnid_LDADD) $(LIBS)
 
 xtokid: $(xtokid_OBJECTS) $(xtokid_DEPENDENCIES)
-	$(LINK) $(xtokid_OBJECTS) $(xtokid_LDADD) $(LIBS)
+	@rm -f xtokid
+	$(LINK) $(xtokid_LDFLAGS) $(xtokid_OBJECTS) $(xtokid_LDADD) $(LIBS)
 
 install-binSCRIPTS: $(bin_SCRIPTS)
-	$(mkinstalldirs) $(bindir)
-	list="$(bin_SCRIPTS)"; for p in $$list; do \
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_SCRIPTS)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    $(INSTALL_SCRIPT) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
+	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
 	  else if test -f $(srcdir)/$$p; then \
-	    $(INSTALL_SCRIPT) $(srcdir)/$$p \
-	      $(bindir)/`echo $$p|sed '$(transform)'`; \
+	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
 	  else :; fi; fi; \
 	done
 
 uninstall-binSCRIPTS:
-	list="$(bin_SCRIPTS)"; for p in $$list; do \
-	  rm -f $(bindir)/`echo $$p|sed '$(transform)'`; \
+	@$(NORMAL_UNINSTALL)
+	list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
 	done
-
-ID: $(HEADERS) $(SOURCES)
-	here=`pwd` && cd $(srcdir) && mkid -f$$here/ID $(SOURCES) $(HEADERS)
+fid_.c: fid.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/fid.c; then echo $(srcdir)/fid.c; else echo fid.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > fid_.c
+fnid_.c: fnid.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/fnid.c; then echo $(srcdir)/fnid.c; else echo fnid.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > fnid_.c
+lid_.c: lid.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/lid.c; then echo $(srcdir)/lid.c; else echo lid.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > lid_.c
+mkid_.c: mkid.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/mkid.c; then echo $(srcdir)/mkid.c; else echo mkid.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > mkid_.c
+xtokid_.c: xtokid.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/xtokid.c; then echo $(srcdir)/xtokid.c; else echo xtokid.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > xtokid_.c
+fid_.o fnid_.o lid_.o mkid_.o xtokid_.o : $(ANSI2KNR)
 
 tags: TAGS
 
-TAGS: $(HEADERS) $(SOURCES) $(TAGS_DEPENDENCIES)
-	here=`pwd` && cd $(srcdir) && etags $(ETAGS_ARGS) $(SOURCES) $(HEADERS) -o $$here/TAGS
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
 
 mostlyclean-tags:
 
 clean-tags:
 
 distclean-tags:
+	-rm -f TAGS ID
 
 maintainer-clean-tags:
-	rm -f TAGS ID
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
 subdir = src
-distdir: $(DEP_DISTFILES)
-	@for file in `cd $(srcdir) && echo $(DISTFILES)`; do \
-	  test -f $(distdir)/$$file \
-	  || ln $(srcdir)/$$file $(distdir)/$$file 2> /dev/null \
-	  || cp -p $(srcdir)/$$file $(distdir)/$$file; \
+
+distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnits src/Makefile
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
 	done
-fid$o: fid.c ../lib/xstring.h ../lib/xunistd.h \
- ../libidu/xnls.h ../libidu/idfile.h ../lib/xobstack.h \
- ../lib/xmalloc.h ../libidu/hash.h ../libidu/dynvec.h \
- ../libidu/tokflags.h ../lib/error.h ../lib/pathmax.h \
- ../lib/xalloca.h
-fnid$o: ../src/fnid.c ../lib/xfnmatch.h ../lib/xstring.h \
- ../lib/xmalloc.h ../libidu/xnls.h ../libidu/idfile.h \
- ../lib/xobstack.h ../libidu/hash.h ../libidu/dynvec.h \
- ../libidu/tokflags.h ../lib/pathmax.h ../lib/error.h \
- ../lib/xalloca.h
-lid$o: ../src/lid.c ../lib/xstdlib.h ../lib/xstring.h \
- ../lib/xunistd.h ../libidu/xnls.h ../lib/xmalloc.h \
- ../libidu/idfile.h ../lib/xobstack.h ../libidu/hash.h \
- ../libidu/dynvec.h ../libidu/tokflags.h ../lib/error.h \
- ../lib/pathmax.h ../lib/xalloca.h
-mkid$o: ../src/mkid.c ../lib/xstdlib.h ../lib/xsysstat.h \
- ../lib/xstddef.h ../lib/xunistd.h ../libidu/xnls.h \
- ../lib/pathmax.h ../lib/xstring.h ../libidu/idfile.h \
- ../lib/xobstack.h ../lib/xmalloc.h ../libidu/hash.h \
- ../libidu/dynvec.h ../libidu/tokflags.h ../libidu/scanners.h \
- ../lib/error.h ../lib/xalloca.h
-xtokid$o: xtokid.c ../lib/xstring.h ../libidu/xnls.h \
- ../libidu/scanners.h ../lib/xobstack.h ../lib/xmalloc.h \
- ../libidu/idfile.h ../libidu/hash.h ../libidu/dynvec.h \
- ../libidu/tokflags.h ../lib/pathmax.h ../lib/error.h
 
-info:
+DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
 
-dvi:
+-include $(DEP_FILES)
 
-check: all
+mostlyclean-depend:
 
-installcheck:
+clean-depend:
 
-install-exec: install-binPROGRAMS install-binSCRIPTS
+distclean-depend:
+	-rm -rf .deps
 
-install-data: 
+maintainer-clean-depend:
 
-install: install-exec install-data all
-	@:
+%.o: %.c
+	@echo '$(COMPILE) -c $<'; \
+	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-cp .deps/$(*F).pp .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm .deps/$(*F).pp
 
-uninstall: uninstall-binPROGRAMS uninstall-binSCRIPTS
+%.lo: %.c
+	@echo '$(LTCOMPILE) -c $<'; \
+	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
+	  < .deps/$(*F).pp > .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm -f .deps/$(*F).pp
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am: install-binPROGRAMS install-binSCRIPTS
+install-exec: install-exec-am
 
-all: $(PROGRAMS) $(SCRIPTS) Makefile
+install-data-am:
+install-data: install-data-am
 
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS
+uninstall: uninstall-am
+all-am: Makefile $(ANSI2KNR) $(PROGRAMS) $(SCRIPTS)
+all-redirect: all-am
 install-strip:
-	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' install
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(bindir) $(bindir)
+	$(mkinstalldirs)  $(DESTDIR)$(bindir) $(DESTDIR)$(bindir)
 
 
 mostlyclean-generic:
-	test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
 
 clean-generic:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
-	rm -f Makefile $(DISTCLEANFILES)
-	rm -f config.cache config.log $(CONFIG_HEADER) stamp-h
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-	test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
-	test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
-mostlyclean:  mostlyclean-binPROGRAMS mostlyclean-compile mostlyclean-kr \
-		mostlyclean-tags mostlyclean-generic
+mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-compile \
+		mostlyclean-krextra mostlyclean-kr mostlyclean-tags \
+		mostlyclean-depend mostlyclean-generic
 
-clean:  clean-binPROGRAMS clean-compile clean-kr clean-tags \
-		clean-generic mostlyclean 
+mostlyclean: mostlyclean-am
 
-distclean:  distclean-binPROGRAMS distclean-compile distclean-kr \
-		distclean-tags distclean-generic clean 
-	rm -f config.status
+clean-am:  clean-binPROGRAMS clean-compile clean-krextra clean-kr \
+		clean-tags clean-depend clean-generic mostlyclean-am
 
-maintainer-clean:  maintainer-clean-binPROGRAMS maintainer-clean-compile \
+clean: clean-am
+
+distclean-am:  distclean-binPROGRAMS distclean-compile distclean-krextra \
+		distclean-kr distclean-tags distclean-depend \
+		distclean-generic clean-am
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-binPROGRAMS \
+		maintainer-clean-compile maintainer-clean-krextra \
 		maintainer-clean-kr maintainer-clean-tags \
-		maintainer-clean-generic distclean 
+		maintainer-clean-depend maintainer-clean-generic \
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
-.PHONY: default mostlyclean-binPROGRAMS distclean-binPROGRAMS \
-clean-binPROGRAMS maintainer-clean-binPROGRAMS uninstall-binPROGRAMS \
-install-binPROGRAMS mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile mostlyclean-kr distclean-kr clean-kr \
-maintainer-clean-kr uninstall-binSCRIPTS install-binSCRIPTS tags \
-mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
-distdir info dvi check installcheck install-exec install-data install \
-uninstall all installdirs mostlyclean-generic distclean-generic \
-clean-generic maintainer-clean-generic clean mostlyclean distclean \
-maintainer-clean
+maintainer-clean: maintainer-clean-am
+
+.PHONY: mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
+maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
+mostlyclean-compile distclean-compile clean-compile \
+maintainer-clean-compile mostlyclean-krextra distclean-krextra \
+clean-krextra maintainer-clean-krextra mostlyclean-kr distclean-kr \
+clean-kr maintainer-clean-kr uninstall-binSCRIPTS install-binSCRIPTS \
+tags mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
+distdir mostlyclean-depend distclean-depend clean-depend \
+maintainer-clean-depend info-am info dvi-am dvi check check-am \
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
 
 
 $(PROGRAMS): $(LDADD)
-.SUFFIXES:
-.SUFFIXES: .c .o ._c ._o
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -1,11 +1,17 @@
-# Makefile.in generated automatically by automake 1.1b from Makefile.am
+# Makefile.in generated automatically by automake 1.4a from Makefile.am
 
-# Copyright (C) 1994, 1995, 1996 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
-# gives unlimited permission to copy, distribute and modify it.
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
 
 
-SHELL = /bin/sh
+SHELL = @SHELL@
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -26,221 +32,309 @@ mandir = @mandir@
 includedir = @includedir@
 oldincludedir = /usr/include
 
+DESTDIR =
+
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 top_builddir = ..
 
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 transform = @program_transform_name@
 
-noinst_LIBRARIES = sys
-
-EXTRA_DIST = alloca.c basename.c dirname.c error.c fnmatch.c getopt.c \
-	getopt1.c memcpy.c memset.c obstack.c regex.c rx.c \
-	strcasecmp.c strcspn.c strdup.c strndup.c strpbrk.c strspn.c \
-	strstr.c strtok.c
-
-sys_SOURCES = xgetcwd.c xmalloc.c
-
-noinst_HEADERS = ansidecl.h error.h fnmatch.h getopt.h obstack.h \
-	pathmax.h regex.h rx.h xalloca.h xdirent.h xfnmatch.h \
-	xmalloc.h xobstack.h xstddef.h xstdlib.h xstring.h xsysstat.h \
-	xunistd.h
-
-INCLUDES = -I. -I$(srcdir) \
-	   -I../intl -I$(top_srcdir)/intl \
-	   -I.. -I$(top_srcdir) 
-DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
-sys_LIBADD = @REGEXOBJ@ @LIBOBJS@ @ALLOCA@
-mkinstalldirs = $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../config.h
-LIBRARIES = $(noinst_LIBRARIES)
-
-noinst_LIBFILES = libsys.a
-
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+CATALOGS = @CATALOGS@
+CATOBJEXT = @CATOBJEXT@
 CC = @CC@
-LEX = @LEX@
-YACC = @YACC@
-CPPFLAGS = @CPPFLAGS@
 CFLAGS = @CFLAGS@
+CPP = @CPP@
+DATADIRNAME = @DATADIRNAME@
+EMACS = @EMACS@
+GENCAT = @GENCAT@
+GMOFILES = @GMOFILES@
+GMSGFMT = @GMSGFMT@
+GT_NO = @GT_NO@
+GT_YES = @GT_YES@
+INCLUDE_LOCALE_H = @INCLUDE_LOCALE_H@
+INSTOBJEXT = @INSTOBJEXT@
+INTLDEPS = @INTLDEPS@
+INTLLIBS = @INTLLIBS@
+INTLOBJS = @INTLOBJS@
+LANGUAGE_MAP_FILE = @LANGUAGE_MAP_FILE@
 LDFLAGS = @LDFLAGS@
-LIBS = @LIBS@
-
-COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
-LINK = $(CC) $(LDFLAGS) -o $@
-sys_OBJECTS = xgetcwd.o xmalloc.o
-EXTRA_sys_SOURCES =
-LIBFILES =  libsys.a
-AR = ar
-RANLIB = @RANLIB@
-HEADERS = $(noinst_HEADERS)
-
-DIST_COMMON = Makefile.am Makefile.in
-
-
+LIBOBJS = @LIBOBJS@
+LN_S = @LN_S@
+MAINT = @MAINT@
+MAKEINFO = @MAKEINFO@
+MKINSTALLDIRS = @MKINSTALLDIRS@
+MSGFMT = @MSGFMT@
 PACKAGE = @PACKAGE@
+POFILES = @POFILES@
+POSUB = @POSUB@
+RANLIB = @RANLIB@
+README_ALPHA = @README_ALPHA@
+U = @U@
+USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
+USE_NLS = @USE_NLS@
 VERSION = @VERSION@
+l = @l@
+lispdir = @lispdir@
 
-DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
-	$(TEXINFOS) $(INFOS) $(MANS) $(EXTRA_DIST) $(DATA)
-DEP_DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
-	$(TEXINFOS) $(INFO_DEPS) $(MANS) $(EXTRA_DIST) $(DATA)
+noinst_LIBRARIES = libsys.a
 
-TAR = tar
-SOURCES = $(sys_SOURCES)
-OBJECTS = $(sys_OBJECTS)
-
-default: all
+EXTRA_DIST = alloca.c basename.c dirname.c error.c fnmatch.c memcpy.c 	memset.c obstack.c regex.c rx.c strcasecmp.c strcspn.c strdup.c 	strndup.c strpbrk.c strspn.c strstr.c strtok.c
 
 
-$(srcdir)/Makefile.in: @MAINT@Makefile.am $(top_srcdir)/configure.in
-	cd $(top_srcdir) && automake $(subdir)/Makefile
+libsys_a_SOURCES = xgetcwd.c xmalloc.c
 
-Makefile: $(top_builddir)/config.status Makefile.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= ./config.status
+noinst_HEADERS = ansidecl.h error.h fnmatch.h getopt.h obstack.h 	pathmax.h regex.h rx.h xalloca.h xdirent.h xfnmatch.h 	xmalloc.h xobstack.h xstddef.h xstdlib.h xstring.h xsysstat.h 	xunistd.h
+
+
+INCLUDES = -I. -I$(srcdir) 	   -I../intl -I$(top_srcdir)/intl 	   -I.. -I$(top_srcdir)
+
+DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
+libsys_a_LIBADD = @LIBOBJS@ @ALLOCA@
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = ../config.h
+CONFIG_CLEAN_FILES = 
+LIBRARIES =  $(noinst_LIBRARIES)
+
+CPPFLAGS = @CPPFLAGS@
+LIBS = @LIBS@
+libsys_a_DEPENDENCIES =  @LIBOBJS@ @ALLOCA@
+libsys_a_OBJECTS =  xgetcwd.o xmalloc.o
+AR = ar
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+HEADERS =  $(noinst_HEADERS)
+
+DIST_COMMON =  Makefile.am Makefile.in alloca.c ansi2knr.1 ansi2knr.c \
+basename.c dirname.c error.c fnmatch.c memcpy.c memset.c obstack.c \
+obstack.h regex.c regex.h rx.c rx.h strcspn.c strdup.c strndup.c \
+strpbrk.c strspn.c strstr.c strtok.c
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = gtar
+GZIP_ENV = --best
+DEP_FILES =  .deps/alloca.P .deps/basename.P .deps/dirname.P \
+.deps/error.P .deps/fnmatch.P .deps/memcpy.P .deps/memset.P \
+.deps/obstack.P .deps/regex.P .deps/rx.P .deps/strcspn.P .deps/strdup.P \
+.deps/strndup.P .deps/strpbrk.P .deps/strspn.P .deps/strstr.P \
+.deps/strtok.P .deps/xgetcwd.P .deps/xmalloc.P
+SOURCES = $(libsys_a_SOURCES)
+OBJECTS = $(libsys_a_OBJECTS)
+
+all: all-redirect
+.SUFFIXES:
+.SUFFIXES: .S .c .o .s
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnits lib/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
 
 mostlyclean-noinstLIBRARIES:
 
 clean-noinstLIBRARIES:
-	test -z "$(noinst_LIBFILES)" || rm -f $(noinst_LIBFILES)
+	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
 
 distclean-noinstLIBRARIES:
 
 maintainer-clean-noinstLIBRARIES:
 
-.c.o:
+.s.o:
+	$(COMPILE) -c $<
+
+.S.o:
 	$(COMPILE) -c $<
 
 mostlyclean-compile:
-	rm -f *.o core
+	-rm -f *.o core *.core
 
 clean-compile:
 
 distclean-compile:
-	rm -f *.tab.c
+	-rm -f *.tab.c
 
 maintainer-clean-compile:
-$(sys_OBJECTS): ../config.h
 
-libsys.a: $(sys_OBJECTS) $(sys_LIBADD)
-	rm -f libsys.a
-	$(AR) cru libsys.a $(sys_OBJECTS) $(sys_LIBADD)
+libsys.a: $(libsys_a_OBJECTS) $(libsys_a_DEPENDENCIES)
+	-rm -f libsys.a
+	$(AR) cru libsys.a $(libsys_a_OBJECTS) $(libsys_a_LIBADD)
 	$(RANLIB) libsys.a
-
-ID: $(HEADERS) $(SOURCES)
-	here=`pwd` && cd $(srcdir) && mkid -f$$here/ID $(SOURCES) $(HEADERS)
 
 tags: TAGS
 
-TAGS: $(HEADERS) $(SOURCES) $(TAGS_DEPENDENCIES)
-	here=`pwd` && cd $(srcdir) && etags $(ETAGS_ARGS) $(SOURCES) $(HEADERS) -o $$here/TAGS
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
 
 mostlyclean-tags:
 
 clean-tags:
 
 distclean-tags:
+	-rm -f TAGS ID
 
 maintainer-clean-tags:
-	rm -f TAGS ID
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
 subdir = lib
-distdir: $(DEP_DISTFILES)
-	@for file in `cd $(srcdir) && echo $(DISTFILES)`; do \
-	  test -f $(distdir)/$$file \
-	  || ln $(srcdir)/$$file $(distdir)/$$file 2> /dev/null \
-	  || cp -p $(srcdir)/$$file $(distdir)/$$file; \
+
+distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnits lib/Makefile
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
 	done
-alloca.o: ../lib/alloca.c
-basename.o: ../lib/basename.c ../lib/xstring.h
-dirname.o: ../lib/dirname.c ../lib/xstring.h
-error.o: ../lib/error.c
-fnmatch.o: ../lib/fnmatch.c
-getopt.o: ../lib/getopt.c
-getopt1.o: ../lib/getopt1.c ../lib/getopt.h
-memcpy.o: ../lib/memcpy.c
-memset.o: ../lib/memset.c
-strcspn.o: ../lib/strcspn.c
-strdup.o: ../lib/strdup.c
-strndup.o: ../lib/strndup.c ../lib/xstring.h ../lib/xmalloc.h
-strpbrk.o: ../lib/strpbrk.c
-strspn.o: ../lib/strspn.c
-strstr.o: ../lib/strstr.c
-strtok.o: ../lib/strtok.c
-xgetcwd.o: ../lib/xgetcwd.c ../lib/pathmax.h
-xmalloc.o: ../lib/xmalloc.c ../lib/error.h
 
-info:
+DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
 
-dvi:
+-include $(DEP_FILES)
 
-check: all
+mostlyclean-depend:
 
-installcheck:
+clean-depend:
 
-install-exec: 
+distclean-depend:
+	-rm -rf .deps
 
-install-data: 
+maintainer-clean-depend:
 
-install: install-exec install-data all
-	@:
+%.o: %.c
+	@echo '$(COMPILE) -c $<'; \
+	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-cp .deps/$(*F).pp .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm .deps/$(*F).pp
 
-uninstall: 
+%.lo: %.c
+	@echo '$(LTCOMPILE) -c $<'; \
+	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
+	  < .deps/$(*F).pp > .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm -f .deps/$(*F).pp
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am:
+install-exec: install-exec-am
 
-all: $(LIBFILES) $(HEADERS) Makefile
+install-data-am:
+install-data: install-data-am
 
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am:
+uninstall: uninstall-am
+all-am: Makefile $(LIBRARIES) $(HEADERS)
+all-redirect: all-am
 install-strip:
-	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' install
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
 
 
 mostlyclean-generic:
-	test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
 
 clean-generic:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
-	rm -f Makefile $(DISTCLEANFILES)
-	rm -f config.cache config.log $(CONFIG_HEADER) stamp-h
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-	test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
-	test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
-mostlyclean:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
-		mostlyclean-tags mostlyclean-generic
+mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
+		mostlyclean-tags mostlyclean-depend mostlyclean-generic
 
-clean:  clean-noinstLIBRARIES clean-compile clean-tags clean-generic \
-		mostlyclean 
+mostlyclean: mostlyclean-am
 
-distclean:  distclean-noinstLIBRARIES distclean-compile distclean-tags \
-		distclean-generic clean 
-	rm -f config.status
+clean-am:  clean-noinstLIBRARIES clean-compile clean-tags clean-depend \
+		clean-generic mostlyclean-am
 
-maintainer-clean:  maintainer-clean-noinstLIBRARIES \
+clean: clean-am
+
+distclean-am:  distclean-noinstLIBRARIES distclean-compile \
+		distclean-tags distclean-depend distclean-generic \
+		clean-am
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-noinstLIBRARIES \
 		maintainer-clean-compile maintainer-clean-tags \
-		maintainer-clean-generic distclean 
+		maintainer-clean-depend maintainer-clean-generic \
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
-.PHONY: default mostlyclean-noinstLIBRARIES distclean-noinstLIBRARIES \
+maintainer-clean: maintainer-clean-am
+
+.PHONY: mostlyclean-noinstLIBRARIES distclean-noinstLIBRARIES \
 clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
 mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile tags mostlyclean-tags distclean-tags \
-clean-tags maintainer-clean-tags distdir info dvi check installcheck \
-install-exec install-data install uninstall all installdirs \
+clean-tags maintainer-clean-tags distdir mostlyclean-depend \
+distclean-depend clean-depend maintainer-clean-depend info-am info \
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
 mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
-.SUFFIXES:
-.SUFFIXES: .c .o
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
