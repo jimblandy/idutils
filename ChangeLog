@@ -1,3 +1,12 @@
+Wed May 17 10:10:59 1995  Greg McGary  <gkm@magilla.cichlid.com>
+
+	* lid.c: (find_token, grep_id): Support ISO-8859 8-bit charsets.
+
+Tue May 16 23:05:36 1995  Greg McGary  <gkm@magilla.cichlid.com>
+
+	* scanners.c (set_args_text, ctype_text, ctype_asm):
+	Support ISO-8859 8-bit charsets.
+
 Sat Feb 25 16:23:49 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
 	* Version 3.0.8 released.

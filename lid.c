@@ -376,7 +376,7 @@ grep_id (char const *name, char **argv)
 
   if (merging)
     {
-      re = file_regexp (name, "[^a-zA-Z0-9_]_*", "[^a-zA-Z0-9_]");
+      re = file_regexp (name, "[^a-zA-Z0-9_À-ÿ]_*", "[^a-zA-Z0-9_À-ÿ]");
       if (re)
 	{
 	  char const *regexp_error = re_comp (re);
@@ -869,7 +869,7 @@ find_token (char const *token_0)
     {
       int c;
       int incr = 1;
-      char const *token;
+      unsigned char const *token = (unsigned char const *) token_0;
 
       offset = start + (end - start) / 2;
       fseek (id_FILE, offset, SEEK_SET);
@@ -881,7 +881,6 @@ find_token (char const *token_0)
 	}
 
       /* compare the token names */
-      token = token_0;
       while (*token == (c = getc (id_FILE)) && *token && c)
 	{
 	  token++;

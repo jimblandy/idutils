@@ -32,19 +32,19 @@ extern char const *program_name;
 static char const *get_token_VHIL __P((FILE *input_FILE, int *flags));
 static char const *get_token_c __P((FILE *input_FILE, int *flags));
 static void set_args_c __P((char const *lang_name, int op, char const *arg));
-static void set_ctype_c __P((char const *chars, int type));
-static void clear_ctype_c __P((char const *chars, int type));
+static void set_ctype_c __P((unsigned char const *chars, int type));
+static void clear_ctype_c __P((unsigned char const *chars, int type));
 static void usage_c __P((char const *lang_name));
 
 static char const *get_token_asm __P((FILE *input_FILE, int *flags));
-static void set_ctype_asm __P((char const *chars, int type));
-static void clear_ctype_asm __P((char const *chars, int type));
+static void set_ctype_asm __P((unsigned char const *chars, int type));
+static void clear_ctype_asm __P((unsigned char const *chars, int type));
 static void usage_asm __P((char const *lang_name));
 static void set_args_asm __P((char const *lang_name, int op, char const *arg));
 
 static char const *get_token_text __P((FILE *input_FILE, int *flags));
-static void set_ctype_text __P((char const *chars, int type));
-static void clear_ctype_text __P((char const *chars, int type));
+static void set_ctype_text __P((unsigned char const *chars, int type));
+static void clear_ctype_text __P((unsigned char const *chars, int type));
 static void usage_text __P((char const *lang_name));
 static void set_args_text __P((char const *lang_name, int op, char const *arg));
 
@@ -438,6 +438,22 @@ static unsigned short ctype_c[257] =
 /*150*/ I1,	I1,	I1,	I1,	I1|NM,	I1,	I1,	I1,
 /*160*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
 /*170*/ I1|NM,	I1,	I1,	0,	0,	0,	0,	0,
+/*200*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*210*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*220*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*230*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*240*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*250*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*260*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*270*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*300*/ SK,	SK,	SK,	SK,	SK,	SK,	SK,	SK,
+/*310*/ SK,	SK,	SK,	SK,	SK,	SK,	SK,	SK,
+/*320*/ SK,	SK,	SK,	SK,	SK,	SK,	SK,	0,
+/*330*/ SK,	SK,	SK,	SK,	SK,	SK,	SK,	SK,
+/*340*/ SK,	SK,	SK,	SK,	SK,	SK,	SK,	SK,
+/*350*/ SK,	SK,	SK,	SK,	SK,	SK,	SK,	SK,
+/*360*/ SK,	SK,	SK,	SK,	SK,	SK,	SK,	0,
+/*370*/ SK,	SK,	SK,	SK,	SK,	SK,	SK,	SK,
 };
 
 static int eat_underscore = 1;
@@ -689,7 +705,7 @@ next:
 }
 
 static void
-set_ctype_c (char const *chars, int type)
+set_ctype_c (unsigned char const *chars, int type)
 {
   unsigned short *rct = &ctype_c[1];
 
@@ -698,7 +714,7 @@ set_ctype_c (char const *chars, int type)
 }
 
 static void
-clear_ctype_c (char const *chars, int type)
+clear_ctype_c (unsigned char const *chars, int type)
 {
   unsigned short *rct = &ctype_c[1];
 
@@ -735,14 +751,14 @@ set_args_c (char const *lang_name, int op, char const *arg)
       break;
     case 's':
       if (op == '+')
-	set_ctype_c (arg, SK);
+	set_ctype_c ((unsigned char *) arg, SK);
       else
-	clear_ctype_c (arg, SK);
+	clear_ctype_c ((unsigned char *) arg, SK);
       break;
     case 'v':
-      set_ctype_c ("$", I1);
-      set_ctype_c ("#", VH);
-      set_ctype_c (" \t", WS);
+      set_ctype_c ((unsigned char *) "$", I1);
+      set_ctype_c ((unsigned char *) "#", VH);
+      set_ctype_c ((unsigned char *) " \t", WS);
       scan_VHIL = 1;
       break;
     default:
@@ -821,7 +837,22 @@ static unsigned char ctype_asm[257] =
 /*150*/ I1,	I1,	I1,	I1,	I1|NM,	I1,	I1,	I1,
 /*160*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
 /*170*/ I1|NM,	I1,	I1,	0,	0,	0,	0,	0,
-
+/*200*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*210*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*220*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*230*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*240*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*250*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*260*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*270*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*300*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*310*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*320*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*330*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*340*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*350*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*360*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*370*/ 0,	0,	0,	0,	0,	0,	0,	0,
 };
 
 static int cpp_on_asm = 1;
@@ -963,7 +994,7 @@ next:
 }
 
 static void
-set_ctype_asm (char const *chars, int type)
+set_ctype_asm (unsigned char const *chars, int type)
 {
   unsigned char *rct = &ctype_asm[1];
 
@@ -972,7 +1003,7 @@ set_ctype_asm (char const *chars, int type)
 }
 
 static void
-clear_ctype_asm (char const *chars, int type)
+clear_ctype_asm (unsigned char const *chars, int type)
 {
   unsigned char *rct = &ctype_asm[1];
 
@@ -1007,10 +1038,10 @@ set_args_asm (char const *lang_name, int op, char const *arg)
   switch (*arg++)
     {
     case 'a':
-      set_ctype_asm (arg, I1 | ((op == '-') ? IG : 0));
+      set_ctype_asm ((unsigned char *) arg, I1 | ((op == '-') ? IG : 0));
       break;
     case 'c':
-      set_ctype_asm (arg, CM);
+      set_ctype_asm ((unsigned char *) arg, CM);
       break;
     case 'u':
       eat_underscore = (op == '+');
@@ -1021,13 +1052,13 @@ set_args_asm (char const *lang_name, int op, char const *arg)
     case 'C':
       if (op == '+')
 	{
-	  set_ctype_asm ("/", C1);
-	  set_ctype_asm ("*", C2);
+	  set_ctype_asm ((unsigned char *) "/", C1);
+	  set_ctype_asm ((unsigned char *) "*", C2);
 	}
       else
 	{
-	  clear_ctype_asm ("/", C1);
-	  clear_ctype_asm ("*", C2);
+	  clear_ctype_asm ((unsigned char *) "/", C1);
+	  clear_ctype_asm ((unsigned char *) "*", C2);
 	}
       break;
     default:
@@ -1091,6 +1122,22 @@ static unsigned char ctype_text[257] =
 /*150*/ I1,	I1,	I1,	I1,	I1|NM,	I1,	I1,	I1,
 /*160*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
 /*170*/ I1|NM,	I1,	I1,	0,	0,	0,	0,	0,
+/*200*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*210*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*220*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*230*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*240*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*250*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*260*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*270*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*300*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*310*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*320*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	0,
+/*330*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*340*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*350*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*360*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	0,
+/*370*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
 };
 
 /*
@@ -1143,7 +1190,7 @@ top:
 }
 
 static void
-set_ctype_text (char const *chars, int type)
+set_ctype_text (unsigned char const *chars, int type)
 {
   unsigned char *rct = &ctype_text[1];
 
@@ -1152,7 +1199,7 @@ set_ctype_text (char const *chars, int type)
 }
 
 static void
-clear_ctype_text (char const *chars, int type)
+clear_ctype_text (unsigned char const *chars, int type)
 {
   unsigned char *rct = &ctype_text[1];
 
@@ -1185,15 +1232,15 @@ set_args_text (char const *lang_name, int op, char const *arg)
     {
     case 'a':
       if (op == '+')
-	set_ctype_text (arg, I1);
+	set_ctype_text ((unsigned char *) arg, I1);
       else
-	clear_ctype_text (arg, I1);
+	clear_ctype_text ((unsigned char *) arg, I1);
       break;
     case 's':
       if (op == '+')
-	set_ctype_text (arg, SQ);
+	set_ctype_text ((unsigned char *) arg, SQ);
       else
-	clear_ctype_text (arg, SQ);
+	clear_ctype_text ((unsigned char *) arg, SQ);
       break;
     default:
       if (lang_name)
