@@ -41,7 +41,7 @@ off_t largest_member_file = 0;
 int walk_dir __P((struct file_link *dir_link));
 struct member_file *get_member_file __P((struct file_link *flink));
 struct lang_args *get_lang_args __P((struct file_link const *flink));
-void print_member_file (struct member_file *member);
+void print_member_file __P((struct member_file *member));
 int walk_sub_dirs __P((struct dynvec *sub_dirs_vec));
 void reparent_children __P((struct file_link *dlink, struct file_link *slink));
 int classify_link __P((struct file_link *flink, struct stat *stp));
