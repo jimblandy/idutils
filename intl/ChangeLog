@@ -1,3 +1,11 @@
+Tue Jun 18 20:11:17 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* l10nflist.c: Correct presence test macros of __argz_* functions.
+
+	* l10nflist.c: Include <argz.h> based on test of it instead when
+	__argz_* functions are available.
+	Reported by Andreas Schwab.
+
 Thu Jun 13 15:17:44 1996  Ulrich Drepper  <drepper@cygnus.com>
 
 	* explodename.c, l10nflist.c: Define NULL for dumb systems.

@@ -21,8 +21,7 @@ Boston, MA 02111-1307, USA.  */
 # include <config.h>
 #endif
 
-#if defined _LIBC || \
-    defined __ARGZ_COUNT || defined __ARGZ_STRINGIFY || defined __ARGZ_NEXT
+#if defined _LIBC || defined HAVE_ARGZ_H
 # include <argz.h>
 #endif
 #include <ctype.h>
@@ -71,7 +70,7 @@ static char *stpcpy PARAMS ((char *dest, const char *src));
 
 /* Define function which are usually not available.  */
 
-#if !defined _LIBC && !defined __ARGZ_COUNT
+#if !defined _LIBC && !defined HAVE___ARGZ_COUNT
 /* Returns the number of strings in ARGZ.  */
 static size_t __argz_count PARAMS ((const char *argz, size_t len));
 
@@ -90,9 +89,9 @@ __argz_count (argz, len)
     }
   return count;
 }
-#endif	/* !_LIBC && !__ARGZ_COUNT */
+#endif	/* !_LIBC && !HAVE___ARGZ_COUNT */
 
-#if !defined _LIBC && !defined __ARGZ_STRINGIFY
+#if !defined _LIBC && !defined HAVE___ARGZ_STRINGIFY
 /* Make '\0' separated arg vector ARGZ printable by converting all the '\0's
    except the last into the character SEP.  */
 static void __argz_stringify PARAMS ((char *argz, size_t len, int sep));
@@ -112,9 +111,9 @@ __argz_stringify (argz, len, sep)
 	*argz++ = sep;
     }
 }
-#endif	/* !_LIBC && !__ARGZ_COUNT */
+#endif	/* !_LIBC && !HAVE___ARGZ_COUNT */
 
-#if !defined _LIBC && !defined __ARGZ_NEXT
+#if !defined _LIBC && !defined HAVE___ARGZ_NEXT
 static char *
 __argz_next (argz, argz_len, entry)
      char *argz;
@@ -134,7 +133,7 @@ __argz_next (argz, argz_len, entry)
     else
       return 0;
 }
-#endif
+#endif	/* !_LIBC && !HAVE___ARGZ_NEXT */
 
 
 /* Return number of bits set in X.  */
