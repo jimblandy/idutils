@@ -10,7 +10,7 @@ dnl they are there to delimit sections in the output configure script.
 ##############################################################################
 
 AC_INIT(src/mkid.c)
-AC_CONFIG_HEADER(config.h)
+AM_CONFIG_HEADER(config.h)
 AC_PREREQ(2.10)
 AC_ARG_PROGRAM
 
@@ -19,7 +19,7 @@ AC_ARG_PROGRAM
 ##############################################################################
 
 PACKAGE=id-utils
-VERSION=3.2
+VERSION=3.2a
 PACKAGE_VERSION="GNU $PACKAGE $VERSION"
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
@@ -86,7 +86,7 @@ AM_C_PROTOTYPES
 AC_TYPE_SIGNAL
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
-md_TYPE_PTRDIFF_T
+AM_TYPE_PTRDIFF_T
 
 ##############################################################################
 ################ Set default compilation flags ###############################
@@ -102,7 +102,7 @@ AC_SUBST(LDFLAGS)
 ##############################################################################
 
 AC_FUNC_ALLOCA
-ud_WITH_REGEX
+AM_WITH_REGEX
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(getwd getcwd link strerror isascii bcopy bzero memcpy)
 AC_REPLACE_FUNCS(strdup strndup strspn strcspn strpbrk strstr strtok)
@@ -134,7 +134,7 @@ AC_SUBST(LANGUAGE_MAP_FILE)
 ################ Find a home for Emacs Lisp code #############################
 ##############################################################################
 
-ud_PATH_LISPDIR
+AM_PATH_LISPDIR
 
 ##############################################################################
 ################ Generate the configure script ###############################
