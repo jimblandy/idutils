@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 # include <config.h>
 #endif
 
+#include <ctype.h>
 #include <errno.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -63,7 +64,7 @@ void free ();
 /* Rename the non ANSI C functions.  This is required by the standard
    because some ANSI C functions will require linking with this object
    file and the name space must not be polluted.  */
-# define stpcpy __stpcpy
+# define stpcpy(dest, src) __stpcpy(dest, src)
 #endif
 
 /* Encoding of locale name parts.  */
@@ -102,7 +103,8 @@ static const char *normalize_codeset PARAMS ((const char *codeset));
 
 /* Substitution for systems lacking this function in their C library.  */
 #if !_LIBC && !HAVE_STPCPY
-static char *stpcpy PARAMS ((char *dest, const char *src));
+static char *stpcpy__ PARAMS ((char *dest, const char *src));
+# define stpcpy(dest, src) stpcpy__ (dest, src)
 #endif
 
 
@@ -562,7 +564,7 @@ normalize_codeset (codeset)
    to be defined.  */
 #if !_LIBC && !HAVE_STPCPY
 static char *
-stpcpy (dest, src)
+stpcpy__ (dest, src)
      char *dest;
      const char *src;
 {

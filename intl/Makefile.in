@@ -32,7 +32,7 @@ includedir = $(prefix)/include
 datadir = $(prefix)/@DATADIRNAME@
 localedir = $(datadir)/locale
 gnulocaledir = $(prefix)/share/locale
-gettextsrcdir = $(prefix)/share/gettext
+gettextsrcdir = @datadir@/gettext
 aliaspath = $(localedir):.
 subdir = intl
 

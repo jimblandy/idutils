@@ -1,6 +1,19 @@
+Tue Mar 26 12:39:14 1996  Ulrich Drepper  <drepper@myware>
+
+	* finddomain.c: Include <ctype.h>.  Reported by Roland McGrath.
+
+Sat Mar 23 02:00:35 1996  Ulrich Drepper  <drepper@myware>
+
+	* finddomain.c (stpcpy): Rename to stpcpy__ to prevent clashing
+        with external declaration.
+
+Sat Mar  2 00:47:09 1996  Ulrich Drepper  <drepper@myware>
+
+	* Makefile.in (all-no): Rename from all_no.
+
 Sat Feb 17 00:25:59 1996  Ulrich Drepper  <drepper@myware>
 
-	* gettextP.h [loaded_domain]: Array Successor must now contain up
+	* gettextP.h [loaded_domain]: Array `successor' must now contain up
         to 63 elements (because of codeset name normalization).
 
 	* finddomain.c: Implement codeset name normalization.
