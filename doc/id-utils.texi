@@ -369,7 +369,7 @@ options:
 @cindex language map file
 
 @var{mapfile} contains rules for determining the source languages from
-file names.  @xref{Language map}
+file names @xref{Language map}.
 
 @item -i @var{languages}
 @itemx --include=@var{languages}
