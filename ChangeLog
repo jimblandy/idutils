@@ -1,5 +1,8 @@
 1999-01-27  Jim Meyering  <meyering@ascend.com> (with some changes from gkm)
 
+	* Makefile.maint: New file.
+	* GNUmakefile: New file.
+
 	* lib/Makefile.am (AUTOMAKE_OPTIONS): Use ../src/ansi2knr.
 	* libidu/Makefile.am (AUTOMAKE_OPTIONS): Likewise.
 	(ansi2knr.c): Remove rule.
