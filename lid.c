@@ -26,9 +26,9 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <rx.h>
 #include <assert.h>
 #include <limits.h>
+#include <regex.h>
 #include "alloc.h"
 #include "idfile.h"
 #include "idarg.h"
@@ -134,11 +134,11 @@ main (int argc, char **argv)
   char const *REL_file_name = NULL;
   int (*forced_find_func) (char const *arg, doit_t doit) = NULL;
 
-  program_name = basename (GETARG (argc, argv));
+  program_name = basename ((argc--, *argv++));
 
   while (argc)
     {
-      char const *arg = GETARG (argc, argv);
+      char const *arg = (argc--, *argv++);
       int op = *arg++;
       switch (op)
 	{
@@ -146,7 +146,7 @@ main (int argc, char **argv)
 	case '+':
 	  break;
 	default:
-	  UNGETARG (argc, argv);
+	  (argc++, --argv);
 	  goto argsdone;
 	}
       while (*arg)
@@ -279,14 +279,14 @@ argsdone:
 
   if (argc == 0)
     {
-      UNGETARG (argc, argv);
+      (argc++, --argv);
       *(char const **)argv = ".";
     }
 
   while (argc)
     {
       long val = -1;
-      char *arg = GETARG (argc, argv);
+      char *arg = (argc--, *argv++);
 
       if (forced_find_func)
 	find_func = forced_find_func;
@@ -430,20 +430,11 @@ edit_id (char const *name, char **argv)
   static char const *eid_left_del;
 
   if (editor == NULL)
-    editor = getenv ("EDITOR");
-  if (editor == NULL)
     {
-      char const *ucb_vi = "/usr/ucb/vi";
-      char const *bin_vi = "/usr/bin/vi";
-
-      if (access (ucb_vi, 01) == 0)
-	editor = ucb_vi;
-      else if (access (bin_vi, 01) == 0)
-	editor = bin_vi;
-      else
-	editor = "/bin/ed";	/* YUCK! */
-      if (editor == ucb_vi || editor == bin_vi)
+      editor = getenv ("EDITOR");
+      if (editor == NULL)
 	{
+	  editor = "vi";
 	  eid_arg = "+1;/%s/";
 	  eid_left_del = "\\<";
 	  eid_right_del = "\\>";
@@ -533,7 +524,7 @@ editit:
   switch (fork ())
     {
     case -1:
-      fprintf (stderr, "%s: Cannot fork (%s)\n", program_name, uerror ());
+      fprintf (stderr, "%s: Cannot fork (%s)\n", program_name, strerror (errno));
       exit (1);
     case 0:
       argv--;
@@ -544,7 +535,7 @@ editit:
 	  argv[1] = ed_arg_buffer;
 	}
       *(char const **) argv = editor;
-      execv (editor, argv);
+      execvp (editor, argv);
       filerr ("exec", editor);
     default:
       {
@@ -1290,16 +1281,20 @@ tree8_to_argv (unsigned char const *hits_tree8)
 #endif
 
 #if HAVE_TERMIOS_H || HAVE_TERMIO_H
+
 #if HAVE_TERMIOS_H
 #include <termios.h>
-#endif
+struct termios linemode;
+struct termios charmode;
+struct termios savemode;
+#else /* not HAVE_TERMIOS_H */
 #if HAVE_TERMIO_H
 #include <termio.h>
-#endif
-
 struct termio linemode;
 struct termio charmode;
 struct termio savemode;
+#endif /* HAVE_TERMIO_H */
+#endif /* not HAVE_TERMIOS_H */
 
 void
 savetty (void)

@@ -565,20 +565,10 @@ unsymlink (char *n)
   return n;
 }
 
-long input_chars = 0;
-
 FILE *
 open_source_FILE (char *file_name, char const *filter)
 {
-  struct stat stat_buf;
   FILE *source_FILE;
-
-  if (stat (file_name, &stat_buf) < 0)
-    {
-      filerr ("open", file_name);
-      return NULL;
-    }
-  input_chars += stat_buf.st_size;
 
   if (filter)
     {

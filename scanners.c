@@ -134,9 +134,9 @@ void
 init_scanners (void)
 {
   struct language *lang;
-  struct language *lang_N = &languages[(sizeof(languages)/sizeof(languages[0])) - 1];
+  struct language *lang_N = &languages[(sizeof (languages) / sizeof (languages[0])) - 1];
   struct suffix *suff;
-  struct suffix *suff_N = &suffixes[(sizeof(suffixes)/sizeof(suffixes[0])) - 1];
+  struct suffix *suff_N = &suffixes[(sizeof (suffixes) / sizeof (suffixes[0])) - 1];
   
   for (lang = languages; lang <= lang_N; ++lang)
     lang->lang_next = lang + 1;

@@ -57,18 +57,18 @@ main (int argc, char **argv)
   int index_1 = -1;
   int index_2 = -1;
 
-  program_name = basename (GETARG (argc, argv));
+  program_name = basename ((argc--, *argv++));
 
   while (argc)
     {
-      char const *arg = GETARG (argc, argv);
+      char const *arg = (argc--, *argv++);
       switch (op = *arg++)
 	{
 	case '-':
 	case '+':
 	  break;
 	default:
-	  UNGETARG (argc, argv);
+	  (argc++, --argv);
 	  goto argsdone;
 	}
       while (*arg)

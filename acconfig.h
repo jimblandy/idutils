@@ -23,5 +23,8 @@
 /* Define to the minor.minor.patch_level # of the distribution.  */
 #undef FULL_VERSION
 
+/* Define to the patch level of the distribution.  */
+#undef PATCH_LEVEL
+
 /* Define to filename of iid help text.  */
 #undef IID_HELP_FILE

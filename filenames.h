@@ -33,6 +33,4 @@ void close_source_FILE (FILE *fp, char const *filter);
 char const *get_sccs (char const *dir, char const *base, char const *sccs_dir);
 char const *co_rcs (char const *dir, char const *base, char const *rcs_dir);
 
-extern long input_chars;
-
 #endif /* not _filenames_h_ */

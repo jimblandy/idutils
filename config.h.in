@@ -49,6 +49,9 @@
 /* Define to the version of the distribution.  */
 #undef VERSION
 
+/* Define to the patch level of the distribution.  */
+#undef PATCH_LEVEL
+
 /* Define to filename of iid help text.  */
 #undef IID_HELP_FILE
 
@@ -84,6 +87,9 @@
 
 /* Define if you have the strdup function.  */
 #undef HAVE_STRDUP
+
+/* Define if you have the strerror function.  */
+#undef HAVE_STRERROR
 
 /* Define if you have the strrchr function.  */
 #undef HAVE_STRRCHR

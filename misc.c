@@ -67,23 +67,10 @@ fgets0 (char *buf0, int size, FILE * in_FILE)
 
 extern char const *program_name;
 
-char const *
-uerror (void)
-{
-  static char errbuf[10];
-
-  if (errno == 0 || errno >= sys_nerr)
-    {
-      sprintf (errbuf, "error %d", errno);
-      return errbuf;
-    }
-  return sys_errlist[errno];
-}
-
 void
 filerr (char const *syscall, char const *file_name)
 {
-  fprintf (stderr, "%s: Cannot %s `%s' (%s)\n", program_name, syscall, file_name, uerror ());
+  fprintf (stderr, "%s: Cannot %s `%s' (%s)\n", program_name, syscall, file_name, strerror (errno));
 }
 
 int

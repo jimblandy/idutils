@@ -28,8 +28,9 @@ ac_save_CFLAGS="$CFLAGS"
 # AIX			-qlanglvl=ansi
 # Ultrix and OSF/1	-std1
 # HP-UX			-Aa -D_HPUX_SOURCE
+# CX/UX			-Xa (-Xc is strict ANSI)
 # SVR4			-Xc
-for ac_arg in "" -qlanglvl=ansi -std1 "-Aa -D_HPUX_SOURCE" -Xc
+for ac_arg in "" -qlanglvl=ansi -std1 "-Aa -D_HPUX_SOURCE" -Xa -Xc
 do
   CFLAGS="$ac_save_CFLAGS $ac_arg"
   AC_TRY_COMPILE(

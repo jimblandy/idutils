@@ -262,3 +262,10 @@ $(srcdir)/config.h.in: stamp-h.in
 $(srcdir)/stamp-h.in: configure.in aclocal.m4 acconfig.h 
 	cd $(srcdir) && autoheader
 	date >$(srcdir)/stamp-h.in
+
+depend $(DEPEND): $(ALL_CFILES)
+	(cd $(srcdir) && $(CC) $(CC_FLAGS) -MM $(ALL_CFILES);) >$(DEPEND)
+
+##############################################################################
+
+@DEPEND_FILE@

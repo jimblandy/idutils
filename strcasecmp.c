@@ -58,10 +58,9 @@ static unsigned char charmap[] = {
 };
 
 int
-strcasecmp(s1, s2)
-    char *s1, *s2;
+strcasecmp(char const *s1, char const *s2)
 {
-    register unsigned char u1, u2;
+    unsigned char u1, u2;
 
     for (;;) {
 	u1 = (unsigned char) *s1++;

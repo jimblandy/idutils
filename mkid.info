@@ -26,6 +26,9 @@ translation.
 
 File: mkid.info,  Node: Top,  Next: Overview,  Prev: (dir),  Up: (dir)
 
+GNU `mkid'
+**********
+
 * Menu:
 
 * Overview::                    What is an ID database and what tools manipulate it?
@@ -1057,38 +1060,38 @@ Command Index
 
 Tag Table:
 Node: Top913
-Node: Overview1298
-Node: History2862
-Node: Mkid5027
-Node: Mkid Command Line Options6363
-Node: Scanner Arguments8124
-Node: Builtin Scanners10479
-Node: C11144
-Node: Plain Text12039
-Node: Assembler13107
-Node: Adding Your Own Scanner14295
-Node: Mkid Examples16272
-Node: Database Query Tools18249
-Node: Common Options19190
-Node: Patterns22906
-Node: Lid24148
-Node: Aid24570
-Node: Gid25101
-Node: Eid25721
-Node: Pid26845
-Node: Iid27735
-Node: Ss and Files commands29605
-Node: Sets33068
-Node: Show33308
-Node: Begin33636
-Node: Help34123
-Node: Off34404
-Node: Shell Commands as Queries34634
-Node: Shell Escape35160
-Node: Other Tools35502
-Node: GNU Emacs Interface35879
-Node: Fid36685
-Node: Idx37237
-Node: Command Index37912
+Node: Overview1321
+Node: History2885
+Node: Mkid5050
+Node: Mkid Command Line Options6386
+Node: Scanner Arguments8147
+Node: Builtin Scanners10502
+Node: C11167
+Node: Plain Text12062
+Node: Assembler13130
+Node: Adding Your Own Scanner14318
+Node: Mkid Examples16295
+Node: Database Query Tools18272
+Node: Common Options19213
+Node: Patterns22929
+Node: Lid24171
+Node: Aid24593
+Node: Gid25124
+Node: Eid25744
+Node: Pid26868
+Node: Iid27758
+Node: Ss and Files commands29628
+Node: Sets33091
+Node: Show33331
+Node: Begin33659
+Node: Help34146
+Node: Off34427
+Node: Shell Commands as Queries34657
+Node: Shell Escape35183
+Node: Other Tools35525
+Node: GNU Emacs Interface35902
+Node: Fid36708
+Node: Idx37260
+Node: Command Index37935
 
 End Tag Table

@@ -24,16 +24,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
+#include "strxtra.h"
 
-#ifdef HAVE_ALLOCA
-#ifdef HAVE_ALLOCA_H
+#if HAVE_ALLOCA
+
+#if HAVE_ALLOCA_H
 #include <alloca.h>
 #endif
-
 #define TEMP_ALLOC(s) alloca(s)
 #define TEMP_FREE(s)
 
-#else /* not HAVE_ALLOCA
+#else /* not HAVE_ALLOCA */
 
 #define TEMP_ALLOC(s) malloc(s)
 #define TEMP_FREE(s)  free(s)
@@ -556,20 +557,20 @@ yylex( void )
 
          /* first token on line, check for command names */
 
-         if (strcasecmp(yytext, "SS")) return(SS) ;
-         if (strcasecmp(yytext, "FILES")) return(FILES) ;
-         if (strcasecmp(yytext, "F")) return(FILES) ;
-         if (strcasecmp(yytext, "HELP")) return(HELP) ;
-         if (strcasecmp(yytext, "H")) return(HELP) ;
-         if (strcasecmp(yytext, "?")) return(HELP) ;
-         if (strcasecmp(yytext, "BEGIN")) return(BEGIN) ;
-         if (strcasecmp(yytext, "B")) return(BEGIN) ;
-         if (strcasecmp(yytext, "SETS")) return(SETS) ;
-         if (strcasecmp(yytext, "SHOW")) return(SHOW) ;
-         if (strcasecmp(yytext, "P")) return(SHOW) ;
-         if (strcasecmp(yytext, "OFF")) return(OFF) ;
-         if (strcasecmp(yytext, "Q")) return(OFF) ;
-         if (strcasecmp(yytext, "QUIT")) return(OFF) ;
+         if (strcaseequ(yytext, "SS")) return(SS) ;
+         if (strcaseequ(yytext, "FILES")) return(FILES) ;
+         if (strcaseequ(yytext, "F")) return(FILES) ;
+         if (strcaseequ(yytext, "HELP")) return(HELP) ;
+         if (strcaseequ(yytext, "H")) return(HELP) ;
+         if (strcaseequ(yytext, "?")) return(HELP) ;
+         if (strcaseequ(yytext, "BEGIN")) return(BEGIN) ;
+         if (strcaseequ(yytext, "B")) return(BEGIN) ;
+         if (strcaseequ(yytext, "SETS")) return(SETS) ;
+         if (strcaseequ(yytext, "SHOW")) return(SHOW) ;
+         if (strcaseequ(yytext, "P")) return(SHOW) ;
+         if (strcaseequ(yytext, "OFF")) return(OFF) ;
+         if (strcaseequ(yytext, "Q")) return(OFF) ;
+         if (strcaseequ(yytext, "QUIT")) return(OFF) ;
          if (yytext[0] == '!') {
             code = SHELL_COMMAND ;
          } else {
@@ -579,12 +580,12 @@ yylex( void )
 
          /* not first token, check for operator names */
 
-         if (strcasecmp(yytext, "LID")) return(LID) ;
-         if (strcasecmp(yytext, "AID")) return(AID) ;
-         if (strcasecmp(yytext, "AND")) return(AND) ;
-         if (strcasecmp(yytext, "OR")) return(OR) ;
-         if (strcasecmp(yytext, "NOT")) return(NOT) ;
-         if (strcasecmp(yytext, "MATCH")) return(MATCH) ;
+         if (strcaseequ(yytext, "LID")) return(LID) ;
+         if (strcaseequ(yytext, "AID")) return(AID) ;
+         if (strcaseequ(yytext, "AND")) return(AND) ;
+         if (strcaseequ(yytext, "OR")) return(OR) ;
+         if (strcaseequ(yytext, "NOT")) return(NOT) ;
+         if (strcaseequ(yytext, "MATCH")) return(MATCH) ;
          if ((yytext[0] == 's' || yytext[0] == 'S') && isdigit(yytext[1])) {
             
             /* this might be a set specification */

@@ -53,16 +53,19 @@ AC_SUBST(LDFLAGS)
 
 dnl Checks for library functions.
 AC_PROG_GCC_TRADITIONAL
-AC_CHECK_FUNCS(getwd getcwd getopt_long re_comp strdup strchr strrchr strcasecmp)
+AC_CHECK_FUNCS(getwd getcwd getopt_long re_comp)
+AC_CHECK_FUNCS(strdup strchr strrchr strcasecmp strerror)
 AC_CHECK_FUNCS(memcpy bcopy memset bzero)
 AC_FUNC_ALLOCA
 AC_SUBST(ALLOCA)
-if test "$ac_cv_func_re_comp" = no; then REGEXP=rx.o; fi
+if test "$ac_cv_func_re_comp" = no; then REGEXP="regex.o"; fi
 AC_SUBST(REGEXP)
 if test "$ac_cv_func_getopt_long" = no; then GETOPT="getopt.o getopt1.o"; fi
 AC_SUBST(GETOPT)
 if test "$ac_cv_func_strcasecmp" = no; then STRCASECMP="strcasecmp.o"; fi
 AC_SUBST(STRCASECMP)
+if test "$ac_cv_func_strerror" = no; then STRERROR="strerror.o"; fi
+AC_SUBST(STRERROR)
 
 if test "x$prefix" != xNONE; then
     libdir=$prefix/lib
@@ -73,5 +76,10 @@ IID_HELP_FILE=$libdir/iid.help
 AC_SUBST(libdir)
 AC_SUBST(IID_HELP_FILE)
 AC_DEFINE_UNQUOTED(IID_HELP_FILE, "$libdir/iid.help")
+
+DEPEND=${srcdir:-.}/depend.out
+DEPEND_FILE=$DEPEND
+AC_SUBST(DEPEND)
+AC_SUBST_FILE(DEPEND_FILE)
 
 AC_OUTPUT(Makefile)

@@ -1709,11 +1709,13 @@ EOF
 fi
 
 
-if test "$ac_cv_func_re_comp" = no; then REGEXP=rx.o; fi
+if test "$ac_cv_func_re_comp" = no; then REGEXP="regex.o"; fi
 
 if test "$ac_cv_func_getopt_long" = no; then GETOPT="getopt.o getopt1.o"; fi
 
 if test "$ac_cv_func_strcasecmp" = no; then STRCASECMP="strcasecmp.o"; fi
+
+if test "$ac_cv_func_strerror" = no; then STRERROR="strerror.o"; fi
 
 
 if test "x$prefix" != xNONE; then
@@ -1727,6 +1729,11 @@ IID_HELP_FILE=$libdir/iid.help
 cat >> confdefs.h <<EOF
 #define IID_HELP_FILE "$libdir/iid.help"
 EOF
+
+
+DEPEND=${srcdir:-.}/depend.out
+DEPEND_FILE=$DEPEND
+
 
 
 trap '' 1 2 15
@@ -1844,8 +1851,12 @@ s%@ALLOCA@%$ALLOCA%g
 s%@REGEXP@%$REGEXP%g
 s%@GETOPT@%$GETOPT%g
 s%@STRCASECMP@%$STRCASECMP%g
+s%@STRERROR@%$STRERROR%g
 s%@libdir@%$libdir%g
 s%@IID_HELP_FILE@%$IID_HELP_FILE%g
+s%@DEPEND@%$DEPEND%g
+/@DEPEND_FILE@/r $DEPEND_FILE
+s%@DEPEND_FILE@%%g
 
 CEOF
 EOF

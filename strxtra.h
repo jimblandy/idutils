@@ -19,17 +19,21 @@
 #ifndef _strxtra_h_
 #define _strxtra_h_
 
-#ifdef HAVE_MALLOC_H
+#if HAVE_STDLIB_H
+#include <stdlib.h>
+#else /* not HAVE_STDLIB_H */
+#if HAVE_MALLOC_H
 #include <malloc.h>
-#endif
+#endif /* HAVE_MALLOC_H */
+#endif /* not HAVE_STDLIB_H */
 
-#define strequ(s1, s2)		(strcmp((s1), (s2)) == 0)
-#define strnequ(s1, s2, n)	(strncmp((s1), (s2), (n)) == 0)
-#define strcaseequ(s1, s2)	(strcasecmp((s1), (s2)) == 0)
-#define strncaseequ(s1, s2, n)	(strncasecmp((s1), (s2), (n)) == 0)
+#define strequ(s1, s2)		(strcmp ((s1), (s2)) == 0)
+#define strnequ(s1, s2, n)	(strncmp ((s1), (s2), (n)) == 0)
+#define strcaseequ(s1, s2)	(strcasecmp ((s1), (s2)) == 0)
+#define strncaseequ(s1, s2, n)	(strncasecmp ((s1), (s2), (n)) == 0)
 #ifndef HAVE_STRDUP
-#define strdup(s)		(strcpy(calloc(1, strlen(s)+1), (s)))
+#define strdup(s)		(strcpy (calloc (1, strlen (s) + 1), (s)))
 #endif
-#define strndup(s, n)		(strncpy(calloc(1, (n)+1), (s), (n)))
+#define strndup(s, n)		(strncpy (calloc (1, (n)+1), (s), (n)))
 
 #endif /* not _strxtra_h_ */

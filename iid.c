@@ -49,16 +49,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
+#include "strxtra.h"
 
-#ifdef HAVE_ALLOCA
-#ifdef HAVE_ALLOCA_H
+#if HAVE_ALLOCA
+
+#if HAVE_ALLOCA_H
 #include <alloca.h>
 #endif
-
 #define TEMP_ALLOC(s) alloca(s)
 #define TEMP_FREE(s)
 
-#else /* not HAVE_ALLOCA
+#else /* not HAVE_ALLOCA */
 
 #define TEMP_ALLOC(s) malloc(s)
 #define TEMP_FREE(s)  free(s)
@@ -250,7 +251,7 @@ set_type * SetInverse( set_type * sp ) ;
 void RunShell( char * pp , id_list_type * idlp ) ;
 
 
-#line 229 "iid.y"
+#line 230 "iid.y"
 typedef union {
    set_type *     setdef ;   
    id_type *      strdef ;
@@ -342,9 +343,9 @@ static const short yyrhs[] = {     9,
 
 #if YYDEBUG != 0
 static const short yyrline[] = { 0,
-   255,   263,   264,   270,   276,   282,   288,   292,   299,   308,
-   317,   326,   333,   342,   351,   362,   369,   378,   387,   395,
-   403,   412,   421,   430,   438,   445,   451,   459,   467
+   256,   264,   265,   271,   277,   283,   289,   293,   300,   309,
+   318,   327,   334,   343,   352,   363,   370,   379,   388,   396,
+   404,   413,   422,   431,   439,   446,   452,   460,   468
 };
 
 static const char * const yytname[] = {   "$","error","$illegal.","SET","ID",
@@ -967,7 +968,7 @@ yyreduce:
   switch (yyn) {
 
 case 1:
-#line 257 "iid.y"
+#line 258 "iid.y"
 {
          /* cd to the directory specified as argument, flush sets */
 
@@ -976,7 +977,7 @@ case 1:
       ;
     break;}
 case 3:
-#line 265 "iid.y"
+#line 266 "iid.y"
 {
          /* print the list of files resulting from Query */
 
@@ -984,7 +985,7 @@ case 3:
       ;
     break;}
 case 4:
-#line 271 "iid.y"
+#line 272 "iid.y"
 {
          /* run PAGER on the list of files in SET */
 
@@ -992,7 +993,7 @@ case 4:
       ;
     break;}
 case 5:
-#line 277 "iid.y"
+#line 278 "iid.y"
 {
          /* describe sets created so far */
 
@@ -1000,7 +1001,7 @@ case 5:
       ;
     break;}
 case 6:
-#line 283 "iid.y"
+#line 284 "iid.y"
 {
          /* run PAGER on the help file */
 
@@ -1008,13 +1009,13 @@ case 6:
       ;
     break;}
 case 7:
-#line 289 "iid.y"
+#line 290 "iid.y"
 {
          exit(0) ;
       ;
     break;}
 case 8:
-#line 293 "iid.y"
+#line 294 "iid.y"
 {
          /* run the shell command and eat the results as a file set */
 
@@ -1023,7 +1024,7 @@ case 8:
       ;
     break;}
 case 9:
-#line 300 "iid.y"
+#line 301 "iid.y"
 {
          /* run the shell command */
 
@@ -1032,7 +1033,7 @@ case 9:
       ;
     break;}
 case 10:
-#line 310 "iid.y"
+#line 311 "iid.y"
 {
          /* Turn on verbose query flag */
 
@@ -1040,7 +1041,7 @@ case 10:
       ;
     break;}
 case 11:
-#line 319 "iid.y"
+#line 320 "iid.y"
 {
          /* Turn off verbose query flag */
 
@@ -1048,7 +1049,7 @@ case 11:
       ;
     break;}
 case 12:
-#line 328 "iid.y"
+#line 329 "iid.y"
 {
          /* value of query is set associated with primitive */
 
@@ -1056,7 +1057,7 @@ case 12:
       ;
     break;}
 case 13:
-#line 334 "iid.y"
+#line 335 "iid.y"
 {
          /* value of query is intersection of the two query sets */
 
@@ -1067,7 +1068,7 @@ case 13:
       ;
     break;}
 case 14:
-#line 343 "iid.y"
+#line 344 "iid.y"
 {
          /* value of query is union of the two query sets */
 
@@ -1078,7 +1079,7 @@ case 14:
       ;
     break;}
 case 15:
-#line 352 "iid.y"
+#line 353 "iid.y"
 {
          /* value of query is inverse of other query */
          
@@ -1089,7 +1090,7 @@ case 15:
       ;
     break;}
 case 16:
-#line 364 "iid.y"
+#line 365 "iid.y"
 {
          /* Value of primitive is value of recorded set */
 
@@ -1097,7 +1098,7 @@ case 16:
       ;
     break;}
 case 17:
-#line 370 "iid.y"
+#line 371 "iid.y"
 {
          /* Value of primitive is obtained by running an lid query */
 
@@ -1108,7 +1109,7 @@ case 17:
       ;
     break;}
 case 18:
-#line 379 "iid.y"
+#line 380 "iid.y"
 {
          /* Value of primitive is obtained by running an aid query */
 
@@ -1119,7 +1120,7 @@ case 18:
       ;
     break;}
 case 19:
-#line 388 "iid.y"
+#line 389 "iid.y"
 {
          /* Match names from database against pattern */
          yyval. setdef  = RunProg("pid -kmn", yyvsp[0]. listdef ) ;
@@ -1129,7 +1130,7 @@ case 19:
       ;
     break;}
 case 20:
-#line 396 "iid.y"
+#line 397 "iid.y"
 {
          /* value of primitive is value of query */
 
@@ -1137,7 +1138,7 @@ case 20:
       ;
     break;}
 case 21:
-#line 405 "iid.y"
+#line 406 "iid.y"
 {
          /* make arg list holding single ID */
 
@@ -1147,7 +1148,7 @@ case 21:
       ;
     break;}
 case 22:
-#line 413 "iid.y"
+#line 414 "iid.y"
 {
          /* arg list is Id_list */
 
@@ -1156,7 +1157,7 @@ case 22:
       ;
     break;}
 case 23:
-#line 423 "iid.y"
+#line 424 "iid.y"
 {
          /* arg list is Id_list */
 
@@ -1164,7 +1165,7 @@ case 23:
       ;
     break;}
 case 24:
-#line 432 "iid.y"
+#line 433 "iid.y"
 {
          /* make arg list holding single ID */
 
@@ -1173,7 +1174,7 @@ case 24:
       ;
     break;}
 case 25:
-#line 439 "iid.y"
+#line 440 "iid.y"
 {
          /* make arg list holding names from set */
 
@@ -1182,7 +1183,7 @@ case 25:
       ;
     break;}
 case 26:
-#line 446 "iid.y"
+#line 447 "iid.y"
 {
          /* extend arg list with additional ID */
 
@@ -1190,7 +1191,7 @@ case 26:
       ;
     break;}
 case 27:
-#line 452 "iid.y"
+#line 453 "iid.y"
 {
          /* extend arg list with additional file names */
 
@@ -1198,7 +1199,7 @@ case 27:
       ;
     break;}
 case 28:
-#line 461 "iid.y"
+#line 462 "iid.y"
 {
          /* make arg list holding single ID */
 
@@ -1207,7 +1208,7 @@ case 28:
       ;
     break;}
 case 29:
-#line 468 "iid.y"
+#line 469 "iid.y"
 {
          /* extend arg list with additional ID */
 
@@ -1438,7 +1439,7 @@ yyerrhandle:
   yystate = yyn;
   goto yynewstate;
 }
-#line 475 "iid.y"
+#line 476 "iid.y"
 
 
 /* ScanLine - a global variable holding a pointer to the current
@@ -1523,20 +1524,20 @@ yylex( void )
 
          /* first token on line, check for command names */
 
-         if (strcasecmp(yytext, "SS")) return(SS) ;
-         if (strcasecmp(yytext, "FILES")) return(FILES) ;
-         if (strcasecmp(yytext, "F")) return(FILES) ;
-         if (strcasecmp(yytext, "HELP")) return(HELP) ;
-         if (strcasecmp(yytext, "H")) return(HELP) ;
-         if (strcasecmp(yytext, "?")) return(HELP) ;
-         if (strcasecmp(yytext, "BEGIN")) return(BEGIN) ;
-         if (strcasecmp(yytext, "B")) return(BEGIN) ;
-         if (strcasecmp(yytext, "SETS")) return(SETS) ;
-         if (strcasecmp(yytext, "SHOW")) return(SHOW) ;
-         if (strcasecmp(yytext, "P")) return(SHOW) ;
-         if (strcasecmp(yytext, "OFF")) return(OFF) ;
-         if (strcasecmp(yytext, "Q")) return(OFF) ;
-         if (strcasecmp(yytext, "QUIT")) return(OFF) ;
+         if (strcaseequ(yytext, "SS")) return(SS) ;
+         if (strcaseequ(yytext, "FILES")) return(FILES) ;
+         if (strcaseequ(yytext, "F")) return(FILES) ;
+         if (strcaseequ(yytext, "HELP")) return(HELP) ;
+         if (strcaseequ(yytext, "H")) return(HELP) ;
+         if (strcaseequ(yytext, "?")) return(HELP) ;
+         if (strcaseequ(yytext, "BEGIN")) return(BEGIN) ;
+         if (strcaseequ(yytext, "B")) return(BEGIN) ;
+         if (strcaseequ(yytext, "SETS")) return(SETS) ;
+         if (strcaseequ(yytext, "SHOW")) return(SHOW) ;
+         if (strcaseequ(yytext, "P")) return(SHOW) ;
+         if (strcaseequ(yytext, "OFF")) return(OFF) ;
+         if (strcaseequ(yytext, "Q")) return(OFF) ;
+         if (strcaseequ(yytext, "QUIT")) return(OFF) ;
          if (yytext[0] == '!') {
             code = SHELL_COMMAND ;
          } else {
@@ -1546,12 +1547,12 @@ yylex( void )
 
          /* not first token, check for operator names */
 
-         if (strcasecmp(yytext, "LID")) return(LID) ;
-         if (strcasecmp(yytext, "AID")) return(AID) ;
-         if (strcasecmp(yytext, "AND")) return(AND) ;
-         if (strcasecmp(yytext, "OR")) return(OR) ;
-         if (strcasecmp(yytext, "NOT")) return(NOT) ;
-         if (strcasecmp(yytext, "MATCH")) return(MATCH) ;
+         if (strcaseequ(yytext, "LID")) return(LID) ;
+         if (strcaseequ(yytext, "AID")) return(AID) ;
+         if (strcaseequ(yytext, "AND")) return(AND) ;
+         if (strcaseequ(yytext, "OR")) return(OR) ;
+         if (strcaseequ(yytext, "NOT")) return(NOT) ;
+         if (strcaseequ(yytext, "MATCH")) return(MATCH) ;
          if ((yytext[0] == 's' || yytext[0] == 'S') && isdigit(yytext[1])) {
             
             /* this might be a set specification */

@@ -24,10 +24,10 @@
 #include "idarg.h"
 #include "strxtra.h"
 
-static int io_idhead (FILE *fp, int (*io) (FILE *, void *, int, int), struct idhead *idh);
-static int io_write (FILE *output_FILE, void *addr, int size, int is_int);
-static int io_read (FILE *input_FILE, void *addr, int size, int is_int);
-static int io_size (FILE *, void *, int size, int);
+static int io_idhead (FILE *fp, int (*io) (FILE *, void *, unsigned int, int), struct idhead *idh);
+static int io_write (FILE *output_FILE, void *addr, unsigned int size, int is_int);
+static int io_read (FILE *input_FILE, void *addr, unsigned int size, int is_int);
+static int io_size (FILE *, void *, unsigned int size, int);
 
 extern char *program_name;
 
@@ -39,7 +39,7 @@ FILE *
 init_idfile (char const *id_file, struct idhead *idh, struct idarg **id_args)
 {
   FILE *id_FILE;
-  int i;
+  unsigned int i;
   char *strings;
   struct idarg *ida;
 
@@ -99,13 +99,13 @@ sizeof_idhead ()
 }
 
 static int
-io_size (FILE *ignore_FILE, void *ignore_addr, int size, int ignore_int)
+io_size (FILE *ignore_FILE, void *ignore_addr, unsigned int size, int ignore_int)
 {
   return size;
 }
 
 static int
-io_read (FILE *input_FILE, void *addr, int size, int is_int)
+io_read (FILE *input_FILE, void *addr, unsigned int size, int is_int)
 {
   if (is_int)
     {
@@ -134,7 +134,7 @@ io_read (FILE *input_FILE, void *addr, int size, int is_int)
 }
 
 static int
-io_write (FILE *output_FILE, void *addr, int size, int is_int)
+io_write (FILE *output_FILE, void *addr, unsigned int size, int is_int)
 {
   if (is_int)
     {
@@ -163,10 +163,11 @@ io_write (FILE *output_FILE, void *addr, int size, int is_int)
 }
 
 static int
-io_idhead (FILE *fp, int (*io) (FILE *, void *, int, int), struct idhead *idh)
+io_idhead (FILE *fp, int (*io) (FILE *, void *, unsigned int, int), struct idhead *idh)
 {
-  int size = 0;
-  fseek (fp, 0L, 0);
+  unsigned int size = 0;
+  if (fp)
+    fseek (fp, 0L, 0);
   size += io (fp, idh->idh_magic, sizeof (idh->idh_magic), 0);
   size += io (fp, &idh->idh_pad_1, sizeof (idh->idh_pad_1), 0);
   size += io (fp, &idh->idh_version, sizeof (idh->idh_version), 0);

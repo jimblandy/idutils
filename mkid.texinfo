@@ -1,4 +1,4 @@
-\input texinfo   @c -*-texinfo-*-
+\input texinfo
 @comment %**start of header (This is for running Texinfo on a region.)
 @setfilename mkid.info
 @settitle The ID Database
@@ -65,7 +65,9 @@ into another language, under the above conditions for modified versions,
 except that this permission notice may be stated in a translation.
 @end titlepage
 
+@ifinfo
 @node Top, Overview, (dir), (dir)
+@top GNU @code{mkid}
 
 @menu
 * Overview::                    What is an ID database and what tools manipulate it?
@@ -75,6 +77,8 @@ except that this permission notice may be stated in a translation.
 * Other Tools::                 Other Tools
 * Command Index::               Command Index
 @end menu
+
+@end ifinfo
 
 @node Overview, Mkid, Top, Top
 @chapter Overview
