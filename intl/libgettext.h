@@ -143,7 +143,7 @@ extern int _nl_msg_cat_cntr;
 #   define dcgettext(Domainname, Msgid, Category)			      \
   (__extension__							      \
    ({									      \
-     char *result;							      \
+     char *__result;							      \
      if (__builtin_constant_p (Msgid))					      \
        {								      \
 	 static char *__translation__;					      \
@@ -154,11 +154,11 @@ extern int _nl_msg_cat_cntr;
 	       dcgettext__ ((Domainname), (Msgid), (Category));		      \
 	     __catalog_counter__ = _nl_msg_cat_cntr;			      \
 	   }								      \
-	 result = __translation__;					      \
+	 __result = __translation__;					      \
        }								      \
      else								      \
-       result = dcgettext__ ((Domainname), (Msgid), (Category));	      \
-     result;								      \
+       __result = dcgettext__ ((Domainname), (Msgid), (Category));	      \
+     __result;								      \
     }))
 #  endif
 # endif

@@ -1,4 +1,11 @@
+Thu Jun 13 15:17:44 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* explodename.c, l10nflist.c: Define NULL for dumb systems.
+
 Tue Jun 11 17:05:13 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* intlh.inst.in, libgettext.h (dcgettext): Rename local variable
+	result to __result to prevent name clash.
 
 	* l10nflist.c, localealias.c, dcgettext.c: Define _GNU_SOURCE to
         get prototype for stpcpy and strcasecmp.
