@@ -34,7 +34,7 @@ END-INFO-DIR-ENTRY
 @ifinfo
 This file documents the @file{id-utils} database utilities.
 
-Copyright (C) 1996, 1999 Free Software Foundation, Inc.
+Copyright (C) 1996, 1999, 2000 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -754,7 +754,7 @@ size of the source trees it can index is limited only by available
 system memory.  @file{mkid}'s indexing algorithm is very space-efficient
 and exhibits excellent locality-of-reference, and so is capable of
 operating with a working-set size that is only half the size of its
-virtual address space.  A typical @sc{UNIX}-like operating system with
+virtual address space.  A typical @sc{unix}-like operating system with
 16 megabytes of system memory should be able to build an ID database
 covering approximately 12,000-14,000 source files totaling
 approximately 50--100 Megabytes.  A 66 MHz 486 computer can build such
