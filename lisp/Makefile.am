@@ -5,6 +5,8 @@ elc_SCRIPTS = id-utils.elc
 elcdir = @LISPDIR@
 SUFFIXES = .el .elc
 
+DISTCLEANFILES = id-utils.elc
+
 .el.elc:
 	@echo "WARNING: Warnings can be ignored. :-)"
 	$(SHELL) $(srcdir)/elisp-comp $<
