@@ -566,7 +566,7 @@ report_grep (char const *name, struct file_link **flinkv)
       if (gid_FILE == 0)
 	{
 	  error (0, errno, "can't open `%s'", file_name);
-	  return;
+	  continue;
 	}
 
       while (fgets (line + 1, sizeof (line) - 1, gid_FILE))

@@ -1,3 +1,8 @@
+1999-02-11  Greg McGary  <gkm@gnu.org>
+
+	* src/lid.c (report_grep): Continue rather than return when
+	fopen fails.
+
 1999-01-31  Jim Meyering  <meyering@ascend.com>
 
 	* doc/Makefile.am (DISTCLEANFILES): Remove id-utils.cm.
