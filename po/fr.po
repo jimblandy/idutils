@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1999-03-29 01:16-0700\n"
+"POT-Creation-Date: 1999-03-30 23:39-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,7 +47,7 @@ msgstr ""
 msgid "can't determine the io_size of a string!"
 msgstr ""
 
-#: libidu/idread.c:45 src/mkid.c:406 src/xtokid.c:215
+#: libidu/idread.c:45 src/mkid.c:446 src/xtokid.c:215
 #, c-format
 msgid "can't open `%s'"
 msgstr ""
@@ -155,55 +155,55 @@ msgid ""
 "delimiters\n"
 msgstr ""
 
-#: libidu/walker.c:103
+#: libidu/walker.c:106
 #, c-format
 msgid "can't read directory `%s' (`.' from `%s')"
 msgstr ""
 
-#: libidu/walker.c:170
+#: libidu/walker.c:173
 #, c-format
 msgid "notice: `%s' was a %s, but is now a %s!"
 msgstr ""
 
-#: libidu/walker.c:171 libidu/walker.c:172
+#: libidu/walker.c:174 libidu/walker.c:175
 msgid "file"
 msgstr ""
 
-#: libidu/walker.c:171 libidu/walker.c:172
+#: libidu/walker.c:174 libidu/walker.c:175
 msgid "directory"
 msgstr ""
 
-#: libidu/walker.c:290
+#: libidu/walker.c:293
 #, c-format
 msgid "warning: `%s' and `%s' are the same file, but yield different scans!"
 msgstr ""
 
-#: libidu/walker.c:384
+#: libidu/walker.c:389
 #, c-format
 msgid "notice: scan parameters changed for `%s'"
 msgstr ""
 
-#: libidu/walker.c:579
+#: libidu/walker.c:593
 #, fuzzy
 msgid "can't get working directory"
 msgstr "%s: Impossible d'obtenir le répertoire courant."
 
-#: libidu/walker.c:636
+#: libidu/walker.c:650
 #, c-format
 msgid "can't chdir to `%s'"
 msgstr ""
 
-#: libidu/walker.c:641
+#: libidu/walker.c:655
 #, c-format
 msgid "can't chdir to `%s' from `%s'"
 msgstr ""
 
-#: libidu/walker.c:695
+#: libidu/walker.c:709
 #, c-format
 msgid "can't lstat `%s' from `%s'"
 msgstr ""
 
-#: libidu/walker.c:703
+#: libidu/walker.c:717
 #, c-format
 msgid "can't stat `%s' from `%s'"
 msgstr ""
@@ -256,7 +256,7 @@ msgstr ""
 msgid "%s: option requires an argument -- %c\n"
 msgstr ""
 
-#: src/fid.c:70 src/fnid.c:49 src/lid.c:233 src/mkid.c:121 src/xtokid.c:43
+#: src/fid.c:70 src/fnid.c:49 src/lid.c:233 src/mkid.c:122 src/xtokid.c:43
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr ""
@@ -409,12 +409,12 @@ msgstr ""
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 
-#: src/mkid.c:146 src/xtokid.c:64
+#: src/mkid.c:147 src/xtokid.c:64
 #, c-format
 msgid "Usage: %s [OPTION]... [FILE]...\n"
 msgstr ""
 
-#: src/mkid.c:150
+#: src/mkid.c:151
 msgid ""
 "Build an identifier database.\n"
 "  -o, --output=OUTFILE    file name of ID database output\n"
@@ -440,96 +440,96 @@ msgid ""
 "The following arguments apply to the language-specific scanners:\n"
 msgstr ""
 
-#: src/mkid.c:332
+#: src/mkid.c:360
 #, c-format
 msgid "can't create `%s' in `%s'"
 msgstr ""
 
-#: src/mkid.c:336
+#: src/mkid.c:364
 #, c-format
 msgid "can't modify `%s'"
 msgstr ""
 
-#: src/mkid.c:389
+#: src/mkid.c:429
 #, c-format
 msgid "can't stat `%s'"
 msgstr ""
 
-#: src/mkid.c:455
+#: src/mkid.c:498
 #, fuzzy, c-format
 msgid "  new = %d/%d"
 msgstr ", nouveau=%d/%d"
 
-#: src/mkid.c:464
+#: src/mkid.c:507
 #, c-format
 msgid "Name=%ld, "
 msgstr "Nom=%ld, "
 
-#: src/mkid.c:465
+#: src/mkid.c:508
 #, c-format
 msgid "Number=%ld, "
 msgstr "Numéro=%ld, "
 
-#: src/mkid.c:466
+#: src/mkid.c:509
 #, c-format
 msgid "String=%ld, "
 msgstr "Chaîne=%ld, "
 
-#: src/mkid.c:467
+#: src/mkid.c:510
 #, c-format
 msgid "Literal=%ld, "
 msgstr "Litéral=%ld, "
 
-#: src/mkid.c:468
+#: src/mkid.c:511
 #, c-format
 msgid "Comment=%ld\n"
 msgstr "Commentaire=%ld\n"
 
-#: src/mkid.c:470
+#: src/mkid.c:513
 #, fuzzy, c-format
 msgid "Files=%d, "
 msgstr "Fichiers=%d, "
 
-#: src/mkid.c:471
+#: src/mkid.c:514
 #, c-format
 msgid "Tokens=%ld, "
 msgstr "Unités lexicales=%ld, "
 
-#: src/mkid.c:472
+#: src/mkid.c:515
 #, c-format
 msgid "Bytes=%ld Kb, "
 msgstr "Octets=%ld Kb, "
 
-#: src/mkid.c:473
+#: src/mkid.c:516
 #, fuzzy, c-format
 msgid "Heap=%ld+%ld Kb, "
 msgstr "tas=%ld Kb, "
 
-#: src/mkid.c:475
+#: src/mkid.c:518
 #, c-format
 msgid "Output=%ld (%ld tok, %ld hit)\n"
 msgstr "Sortie=%ld (%ld unités lexicales, %ld Touches)\n"
 
-#: src/mkid.c:478
+#: src/mkid.c:521
 #, fuzzy, c-format
 msgid ", Freq=%ld/%ld=%.2f\n"
 msgstr "Freq=%ld/%ld=%.2f\n"
 
-#: src/mkid.c:501
+#: src/mkid.c:545
 msgid "Sorting tokens...\n"
 msgstr "Tri unités lexicales...\n"
 
-#: src/mkid.c:507
+#: src/mkid.c:551
 #, c-format
 msgid "Writing `%s'...\n"
 msgstr "Écriture `%s'...\n"
 
-#: src/mkid.c:510
+#: src/mkid.c:554
 #, c-format
 msgid "can't create `%s'"
 msgstr ""
 
-#: src/mkid.c:656
+#: src/mkid.c:708
 #, fuzzy
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "niveau %d: %ld == %ld\n"
