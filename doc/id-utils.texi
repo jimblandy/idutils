@@ -8,7 +8,6 @@
 
 @c Define new indices for file names, commands and options.
 @defcodeindex fl
-@defcodeindex cm
 @defcodeindex op
 
 @c Put everything in one index (arbitrarily chosen to be the concept index).
@@ -35,7 +34,7 @@ END-INFO-DIR-ENTRY
 @ifinfo
 This file documents the @file{id-utils} database utilities.
 
-Copyright (C) 1996 Free Software Foundation, Inc.
+Copyright (C) 1996, 1999 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
