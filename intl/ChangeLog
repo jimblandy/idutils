@@ -1,3 +1,11 @@
+Tue Apr  2 18:51:18 1996  Ulrich Drepper  <drepper@myware>
+
+	* Makefile.in (all-gettext): New goal.  Same as all-yes.
+
+Thu Mar 28 23:01:22 1996  Karl Eichwalder  <ke@ke.central.de>
+
+	* Makefile.in (gettextsrcdir): Define using @datadir@.
+
 Tue Mar 26 12:39:14 1996  Ulrich Drepper  <drepper@myware>
 
 	* finddomain.c: Include <ctype.h>.  Reported by Roland McGrath.
