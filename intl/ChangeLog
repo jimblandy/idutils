@@ -1,3 +1,8 @@
+1998-10-05  Jim Meyering  <meyering@ascend.com>
+
+	* Makefile.in (uninstall): Uninstall only if the current package is
+	gettext.  From Akim Demaille.
+
 1998-04-29  Ulrich Drepper  <drepper@cygnus.com>
 
 	* intl/localealias.c (read_alias_file): Use unsigned char for
