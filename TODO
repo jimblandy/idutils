@@ -4,6 +4,8 @@ id-utils TODO - Future directions
   - Fix file name handling for non-UNIX file systems
     (notably DOS, Windoze & OS/2).
   - Fix assumption that (sizeof (int) == sizeof (long))
+  - Integrate changes for MSDOS via djgpp
+  - Port to cygwin
 
 * lid
   - use "long long" (if available) integer comparisons
@@ -33,7 +35,7 @@ id-utils TODO - Future directions
 
 * grep
   - Hack GNU grep to use a mkid database for hints about which files to
-    search. 
+    search.
 
 
 Local Variables:

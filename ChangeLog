@@ -1,5 +1,13 @@
 1999-03-28  Greg McGary  <gkm@gnu.org>
 
+	* libidu/hash.c (hash_insert): hash_insert_at no longer
+	returns old contents, but rather the new slot address.
+	(hash_insert_at): Return slot address of inserted item.
+	* libidu/walker.c (get_member_file): return member.
+	(get_link_from_dirent, get_link_from_string): Conform
+	to new hash_insert_at API, where return value is slot
+	address of newly inserted item.
+
 	* Makefile.am (AUTOMAKE_OPTIONS): Add macro.
 
 	* config.h.in (WITH_REGEX): Remove.

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
-"POT-Creation-Date: 1999-01-28 09:05-0600\n"
+"POT-Creation-Date: 1999-03-28 02:08-0700\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Karl Eichwalder <ke@ke.Central.DE>\n"
 "Language-Team: German <de@li.org>\n"
@@ -18,17 +18,17 @@ msgstr ""
 msgid "can't allocate %ld bytes for hash table: memory exhausted"
 msgstr ""
 
-#: libidu/hash.c:258
+#: libidu/hash.c:264
 #, fuzzy
 msgid "Load=%ld/%ld=%.0f%%, "
 msgstr "\"Load\"=%ld/%ld=%.2f, "
 
-#: libidu/hash.c:260
+#: libidu/hash.c:266
 #, c-format
 msgid "Rehash=%d, "
 msgstr "\"Rehash\"=%d, "
 
-#: libidu/hash.c:261
+#: libidu/hash.c:267
 msgid "Collisions=%ld/%ld=%.0f%%"
 msgstr ""
 
@@ -104,7 +104,7 @@ msgstr "Kein Scanner für die Sprache '%s'"
 msgid "can't read entire language map file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:417
+#: libidu/scanners.c:413
 msgid ""
 "C language:\n"
 "  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the "
@@ -115,17 +115,17 @@ msgid ""
 "strings\n"
 msgstr ""
 
-#: libidu/scanners.c:686 libidu/scanners.c:990 libidu/scanners.c:1193
+#: libidu/scanners.c:682 libidu/scanners.c:986 libidu/scanners.c:1189
 #, c-format
 msgid "junk: `%c'"
 msgstr "\"junk\": '%c'"
 
-#: libidu/scanners.c:688 libidu/scanners.c:992 libidu/scanners.c:1195
+#: libidu/scanners.c:684 libidu/scanners.c:988 libidu/scanners.c:1191
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "\"junk\": '\\%03o'"
 
-#: libidu/scanners.c:792
+#: libidu/scanners.c:788
 msgid ""
 "Assembly language:\n"
 "  -c,--comment=CHARS     Any of CHARS starts a comment until end-of-line\n"
@@ -135,7 +135,7 @@ msgid ""
 "  -n,--no-cpp            Don't handle C pre-processor directives\n"
 msgstr ""
 
-#: libidu/scanners.c:1096
+#: libidu/scanners.c:1092
 msgid ""
 "Text language:\n"
 "  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
@@ -245,7 +245,7 @@ msgstr ""
 msgid "%s: option requires an argument -- %c\n"
 msgstr ""
 
-#: src/fid.c:70 src/fnid.c:49 src/lid.c:237 src/mkid.c:120 src/xtokid.c:43
+#: src/fid.c:70 src/fnid.c:49 src/lid.c:233 src/mkid.c:120 src/xtokid.c:43
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr ""
@@ -273,7 +273,7 @@ msgstr ""
 msgid "too many file name arguments"
 msgstr ""
 
-#: src/fid.c:153 src/fnid.c:148 src/lid.c:411
+#: src/fid.c:153 src/fnid.c:148 src/lid.c:407
 msgid "can't locate `ID'"
 msgstr ""
 
@@ -302,12 +302,12 @@ msgid ""
 "      --version          output version information and exit\n"
 msgstr ""
 
-#: src/lid.c:245
+#: src/lid.c:241
 #, c-format
 msgid "Usage: %s [OPTION]... PATTERN...\n"
 msgstr ""
 
-#: src/lid.c:249
+#: src/lid.c:245
 #, c-format
 msgid ""
 "Query ID database and report results.\n"
@@ -352,51 +352,51 @@ msgid ""
 "      --version         output version information and exit\n"
 msgstr ""
 
-#: src/lid.c:285
+#: src/lid.c:281
 msgid "braces"
 msgstr ""
 
-#: src/lid.c:285
+#: src/lid.c:281
 msgid "space"
 msgstr ""
 
-#: src/lid.c:351
+#: src/lid.c:347
 msgid "notice: use of `-e' is deprecated, use `-r' instead"
 msgstr ""
 
-#: src/lid.c:432
+#: src/lid.c:428
 #, fuzzy, c-format
 msgid "All identifiers are non-ambiguous within the first %d characters\n"
 msgstr ""
 "Alle Bezeichner (id's) sind verschieden hinsichtlich der ersten %d Zeichen\n"
 
-#: src/lid.c:467
+#: src/lid.c:463
 #, c-format
 msgid "invalid `--key' style: `%s'"
 msgstr ""
 
-#: src/lid.c:479
+#: src/lid.c:475
 #, c-format
 msgid "invalid `--result' style: `%s'"
 msgstr ""
 
 # Muss hier auf `_j_ ... / nq' umgestellt werden????
 #. FIXME: i18n of responses
-#: src/lid.c:636
+#: src/lid.c:632
 #, fuzzy
 msgid "edit? [y1-9^S/nq] "
 msgstr "Editieren? [y1-9^S/nq] "
 
-#: src/lid.c:705
+#: src/lid.c:701
 msgid "can't fork"
 msgstr ""
 
-#: src/lid.c:723
+#: src/lid.c:719
 #, c-format
 msgid "can't exec `%s'"
 msgstr ""
 
-#: src/lid.c:854
+#: src/lid.c:849
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 
@@ -479,7 +479,7 @@ msgstr "Kommentar=%ld\n"
 
 #: src/mkid.c:450
 #, fuzzy, c-format
-msgid "Files=%lu, "
+msgid "Files=%d, "
 msgstr "Dateien=%d, "
 
 #: src/mkid.c:451
@@ -497,32 +497,32 @@ msgstr "Bytes=%ld Kb, "
 msgid "Heap=%ld+%ld Kb, "
 msgstr "\"Heap\"=%ld Kb, "
 
-#: src/mkid.c:456
+#: src/mkid.c:455
 #, c-format
 msgid "Output=%ld (%ld tok, %ld hit)\n"
 msgstr "Ausgabe=%ld (%ld tok, %ld hit)\n"
 
 # Frequenz übersetzen? ke
-#: src/mkid.c:460
+#: src/mkid.c:458
 #, fuzzy, c-format
 msgid ", Freq=%ld/%ld=%.2f\n"
 msgstr "\"Freq\"=%ld/%ld=%.2f\n"
 
-#: src/mkid.c:484
+#: src/mkid.c:481
 msgid "Sorting tokens...\n"
 msgstr "Sortiere \"Token\"...\n"
 
-#: src/mkid.c:490
+#: src/mkid.c:487
 #, c-format
 msgid "Writing `%s'...\n"
 msgstr "Schreibe '%s'...\n"
 
-#: src/mkid.c:493
+#: src/mkid.c:490
 #, c-format
 msgid "can't create `%s'"
 msgstr ""
 
-#: src/mkid.c:639
+#: src/mkid.c:636
 #, fuzzy
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "level %d: %ld == %ld\n"

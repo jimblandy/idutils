@@ -10,7 +10,6 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -77,7 +76,6 @@ INTLLIBS = @INTLLIBS@
 INTLOBJS = @INTLOBJS@
 LANGUAGE_MAP_FILE = @LANGUAGE_MAP_FILE@
 LDFLAGS = @LDFLAGS@
-LIBOBJS = @LIBOBJS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MKINSTALLDIRS = @MKINSTALLDIRS@
@@ -94,7 +92,8 @@ VERSION = @VERSION@
 l = @l@
 lispdir = @lispdir@
 
-AUTOMAKE_OPTIONS = ansi2knr
+
+AUTOMAKE_OPTIONS = ../src/ansi2knr
 
 noinst_LIBRARIES = libidu.a
 
@@ -107,7 +106,7 @@ EXTRA_DIST = $(idu_DATA)
 
 noinst_HEADERS = dynvec.h hash.h idfile.h scanners.h tokflags.h xnls.h
 
-INCLUDES = -I. -I$(srcdir) 	   -I../lib -I$(top_srcdir)/lib 	   -I../intl -I$(top_srcdir)/intl 	   -I.. -I$(top_srcdir) 
+INCLUDES = -I. -I$(srcdir) 	   -I../lib -I$(top_srcdir)/lib 	   -I../intl -I$(top_srcdir)/intl 	   -I.. -I$(top_srcdir)
 
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -117,7 +116,7 @@ LIBRARIES =  $(noinst_LIBRARIES)
 
 CPPFLAGS = @CPPFLAGS@
 LIBS = @LIBS@
-ANSI2KNR = @ANSI2KNR@
+ANSI2KNR = ../src/ansi2knr
 libidu_a_LIBADD = 
 libidu_a_OBJECTS =  dynvec$U.o hash$U.o idfile$U.o idread$U.o \
 idwrite$U.o fnprint$U.o scanners$U.o walker$U.o
@@ -176,18 +175,11 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
+../src/ansi2knr: ../src/ansi2knr.o
+	cd ../src && $(MAKE) $(AM_MAKEFLAGS) ansi2knr
 
-mostlyclean-krextra:
-
-clean-krextra:
-	-rm -f ansi2knr
-
-distclean-krextra:
-
-maintainer-clean-krextra:
-ansi2knr: ansi2knr.o
-	$(LINK) ansi2knr.o $(LIBS)
-ansi2knr.o: $(CONFIG_HEADER)
+../src/ansi2knr.o:
+	cd ../src && $(MAKE) $(AM_MAKEFLAGS) ansi2knr.o
 
 
 mostlyclean-kr:
@@ -341,7 +333,7 @@ install-am: all-am
 install: install-am
 uninstall-am: uninstall-iduDATA
 uninstall: uninstall-am
-all-am: Makefile $(ANSI2KNR) $(LIBRARIES) $(DATA) $(HEADERS)
+all-am: Makefile $(LIBRARIES) $(DATA) $(HEADERS)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
@@ -359,27 +351,26 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
-		mostlyclean-krextra mostlyclean-kr mostlyclean-tags \
-		mostlyclean-depend mostlyclean-generic
+		mostlyclean-kr mostlyclean-tags mostlyclean-depend \
+		mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-noinstLIBRARIES clean-compile clean-krextra clean-kr \
-		clean-tags clean-depend clean-generic mostlyclean-am
+clean-am:  clean-noinstLIBRARIES clean-compile clean-kr clean-tags \
+		clean-depend clean-generic mostlyclean-am
 
 clean: clean-am
 
-distclean-am:  distclean-noinstLIBRARIES distclean-compile \
-		distclean-krextra distclean-kr distclean-tags \
-		distclean-depend distclean-generic clean-am
+distclean-am:  distclean-noinstLIBRARIES distclean-compile distclean-kr \
+		distclean-tags distclean-depend distclean-generic \
+		clean-am
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-noinstLIBRARIES \
-		maintainer-clean-compile maintainer-clean-krextra \
-		maintainer-clean-kr maintainer-clean-tags \
-		maintainer-clean-depend maintainer-clean-generic \
-		distclean-am
+		maintainer-clean-compile maintainer-clean-kr \
+		maintainer-clean-tags maintainer-clean-depend \
+		maintainer-clean-generic distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -388,9 +379,8 @@ maintainer-clean: maintainer-clean-am
 .PHONY: mostlyclean-noinstLIBRARIES distclean-noinstLIBRARIES \
 clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
 mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile mostlyclean-krextra distclean-krextra \
-clean-krextra maintainer-clean-krextra mostlyclean-kr distclean-kr \
-clean-kr maintainer-clean-kr uninstall-iduDATA install-iduDATA tags \
+maintainer-clean-compile mostlyclean-kr distclean-kr clean-kr \
+maintainer-clean-kr uninstall-iduDATA install-iduDATA tags \
 mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
 distdir mostlyclean-depend distclean-depend clean-depend \
 maintainer-clean-depend info-am info dvi-am dvi check check-am \
@@ -400,9 +390,6 @@ all-redirect all-am all installdirs mostlyclean-generic \
 distclean-generic clean-generic maintainer-clean-generic clean \
 mostlyclean distclean maintainer-clean
 
-
-ansi2knr.c: $(top_srcdir)/src/ansi2knr.c
-	ln $(top_srcdir)/src/ansi2knr.c .
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
