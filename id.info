@@ -1,0 +1,1433 @@
+This is Info file id.info, produced by Makeinfo-1.55 from the input
+file id.texinfo.
+
+START-INFO-DIR-ENTRY
+* ID database: (id).		Identifier database utilities.
+* aid: (id)aid invocation::			Matching strings.
+* eid: (id)eid invocation::			Invoking an editor on matches.
+* fid: (id)fid invocation::			Listing a file's identifiers.
+* gid: (id)gid invocation::			Listing all matching lines.
+* idx: (id)idx invocation::			Testing mkid scanners.
+* iid: (id)iid invocation::			Interactive complex queries.
+* lid: (id)lid invocation::			Matching patterns.
+* mkid: (id)mkid invocation::			Creating an ID database.
+* pid: (id)pid invocation::			Looking up filenames.
+END-INFO-DIR-ENTRY
+
+   This file documents the `mkid' identifier database utilities.
+
+   Copyright (C) 1991, 1995 Tom Horsley.
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation.
+
+
+File: id.info,  Node: Top,  Next: Introduction,  Prev: (DIR),  Up: (DIR)
+
+ID database utilities
+*********************
+
+   This manual documents version 3.0.9 of the ID database utilities.
+
+* Menu:
+
+* Introduction::                Overview of the tools, and authors.
+* mkid invocation::             Creating an ID database.
+* Common query arguments::      Common lookup options and search patterns.
+* gid invocation::              Listing all matching lines.
+* Looking up identifiers::      lid, aid, eid, and fid.
+* pid invocation::              Looking up filenames.
+* iid invocation::              Interactive and complex queries.
+* Index::                       General index.
+
+
+File: id.info,  Node: Introduction,  Next: mkid invocation,  Prev: Top,  Up: Top
+
+Introduction
+************
+
+   An "ID database" is a binary file containing a list of filenames, a
+list of identifiers, and a matrix indicating which identifiers appear in
+which files.  With this database and some tools to manipulate it
+(described in this manual), a host of tasks become simpler and faster.
+For example, you can list all files containing a particular `#include'
+throughout a huge source hierarchy, search for all the memos containing
+references to a project, or automatically invoke an editor on all files
+containing references to some function.  Anyone with a large software
+project to maintain, or a large set of text files to organize, can
+benefit from an ID database.
+
+   Although the ID utilities are most commonly used with identifiers,
+numeric constants are also stored in the database, and can be searched
+for in the same way (independent of radix, if desired).
+
+   There are a number of programs in the ID family:
+
+`mkid'
+     scans files for identifiers and numeric constants and builds the ID
+     database file.
+
+`gid'
+     lists all lines that match given patterns.
+
+`lid'
+     lists the filenames containing identifiers that match given
+     patterns.
+
+`aid'
+     lists the filenames containing identifiers that contain given
+     strings, independent of case.
+
+`eid'
+     invokes an editor on each file containing identifiers that match
+     given patterns.
+
+`fid'
+     lists all identifiers recorded in the database for given files, or
+     identifiers common to two files.
+
+`pid'
+     matches the filenames in the database, rather than the identifiers.
+
+`iid'
+     interactively supports more complex queries, such as intersection
+     and union.
+
+`idx'
+     helps with testing of new `mkid' scanners.
+
+   Please report bugs to `gkm@magilla.cichlid.com'.  Remember to
+include the version number, machine architecture, input files, and any
+other information needed to reproduce the bug: your input, what you
+expected, what you got, and why it is wrong.  Diffs are welcome, but
+please include a description of the problem as well, since this is
+sometimes difficult to infer.  *Note Bugs: (gcc)Bugs.
+
+* Menu:
+
+* Past and future::       How the ID tools came about, and where they're going.
+
+
+File: id.info,  Node: Past and future,  Up: Introduction
+
+Past and future
+===============
+
+   Greg McGary conceived of the ideas behind mkid when he began hacking
+the Unix kernel in 1984.  He needed a navigation tool to help him find
+his way the expansive, unfamiliar landscape.  The first `mkid'-like
+tools were shell scripts, and produced an ASCII database that looks much
+like the output of `lid' with no arguments.  It took over an hour on a
+VAX 11/750 to build a database for a 4.1BSD-ish kernel.  Lookups were
+done with the system utility `look', modified to handle very long lines.
+
+   In 1986, Greg rewrote `mkid', `lid', `fid' and `idx' in C to improve
+performance.  Database-build times were shortened by an order of
+magnitude.  The `mkid' tools were first posted to `comp.sources.unix'
+in September 1987.
+
+   Over the next few years, several versions diverged from the original
+source.  Tom Horsley at Harris Computer Systems Division stepped forward
+to take over maintenance and integrated some of the fixes from divergent
+versions.  He also wrote the `iid' program.  A first release of `mkid'
+version 2 was posted to `alt.sources' near the end of 1990.  At that
+time, Tom wrote this Texinfo manual with the encouragement the net
+community.  (Tom especially thanks Doug Scofield and Bill Leonard whom
+he dragooned into helping poorfraed and edit--they found several
+problems in the initial version.)  Karl Berry revamped the manual for
+Texinfo style, indexing, and organization in 1995.
+
+   In January 1995, Greg McGary reemerged as the primary maintaner and
+launched development of `mkid' version 3, whose primary new feature is
+an efficient algorithm for building databases that is linear in both
+time and space over the size of the input text.  (The old algorithm was
+quadratic in space and therefore choked on very large source trees.)
+The code is released under the GNU Public License, and might become a
+part of the GNU system.  `mkid' 3 is an interim release, since several
+significant enhancements are still in the works: an optional coupling
+with GNU `grep', so that `grep' can use an ID database for hints; a
+`cscope' work-alike query interface; incremental update of the ID
+database; and an automatic file-tree walker so you need not explicitly
+supply every filename argument to the `mkid' program.
+
+
+File: id.info,  Node: mkid invocation,  Next: Common query arguments,  Prev: Introduction,  Up: Top
+
+`mkid': Creating ID databases
+*****************************
+
+   The `mkid' program builds an ID database.  To do this, it must scan
+each file you tell it to include in the database.  This takes some time,
+but once the work is done the query programs run very rapidly.  (You can
+run `mkid' as a `cron' job to regularly update your databases.)
+
+   The `mkid' program knows how to extract identifiers from various
+types of files.  For example, it can recognize and skip over comments
+and string constants in a C program.
+
+   Identifiers are not the only thing included in the database.  Numbers
+are also recognized and included in the database indexed by their binary
+value.  This feature allows you to find uses of constants without regard
+to the radix used to specify them, since the same number can frequently
+be written in many different ways (for instance, `47', `0x2f', `057' in
+C).
+
+   All the places in this document which mention identifiers should
+really mention both identifiers and numbers, but that gets fairly
+clumsy after a while, so you just need to keep in mind that numbers are
+included in the database as well as identifiers.
+
+   The ID files that `mkid' creates are architecture- and
+byte-order-independent; you can share them at will across systems.
+
+* Menu:
+
+* mkid options::                Command-line options to mkid.
+* Scanners::                    Built-in and defining your own.
+* mkid examples::               Examples of mkid usage.
+
+
+File: id.info,  Node: mkid options,  Next: Scanners,  Up: mkid invocation
+
+`mkid' options
+==============
+
+   By default, `mkid' scans the files you specify and writes the
+database to a file named `ID' in the current directory.
+
+     mkid [-v] [-SSCANARG] [-aARGFILE] [-] [-fIDFILE] FILES...
+
+   The program accepts the following options.
+
+`-v'
+     Verbose.  `mkid' tells you as it scans each file and indicates
+     which scanner it is using.  It also summarizes some statistics
+     about the database at the end.
+
+`-SSCANARG'
+     Specify options regarding `mkid''s scanners.  *Note Scanner option
+     formats::.
+
+`-aARGFILE'
+     Read additional command line arguments from ARGFILE.  This is
+     typically used to specify lists of filenames longer than will fit
+     on a command line; some systems have severe limitations on the
+     total length of a command line.
+
+`-'
+     Read additional command line arguments from standard input.
+
+`-fIDFILE'
+     Write the database to the file IDFILE, instead of `ID'.  The
+     database stores filenames relative to the directory containing the
+     database, so if you move the database to a different directory
+     after creating it, you may have trouble finding files.
+
+   The remaining arguments FILES are the files to be scanned and
+included in the database.  If no files are given at all (either on
+command line or via `-a' or `-'), `mkid' does nothing.
+
+
+File: id.info,  Node: Scanners,  Next: mkid examples,  Prev: mkid options,  Up: mkid invocation
+
+Scanners
+========
+
+   To determine which identifiers to extract from a file and store in
+the database, `mkid' calls a "scanner"; we say a scanner "recognizes" a
+particular language.  Scanners for several languages are built-in to
+`mkid'; you can add your own scanners as well, as explained in the
+sections below.
+
+   `mkid' determines which scanner to use for a particular file by
+looking at the suffix of the filename.  This "suffix" is everything
+after and including the last `.' in a filename; for example, the suffix
+of `foo.c' is `.c'.  `mkid' has a built-in list of bindings from some
+suffixes to corresponding scanners; for example, `.c' files are (not
+surprisingly) scanned by the predefined C language scanner.
+
+   If `mkid' cannot determine what scanner to use for a particular
+file, either because the file has no suffix (e.g., `foo') or because
+`mkid' has no binding for the file's suffix (e.g., `foo.bar'), it uses
+the scanner bound to the `.default' suffix.  By default, this is the
+plain text scanner (*note Plain text scanner::.), but you can change
+this with the `-S' option, as explained below.
+
+* Menu:
+
+* Scanner option formats::      Overview of the -S option.
+* Predefined scanners::         The C, plain text, and assembler scanners.
+* Defining new scanners::       Either in source code or at runtime with -S.
+* idx invocation::              Testing mkid scanners.
+
+
+File: id.info,  Node: Scanner option formats,  Next: Predefined scanners,  Up: Scanners
+
+Scanner option formats
+----------------------
+
+   With the `-S' option, you can change which language scanner to use
+for which files, give language-specific options, and get some limited
+online help about scanner options.
+
+   Here are the different forms of the `-S' option:
+
+`-S.SUFFIX=SCANNER'
+     Use SCANNER for a file with the given `.SUFFIX'.  For example,
+     `-S.yacc=c' tells `mkid' to use the `c' language scanner for all
+     files ending in `.yacc'.
+
+`-S.SUFFIX=?'
+     Display which scanner is used for the given `.SUFFIX'.
+
+`-S?=SCANNER'
+     Display which suffixes SCANNER is used for.
+
+`-S?=?'
+     Display the scanner binding for every known suffix.
+
+`-SSCANNER+ARG'
+`-SSCANNER-ARG'
+     Each scanner accepts certain scanner-dependent arguments.  These
+     options all have one of these forms.  *Note Predefined scanners::.
+
+`-SSCANNER?'
+     Display the scanner-specific options accepted by SCANNER.
+
+`-SNEW-SCANNER/OLD-SCANNER/FILTER-COMMAND'
+     Define NEW-SCANNER in terms of OLD-SCANNER and FILTER-COMMAND.
+     *Note Defining scanners with options::.
+
+
+File: id.info,  Node: Predefined scanners,  Next: Defining new scanners,  Prev: Scanner option formats,  Up: Scanners
+
+Predefined scanners
+-------------------
+
+   `mkid' has built-in scanners for several types of languages; you can
+get the list by running `mkid -S?=?'.  The supported languages are
+documented below(1).
+
+* Menu:
+
+* C scanner::                   For the C programming language.
+* Plain text scanner::          For documents or other non-source code.
+* Assembler scanner::           For assembly language.
+
+   ---------- Footnotes ----------
+
+   (1)  This is not strictly true: `vhil' is a supported language, but
+it is an obsolete and arcane dialect of C and should be ignored.
+
+
+File: id.info,  Node: C scanner,  Next: Plain text scanner,  Up: Predefined scanners
+
+C scanner
+.........
+
+   The C scanner is the most commonly used.  Files with the usual `.c'
+and `.h' suffixes, and the `.y' (yacc) and `.l' (lex) suffixes, are
+processed with this scanner (by default).
+
+   Scanner-specific options:
+
+`-Sc-sCHARACTER'
+     Allow the specified CHARACTER in identifiers. For example, if you
+     use `$' in identifiers, you'll want to use `-Sc-s$'.
+
+`-Sc+u'
+     Strip leading underscores from identifiers. You might to do this in
+     peculiar circumstances, such as trying to parse the output from
+     `nm' or some other system utility.
+
+`-Sc-u'
+     Don't strip leading underscores from identifiers; this is the
+     default.
+
+
+File: id.info,  Node: Plain text scanner,  Next: Assembler scanner,  Prev: C scanner,  Up: Predefined scanners
+
+Plain text scanner
+..................
+
+   The plain text scanner is intended for scanning most non-source-code
+files.  This is typically the scanner used when adding custom scanners
+via `-S' (*note Defining scanners with options::.).
+
+   Scanner-specific options:
+
+`-Stext+aCHARACTER'
+     Include CHARACTER in identifiers.  By default, letters (a-z and
+     A-Z) and underscore are included.
+
+`-Stext-aCHARACTER'
+     Exclude CHARACTER from identifiers.
+
+`-Stext+sCHARACTER'
+     Squeeze CHARACTER from identifiers, i.e., do not terminate an
+     identifier when CHARACTER is seen.  By default, the characters
+     `'', `-', and `.' are squeezed out of identifiers.  For example,
+     the input `fred's' leads to the identifier `freds'.
+
+`-Stext-sCHARACTER'
+     Do not squeeze CHARACTER.
+
+
+File: id.info,  Node: Assembler scanner,  Prev: Plain text scanner,  Up: Predefined scanners
+
+Assembler scanner
+.................
+
+   Since assembly languages come in several flavors, this scanner has a
+number of options:
+
+`-Sasm-cCHARACTER'
+     Define CHARACTER as starting a comment that extends to the end of
+     the input line; no default.  In many assemblers this is `;' or `#'.
+
+`-Sasm+u'
+`-Sasm-u'
+     Strip (`+u') or do not strip (`-u') leading underscores from
+     identifiers.  The default is to strip them.
+
+`-Sasm+aCHARACTER'
+     Allow CHARACTER in identifiers.
+
+`-Sasm-aCHARACTER'
+     Allow CHARACTER in identifiers, but if an identifier contains
+     CHARACTER, ignore it. This is useful to ignore temporary labels,
+     which can be generated in great profusion; these often contain `.'
+     or `@'.
+
+`-Sasm+p'
+`-Sasm-p'
+     Recognize (`+p') or do not recognize (`-p') C preprocessor
+     directives in assembler source. The default is to recognize them.
+
+`-Sasm+C'
+`-Sasm-C'
+     Skip over (`+C') or do not skip over (`-C') C style comments in
+     assembler source.  The default is to skip them.
+
+
+File: id.info,  Node: Defining new scanners,  Next: idx invocation,  Prev: Predefined scanners,  Up: Scanners
+
+Defining new scanners
+---------------------
+
+   You can add new scanners to `mkid' in two ways: modify the source
+code and recompile, or at runtime via the `-S' option.  Each has their
+advantages and disadvantages, as explained below.
+
+   If you create a new scanner that would be of use to others, please
+consider sending it back to the maintainer, `gkm@magilla.cichlid.com',
+for inclusion in future releases of `mkid'.
+
+* Menu:
+
+* Defining scanners in source code::
+* Defining scanners with options::
+
+
+File: id.info,  Node: Defining scanners in source code,  Next: Defining scanners with options,  Up: Defining new scanners
+
+Defining scanners in source code
+................................
+
+   To add a new scanner in source code, you should add a new section to
+the file `scanners.c'.  Copy one of the existing scanners (most likely
+either C or plain text), and modify as necessary.  Also add the new
+scanner to the `languages_0' and `suffixes_0' tables near the beginning
+of the file.
+
+   This is not a terribly difficult programming task, but it requires
+recompiling and installing the new version of `mkid', which may be
+inconvenient.
+
+   This method leads to scanners which operate much more quickly than
+ones that depend on external programmers.  It is also likely the
+easiest way to define scanners for new programming languages.
+
+
+File: id.info,  Node: Defining scanners with options,  Prev: Defining scanners in source code,  Up: Defining new scanners
+
+Defining scanners with options
+..............................
+
+   You can use the `-S' option on the command line to define a new
+language scanner:
+
+     -SNEW-SCANNER/EXISTING-SCANNER/FILTER
+
+Here, NEW-SCANNER is the name of the new scanner being defined,
+EXISTING-SCANNER is the name of an existing scanner, and FILTER is a
+shell command or pipeline.
+
+   The new scanner works by passing the input file to FILTER, and then
+arranging for the result to be passed through EXISTING-SCANNER.
+Typically, EXISTING-SCANNER is `text'.
+
+   Somewhere within FILTER, the string`%s' should occur.  This `%s' is
+replaced by the name of the source file being scanned.
+
+   For example, `mkid' has no built-in scanner for Texinfo files (like
+this one).  In indexing a Texinfo file, you most likely would want to
+ignore the Texinfo @-commands. Here's one way to specify a new scanner
+to do this:
+
+     -S/texinfo/text/sed s,@[a-z]*,,g %s
+
+   This defines a new language scanner (`texinfo') defined in terms of
+a `sed' command to strip out Texinfo directives (an `@' character
+followed by letters).  Once the directives are stripped, the remaining
+text is run through the plain text scanner.
+
+   This is a minimal example; to do a complete job, you would need to
+completely delete some lines, such as those beginning with `@end' or
+@node.
+
+
+File: id.info,  Node: idx invocation,  Prev: Defining new scanners,  Up: Scanners
+
+`idx': Testing `mkid' scanners
+------------------------------
+
+   `idx' prints the identifiers found in the files you specify to
+standard output. This is useful in debugging new `mkid' scanners (*note
+Scanners::.). Synopsis:
+
+     idx [-SSCANARG] FILES...
+
+   `idx' accepts the same `-S' options as `mkid'.  *Note Scanner option
+formats::.
+
+   The name "idx" stands for "ID eXtract".  The name may change in
+future releases, since this is such an infrequently used program.
+
+
+File: id.info,  Node: mkid examples,  Prev: Scanners,  Up: mkid invocation
+
+`mkid' examples
+===============
+
+   The simplest example of `mkid' is something like:
+
+     mkid *.[chy]
+
+   This will build an ID database indexing identifiers and numbers in
+the all the `.c', `.h', and `.y' files in the current directory.
+Because `mkid' already knows how to scan files with those suffixes, no
+additional options are needed.
+
+   Here's a more complex example. Suppose you want to build a database
+indexing the contents of all the `man' pages, and furthur suppose that
+your system is using `gzip' (*note Top: (gzip)Top.) to store compressed
+`cat' versions of the `man' pages in the directory `/usr/catman'.  The
+`gzip' program creates files with a `.gz' suffix, so you must tell
+`mkid' how to scan `.gz' files.  Here are the commands to do the job:
+
+     cd /usr/catman
+     find . -name \*.gz -print | mkid '-Sman/text/gzip <%s' -S.gz=man -
+
+Explanation:
+
+  1. We first `cd' to `/usr/catman' so the ID database will store the
+     correct relative filenames.
+
+  2. The `find' command prints the names of all `.gz' files under the
+     current directory.  *Note find invocation: (sh-utils)find
+     invocation.
+
+  3. This list is piped to `mkid'; the `-' option (at the end of the
+     line) tells `mkid' to read arguments (in this case, as is typical,
+     the list of filenames) from standard input.  *Note mkid options::.
+
+  4. The `-Sman/text/gzip ...' defines a new language `man' in terms of
+     the `gzip' program and `mkid''s existing text scanner.  *Note
+     Defining scanners with options::.
+
+  5. The `-S.gz=man' tells `mkid' to treat all `.gz' files as this new
+     language `man'.  *Note Scanner option formats::.
+
+
+   As a further complication, `cat' pages typically contain underlining
+and backspace sequences, which will confuse `mkid'.  To handle this,
+the `gzip' command becomes a pipeline, like this:
+
+     mkid '-Sman/text/gzip <%s | col -b' -S.gz=man -
+
+
+File: id.info,  Node: Common query arguments,  Next: gid invocation,  Prev: mkid invocation,  Up: Top
+
+Common query arguments
+**********************
+
+   Certain options, and regular expression syntax, are shared by the ID
+query tools.  So we describe those things in the sections below, instead
+of repeating the description for each tool.
+
+* Menu:
+
+* Query options::               -f -r -c -ew -kg -n -doxa -m -F -u.
+* Patterns::                    Regular expression syntax for searches.
+* Examples: Query examples.     Some common uses.
+
+
+File: id.info,  Node: Query options,  Next: Patterns,  Up: Common query arguments
+
+Query options
+=============
+
+   The ID query tools (*not* `mkid') share certain command line
+options.  Not all of these options are recognized by all programs, but
+if an option is used by more than one program, it is described below.
+The description of each program gives the options that program uses.
+
+`-fIDFILE'
+     Read the database from IDFILE, in the current directory or in any
+     directory above the current directory.  The default database name
+     is `ID'.  Searching parent directories lets you have a single ID
+     database at the root of a large source tree and then use the query
+     tools from anywhere within that tree.
+
+`-rDIRECTORY'
+     Find files relative to DIRECTORY, instead of the directory in
+     which the ID database was found.  This is useful if the ID
+     database was moved after its creation.
+
+`-c'
+     Equivalent to `-r`pwd`', i.e., find files relative to the current
+     directory, instead of the directory in which the ID database was
+     found.
+
+`-e'
+`-w'
+     `-e' forces pattern arguments to be treated as regular expressions,
+     and `-w' forces pattern arguments to be treated as constant
+     strings.  By default, the query tools guess whether a pattern is
+     regular expressions or constant strings by looking for special
+     characters.  *Note Patterns::.
+
+`-k'
+`-g'
+     `-k' suppresses use of shell brace notation in the output.  By
+     default, the query tools that generate lists of filenames attempt
+     to compress the lists using the usual shell brace notation, e.g.,
+     `{foo,bar}.c' to mean `foo.c' and `bar.c'.  (This is useful if you
+     use `ksh' or the original (not GNU) `sh' and want to feed the list
+     of names to another command, since those shells do not support
+     this brace notation; the name of the `-k' option comes from the
+     `k' in `ksh').
+
+     `-g' turns on use of brace notation; this is only needed if the
+     query tools were compiled with `-k' as the default behavior.
+
+`-n'
+     Suppress the matching identifier before each list of filenames
+     that the query tools output by default. This is useful if you want
+     a list of just the names to feed to another command.
+
+`-d'
+`-o'
+`-x'
+`-a'
+     These options may be used in any combination to specify the radix
+     of numeric matches.  `-d' allows matching on decimal numbers, `-o'
+     on octal numbers, and `-x' on hexadecimal numbers.  The `-a'
+     option is equivalent to specifying all three; this is the default.
+     Any combination of these options may be used.
+
+`-m'
+     Merge multiple lines of output into a single line.  If your query
+     matches more than one identifier, the default is to generate a
+     separate line of output for each matching identifier.
+
+`-F-'
+`-FN'
+`-F-M'
+`-FN-M'
+     Show identifiers matching at least N and at most M times.  `-F-'
+     is equivalent to `-F1', i.e., find identifiers that appear only
+     once in the database.  (This is useful to locate identifiers that
+     are defined but never used, or used once and never defined.)
+
+`-uNUMBER'
+     List identifiers that conflict in the first NUMBER characters.
+     This could be in useful porting programs to brain-dead computers
+     that refuse to support long identifiers, but your best long term
+     option is to set such computers on fire.
+
+
+File: id.info,  Node: Patterns,  Next: Query examples,  Prev: Query options,  Up: Common query arguments
+
+Patterns
+========
+
+   "Patterns", also called "regular expressions", allow you to match
+many different identifiers in a single query.
+
+   The same regular expression syntax is recognized by all the query
+tools that handle regular expressions.  The exact syntax depends on how
+the ID tools were compiled, but the following constructs should always
+be supported:
+
+`.'
+     Match any single character.
+
+`[CHARS]'
+     Match any of the characters specified within the brackets.  You can
+     match any characters *except* the ones in brackets by typing `^'
+     as the first character.  A range of characters can be specified
+     using `-'.  For example, `[abc]' and `[a-c]' both match `a', `b',
+     or `c', and `[^abc]' matches anything *except* `a', `b', or `c'.
+
+`*'
+     Match the previous construct zero or more times.
+
+`^'
+`$'
+     `^' (`$') at the beginning (end) of a pattern anchors the match to
+     the first (last) character of the identifier.
+
+   The query programs use either the `regex'/`regcmp' or
+`re_comp'/`re_exec' functions, depending on which are available in the
+library on your system.  These do not always support the exact same
+regular expression syntax, so consult your local `man' pages to find
+out.
+
+
+File: id.info,  Node: Query examples,  Prev: Patterns,  Up: Common query arguments
+
+Query examples
+==============
+
+   Here are some examples of the options described in the previous
+sections.
+
+   To restrict searches to exact matches, use `^...$'. For example:
+
+     prompt$ gid '^FILE$'
+     ansi2knr.c:144: {	FILE *in, *out;
+     ansi2knr.c:315:     FILE *out;
+     fid.c:38: FILE *id_FILE;
+     filenames.c:576: FILE *
+     ...
+
+   To show identifiers not unique in the first 16 characters:
+
+     prompt$ lid -u16
+     RE_CONTEXT_INDEP_ANCHORS regex.c
+     RE_CONTEXT_INDEP_OPS regex.c
+     RE_SYNTAX_POSIX_BASIC regex.c
+     RE_SYNTAX_POSIX_EXTENDED regex.c
+     ...
+
+   Numbers are searched for numerically rather than textually. For
+example:
+
+     prompt$ lid 0xff
+     0377           {lid,regex}.c
+     0xff           {bitops,fid,lid,mkid}.c
+     255            regex.c
+
+   On the other hand, you can restrict a numeric search to a particular
+radix if you want:
+
+     laurie$ lid -x 0xff
+     0xff           {bitops,fid,lid,mkid}.c
+
+   Filenames in the output are always adjusted to be correct for the
+correct working directory. For example:
+
+     prompt$ lid bdevsw
+     bdevsw         sys/conf.h  cf/conf.c  io/bio.c  os/{fio,main,prf,sys3}.c
+     prompt$ cd io
+     prompt$ lid bdevsw
+     bdevsw         ../sys/conf.h  ../cf/conf.c  bio.c  ../os/{fio,main,prf,sys3}.c
+
+
+File: id.info,  Node: gid invocation,  Next: Looking up identifiers,  Prev: Common query arguments,  Up: Top
+
+`gid': Listing matching lines
+*****************************
+
+   Synopsis:
+
+     gid [-fFILE] [-uN] [-rDIR] [-doxasc] [PATTERN...]
+
+   `gid' finds the identifiers in the database that match the specified
+PATTERNs, then searches for all occurrences of those identifiers, in
+only the files containing matches.  In a large source tree, this saves
+an enormous amount of time (compared to searching every source file).
+
+   With no PATTERN arguments, `gid' prints every line of every source
+file.
+
+   The name "gid" stands for "grep for identifiers", `grep' being the
+standard utility to search regular files.
+
+   *Note Common query arguments::, for a description of the command-line
+options and PATTERN arguments.
+
+   `gid' uses the standard GNU output format for identifying source
+lines:
+
+     FILENAME:LINENUM: TEXT
+
+   Here is an example:
+
+     prompt$ gid FILE
+     ansi2knr.c:144: {	FILE *in, *out;
+     ansi2knr.c:315:     FILE *out;
+     fid.c:38: FILE *id_FILE;
+     ...
+
+* Menu:
+
+* GNU Emacs gid interface::     Using next-error with gid.
+
+
+File: id.info,  Node: GNU Emacs gid interface,  Up: gid invocation
+
+GNU Emacs `gid' interface
+=========================
+
+   The `mkid' source distribution comes with a file `gid.el', which
+defines a GNU Emacs interface to `gid'.  To install it, put `gid.el'
+somewhere that Emacs will find it (i.e., in your `load-path') and put
+
+     (autoload 'gid "gid" nil t)
+
+in one of Emacs' initialization files, e.g., `~/.emacs'.  You will then
+be able to use `M-x gid' to run the command.
+
+   The `gid' function prompts you with the word around point.  If you
+want to search for something else, simply delete the line and type the
+pattern of interest.
+
+   The function then runs the `gid' program in a `*compilation*'
+buffer, so the normal `next-error' function can be used to visit all
+the places the identifier is found (*note Compilation:
+(emacs)Compilation.).
+
+
+File: id.info,  Node: Looking up identifiers,  Next: pid invocation,  Prev: gid invocation,  Up: Top
+
+Looking up identifiers
+**********************
+
+   These commands look up identifiers in the ID database and operate on
+the files containing matches.
+
+* Menu:
+
+* lid invocation::              Matching patterns.
+* aid invocation::              Matching strings.
+* eid invocation::              Invoking an editor on matches.
+* fid invocation::              Listing a file's identifiers.
+
+
+File: id.info,  Node: lid invocation,  Next: aid invocation,  Up: Looking up identifiers
+
+`lid': Matching patterns
+========================
+
+   Synopsis:
+
+     lid [-fFILE] [-uN] [-rDIR] [-mewdoxaskgnc] PATTERN...
+
+   `lid' searches the database for identifiers matching the given
+PATTERN arguments and prints the names of the files that match each
+PATTERN.  With no PATTERNs, `lid' lists every entry in the database.
+
+   The name "lid" stands for "lookup identifier".
+
+   *Note Common query arguments::, for a description of the command-line
+options and PATTERN arguments.
+
+   By default, each line of output consists of an identifier and all the
+files containing that identifier.
+
+   Here is an example showing a search for a single identifier (omitting
+some output to keep lines short):
+
+     prompt$ lid FILE
+     FILE           extern.h {fid,gets0,getsFF,idx,init,lid,mkid,...}.c
+
+   This example shows a regular expression search:
+
+     prompt$ lid 'FILE$'
+     AF_FILE        mkid.c
+     AF_IDFILE      mkid.c
+     FILE           extern.h {fid,gets0,getsFF,idx,init,lid,mkid,...}.c
+     IDFILE         id.h {fid,lid,mkid}.c
+     IdFILE         {fid,lid}.c
+     ...
+
+As you can see, when a regular expression is used, it is possible to
+get more than one line of output.  To merge multiple lines into one,
+use `-m':
+
+     prompt$ lid -m ^get
+     ^get           extern.h {bitsvec,fid,gets0,getsFF,getscan,idx,lid,...}.c
+
+
+File: id.info,  Node: aid invocation,  Next: eid invocation,  Prev: lid invocation,  Up: Looking up identifiers
+
+`aid': Matching strings
+=======================
+
+   Synopsis:
+
+     aid [-fFILE] [-uN] [-rDIR] [-mewdoxaskgnc] STRING...
+
+   `aid' searches the database for identifiers containing the given
+STRING arguments.  The search is case-insensitive.
+
+   The name "aid" stands for "apropos identifier", `apropros' being a
+command that does a similar search of the `whatis' database of `man'
+descriptions.
+
+   For example, `aid get' matches the identifiers `fgets', `GETLINE',
+and `getchar'.
+
+   The default output format is the same as `lid'; see the previous
+section.
+
+   *Note Common query arguments::, for a description of the command-line
+options and PATTERN arguments.
+
+
+File: id.info,  Node: eid invocation,  Next: fid invocation,  Prev: aid invocation,  Up: Looking up identifiers
+
+`eid': Invoking an editor on matches
+====================================
+
+   Synopsis:
+
+     eid [-fFILE] [-uN] [-rDIR] [-doxasc] [PATTERN]...
+
+   `eid' runs the usual search (*note lid invocation::.) on the given
+arguments, shows you the output, and then asks:
+
+     Edit? [y1-9^S/nq]
+
+You can respond with:
+
+`y'
+     Edit all files listed.
+
+`1...9'
+     Start editing at the N + 1'st file.
+
+`/STRING or `CTRL-S'STRING'
+     Start editing at the first filename containing STRING.
+
+`n'
+     Go on to the next PATTERN, i.e., edit nothing for this one.
+
+`q'
+     Quit `eid'.
+
+   `eid' invokes the editor defined by the `EDITOR' environment
+variable to edit a file.  If this editor can accept an initial search
+argument on the command line, `eid' can move automatically to the
+location of the match, via the environment variables below.
+
+   *Note Common query arguments::, for a description of the command-line
+options and PATTERN arguments.
+
+   Here are the environment variables relevant to `eid':
+
+`EDITOR'
+     The name of the editor program to invoke.
+
+`EIDARG'
+     The argument to pass to the editor to search for the matching
+     identifier.  For `vi', this should be `+/%s/''.
+
+`EIDLDEL'
+     A regular expression to force a match at the beginning of a word
+     ("left delimiter).  `eid' inserts this in front of the matching
+     identifier when composing the search argument.  For `vi', this
+     should be `\<'.
+
+`EIDRDEL'
+     The end-of-word regular expression.  For `vi', this should be `\>'.
+
+   For Emacs users, the interface in `gid.el' is probably preferable to
+`eid'.  *Note GNU Emacs gid interface::.
+
+   Here is an example:
+
+     prompt$ eid FILE \^print
+     FILE           {ansi2knr,fid,filenames,idfile,idx,iid,lid,misc,...}.c
+     Edit? [y1-9^S/nq] n
+     ^print         {ansi2knr,fid,getopt,getopt1,iid,lid,mkid,regex,scanners}.c
+     Edit? [y1-9^S/nq] 2
+
+This will start editing at `getopt'.c.
+
+
+File: id.info,  Node: fid invocation,  Prev: eid invocation,  Up: Looking up identifiers
+
+`fid': Listing a file's identifiers
+===================================
+
+   `fid' lists the identifiers found in a given file.  Synopsis:
+
+     fid [-fDBFILE] FILE1 [FILE2]
+
+`-fDBFILE'
+     Read the database from DBFILE instead of `ID'.
+
+`FILE1'
+     List all the identifiers contained in FILE1.
+
+`FILE2'
+     With a second file argument, list only the identifiers both files
+     have in common.
+
+   The output is simply one identifier (or number) per line.
+
+
+File: id.info,  Node: pid invocation,  Next: iid invocation,  Prev: Looking up identifiers,  Up: Top
+
+`pid': Looking up filenames
+***************************
+
+   `pid' matches the filenames stored in the ID database, rather than
+the identifiers.  Synopsis:
+
+     pid [-fDBFILE] [-rDIR] [-ebkgnc] WILDCARD...
+
+   By default, the WILDCARD patterns are treated as shell globbing
+patterns, rather than the regular expressions the other utilities
+accept.  See the section below for details.
+
+   Besides the standard options given in the synopsis (*note Query
+options::.), `pid' accepts the following:
+
+`-e'
+     Do the usual regular expression matching (*note Patterns::.),
+     instead of shell wildcard matching.
+
+`-b'
+     Match the basenames of the files in the database.  For example,
+     `pid -b foo' will match the stored filename `dir/foo', but not
+     `foo/file'.
+
+   For example, the command:
+
+     pid \*.c
+
+lists all the `.c' files in the database.  (The `\' here protects the
+`*' from being expanded by the shell.)
+
+* Menu:
+
+* Wildcard patterns::           Shell-style globbing patterns.
+
+
+File: id.info,  Node: Wildcard patterns,  Up: pid invocation
+
+Wildcard patterns
+=================
+
+   `pid' does simplified shell wildcard matching (unless the `-e'
+option is specified), rather than the regular expression matching done
+by the other utilities.  Here is a description of wildcard matching,
+also called "globbing":
+
+   * `*' matches zero or more characters.
+
+   * `?' matches any single character.
+
+   * `\' forces the next character to be taken literally.
+
+   * `[CHARS]' matches any single character listed in CHARS.
+
+   * `[!CHARS]' matches any character *not* listed in CHARS.
+
+   Most shells treat `/' and leading `.' characters specially. `pid'
+does not do this.  It simply matches the filename in the database
+against the wildcard pattern.
+
+
+File: id.info,  Node: iid invocation,  Next: Index,  Prev: pid invocation,  Up: Top
+
+`iid': Complex interactive queries
+**********************************
+
+   `iid' is an interactive query utility for ID databases.  It operates
+by running another query program (`lid' by default, `aid' if `-a' is
+specified) and manipulating the sets of filenames returned by these
+queries.
+
+* Menu:
+
+* iid command line options::    Command-line options.
+* iid query expressions::       Operands to the commands.
+* iid commands::		Printing matching filenames, etc.
+
+
+File: id.info,  Node: iid command line options,  Next: iid query expressions,  Up: iid invocation
+
+`iid' command line options
+==========================
+
+   `iid' recognizes the following options (the standard query options
+described in *Note Query options:: are inapplicable):
+
+`-a'
+     Use `aid' for searches, instead of `lid'.
+
+`-cCOMMAND'
+     Execute COMMAND and exit, instead of prompting for interactive
+     commands.
+
+`-H'
+     Print a usage message and exit successfully.  The `help' command
+     inside `iid' gives more information.  *Note iid commands::.
+
+
+File: id.info,  Node: iid query expressions,  Next: iid commands,  Prev: iid command line options,  Up: iid invocation
+
+`iid' query expressions
+=======================
+
+   An `iid' "query expression" generates a set of filenames or
+manipulates existing sets.  These expressions are operands to some of
+the `iid' commands (see the next section), not commands themselves.
+
+   Here are the possible constructs, highest precedence first:
+
+`sSET-NUMBER'
+     Refer to a set previously created by a query operation.  During
+     each `iid' session, every query generates a different set number,
+     so any previously generated set may be used as part of any new
+     query by reference to its set number.
+
+`PATTERN'
+     `iid' treats any non-keyword input (i.e., anything not in this
+     table) as an identifier to be searched for in the database.  It is
+     passed to the search program (`lid' by default, `aid' if the `-a'
+     option was specified).  The result of this operation is a set of
+     filenames, and it is assigned a unique set number.
+
+`lid IDENTIFIER-LIST'
+     Invoke the `lid' program on IDENTIFIER-LIST and construct a new
+     set from the result.
+
+`aid IDENTIFIER-LIST'
+     Like `lid', but use the `aid' program.
+
+`match WILDCARDS'
+     Invoke the `pid' program on WILDCARDS, therefore matching on the
+     filenames in the database instead of the identifiers.  The
+     resulting set contains the filenames that match the specified
+     patterns.  *Note pid invocation::.
+
+`not EXPR'
+     The result is those filenames in the database that are not in EXPR.
+
+`EXPR1 and EXPR2'
+     The result is the intersection of the sets EXPR1 and EXPR2, i.e.,
+     only those filenames contained in both.
+
+`EXPR1 or EXPR2'
+     The result is the union of the sets EXPR1 and EXPR2, i.e., all the
+     filenames contained in either or both.
+
+   Operator names are recognized independent of case, so `AND', `and',
+and `aNd' are all the same as far as `iid' is concerned.
+
+   To pass a keyword as an operand, you must enclose it in double
+quotes: the command `lid "lid"' generates the set of all filenames
+matching the string `lid'.
+
+   Patterns containing shell metacharacters (such as `*' or `?') must
+also be properly quoted, since the query commands are run by invoking
+them with the shell.
+
+
+File: id.info,  Node: iid commands,  Prev: iid query expressions,  Up: iid invocation
+
+`iid' commands
+==============
+
+   This section describes the interactive commands that `iid'
+recognizes.  The database query expressions you can pass to the `ss'
+and `files' commands are described in the previous section.
+
+   Some commands output a "summary line" for sets. These lines show the
+set number, the number of filenames in the set, and the command that
+generated it.
+
+`ss QUERY'
+     Build the set(s) of filenames resulting from the query expression
+     QUERY.  The output is a summary line for each set.
+
+`files QUERY'
+`f QUERY'
+     Evaluate the query expression QUERY as in `ss', but output the
+     full list of matching filenames instead of a summary.
+
+`sets'
+     Output a summary line for each extant set.
+
+`show SET'
+`p SET'
+     Pass the filename in the set number SET to the program named in
+     the `PAGER' environment variable.  Typically, this is a
+     page-at-a-time display program like `less' or `more'.  If you use
+     Emacs, you might want to set `PAGER' to `emacsclient' (*note Emacs
+     Server: (emacs)Emacs Server.).
+
+`anything else'
+     When `iid' does not recognize the first word on an input line as a
+     builtin `iid' command, it assumes the input is a shell command
+     which will write a list of filenames to standard output, which it
+     gathers into a set as usual.
+
+     Any set numbers that appear in the input are expanded into the
+     lists of filenames they represent prior to running the command.
+
+`!SHELL-COMMAND'
+     Expand set numbers appear in SHELL-COMMAND into the filenames they
+     represent, and pass the result to `/bin/sh'. The output is not
+     interpreted.
+
+`begin DIRECTORY'
+`b DIRECTORY'
+     Begin a new `iid' session in a different directory (which
+     presumably contains a different database).  It deletes all the sets
+     created so far and switches to the specified directory.  It is
+     equivalent to exiting `iid', changing directories in the shell, and
+     running `iid' again.
+
+`help'
+`h'
+`?'
+     Display a short help file using the program named in `PAGER'.
+
+`quit'
+`q'
+`off'
+     Quit `iid'. An end-of-file character (usually `CTRL-D') also exits.
+
+
+File: id.info,  Node: Index,  Prev: iid invocation,  Up: Top
+
+Index
+*****
+
+* Menu:
+
+* $ in identifiers:                     C scanner.
+* * in globbing:                        Wildcard patterns.
+* *scratch* Emacs buffer:               GNU Emacs gid interface.
+* -:                                    mkid options.
+* -a:                                   iid command line options.
+* -a:                                   Query options.
+* -aARGFILE:                            mkid options.
+* -b:                                   pid invocation.
+* -c:                                   iid command line options.
+* -c:                                   Query options.
+* -d:                                   Query options.
+* -e:                                   pid invocation.
+* -e:                                   Query options.
+* -F:                                   Query options.
+* -fIDFILE:                             Query options.
+* -g:                                   Query options.
+* -H:                                   iid command line options.
+* -k:                                   Query options.
+* -m:                                   Query options.
+* -n:                                   Query options.
+* -o:                                   Query options.
+* -rDIRECTORY:                          Query options.
+* -S scanner option:                    Scanner option formats.
+* -S.:                                  Scanner option formats.
+* -S?:                                  Scanner option formats.
+* -SSCANARG:                            mkid options.
+* -Sasm+a:                              Assembler scanner.
+* -Sasm+C:                              Assembler scanner.
+* -Sasm+p:                              Assembler scanner.
+* -Sasm+u:                              Assembler scanner.
+* -Sasm-c:                              Assembler scanner.
+* -Sc+u:                                C scanner.
+* -Sc-s:                                C scanner.
+* -Sc-u:                                C scanner.
+* -Stext+a:                             Plain text scanner.
+* -Stext+s:                             Plain text scanner.
+* -Stext-a:                             Plain text scanner.
+* -u:                                   Query options.
+* -v:                                   mkid options.
+* -w:                                   Query options.
+* -x:                                   Query options.
+* .default scanner:                     Scanners.
+* .[chly] files, scanning:              C scanner.
+* ? in globbing:                        Wildcard patterns.
+* aid:                                  aid invocation.
+* aid used for iid searches:            iid command line options.
+* architecture-independence:            mkid invocation.
+* assembler scanner:                    Assembler scanner.
+* basename match:                       pid invocation.
+* beginning-of-word editor argument:    eid invocation.
+* Berry, Karl:                          Past and future.
+* brace notation in filename lists:     Query options.
+* bugs, reporting:                      Introduction.
+* C scanner, predefined:                C scanner.
+* case-insensitive searching:           aid invocation.
+* commands for iid:                     iid commands.
+* comments in assembler:                Assembler scanner.
+* common query arguments:               Common query arguments.
+* common query options:                 Query options.
+* complex queries:                      iid invocation.
+* compressed files, building ID from:   mkid examples.
+* conflicting identifiers, finding:     Query options.
+* constant strings, forcing evaluation as: Query options.
+* creating databases:                   mkid invocation.
+* cron:                                 mkid invocation.
+* cscope:                               Past and future.
+* database name, specifying:            Query options.
+* databases, creating:                  mkid invocation.
+* EDITOR:                               eid invocation.
+* eid:                                  eid invocation.
+* EIDARG:                               eid invocation.
+* EIDLDEL:                              eid invocation.
+* EIDRDEL:                              eid invocation.
+* Emacs interface to gid:               GNU Emacs gid interface.
+* emacsclient:                          iid commands.
+* end-of-word editor argument:          eid invocation.
+* examples of mkid:                     mkid examples.
+* examples, queries:                    Query examples.
+* fid:                                  fid invocation.
+* filenames, matching:                  pid invocation.
+* future:                               Past and future.
+* gid Emacs function:                   GNU Emacs gid interface.
+* gid.el interface to Emacs:            GNU Emacs gid interface.
+* globbing patterns:                    Wildcard patterns.
+* grep:                                 Past and future.
+* help for iid:                         iid command line options.
+* history:                              Past and future.
+* Horsley, Tom:                         Past and future.
+* ID database, definition of:           Introduction.
+* ID file format:                       mkid invocation.
+* identifiers in a file:                fid invocation.
+* iid:                                  iid invocation.
+* iid commands:                         iid commands.
+* iid options:                          iid command line options.
+* iid query expressions:                iid query expressions.
+* interactive queries:                  iid invocation.
+* introduction:                         Introduction.
+* languages_0:                          Defining scanners in source code.
+* left delimiter editor argument:       eid invocation.
+* Leonard, Bill:                        Past and future.
+* lid:                                  lid invocation.
+* load-path:                            GNU Emacs gid interface.
+* look and mkid 1:                      Past and future.
+* man pages, compressed:                mkid examples.
+* matching filenames:                   pid invocation.
+* McGary, Greg:                         Past and future.
+* mkid:                                 mkid invocation.
+* mkid options:                         mkid options.
+* multiple lines, merging:              Query options.
+* numbers, in databases:                mkid invocation.
+* numeric matches, specifying radix of: Query options.
+* numeric searches:                     Query examples.
+* options for iid:                      iid command line options.
+* options for mkid:                     mkid options.
+* overview:                             Introduction.
+* PAGER:                                iid commands.
+* parent directories, searched for ID:  Query options.
+* patterns:                             Patterns.
+* pid:                                  pid invocation.
+* plain text scanner:                   Plain text scanner.
+* predefined scanners:                  Predefined scanners.
+* queries for iid:                      iid query expressions.
+* query examples:                       Query examples.
+* query options, common:                Query options.
+* radix of numeric matches, specifying: Query options.
+* regular expression syntax:            Patterns.
+* regular expressions, forcing evaluation as: Query options.
+* right delimiter editor argument:      eid invocation.
+* scanner options:                      Scanner option formats.
+* scanners:                             Scanners.
+* scanners, adding new:                 Defining new scanners.
+* scanners, defining in source code:    Defining scanners in source code.
+* scanners, defining with options:      Defining scanners with options.
+* scanners, predefined:                 Predefined scanners.
+* scanners.c:                           Defining scanners in source code.
+* Scofield, Doug:                       Past and future.
+* search for identifier, initial:       eid invocation.
+* sharing ID files:                     mkid invocation.
+* shell brace notation in filename lists: Query options.
+* shell commands in iid:                iid commands.
+* shell escape:                         iid commands.
+* shell wildcard patterns:              Wildcard patterns.
+* single matches, showing:              Query options.
+* squeezing characters from identifiers: Plain text scanner.
+* statistics:                           mkid options.
+* string searching:                     aid invocation.
+* strings, forcing evaluation as:       Query options.
+* suffixes of filenames:                Scanners.
+* suffixes_0:                           Defining scanners in source code.
+* suppressing matching identifier:      Query options.
+* Texinfo, scanning example of:         Defining scanners with options.
+* whatis:                               aid invocation.
+* wildcard wildcard patterns:           Wildcard patterns.
+* [!...] in globbing:                   Wildcard patterns.
+* [...] in globbing:                    Wildcard patterns.
+* \ in globbing:                        Wildcard patterns.
+
+
+
+Tag Table:
+Node: Top1418
+Node: Introduction2101
+Node: Past and future4406
+Node: mkid invocation6731
+Node: mkid options8295
+Node: Scanners9707
+Node: Scanner option formats11196
+Node: Predefined scanners12366
+Node: C scanner13063
+Node: Plain text scanner13812
+Node: Assembler scanner14717
+Node: Defining new scanners15840
+Node: Defining scanners in source code16457
+Node: Defining scanners with options17296
+Node: idx invocation18744
+Node: mkid examples19304
+Node: Common query arguments21277
+Node: Query options21819
+Node: Patterns25208
+Node: Query examples26542
+Node: gid invocation27924
+Node: GNU Emacs gid interface29080
+Node: Looking up identifiers29938
+Node: lid invocation30428
+Node: aid invocation31856
+Node: eid invocation32636
+Node: fid invocation34674
+Node: pid invocation35226
+Node: Wildcard patterns36327
+Node: iid invocation37091
+Node: iid command line options37642
+Node: iid query expressions38213
+Node: iid commands40515
+Node: Index42745
+
+End Tag Table
