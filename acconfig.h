@@ -7,11 +7,17 @@
 
 @TOP@
 
+/* Define to `unsigned short' if <sys/types.h> doesn't define.  */
+#undef dev_t
+
 /* Define if you have the <sys/ioctl.h> header file.  */
 #undef HAVE_SYS_IOCTL_H
 
 /* Define to filename of iid help text.  */
 #undef IID_HELP_FILE
+
+/* Define to `unsigned long' if <sys/types.h> doesn't define.  */
+#undef ino_t
 
 /* Define to the name of the distribution.  */
 #undef PACKAGE

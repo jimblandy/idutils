@@ -22,7 +22,6 @@
 #include <config.h>
 #include "alloc.h"
 #include "idfile.h"
-#include "idarg.h"
 #include "strxtra.h"
 
 typedef int (*iof_t) __P((FILE *, void *, unsigned int, int));
@@ -33,39 +32,53 @@ static int io_size __P((FILE *, void *, unsigned int size, int));
 
 extern char *program_name;
 
-/* init_id opens id_file, reads the header into idhp (and verifies the magic
- * number), then builds the id_args list holding the names of all the
- * files recorded in the database.
- */
+/* init_id_file opens the ID file, reads header fields into idh,
+   verifies the magic number and version, and reads the constituent
+   file names.  Any errors are considered fatal and cause an exit.  */
+
 FILE *
-init_idfile (char const *id_file, struct idhead *idh, struct idarg **id_args)
+init_id_file (char const *id_file_name, struct idhead *idh)
+{
+  FILE *id_FILE = maybe_init_id_file (id_file_name, idh);
+  if (id_FILE)
+    return id_FILE;
+  error (1, errno, "Can't open `%s'", id_file_name);
+  return NULL;
+}
+
+/* maybe_init_id_file does everything that init_id_file does, but is
+   tolerant of errors opening the ID file, returning NULL in this case
+   (this is called from mkid where an ID might or might not already
+   exist).  All other errors are considered fatal.  */
+
+FILE *
+maybe_init_id_file (char const *id_file_name, struct idhead *idh)
 {
   FILE *id_FILE;
   unsigned int i;
   char *strings;
   struct idarg *ida;
 
-  id_FILE = fopen (id_file, "r");
+  id_FILE = fopen (id_file_name, "r");
   if (id_FILE == NULL)
     return NULL;
 
   read_idhead (id_FILE, idh);
   if (idh->idh_magic[0] != IDH_MAGIC_0 || idh->idh_magic[1] != IDH_MAGIC_1)
-    {
-      fprintf (stderr, "%s: Not an id file: `%s'\n", program_name, id_file);
-      exit (1);
-    }
+    error (1, 0, "`%s' is not an ID file! (bad magic #)", id_file_name);
   if (idh->idh_version != IDH_VERSION)
-    {
-      fprintf (stderr, "%s: ID version mismatch (want: %d, got: %d)\n", program_name, IDH_VERSION, idh->idh_version);
-      exit (1);
-    }
+    error (1, 0, "`%s' is version %d, but I only grok version %d",
+	   id_file_name, idh->idh_version, IDH_VERSION);
 
   fseek (id_FILE, idh->idh_args_offset, 0);
-  strings = malloc (i = idh->idh_tokens_offset - idh->idh_args_offset);
+  /* NEEDSWORK */
+  fseek (id_FILE, idh->idh_files_offset, 0);
+  
+  i = idh->idh_tokens_offset - idh->idh_args_offset;
+  strings = malloc (i);
   fread (strings, i, 1, id_FILE);
-  ida = *id_args =  CALLOC (struct idarg, idh->idh_paths);
-  for (i = 0; i < idh->idh_paths; i++)
+  ida = *id_args =  CALLOC (struct idarg, idh->idh_files);
+  for (i = 0; i < idh->idh_files; i++)
     {
       while (*strings == '+' || *strings == '-')
 	{
@@ -84,6 +97,39 @@ init_idfile (char const *id_file, struct idhead *idh, struct idarg **id_args)
   return id_FILE;
 }
 
+
+unsigned long
+file_link_hash_1 (void const *key)
+{
+  unsigned long result = 0;
+  ADDRESS_HASH_1 (((struct file_link const *) key)->fl_parent, result);
+  STRING_HASH_1 (((struct file_link const *) key)->fl_name, result);
+  return result;
+}
+
+unsigned long
+file_link_hash_2 (void const *key)
+{
+  unsigned long result = 0;
+  ADDRESS_HASH_2 (((struct file_link const *) key)->fl_parent, result);
+  STRING_HASH_2 (((struct file_link const *) key)->fl_name, result);
+  return result;
+}
+
+int
+file_link_hash_cmp (void const *x, void const *y)
+{
+  int result;
+  ADDRESS_CMP (((struct file_link const *) x)->fl_parent,
+	       ((struct file_link const *) y)->fl_parent, result);
+  if (result)
+    return result;
+  STRING_CMP (((struct file_link const *) x)->fl_name,
+	      ((struct file_link const *) y)->fl_name, result);
+  return result;
+}
+
+
 int
 read_idhead (FILE *input_FILE, struct idhead *idh)
 {
@@ -181,14 +227,15 @@ static int
 io_idhead (FILE *fp, iof_t iof, struct idhead *idh)
 {
   unsigned int size = 0;
+  unsigned char pad = 0;
   if (fp)
     fseek (fp, 0L, 0);
   size += iof (fp, idh->idh_magic, 2, 0);
-  size += iof (fp, &idh->idh_pad_1, 1, 0);
+  size += iof (fp, &pad, 1, 0);
   size += iof (fp, &idh->idh_version, 1, 0);
   size += iof (fp, &idh->idh_flags, 2, 1);
-  size += iof (fp, &idh->idh_args, 4, 1);
-  size += iof (fp, &idh->idh_paths, 4, 1);
+  size += iof (fp, &idh->idh_links, 4, 1);
+  size += iof (fp, &idh->idh_files, 4, 1);
   size += iof (fp, &idh->idh_tokens, 4, 1);
   size += iof (fp, &idh->idh_buf_size, 4, 1);
   size += iof (fp, &idh->idh_vec_size, 4, 1);

@@ -26,6 +26,13 @@
 
 #include <config.h>
 #include "strxtra.h"
+#include "obstack.h"
+#include "xmalloc.h"
+
+FILE *popen ();
+
+#define obstack_chunk_alloc xmalloc
+#define obstack_chunk_free free
 
 #if HAVE_ALLOCA
 
@@ -199,6 +206,8 @@ set_type * *       TheSets = NULL ;
  * are constructed.
  */
 int                VerboseQuery ;
+
+char const *program_name ;
 
 int yyerror __P(( char const * s )) ;
 void ScanInit __P(( char * line )) ;
@@ -635,6 +644,7 @@ main( int argc , char * argv [ ] )
    int         DoPrompt ;              /* 1 if should write a prompt */
    int         errors = 0 ;            /* error count */
 
+   program_name = argv[0];
    DoPrompt = isatty(fileno(stdin)) ;
    while ((c = getopt(argc, argv, "Hac:")) != EOF) {
       switch(c) {
@@ -1091,7 +1101,7 @@ RunProg( char const * pp , id_list_type * idlp )
    int            c ;
    char *         cmd ;
    char *         dp ;
-   char           file [ MAXCMD ] ;
+   struct obstack pipe_output_obstack;
    int            i ;
    id_type *      idep ;
    id_type *      next_id ;
@@ -1114,23 +1124,38 @@ RunProg( char const * pp , id_list_type * idlp )
    /* run program with popen, reading the output. Assume each
     * white space terminated string is a file name.
     */
+
    prog = popen(cmd, "r") ;
-   dp = file ;
-   while ((c = getc(prog)) != EOF) {
-      if (isspace(c)) {
-         if (dp != file) {
-            *dp++ = '\0' ;
-            InstallFile(file) ;
-            dp = file ;
-         }
-      } else {
-         *dp++ = c ;
-      }
-   }
-   if (dp != file) {
-      *dp++ = '\0' ;
-      InstallFile(file) ;
-   }
+   obstack_init (&pipe_output_obstack);
+
+  while (1)
+    {
+      c = getc (prog);
+      if (c == EOF || isspace (c))
+	{
+	  int n;
+	  if ((n = obstack_object_size (&pipe_output_obstack)) > 0)
+	    {
+	      char *_file;
+
+	      obstack_1grow (&pipe_output_obstack, 0);
+	      ++n;
+	      _file = obstack_finish (&pipe_output_obstack);
+	      InstallFile(_file) ;
+	      if (n != strlen (_file) + 1)
+		abort ();
+	      obstack_free (&pipe_output_obstack, _file);
+	    }
+	  if (c == EOF)
+	    break;
+	}
+      else
+	{
+	  obstack_1grow (&pipe_output_obstack, c);
+	}
+    }
+  obstack_free (&pipe_output_obstack, NULL);
+
    if (pclose(prog) != 0) {
       /* if there was an error make an empty set, who knows what
        * garbage the program printed.

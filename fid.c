@@ -22,7 +22,6 @@
 
 #include <config.h>
 #include "idfile.h"
-#include "idarg.h"
 #include "bitops.h"
 #include "filenames.h"
 #include "misc.h"
@@ -51,7 +50,7 @@ usage (void)
 int
 main (int argc, char **argv)
 {
-  char const *id_file = IDFILE;
+  char const *id_file_name = IDFILE;
   char *buf;
   int op;
   int i;
@@ -76,7 +75,7 @@ main (int argc, char **argv)
 	switch (*arg++)
 	  {
 	  case 'f':
-	    id_file = arg;
+	    id_file_name = arg;
 	    goto nextarg;
 	  default:
 	    usage ();
@@ -85,18 +84,13 @@ main (int argc, char **argv)
     }
 argsdone:
 
-  id_file = look_up (id_file);
-  if (id_file == NULL)
+  id_file_name = find_id_file (id_file_name);
+  if (id_file_name == NULL)
     {
-      filerr ("open", id_file);
+      filerr ("open", id_file_name);
       return 1;
     }
-  id_FILE = init_idfile (id_file, &idh, &idarg_0);
-  if (id_FILE == NULL)
-    {
-      filerr ("open", id_file);
-      return 1;
-    }
+  id_FILE = init_id_file (id_file_name, &idh, &idarg_0);
   switch (argc)
     {
     case 2:
@@ -114,7 +108,7 @@ argsdone:
 
   buf = MALLOC (char, idh.idh_buf_size);
   fseek (id_FILE, idh.idh_tokens_offset, 0);
-  tree8_levels = tree8_count_levels (idh.idh_paths);
+  tree8_levels = tree8_count_levels (idh.idh_files);
 
   for (i = 0; i < idh.idh_tokens; i++)
     {
@@ -134,7 +128,7 @@ get_idarg_index (char const *file_name)
 {
   struct idarg *idarg;
   int file_name_length = strlen (file_name);
-  struct idarg *end = &idarg_0[idh.idh_paths];
+  struct idarg *end = &idarg_0[idh.idh_files];
 
   for (idarg = idarg_0; idarg < end; ++idarg)
     {

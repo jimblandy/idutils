@@ -19,11 +19,15 @@
 #ifndef _misc_h_
 #define _misc_h_
 
-#if !HAVE_BASENAME
-char const *basename __P((char const *path));
+#if HAVE_BASENAME
+char *basename ();
+#else
+char *basename __P((char const *path));
 #endif
-#if !HAVE_DIRNAME
-char const *dirname __P((char const *path));
+#if HAVE_DIRNAME
+char *dirname ();
+#else
+char *dirname __P((char const *path));
 #endif
 int fgets0 __P((char *buf0, int size, FILE *in_FILE));
 void filerr __P((char const *syscall, char const *file_name));

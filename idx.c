@@ -16,7 +16,13 @@ char const *program_name;
 static void
 usage (void)
 {
-  fprintf (stderr, "Usage: %s [-u] [+/-a<ccc>] [-c<ccc>] files\n", program_name);
+  fprintf (stderr, "\
+Usage: %s [(+|-)S<scanarg>] files\n\
+	-S<lang>-<arg> Pass arg to <lang> scanner\n\
+	-S.<suffix>=<lang> Scan files with .<suffix> as <lang>\n\
+	-S<lang>? Print usage documentation for <lang>\n",
+	   program_name);
+
   exit (1);
 }
 
@@ -71,7 +77,7 @@ idxtract (char *file_name)
   char const *suffix;
   char const *filter;
   char const *lang_name;
-  char const *(*scanner) (FILE*, int*);
+  get_token_t scanner;
 
   suffix = strrchr (file_name, '.');
   lang_name = get_lang_name (suffix);

@@ -55,7 +55,7 @@ DEPEND =	@DEPEND@
 
 REGEXP =	@REGEXP@
 STRCASECMP =	@STRCASECMP@
-LIB_OFILES =	@ALLOCA@ @GETOPT@ @STRERROR@
+LIB_OFILES =	error$o @ALLOCA@ @GETOPT@ @STRERROR@
 
 ##############################################################################
 
@@ -65,7 +65,7 @@ LID_LINKS =	eid aid gid pid
 
 ########################################
 
-MKID_OFILES =	mkid$o misc$o scanners$o idfile$o filenames$o bitops$o $(LIB_OFILES)
+MKID_OFILES =	mkid$o misc$o scanners$o idfile$o filenames$o bitops$o hash$o $(LIB_OFILES)
 LID_OFILES =	lid$o misc$o idfile$o filenames$o bitops$o token$o $(REGEXP) $(LIB_OFILES)
 FID_OFILES =	fid$o misc$o idfile$o filenames$o bitops$o token$o $(LIB_OFILES)
 IDX_OFILES =	idx$o scanners$o filenames$o misc$o $(LIB_OFILES)
@@ -76,28 +76,29 @@ ALL_OFILES =	$(MKID_OFILES) $(LID_OFILES) $(FID_OFILES) $(IDX_OFILES) $(IID_OFIL
 ########################################
 
 SRC_YFILES =	iid.y
+GEN_CFILES =	iid.c
 
 SRC_CFILES =	mkid.c lid.c fid.c idx.c misc.c scanners.c idfile.c \
 		filenames.c bitops.c token.c
-GEN_CFILES =	$(SRC_YFILES:.y=.c)
 LIB_CFILES =	regex.c alloca.c getopt.c getopt1.c strcasecmp.c strerror.c
 ALL_CFILES =	$(SRC_CFILES) $(LIB_CFILES) $(GEN_CFILES)
 
-SRC_HFILES =	alloc.h bitops.h filenames.h idarg.h \
+SRC_HFILES =	alloc.h bitops.h filenames.h hash.h \
 		idfile.h misc.h scanners.h strxtra.h token.h
 LIB_HFILES =	regex.h getopt.h
 
 TAG_SRC_FILES =	$(SRC_HFILES) $(LIB_HFILES) $(SRC_CFILES) $(LIB_CFILES) $(SRC_YFILES)
 DIST_SRC_FILES= $(ALL_CFILES) $(SRC_HFILES) $(LIB_HFILES) $(SRC_YFILES)
 
-INFO_FILES =	mkid.info
-DIST_DOC_FILES= mkid.texinfo version.texi stamp-vti $(INFO_FILES) fid.1 iid.1 lid.1 mkid.1 iid.help
+INFO_FILES =	id.info
+DIST_DOC_FILES= id.texinfo version.texi stamp-vti $(INFO_FILES) iid.help texinfo.tex
 DIST_CONF_FILES=aclocal.m4 acconfig.h configure.in Makefile.in mkdirhier install-sh \
 		stamp-h.in config.h.in configure $(DEPEND) ansi2knr.c ansi2knr.1
 DIST_MISC_FILES=COPYING README README.alpha-test INSTALL NEWS TODO THANKS \
-		idtest gid.el ChangeLog
+		idtest gid.el symfunc.el ChangeLog
 
 DIST_FILES =	$(DIST_CONF_FILES) $(DIST_SRC_FILES) $(DIST_DOC_FILES) $(DIST_MISC_FILES)
+DIFF_EXCLUDE =	-x iid.c -x '*.info*'
 
 ########################################
 
@@ -137,13 +138,13 @@ PRE_PROCESS =	$(CPP) $(CC_FLAGS)
 ########################################
 
 .c._c:
-	$(ANSI2KNR) $< > $@.tmp && mv $@.tmp $@
+	./ansi2knr $< > $@.tmp && mv $@.tmp $@
 ._c._o:
 	@echo $(COMPILE) $<
 	@rm -f _$*.c
 	@ln $< _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
 .c._o:
-	$(ANSI2KNR) $< > $*._c.tmp && mv $*._c.tmp $*._c
+	./ansi2knr $< > $*._c.tmp && mv $*._c.tmp $*._c
 	@echo $(COMPILE) $*._c
 	@rm -f _$*.c
 	@ln $*._c _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
@@ -153,7 +154,7 @@ PRE_PROCESS =	$(CPP) $(CC_FLAGS)
 	@rm -f _$*.c
 	@ln $< _$*.c && $(PRE_PROCESS) _$*.c >$@
 .c._i:
-	$(ANSI2KNR) $< > $*._c.tmp && mv $*._c.tmp $*._c
+	./ansi2knr $< > $*._c.tmp && mv $*._c.tmp $*._c
 	@echo $(PRE_PROCESS) $*._c
 	@rm -f _$*.c
 	@ln $*._c _$*.c && $(PRE_PROCESS) _$*.c >$@
@@ -194,13 +195,12 @@ ansi2knr: ansi2knr.o
 
 info: $(INFO_FILES)
 
-$(INFO_FILES): mkid.texinfo version.texi
-	cd $(srcdir) && $(MAKEINFO) mkid.texinfo
+$(INFO_FILES): id.texinfo version.texi
+	cd $(srcdir) && $(MAKEINFO) id.texinfo
 
-dvi: mkid.dvi
-
-mkid.dvi: mkid.texinfo version.texi
-	$(TEXI2DVI) $(srcdir)/mkid.texinfo
+dvi: id.dvi
+id.dvi: id.texinfo version.texi
+	$(TEXI2DVI) $(srcdir)/id.texinfo
 
 version.texi: stamp-vti
 stamp-vti: configure.in
@@ -236,7 +236,7 @@ uninstall:
 	    (echo $$cmd; eval $$cmd); \
 	done
 	rm -f $(IID_HELP_FILE)
-	@for file in `cd $(infodir) && echo mkid.info*`; do \
+	@for file in `cd $(infodir) && echo id.info*`; do \
 	    cmd="rm -f $(infodir)/$$file"; \
 	    (echo $$cmd; eval $$cmd); \
 	done
@@ -244,15 +244,15 @@ uninstall:
 ##############################################################################
 
 check: mkid lid fid idx
-	here=`pwd`; PATH=$$here:$$PATH; export PATH; cd $(srcdir) \
-	    && $$here/mkid -v -f$$here/ID $(TAG_SRC_FILES) \
+	ENV=; here=`pwd`; PATH=$$here:$$PATH; export PATH; cd $(srcdir) \
+	    && $$here/mkid -f$$here/ID $(TAG_SRC_FILES) \
 	    && $(SHELL) ./idtest -f$$here/ID $(TAG_SRC_FILES) \
 	    && rm -f $$here/ID
 
 id: ID
 ID: $(TAG_SRC_FILES)
-	here=`pwd`; cd $(srcdir) \
-	    && PATH=$$here:$$PATH mkid -f$$here/ID $$here/config.h $(TAG_SRC_FILES)
+	ENV=; here=`pwd`; PATH=$$here:$$PATH; export PATH; cd $(srcdir) \
+	    && mkid -f$$here/ID $$here/config.h $(TAG_SRC_FILES)
 
 tags: TAGS
 TAGS: $(TAG_SRC_FILES)
@@ -275,15 +275,11 @@ distclean: clean
 maintainer-clean: distclean
 	@echo "This command is intended only for maintainers to use;"
 	@echo "rebuilding the deleted files may require special tools."
-	rm -f stamp-vti version.texi mkid.info*
+	rm -f stamp-vti version.texi id.info*
 
 ##############################################################################
 
 dist: $(DIST_TGZ) $(UDIFF_GZ) $(CDIFF_GZ)
-
-shar: $(DIST_SHAR)
-$(DIST_SHAR): $(DIST_TGZ) $(CDIFF_GZ)
-	shar $(CDIFF_GZ) $(DIST_TGZ) >$@
 
 dist-tgz: $(DIST_TGZ)
 $(DIST_TGZ): $(DIST_DIR)
@@ -296,16 +292,6 @@ $(DIST_DIR): $(DIST_FILES)
 	chmod 777 $@
 	distdir=`pwd`/$@; cd $(srcdir); cp -p $(DIST_FILES) $$distdir
 	chmod -R a+r $@
-
-########################################
-
-cdiff: $(CDIFF_GZ)
-$(CDIFF_GZ): $(OLD_DIST_DIR) $(DIST_DIR)
-	diff -r -c --show-c-function --new-file $(OLD_DIST_DIR) $(DIST_DIR) |gzip >$@
-
-udiff: $(UDIFF_GZ)
-$(UDIFF_GZ): $(OLD_DIST_DIR) $(DIST_DIR)
-	diff -r -u $(OLD_DIST_DIR) $(DIST_DIR) |gzip >$@
 
 ##############################################################################
 

@@ -7,16 +7,40 @@
     scanner-arg syntax.
   - Use getopt_long () in all programs to parse command-line arguments
   - Handle GNU standard arguments: In particular, --version & --help
+  - use xmalloc
 
-* Portability
-  - The configure script tests for lots of things, but the code doesn't
-    use all of the results that it should.
+* Portability & uniformity
+  - configure tests for lots of things, but code doesn't use all
+    results.  Either use the results, or drop the tests.
   - Fix filenames.c to handle non-UNIX file names properly
     (notably DOS & OS/2).
   - Fix assumption that (sizeof (int) == sizeof (long))
+  - use alloca
+  - use xmalloc
 
 * all query interfaces
-  - add environment variable for setting default ID file name.
+  - add environment variable for setting default ID file name--allow this
+    variable to be a "path" to handle multiple ID files, e.g.,
+	IDFILE=/usr/src/ID:/usr/local/src/ID:$HOME/src/ID
+    also allow dirs (considered to contain a file named "ID" by default)
+
+* mkid & lid
+  - store & retrieve floating point literals
+  - automatically crack (optionally gzipped or compressed) tar files, so
+    you can index and search archived source without having to unpack it.
+
+* mkid
+  - add a recursive file tree walker, so a complete list of file names
+    need not be supplied--implement with ftw(3)?
+  - (Optinally?) store tokenized contents of comments.
+  - Store attributes with symbols: type, func, variable struct-tag
+    enum-tag, keyword, etc.  Store caller/callee relationships between
+    identifiers.  Indicate which files have defns vs. uses.  This info
+    is needed to support a cscope interface.
+  - Add times(2) results to statistics output.
+  - treat \ specially for TeX files and do likewise with @ for Texinfo.
+  - add time(1) style output to statistics report at end
+  - control stats reports with a command-line arg.
 
 * lid
   - change the name of the program to something a bit more
@@ -31,22 +55,18 @@
       alias lid="findid -e 'echo %t %f'"
       alias eid="findid -e 'vi +/\\<%t\\>/ %F'" # for vi users
       alias gid="findid -e 'egrep \\<%t\\> %F'"
+  - make `pid' a separate program
+  - standardize & document regexp syntax (currently, it depends on whether
+    you link rx.o or your vendor's regexp stuff).
+  - gid bug: "gid -e file_" yeilds nothing.
 
-* mkid & lid
-  - store & retrieve floating point literals
-  - automatically crack (optionally gzipped or compressed) tar files, so
-    you can index and search archived source without having to unpack it.
+* iid
+  - don't use $PS1 for the prompt.  Use (iid), or iid> or something like that
+  - review (revise?) syntax
 
-* mkid
-  - add a recursive file tree walker, so a complete list of file names
-    need not be supplied.
-  - (Optinally?) store tokenized contents of comments.
-  - Store attributes with symbols: type, func, variable struct-tag
-    enum-tag, keyword, etc.  Store caller/callee relationships between
-    identifiers.  Indicate which files have defns vs. uses.  This info
-    is needed to support a cscope interface.
-  - Add times(2) results to statistics output.
-  - treat \ specially for TeX files and do likewise with @ for Texinfo.
+* gid.el
+  - associate ID file with buffers so future `gid's will use the right ID.
+  - wire completion on token names
 
 * cscope
   - add a cscope work-alike query interface (this is being done by

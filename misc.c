@@ -25,7 +25,7 @@
 #include "misc.h"
 
 #if !HAVE_BASENAME
-char const *
+char *
 basename (char const *path)
 {
   char *base;
@@ -39,7 +39,7 @@ basename (char const *path)
 #endif
 
 #if !HAVE_DIRNAME
-char const *
+char *
 dirname (char const *path)
 {
   char *base;

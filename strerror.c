@@ -15,7 +15,12 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
-char *strerror(int errnum)
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+char *
+strerror __P((int errnum))
 {
         extern char *sys_errlist[];
         extern int sys_nerr;

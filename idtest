@@ -2,6 +2,12 @@
 
 export LANG; LANG=C
 
+: ${TMP=/tmp}
+ID_idx=$TMP/ID.idx
+ID_lid=$TMP/ID.lid
+tmp_idx=$TMP/$$.idx
+tmp_fid=$TMP/$$.fid
+
 case $# in
 0) 1>&2 echo Usage: $0 files...; exit 1;;
 esac
@@ -11,19 +17,16 @@ esac
 
 errors=
 
-if idx "$@" |sort -u >ID.idx &&
-    lid $idfile_arg |sed -e 's/[ 	].*//' |sort -u >ID.lid &&
-    cmp -s ID.idx ID.lid
+if idx "$@" |sort -u >$ID_idx &&
+    lid $idfile_arg |sed -e 's/[ 	].*//' |sort -u >$ID_lid &&
+    cmp -s $ID_idx $ID_lid
 then
-    rm -f ID.idx ID.lid
+    rm -f $ID_idx $ID_lid
     echo "Good.  idx and lid agree."
 else
-    1>&2 echo "Oops!  idx and lid disagree--look in ID.idx and ID.lid"
+    1>&2 echo "Oops!  idx and lid disagree--look at $ID_idx and $ID_lid"
     errors=t
 fi
-
-idx_file=$$.idx
-fid_file=$$.fid
 
 for file
 do
@@ -31,9 +34,9 @@ do
     x-*) scan_args="$scan_args $file"
 	 continue;;
     esac
-    if fid $idfile_arg $file >$fid_file &&
-	idx $scan_args $file |sort -u >$idx_file &&
-	cmp -s $idx_file $fid_file;
+    if fid $idfile_arg $file >$tmp_fid &&
+	idx $scan_args $file |sort -u >$tmp_idx &&
+	cmp -s $tmp_idx $tmp_fid;
     then
 	echo "Good.  idx and fid agree for $file"
     else
@@ -41,7 +44,7 @@ do
 	errors=t
     fi
 done
-rm -f $idx_file $fid_file
+rm -f $tmp_idx $tmp_fid
 
 case x$errors in
 xt) echo "Some checks failed."

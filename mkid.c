@@ -19,6 +19,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <unistd.h>
 #include <limits.h>
 #include <assert.h>
@@ -31,12 +32,16 @@
 #include "strxtra.h"
 #include "alloc.h"
 #include "idfile.h"
-#include "idarg.h"
 #include "token.h"
 #include "bitops.h"
 #include "misc.h"
 #include "filenames.h"
+#include "hash.h"
 #include "scanners.h"
+
+#ifndef offsetof
+#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+#endif
 
 struct summary
 {
@@ -55,7 +60,7 @@ struct summary
   int sum_level;
 };
 
-#define MAX_LEVELS 5		/* log_8 of the max # of files log_8 32768 == 5 */
+#define MAX_LEVELS 5		/* log_8 of the max # of files: log_8(32768) == 5 */
 
 struct token
 {
@@ -65,34 +70,28 @@ struct token
   char tok_name[1];
 };
 
-struct token **hash_table;	/* Vector of token pointers */
-
 char *bitsset __P((char *s1, char const *s2, int n));
 char *bitsclr __P((char *s1, char const *s2, int n));
 char *bitsand __P((char *s1, char const *s2, int n));
 char *bitsxor __P((char *s1, char const *s2, int n));
 int bitstst __P((char const *s1, char const *s2, int n));
 int bitsany __P((char const *s, int n));
-int round2 __P((int rough));
 struct token *make_token __P((char const *name, int));
 void scan_1_file __P((char const *(*get_token) (FILE*, int*), FILE *source_FILE));
 struct idarg *parse_idargs __P((int argc, char **argv));
 struct idarg *parse_idargs_from_FILE __P((FILE *arg_FILE, struct idarg *idarg));
-void init_hash_table __P((int file_name_count));
 void scan_files __P((struct idarg *idarg));
 void report_statistics __P((void));
 
-void init_hash __P((long size));
-struct token **hash_lookup __P((char const *key));
-unsigned int string_hash_1 __P((char const *key));
-unsigned int string_hash_2 __P((char const *key));
-void rehash __P((void));
+unsigned long token_hash_1 __P((void const *key));
+unsigned long token_hash_2 __P((void const *key));
+int token_hash_cmp __P((void const *x, void const *y));
 
 void write_idfile __P((char const *id_file, struct idarg *idargs));
 void bump_current_hits_signature __P((void));
 void init_hits_signature __P((int i));
 int bit_to_index __P((int bit));
-int compare_tokens __P((void const *x, void const *y));
+int token_qsort_cmp __P((void const *x, void const *y));
 void free_summary_tokens __P((void));
 void summarize __P((void));
 void assert_hits __P((struct summary *summary));
@@ -104,6 +103,9 @@ struct summary *make_sibling_summary __P((struct summary *summary));
 int count_vec_size __P((struct summary *summary, unsigned char const *tail_hits));
 int count_buf_size __P((struct summary *summary, unsigned char const *tail_hits));
 void usage __P((void));
+
+struct hash_table token_table;
+struct hash_table file_table;
 
 /* Miscellaneous statistics */
 long input_chars;
@@ -118,14 +120,6 @@ long hits_length = 0;
 long tokens_length = 0;
 long output_length = 0;
 
-/* Hash table maintenance */
-unsigned long hash_size;	/* # of slots */
-unsigned long hash_capacity;	/* # of usable slots */
-unsigned long hash_fill;	/* # of keys inserted in table */
-unsigned long hash_probes = 0;
-unsigned long hash_lookups = 0;
-unsigned int hash_rehashes = 0;
-
 int verbose_flag = 0;
 int statistics_flag = 1;
 
@@ -139,7 +133,7 @@ unsigned char current_hits_signature[MAX_LEVELS];
 struct summary *summary_root;
 struct summary *summary_leaf;
 
-char PWD_name[BUFSIZ];		/* The current working directory */
+char PWD_buf[BUFSIZ];		/* The current working directory */
 char absolute_idfile_name[BUFSIZ]; /* The absolute name of the database */
 char const *id_file_name = IDFILE;
 
@@ -149,7 +143,7 @@ void
 usage (void)
 {
   fprintf (stderr, "\
-Usage: %s [-v] [-f<idfile>] [(+|-)l[<lang>]] [(+|-)S<scanarg>] [-a<argfile>] [-] [-u] [files...]\n\
+Usage: %s [-v] [-f<idfile>] [(+|-)l[<lang>]] [(+|-)S<scanarg>] [-a<argfile>] [-] [files...]\n\
 	-v	 Verbose: print reports of progress\n\
 	-a<file> Open file for arguments\n\
 	-	 Read newline-separated args from stdin\n\
@@ -157,13 +151,17 @@ Usage: %s [-v] [-f<idfile>] [(+|-)l[<lang>]] [(+|-)S<scanarg>] [-a<argfile>] [-]
 	-S<lang>-<arg> Pass arg to <lang> scanner\n\
 	-S.<suffix>=<lang> Scan files with .<suffix> as <lang>\n\
 	-S<lang>? Print usage documentation for <lang>\n\
-	-u	 Update an existing database (unimplemented)\n\
 \n\
-Version %s; Made %s %s\n",
-	   program_name, VERSION, __DATE__, __TIME__);
-
+Version %s",
+	   program_name, VERSION);
+#ifdef __DATE__
+  fprintf (stderr, "; Made %s %s", __DATE__, __TIME__);
+#endif
+  fputc ('\n', stderr);
   exit (1);
 }
+
+void *sbrk ();
 
 int
 main (int argc, char **argv)
@@ -172,13 +170,6 @@ main (int argc, char **argv)
   char const *sbrk0;
 
   program_name = basename ((argc--, *argv++));
-  if (kshgetwd (PWD_name) == NULL)
-    {
-      fprintf (stderr, "%s: cannot get current working directory name.\n", program_name);
-      return 1;
-    }
-  strcat (PWD_name, "/");
-
   init_scanners ();
 
   idarg_0 = parse_idargs (argc, argv);
@@ -188,10 +179,11 @@ main (int argc, char **argv)
       return 0;
     }
 
-  sbrk0 = (char const *)sbrk (0);
-  init_hash (scan_count * 64);
+  sbrk0 = (char const *) sbrk (0);
+  hash_init (&token_table, scan_count * 64, token_hash_1, token_hash_2, token_hash_cmp);
 
-  strcpy (absolute_idfile_name, span_file_name (PWD_name, id_file_name));
+  get_PWD (PWD_buf);
+  strcpy (absolute_idfile_name, span_file_name (PWD_buf, id_file_name));
   if (access (id_file_name, 06) < 0
       && (errno != ENOENT || access (dirname (id_file_name), 06) < 0))
     {
@@ -204,11 +196,11 @@ main (int argc, char **argv)
   
   scan_files (idarg_0);
 
-  if (hash_fill == 0)
+  if (token_table.ht_fill == 0)
     return 0;
 
   free_summary_tokens ();
-  free (hash_table);
+  free (token_table.ht_vec);
 
   write_idfile (id_file_name, idarg_0);
   heap_size = (char const *) sbrk (0) - sbrk0;
@@ -225,7 +217,7 @@ scan_files (struct idarg *idarg)
 
   for ( ; idarg->ida_next; idarg = idarg->ida_next)
     {
-      char const *(*scanner) (FILE*, int*);
+      char const *(*scanner) __P((FILE*, int*));
       FILE *source_FILE;
       char *arg = idarg->ida_arg;
       char const *lang_name = NULL;
@@ -320,13 +312,13 @@ report_statistics (void)
   printf ("Heap=%ld Kb, ", heap_size / 1024);
   printf ("Output=%ld (%ld tok, %ld hit)\n", output_length, tokens_length, hits_length);
 
-  printf ("Load=%ld/%ld=%.2f, ", hash_fill, hash_size,
-	  (double) hash_fill / (double) hash_size);
-  printf ("Rehash=%d, ", hash_rehashes);
-  printf ("Probes=%ld/%ld=%.2f, ", hash_probes, hash_lookups,
-	  (double) hash_probes / (double) hash_lookups);
-  printf ("Freq=%ld/%ld=%.2f\n", occurrences, hash_fill,
-	  (double) occurrences / (double) hash_fill);
+  printf ("Load=%ld/%ld=%.2f, ", token_table.ht_fill, token_table.ht_size,
+	  (double) token_table.ht_fill / (double) token_table.ht_size);
+  printf ("Rehash=%d, ", token_table.ht_rehashes);
+  printf ("Probes=%ld/%ld=%.2f, ", token_table.ht_probes, token_table.ht_lookups,
+	  (double) token_table.ht_probes / (double) token_table.ht_lookups);
+  printf ("Freq=%ld/%ld=%.2f\n", occurrences, token_table.ht_fill,
+	  (double) occurrences / (double) token_table.ht_fill);
 }
 
 struct idarg *
@@ -341,8 +333,7 @@ parse_idargs (int argc, char **argv)
   enum {
       AF_CMDLINE = 0x1,		/* file args came on command line */
       AF_FILE = 0x2,		/* file args came from a file (-f<file>) */
-      AF_IDFILE = 0x4,		/* file args came from an old ID file (-u) */
-      AF_QUERY = 0x8
+      AF_USAGE = 0x8
   };				/* no file args necessary: usage query */
 
   idarg = idarg_0 = CALLOC (struct idarg, 1);
@@ -367,12 +358,6 @@ parse_idargs (int argc, char **argv)
       op = *arg++;
       switch (*arg++)
 	{
-	case 'u':
-#if 0
-	  args_from |= AF_IDFILE;
-	  old_idarg (id_file_name, &idarg);
-	  break;
-#endif
 	case '\0':
 	  args_from |= AF_FILE;
 	  idarg = parse_idargs_from_FILE (stdin, idarg);
@@ -397,12 +382,10 @@ parse_idargs (int argc, char **argv)
 	  if (strchr (&arg[-2], '?'))
 	    {
 	      set_scan_args (op, arg);
-	      args_from |= AF_QUERY;
+	      args_from |= AF_USAGE;
 	    }
 	  /*FALLTHROUGH */
 	case 'l':
-	case 's':
-	case 'r':
 	  idarg->ida_arg = &arg[-2];
 	  idarg->ida_index = -1;
 	  idarg = (idarg->ida_next = CALLOC (struct idarg, 1));
@@ -414,7 +397,7 @@ parse_idargs (int argc, char **argv)
 	}
     }
 
-  if (args_from & AF_QUERY)
+  if (args_from & AF_USAGE)
     exit (0);
   /* File args should only come from one place.  Ding the user if
      arguments came from multiple places, or if none were supplied at
@@ -423,7 +406,6 @@ parse_idargs (int argc, char **argv)
     {
     case AF_CMDLINE:
     case AF_FILE:
-    case AF_IDFILE:
       if (file_name_count > 0)
 	break;
       /*FALLTHROUGH */
@@ -468,7 +450,7 @@ parse_idargs_from_FILE (FILE *arg_FILE, struct idarg *idarg)
 }
 
 void
-scan_1_file (char const *(*get_token) (FILE*, int*), FILE *source_FILE)
+scan_1_file (get_token_t get_token, FILE *source_FILE)
 {
   struct stat stat_buf;
   struct token **slot;
@@ -490,8 +472,9 @@ scan_1_file (char const *(*get_token) (FILE*, int*), FILE *source_FILE)
     {
       if (*key == '\0')
 	continue;
-      token = *(slot = hash_lookup (key));
       total_tokens++;
+      slot = (struct token **) hash_lookup (&token_table, key - offsetof (struct token, tok_name));
+      token = *slot;
       if (token)
 	{
 	  token->tok_flags |= flags;
@@ -507,8 +490,8 @@ scan_1_file (char const *(*get_token) (FILE*, int*), FILE *source_FILE)
 	  sign_token (token);
 	  distinct_tokens++;
 	  new_tokens++;
-	  if (hash_fill++ >= hash_capacity)
-	    rehash ();
+	  if (token_table.ht_fill++ >= token_table.ht_capacity)
+	    rehash (&token_table);
 	}
     }
   if (verbose_flag)
@@ -546,13 +529,13 @@ write_idfile (char const *file_name, struct idarg *idarg)
 
   if (verbose_flag)
     printf ("Sorting tokens...\n");
-  assert (summary_root->sum_hits_count == hash_fill);
-  tokens = REALLOC (summary_root->sum_tokens, struct token *, hash_fill);
-  qsort (tokens, hash_fill, sizeof (struct token *), compare_tokens);
+  assert (summary_root->sum_hits_count == token_table.ht_fill);
+  tokens = REALLOC (summary_root->sum_tokens, struct token *, token_table.ht_fill);
+  qsort (tokens, token_table.ht_fill, sizeof (struct token *), token_qsort_cmp);
 
   if (verbose_flag)
     printf ("Writing `%s'...\n", file_name);
-  lsl = strrchr (relative_file_name (PWD_name, absolute_idfile_name), '/');
+  lsl = strrchr (relative_file_name (PWD_buf, absolute_idfile_name), '/');
   if (lsl == NULL)
     {
       /* The database is in the cwd, don't adjust the names */
@@ -575,23 +558,20 @@ write_idfile (char const *file_name, struct idarg *idarg)
   idh.idh_magic[0] = IDH_MAGIC_0;
   idh.idh_magic[1] = IDH_MAGIC_1;
   idh.idh_version = IDH_VERSION;
-  idh.idh_pad_1 = 0;
   idh.idh_flags = IDH_COUNTS;
 
   /* write out the list of pathnames */
   fseek (id_FILE, sizeof_idhead (), 0);
   idh.idh_args_offset = ftell (id_FILE);
-  for (i = 0; idarg->ida_next; idarg = idarg->ida_next)
+  for ( ; idarg->ida_next; idarg = idarg->ida_next)
     {
       if (*idarg->ida_arg != '-' && fixup_names)
-	fputs (relative_file_name (absolute_idfile_name, span_file_name (PWD_name, idarg->ida_arg)), id_FILE);
+	fputs (relative_file_name (absolute_idfile_name, span_file_name (PWD_buf, idarg->ida_arg)), id_FILE);
       else
 	fputs (idarg->ida_arg, id_FILE);
-      i++;
       putc ('\0', id_FILE);
     }
-  idh.idh_args = i;
-  idh.idh_paths = file_name_count;
+  idh.idh_files = file_name_count;
 
   /* write out the list of identifiers */
 
@@ -599,7 +579,7 @@ write_idfile (char const *file_name, struct idarg *idarg)
   putc ('\0', id_FILE);
   idh.idh_tokens_offset = ftell (id_FILE);
   
-  for (i = 0; i < hash_fill; i++, tokens++)
+  for (i = 0; i < token_table.ht_fill; i++, tokens++)
     {
       struct token *token = *tokens;
       occurrences += token->tok_count;
@@ -639,7 +619,7 @@ write_idfile (char const *file_name, struct idarg *idarg)
       putc ('\0', id_FILE);
     }
   assert_hits (summary_root);
-  idh.idh_tokens = hash_fill;
+  idh.idh_tokens = token_table.ht_fill;
   output_length = ftell (id_FILE);
   idh.idh_end_offset = output_length - 2;
   idh.idh_buf_size = max_buf_size;
@@ -649,119 +629,30 @@ write_idfile (char const *file_name, struct idarg *idarg)
   fclose (id_FILE);
 }
 
-void
-init_hash (long size)
+unsigned long
+token_hash_1 (void const *key)
 {
-  hash_size = round2 (size);
-  if (hash_size < 512)
-    hash_size = 512;
-#if 0
-  if (hash_size > 0x8000)
-    hash_size = 0x8000;
-#endif
-  if (hash_size > (128 * 1024))
-      hash_size /= 2;
-  hash_capacity = hash_size - (hash_size >> 4);	/* about 94% */
-  hash_table =  CALLOC (struct token *, hash_size);
-  assert (hash_table);
+  return_STRING_HASH_1 (((struct token const *) key)->tok_name);
 }
 
-/* Use double hashing with open addressing.
-   The table size is always a power of two.  */
-struct token **
-hash_lookup (char const *key)
+unsigned long
+token_hash_2 (void const *key)
 {
-  unsigned int hash1 = string_hash_1 (key) % hash_size;
-  unsigned int hash2 = 0;
-  struct token **slot = &hash_table[hash1];
-
-  hash_lookups++;
-  for (;;)
-    {
-      hash_probes++;
-      if (*slot == NULL || strcmp (key, (*slot)->tok_name) == 0)
-	return slot;
-
-      if (!hash2)
-	  hash2 = string_hash_2 (key);
-      hash1 = (hash1 + hash2) % hash_size;
-      slot = &hash_table[hash1];
-    }
+  return_STRING_HASH_2 (((struct token const *) key)->tok_name);
 }
 
-/* Primary hash function for string keys. */
-unsigned int
-string_hash_1 (char const *key)
+int
+token_hash_cmp (void const *x, void const *y)
 {
-  unsigned int sum = 0;
-
-  key--;
-  while (*++key)
-    sum += (*key << (key[1] & 0xf));
-
-  return sum;
+  return_STRING_COMPARE (((struct token const *) x)->tok_name,
+			 ((struct token const *) y)->tok_name);
 }
 
-/* Secondary hash function for string keys.  The result must be
-   relatively prime to the table size, which is a power of two,
-   so any odd number will do.  */
-unsigned int
-string_hash_2 (char const *key)
+int
+token_qsort_cmp (void const *x, void const *y)
 {
-  unsigned int sum = 0;
-
-  key--;
-  while (*++key)
-    sum += (*key << (key[1] & 0x7));
-
-  return sum | 1;
-}
-
-/* Double the size of the hash table in the event of overflow... */
-void 
-rehash (void)
-{
-  unsigned long old_hash_size = hash_size;
-  struct token **old_hash_table = hash_table;
-  struct token **htp;
-  struct token **slot;
-
-  hash_size *= 2;
-  if (verbose_flag)
-    printf ("\n\tRehashing... (doubling size to %ld)\n", hash_size);
-  hash_rehashes++;
-  hash_capacity = hash_size - (hash_size >> 4);
-  hash_table =  CALLOC (struct token *, hash_size);
-
-  for (htp = old_hash_table; htp < &old_hash_table[old_hash_size]; htp++)
-    {
-      if (*htp == NULL)
-	continue;
-      slot = hash_lookup ((*htp)->tok_name);
-
-      if (*slot)
-	{
-	  fprintf (stderr, "%s: Duplicate hash entry!\n", (*slot)->tok_name);
-	  exit (1);
-	}
-      *slot = *htp;
-    }
-  free (old_hash_table);
-}
-
-/* Round a given number up to the nearest power of 2. */
-int 
-round2 (int rough)
-{
-  int round;
-
-  round = 1;
-  while (rough)
-    {
-      round <<= 1;
-      rough >>= 1;
-    }
-  return round;
+  return_STRING_COMPARE ((*(struct token const *const *) x)->tok_name,
+			 (*(struct token const *const *) y)->tok_name);
 }
 
 struct token *
@@ -815,13 +706,6 @@ bit_to_index (int bit)
   return i;
 }
 
-int
-compare_tokens (void const *x, void const *y)
-{
-  return strcmp ((*(struct token const *const *) x)->tok_name,
-		 (*(struct token const *const *) y)->tok_name);
-}
-
 void
 free_summary_tokens (void)
 {
@@ -863,7 +747,7 @@ summarize (void)
 	  printf (fmt, summary->sum_level, count, init_size);
 	}
 
-      qsort (tokens, count, sizeof (struct token *), compare_tokens);
+      qsort (tokens, count, sizeof (struct token *), token_qsort_cmp);
       summary->sum_hits = hits;
       while (count--)
 	{

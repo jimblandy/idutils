@@ -32,7 +32,6 @@
 #include <config.h>
 #include "alloc.h"
 #include "idfile.h"
-#include "idarg.h"
 #include "token.h"
 #include "bitops.h"
 #include "strxtra.h"
@@ -47,6 +46,7 @@ char **tree8_to_argv __P((unsigned char const *hits_tree8));
 char **bits_to_argv __P((unsigned char const *bits_vec));
 
 static void usage __P((void));
+int common_prefix_suffix __P((char const *path1, char const *path2));
 void look_id __P((char const *name, char **argv));
 void grep_id __P((char const *name, char **argv));
 void edit_id __P((char const *name, char **argv));
@@ -87,8 +87,8 @@ enum radix {
 #define	TOLOWER(c)	(isupper (c) ? tolower (c) : (c))
 #define IS_ALNUM(c)	(isalnum (c) || (c) == '_')
 
-#ifndef CRUNCH_DEFAULT
-#define CRUNCH_DEFAULT 1
+#ifndef BRACE_NOTATION_DEFAULT
+#define BRACE_NOTATION_DEFAULT 1
 #endif
 
 /* Sorry about all the globals, but it's really cleaner this way. */
@@ -96,16 +96,15 @@ FILE *id_FILE;
 int merging;
 int radix_arg;
 int echo_on = 1;
-int crunch_on = CRUNCH_DEFAULT;
+int brace_notation_on = BRACE_NOTATION_DEFAULT;
 int file_name_regexp = 0;
 int match_base = 0;
-char id_dir[BUFSIZ];
+char *anchor_dir;
 int tree8_levels;
 unsigned int bits_vec_size;
-char PWD_name[BUFSIZ];
+char PWD_buf[MAXPATHLEN];
 struct idhead idh;
-struct idarg *id_args;
-int (*find_func) (char const *, doit_t);
+int (*find_func) __P((char const *, doit_t));
 unsigned short frequency_low = 1;
 unsigned short frequency_high = USHRT_MAX;
 char *buf;
@@ -117,7 +116,7 @@ char const *program_name;
 static void
 usage (void)
 {
-  fprintf (stderr, "Usage: %s [-f<file>] [-u<n>] [-r<dir>] [-mewdoxasknc] patterns...\n", program_name);
+  fprintf (stderr, "Usage: %s [-f<file>] [-u<n>] [-r<dir>] [-mewdoxaskncg] patterns...\n", program_name);
   exit (1);
 }
 
@@ -128,11 +127,7 @@ main (int argc, char **argv)
   doit_t doit = look_id;
   int force_merge = 0;
   unsigned int unique_limit = 0;
-  int use_id_file_name = 1;
-  int use_pwd_file_name = 0;
-  int use_relative_file_name = 0;
-  char const *REL_file_name = NULL;
-  int (*forced_find_func) (char const *, doit_t) = NULL;
+  int (*forced_find_func) __P((char const *, doit_t)) = NULL;
 
   program_name = basename ((argc--, *argv++));
 
@@ -184,25 +179,24 @@ main (int argc, char **argv)
 	    parse_frequency_arg (arg);
 	    goto nextarg;
 	  case 'k':
-	    crunch_on = 0;
+	    brace_notation_on = 0;
 	    break;
 	  case 'g':
-	    crunch_on = 1;
+	    brace_notation_on = 1;
 	    break;
 	  case 'n':
 	    echo_on = 0;
 	    break;
-	  case 'c':
-	    use_id_file_name = 0;
-	    use_pwd_file_name = 1;
-	    break;
 	  case 'b':
 	    match_base = 1;
 	    break;
+	  case 'c':
+	    maybe_anchor_usage ();
+	    anchor_dir = PWD_buf;
+	    break;
 	  case 'r':
-	    use_id_file_name = 0;
-	    use_relative_file_name = 1;
-	    REL_file_name = arg;
+	    maybe_anchor_usage ();
+	    anchor_dir = arg;
 	    goto nextarg;
 	  default:
 	    usage ();
@@ -211,48 +205,17 @@ main (int argc, char **argv)
     }
 argsdone:
 
-  if (use_pwd_file_name && use_relative_file_name)
-    {
-      fprintf (stderr, "%s: please use only one of -c or -r\n", program_name);
-      usage ();
-    }
-  /* Look for the ID database up the tree */
-  id_file_name = look_up (id_file_name);
-  if (id_file_name == NULL)
-    {
-      filerr ("open", id_file_name);
-      exit (1);
-    }
-  /* Find out current directory to relate names to */
-  if (kshgetwd (PWD_name) == NULL)
-    {
-      fprintf (stderr, "%s: cannot determine current directory\n", program_name);
-      exit (1);
-    }
-  strcat (PWD_name, "/");
-  /* Determine absolute path name that database files are relative to */
-  if (use_id_file_name)
-    {
-      strcpy (id_dir, span_file_name (PWD_name, id_file_name));
-      *(strrchr (id_dir, '/') + 1) = '\0';
-    }
-  else if (use_pwd_file_name)
-    {
-      strcpy (id_dir, PWD_name);
-    }
-  else
-    {
-      strcpy (id_dir, span_file_name (PWD_name, REL_file_name));
-      strcat (id_dir, "/");
-    }
-  id_FILE = init_idfile (id_file_name, &idh, &id_args);
-  if (id_FILE == NULL)
-    {
-      filerr ("open", id_file_name);
-      exit (1);
-    }
-  bits_vec_size = (idh.idh_paths + 7) >> 3;
-  tree8_levels = tree8_count_levels (idh.idh_paths);
+  get_PWD (PWD_buf);
+  id_file_name = find_id_file (id_file_name);
+  
+  if (anchor_dir == NULL)
+    anchor_dir = strdup (span_dir_name (PWD_buf, id_file_name));
+  else if (anchor_dir != PWD_buf)
+    anchor_dir = strdup (span_dir_name (PWD_buf, anchor_dir));
+
+  id_FILE = init_id_file (id_file_name, &idh);
+  bits_vec_size = (idh.idh_files + 7) >> 3;
+  tree8_levels = tree8_count_levels (idh.idh_files);
 
   switch (program_name[0])
     {
@@ -328,21 +291,43 @@ argsdone:
   exit (0);
 }
 
+/* common_prefix_suffix returns non-zero if two file names have a
+   fully common directory prefix and a common suffix (i.e., they're
+   eligible for coalescing with brace notation.  */
+
+int
+common_prefix_suffix (char const *file_name_1, char const *file_name_2)
+{
+  char const *slash_1;
+  char const *slash_2;
+
+  slash_1 = strrchr (file_name_1, '/');
+  slash_2 = strrchr (file_name_2, '/');
+
+  if (slash_1 == NULL && slash_2 == NULL)
+    return strequ (suff_name (file_name_1), suff_name (file_name_2));
+  if ((slash_1 - file_name_1) != (slash_2 - file_name_2))
+    return 0;
+  if (!strnequ (file_name_1, file_name_2, slash_1 - file_name_1))
+    return 0;
+  return strequ (suff_name (slash_1), suff_name (slash_2));
+}
+
 void
 look_id (char const *name, char **argv)
 {
   char const *arg;
   char const *dir;
-  int crunching = 0;
+  int using_braces = 0;
 
   if (echo_on)
     printf ("%-14s ", name);
   while (*argv)
     {
       arg = *argv++;
-      if (*argv && crunch_on && can_crunch (arg, *argv))
+      if (*argv && brace_notation_on && common_prefix_suffix (arg, *argv))
 	{
-	  if (crunching)
+	  if (using_braces)
 	    printf (",%s", root_name (arg));
 	  else
 	    {
@@ -351,15 +336,15 @@ look_id (char const *name, char **argv)
 		printf ("%s/", dir);
 	      printf ("{%s", root_name (arg));
 	    }
-	  crunching = 1;
+	  using_braces = 1;
 	}
       else
 	{
-	  if (crunching)
+	  if (using_braces)
 	    printf (",%s}%s", root_name (arg), suff_name (arg));
 	  else
 	    fputs (arg, stdout);
-	  crunching = 0;
+	  using_braces = 0;
 	  if (*argv)
 	    putchar (' ');
 	}
@@ -376,7 +361,7 @@ grep_id (char const *name, char **argv)
 
   if (merging)
     {
-      re = file_regexp (name, "[^a-zA-Z0-9_À-ÿ]_*", "[^a-zA-Z0-9_À-ÿ]");
+      re = file_regexp (name, "[^a-zA-Z0-9_]_*", "[^a-zA-Z0-9_]");
       if (re)
 	{
 	  char const *regexp_error = re_comp (re);
@@ -539,8 +524,8 @@ editit:
       filerr ("exec", editor);
     default:
       {
-	void (*oldint) (int) = signal (SIGINT, SIG_IGN);
-	void (*oldquit) (int) = signal (SIGQUIT, SIG_IGN);
+	void (*oldint) __P((int)) = signal (SIGINT, SIG_IGN);
+	void (*oldquit) __P((int)) = signal (SIGQUIT, SIG_IGN);
 
 	while (wait (0) == -1 && errno == EINTR)
 	  ;
@@ -869,7 +854,7 @@ find_token (char const *token_0)
     {
       int c;
       int incr = 1;
-      unsigned char const *token = (unsigned char const *) token_0;
+      char const *token;
 
       offset = start + (end - start) / 2;
       fseek (id_FILE, offset, SEEK_SET);
@@ -881,6 +866,7 @@ find_token (char const *token_0)
 	}
 
       /* compare the token names */
+      token = token_0;
       while (*token == (c = getc (id_FILE)) && *token && c)
 	{
 	  token++;
@@ -1022,7 +1008,7 @@ file_name_wildcard (char const *re, char const *fn)
 int
 match_file_names (char const *re, doit_t doit)
 {
-  char const *absname;
+  char const *abs_name;
   struct idarg *ida = id_args;
   int i;
   int count = 0;
@@ -1038,22 +1024,22 @@ match_file_names (char const *re, doit_t doit)
 	}
     }
 
-  for (i = 0; i < idh.idh_paths; i++, ida++)
+  for (i = 0; i < idh.idh_files; i++, ida++)
     {
       if (*ida->ida_arg == 0)
 	continue;
       if (match_base)
 	{
-	  absname = strrchr (ida->ida_arg, '/');
-	  if (absname == NULL)
-	    absname = ida->ida_arg;
+	  abs_name = strrchr (ida->ida_arg, '/');
+	  if (abs_name == NULL)
+	    abs_name = ida->ida_arg;
 	}
       else
-	absname = span_file_name (id_dir, ida->ida_arg);
+	abs_name = span_file_name (anchor_dir, ida->ida_arg);
       if (file_name_regexp)
-	matched = re_exec (absname);
+	matched = re_exec (abs_name);
       else
-	matched = file_name_wildcard (re, absname);
+	matched = file_name_wildcard (re, abs_name);
       if (matched)
 	{
 	  BITSET (bits_vec, i);
@@ -1224,10 +1210,10 @@ bits_to_argv (unsigned char const *bv)
   static char **argv_0;
   char **argv;
   struct idarg *ida = id_args;
-  struct idarg *end = &id_args[idh.idh_paths];
+  struct idarg *end = &id_args[idh.idh_files];
 
   if (argv_0 == NULL)
-    argv_0 = MALLOC (char *, idh.idh_paths + reserved_argv_slots + 2);
+    argv_0 = MALLOC (char *, idh.idh_files + reserved_argv_slots + 2);
   argv = &argv_0[reserved_argv_slots];
 
   for (;;)
@@ -1249,8 +1235,8 @@ bits_to_argv (unsigned char const *bv)
 	    {
 	      if (!(ida->ida_flags & IDA_RELATIVE))
 		{
-		  char const *abs_name = span_file_name (id_dir, ida->ida_arg);
-		  char const *rel_name = relative_file_name (PWD_name, abs_name);
+		  char const *abs_name = span_file_name (anchor_dir, ida->ida_arg);
+		  char const *rel_name = relative_file_name (PWD_buf, abs_name);
 		  char const *short_name = (strlen (rel_name) > strlen (abs_name)
 					    ? abs_name : rel_name);
 		  if (!strequ (short_name, ida->ida_arg))

@@ -20,7 +20,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
-#include <sys/param.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -28,116 +27,100 @@
 #include "strxtra.h"
 #include "filenames.h"
 #include "misc.h"
+#include "error.h"
+
+#ifdef S_IFLNK
+static char const *unsymlink __P((char *n));
+#endif
+static void canonical_name __P((char *n));
+static char const *lex_name __P((void));
+static int same_link __P((struct stat *x, struct stat *y));
+
+FILE *popen ();
 
 /* relative_file_name takes two arguments:
- * 1) an absolute path name for a directory.
- *    (This name MUST have a trailing /).
- * 2) an absolute path name for a file.
- *
- * It looks for common components at the front of the file and
- * directory names and generates a relative path name for the file
- * (relative to the specified directory).
- *
- * This may result in a huge number of ../s if the names
- * have no components in common.
- *
- * The output from this concatenated with the input directory name
- * and run through span_file_name should result in the original input
- * absolute path name of the file.
- *
- * Examples:
- *  dir      arg                  return value
- *  /x/y/z/  /x/y/q/file      ->  ../q/file
- *  /x/y/z/  /q/t/p/file      ->  ../../../q/t/p/file
- *  /x/y/z/  /x/y/z/file      ->  file
- */
+   1) an absolute path name for a directory. (*must* have a trailing "/").
+   2) an absolute path name for a file.
+
+   It looks for a common directory prefix and generates a name for the
+   given file that is relative to the given directory.  The result
+   might begin with a long sequence of "../"s, if the given names are
+   long but have a short common prefix.
+ 
+   (Note: If the the result of relative_file_name is appended to its
+   directory argument and passed to span_file_name, span_file_name's
+   result should match relative_file_name's file name argument.)
+ 
+   Examples:
+     dir      arg          return value
+   /x/y/z/  /x/y/q/file  ../q/file
+   /x/y/z/  /q/t/p/file  ../../../q/t/p/file
+   /x/y/z/  /x/y/z/file  file */
+
 char const *
-relative_file_name (char const *dir, char const *arg)
+relative_file_name (char const *dir_name, char const *file_name)
 {
-  char const *a;
-  char const *d;
-  char const *lasta;
-  char const *lastd;
-  static char file_name_buffer[BUFSIZ];
-  char *buf = file_name_buffer;
+  static char file_name_buffer[MAXPATHLEN];
+  char *bp = file_name_buffer;
 
-  lasta = a = arg;
-  lastd = d = dir;
-  while (*a == *d)
-    {
-      if (*a == '/')
-	{
-	  lasta = a;
-	  lastd = d;
-	}
-      ++a;
-      ++d;
-    }
-  /* lasta and lastd now point to the last / in each
-	 * file name where the leading file components were
-	 * identical.
-	 */
-  ++lasta;
-  ++lastd;
-  /* copy a ../ into the buffer for each component of
-	 * the directory that remains.
-	 */
+  while (*file_name && *file_name++ == *dir_name++)
+    ;
+  while (*--dir_name != '/')
+    ;
+  dir_name++;
+  while (*--file_name != '/')
+    ;
+  file_name++;
+  /* file_name and dir_name now point past their common directory prefix */
 
-  while (*lastd != '\0')
+  /* copy "../" into the buffer for each component of the directory
+     that remains.  */
+
+  while (*dir_name)
     {
-      if (*lastd == '/')
+      if (*dir_name++ == '/')
 	{
-	  strcpy (buf, "../");
-	  buf += 3;
+	  strcpy (bp, "../");
+	  bp += 3;
 	}
-      ++lastd;
     }
-  /* now tack on remainder of arg */
-  strcpy (buf, lasta);
+
+  strcpy (bp, file_name);
   return file_name_buffer;
 }
 
-/* span_file_name accepts a directory name and a file name and returns
-   a cannonical form of the full file name within that directory.  It
-   gets rid of ./ and things like that.  If the file is an absolute
-   name then the directory is ignored.  */
-char const *
-span_file_name (char const *dir, char const *arg)
-{
-  char *argptr;
-  static char file_name_buffer[BUFSIZ];
+/* span_file_name accepts a canonical directory name and a file name
+   and returns a canonical path to the file name relative to the
+   directory.  If the file name is absolute, then the directory is
+   ignored.  */
 
-  /* reduce directory to cannonical form */
-  strcpy (file_name_buffer, dir);
-  cannoname (file_name_buffer);
-  /* tack the obilgatory / on the end */
-  strcat (file_name_buffer, "/");
-  /* stick file name in buffer after directory */
-  argptr = file_name_buffer + strlen (file_name_buffer);
-  strcpy (argptr, arg);
-  /* and reduce it to cannonical form also */
-  cannoname (argptr);
+char const *
+span_file_name (char const *dir_name, char const *file_name)
+{
+  char *fnp;
+  static char file_name_buffer[MAXPATHLEN];
+
+  strcpy (file_name_buffer, dir_name);
+  fnp = file_name_buffer + strlen (file_name_buffer);
+  *fnp++ = '/';
+  strcpy (fnp, file_name);
+  canonical_name (fnp);
   /* If it is an absolute name, just return it */
-  if (*argptr == '/')
-    return argptr;
-  /* otherwise, combine the names to cannonical form */
-  cannoname (file_name_buffer);
+  if (*fnp == '/')
+    return fnp;
+  /* otherwise, combine the names to canonical form */
+  canonical_name (file_name_buffer);
   return file_name_buffer;
 }
 
-/* root_name returns the base name of the file with any leading
- * directory information or trailing suffix stripped off. Examples:
- *
- *   /usr/include/stdio.h   ->   stdio
- *   fred                   ->   fred
- *   barney.c               ->   barney
- *   bill/bob               ->   bob
- *   /                      ->   < null string >
- */
+/* root_name strips off the directory prefix and one suffix.  If there
+   is neither prefix nor suffix, (i.e., "/"), it returns the empty
+   string.  */
+
 char const *
 root_name (char const *path)
 {
-  static char file_name_buffer[BUFSIZ];
+  static char file_name_buffer[MAXPATHLEN];
   char const *root;
   char const *dot;
 
@@ -158,15 +141,9 @@ root_name (char const *path)
   return file_name_buffer;
 }
 
-/* suff_name returns the suffix (including the dot) or a null string
- * if there is no suffix. Examples:
- *
- *   /usr/include/stdio.h   ->   .h
- *   fred                   ->   < null string >
- *   barney.c               ->   .c
- *   bill/bob               ->   < null string >
- *   /                      ->   < null string >
- */
+/* suff_name returns the suffix (including the dot), or the
+   empty-string if there is none.  */
+
 char const *
 suff_name (char const *path)
 {
@@ -178,66 +155,57 @@ suff_name (char const *path)
   return dot;
 }
 
-int
-can_crunch (char const *path1, char const *path2)
+/* Return non-zero if the two stat bufs refer to the same file or
+   directory */
+
+static int
+same_link (struct stat *x, struct stat *y)
 {
-  char const *slash1;
-  char const *slash2;
-
-  slash1 = strrchr (path1, '/');
-  slash2 = strrchr (path2, '/');
-
-  if (slash1 == NULL && slash2 == NULL)
-    return strequ (suff_name (path1), suff_name (path2));
-  if ((slash1 - path1) != (slash2 - path2))
-    return 0;
-  if (!strnequ (path1, path2, slash1 - path1))
-    return 0;
-  return strequ (suff_name (slash1), suff_name (slash2));
+  return ((x->st_ino == y->st_ino) && (x->st_dev == y->st_dev));
 }
 
-/* look_up adds ../s to the beginning of a file name until it finds
- * the one that really exists. Returns NULL if it gets all the way
- * to / and never finds it.
- *
- * If the file name starts with /, just return it as is.
- *
- * This routine is used to locate the ID database file.
- */
-char const *
-look_up (char const *arg)
-{
-  static char file_name_buffer[BUFSIZ];
-  char *buf = file_name_buffer;
-  struct stat rootb;
-  struct stat statb;
+/* find_id_file adds "../"s to the beginning of a file name until it
+   finds the one that really exists.  If the file name starts with
+   "/", just return it as is.  If we fail for any reason, report the
+   error and exit.  */
 
-  /* if we got absolute name, just use it. */
+char const *
+find_id_file (char const *arg)
+{
+  static char file_name_buffer[MAXPATHLEN];
+  char *name;
+  char *dir_end;
+  struct stat root_buf;
+  struct stat stat_buf;
+
   if (arg[0] == '/')
     return arg;
-  /* if the name we were give exists, don't bother searching */
-  if (stat (arg, &statb) == 0)
+  if (stat (arg, &stat_buf) == 0)
     return arg;
-  /* search up the tree until we find a directory where this
-	 * relative file name is visible.
-	 * (or we run out of tree to search by hitting root).
-	 */
 
-  if (stat ("/", &rootb) != 0)
-    return NULL;
+  name = &file_name_buffer[sizeof (file_name_buffer) - strlen (arg) - 1];
+  strcpy (name, arg);
+  dir_end = name - 1;
+
+  if (stat ("/", &root_buf) < 0)
+    {
+      error (1, errno, "Can't stat `/'");
+      return NULL;
+    }
   do
     {
-      strcpy (buf, "../");
-      buf += 3;
-      strcpy (buf, arg);
-      if (stat (file_name_buffer, &statb) == 0)
-	return file_name_buffer;
-      *buf = '\0';
-      if (stat (file_name_buffer, &statb) != 0)
+      *--name = '/';
+      *--name = '.';
+      *--name = '.';
+      if (stat (name, &stat_buf) == 0)
+	return name;
+      *dir_end = '\0';
+      if (stat (name, &stat_buf) < 0)
 	return NULL;
+      *dir_end = '/';
     }
-  while (!((statb.st_ino == rootb.st_ino) ||
-	   (statb.st_dev == rootb.st_dev)));
+  while (name >= &file_name_buffer[3] && !same_link(&stat_buf, &root_buf));
+  error (1, errno, "Can't stat `%s' anywhere between here and `/'", arg);
   return NULL;
 }
 
@@ -255,123 +223,101 @@ static char dotdot[] = "..";
 static char const *nextc = NULL;
 static char *namep;
 
-/* lexname - Return next name component. Uses global variables initialized
- * by cannoname to figure out what it is scanning.
+/* lex_name - Return next name component. Uses global variables initialized
+ * by canonical_name to figure out what it is scanning.
  */
 static char const *
-lexname (void)
+lex_name (void)
 {
   char c;
   char const *d;
 
-  if (nextc)
+  if (nextc == NULL)
+    return NULL;
+
+  c = *nextc++;
+  if (c == '\0')
     {
-      c = *nextc++;
+      nextc = NULL;
+      return NULL;
+    }
+  if (c == '/')
+    return slash;
+  if (c == '.')
+    {
+      if ((*nextc == '/') || (*nextc == '\0'))
+	return dot;
+      if (*nextc == '.' && (*(nextc + 1) == '/' || *(nextc + 1) == '\0'))
+	{
+	  ++nextc;
+	  return dotdot;
+	}
+    }
+  d = namep;
+  *namep++ = c;
+  while ((c = *nextc) != '/')
+    {
+      *namep++ = c;
       if (c == '\0')
 	{
 	  nextc = NULL;
-	  return NULL;
+	  return d;
 	}
-      if (c == '/')
-	{
-	  return &slash[0];
-	}
-      if (c == '.')
-	{
-	  if ((*nextc == '/') || (*nextc == '\0'))
-	    return &dot[0];
-	  if (*nextc == '.' && (*(nextc + 1) == '/' || *(nextc + 1) == '\0'))
-	    {
-	      ++nextc;
-	      return &dotdot[0];
-	    }
-	}
-      d = namep;
-      *namep++ = c;
-      while ((c = *nextc) != '/')
-	{
-	  *namep++ = c;
-	  if (c == '\0')
-	    {
-	      nextc = NULL;
-	      return d;
-	    }
-	  ++nextc;
-	}
-      *namep++ = '\0';
-      return d;
+      ++nextc;
     }
-  else
-    {
-      return NULL;
-    }
+  *namep++ = '\0';
+  return d;
 }
 
-/* cannoname - Put a file name in cannonical form. Looks for all the
- * whacky wonderful things a demented *ni* programmer might put
- * in a file name and reduces the name to cannonical form.
- */
-void
-cannoname (char *n)
+/* canonical_name puts a file name in canonical form.  It looks for all
+   the whacky wonderful things a demented *ni* programmer might put in
+   a file name and reduces the name to canonical form.  */
+
+static void
+canonical_name (char *file_name)
 {
   char const *components[1024];
-  char const **cap = &components[0];
+  char const **cap = components;
   char const **cad;
   char const *cp;
-  char namebuf[2048];
+  char name_buf[2048];
   char const *s;
 
   /* initialize scanner */
-  nextc = n;
-  namep = &namebuf[0];
+  nextc = file_name;
+  namep = name_buf;
 
-  /* break the file name into individual components */
-  while ((cp = lexname ()))
-    {
-      *cap++ = cp;
-    }
-
-  /* If name is empty, leave it that way */
-  if (cap == &components[0])
+  while ((cp = lex_name ()))
+    *cap++ = cp;
+  if (cap == components)
     return;
-
-  /* flag end of component list */
   *cap = NULL;
 
   /* remove all trailing slashes and dots */
-  while ((--cap != &components[0]) &&
-	 ((*cap == &slash[0]) || (*cap == &dot[0])))
+  while ((--cap != components) &&
+	 ((*cap == slash) || (*cap == dot)))
     *cap = NULL;
 
-  /* squeeze out all . / component sequences */
-  cap = &components[0];
-  cad = cap;
+  /* squeeze out all "./" sequences */
+  cad = cap = components;
   while (*cap)
     {
-      if ((*cap == &dot[0]) && (*(cap + 1) == &slash[0]))
-	{
-	  cap += 2;
-	}
+      if ((*cap == dot) && (*(cap + 1) == slash))
+	cap += 2;
       else
-	{
-	  *cad++ = *cap++;
-	}
+	*cad++ = *cap++;
     }
   *cad++ = NULL;
 
   /* find multiple // and use last slash as root, except on apollo which
-    * apparently actually uses // in real file names (don't ask me why).
-    */
+     apparently actually uses // in real file names (don't ask me why). */
 #ifndef apollo
   s = NULL;
-  cap = &components[0];
-  cad = cap;
+  cad = cap = components;
   while (*cap)
     {
-      if ((s == &slash[0]) && (*cap == &slash[0]))
-	{
-	  cad = &components[0];
-	}
+      if ((s == slash) && (*cap == slash))
+	cad = components;
       s = *cap++;
       *cad++ = s;
     }
@@ -379,16 +325,15 @@ cannoname (char *n)
 #endif
 
   /* if this is absolute name get rid of any /.. at beginning */
-  if ((components[0] == &slash[0]) && (components[1] == &dotdot[0]))
+  if ((components[0] == slash) && (components[1] == dotdot))
     {
-      cap = &components[1];
-      cad = cap;
-      while (*cap == &dotdot[0])
+      cad = cap = &components[1];
+      while (*cap == dotdot)
 	{
 	  ++cap;
 	  if (*cap == NULL)
 	    break;
-	  if (*cap == &slash[0])
+	  if (*cap == slash)
 	    ++cap;
 	}
       while (*cap)
@@ -397,13 +342,11 @@ cannoname (char *n)
     }
 
   /* squeeze out any name/.. sequences (but leave leading ../..) */
-  cap = &components[0];
+  cap = components;
   cad = cap;
   while (*cap)
     {
-      if ((*cap == &dotdot[0]) &&
-	  ((cad - 2) >= &components[0]) &&
-	  ((*(cad - 2)) != &dotdot[0]))
+      if ((*cap == dotdot) && ((cad - 2) >= components) && (*(cad - 2) != dotdot))
 	{
 	  cad -= 2;
 	  ++cap;
@@ -411,117 +354,104 @@ cannoname (char *n)
 	    ++cap;
 	}
       else
-	{
-	  *cad++ = *cap++;
-	}
+	*cad++ = *cap++;
     }
   /* squeezing out a trailing /.. can leave unsightly trailing /s */
-  if ((cad >= &components[2]) && ((*(cad - 1)) == &slash[0]))
+  if ((cad >= &components[2]) && ((*(cad - 1)) == slash))
     --cad;
   *cad = NULL;
   /* if it was just name/.. it now becomes . */
   if (components[0] == NULL)
     {
-      components[0] = &dot[0];
+      components[0] = dot;
       components[1] = NULL;
     }
 
   /* re-assemble components */
-  cap = &components[0];
+  cap = components;
   while ((s = *cap++))
     {
       while (*s)
-	*n++ = *s++;
+	*file_name++ = *s++;
     }
-  *n++ = '\0';
+  *file_name++ = '\0';
 }
 
-/* kshgetwd is a routine that acts just like getwd, but is optimized
- * for ksh users, taking advantage of the fact that ksh maintains
- * an environment variable named PWD holding path name of the
- * current working directory.
- *
- * The primary motivation for this is not really that it is algorithmically
- * simpler, but that it is much less likely to bother NFS if we can just
- * guess the name of the current working directory using the hint that
- * ksh maintains. Anything that avoids NFS gettar failed messages is
- * worth doing.
- */
-char const *
-kshgetwd (char *pathname)
-{
-  struct stat kshstat, dotstat;
-  char kshname[MAXPATHLEN];
-  char const *kshp;
+/* get_PWD is an optimized getwd(3) or getcwd(3) that takes advantage
+   of the shell's $PWD environment-variable, if present.  This is
+   particularly worth doing on NFS mounted filesystems.  */
 
-  kshp = getenv ("PWD");
-  if (kshp)
+char const *
+get_PWD (char *pwd_buf)
+{
+  struct stat pwd_stat;
+  struct stat dot_stat;
+  char *pwd = getenv ("PWD");
+
+  if (pwd)
     {
-      /* OK, there was a PWD environment variable */
-      strcpy (kshname, kshp);
-      if (unsymlink (kshname)
-	  /* And we could resolve the symbolic links through it */
-	  && kshname[0] == '/'
-	  /* And the name we have is an absolute path name */
-	  && stat (kshname, &kshstat) == 0
-	  /* And we can stat the name */
-	  && stat (".", &dotstat) == 0
-	  /* And we can stat "." */
-	  && (kshstat.st_dev == dotstat.st_dev)
-	  && (kshstat.st_ino == dotstat.st_ino))
-	/* By golly, that name is the same file as "." ! */
-	return strcpy (pathname, kshname);
+      pwd = strcpy (pwd_buf, pwd);
+      if (pwd[0] != '/'
+	  || stat (".", &dot_stat) < 0
+	  || stat (pwd, &pwd_stat) < 0
+	  || !same_link(&pwd_stat, &dot_stat)
+#ifdef S_IFLNK
+	  || !unsymlink (pwd)
+	  || pwd[0] != '/'
+	  || stat (pwd, &pwd_stat) < 0
+	  || !same_link(&pwd_stat, &dot_stat)
+#endif
+	  )
+	pwd = 0;
     }
 
-  /* Oh well, something did not work out right, do it the hard way */
+  if (pwd == 0)
+    {
+      /* Oh well, something did not work out right, so do it the hard way... */
 #if HAVE_GETCWD
-  return getcwd (pathname, BUFSIZ);
+      pwd = getcwd (pwd_buf, MAXPATHLEN);
 #else
 #if HAVE_GETWD
-  return getwd (pathname);
+      pwd = getwd (pwd_buf);
 #endif
 #endif
+    }
+  if (pwd)
+    strcat (pwd, "/");
+  else
+    error (1, errno, "Can't determine current working directory!");
+
+  return pwd;
 }
 
-/* unsymlink is a routine that resolves all symbolic links in
- * a file name, transforming a name to the "actual" file name
- * instead of the name in terms of symbolic links.
- *
- * If it can resolve all links and discover an actual file
- * it returns a pointer to its argument string and transforms
- * the argument in place to the actual name.
- *
- * If no such actual file exists, or for some reason the links
- * cannot be resolved, it returns a NULL pointer and leaves the
- * name alone.
- */
-char const *
-unsymlink (char *n)
+#ifdef S_IFLNK
+
+/* unsymlink resolves all symbolic links in a file name into hard
+   links.  If successful, it returns its argument and transforms
+   the file name in situ.  If unsuccessful, it returns NULL, and leaves
+   the argument untouched.  */
+
+static char const *
+unsymlink (char *file_name_buf)
 {
-  char newname[MAXPATHLEN];
-  char partname[MAXPATHLEN];
-  char linkname[MAXPATHLEN];
+  char new_buf[MAXPATHLEN];
+  char part_buf[MAXPATHLEN];
+  char link_buf[MAXPATHLEN];
   char const *s;
   char *d;
   char *lastcomp;
-  int linksize;
-  struct stat statb;
+  struct stat stat_buf;
 
-  /* Just stat the file to automagically do all the symbolic
-    * link verification checks and make sure we have access to
-    * directories, etc.
-    */
-  if (stat (n, &statb) != 0)
-    return NULL;
-  strcpy (newname, n);
+  strcpy (new_buf, file_name_buf);
+
   /* Now loop, lstating each component to see if it is a symbolic
-    * link. For symbolic link components, use readlink() to get
-    * the real name, put the read link name in place of the
-    * last component, and start again.
-    */
-  cannoname (newname);
-  s = &newname[0];
-  d = &partname[0];
+     link.  For symbolic link components, use readlink() to get the
+     real name, put the read link name in place of the last component,
+     and start again.  */
+
+  canonical_name (new_buf);
+  s = new_buf;
+  d = part_buf;
   if (*s == '/')
     *d++ = *s++;
   lastcomp = d;
@@ -531,28 +461,25 @@ unsymlink (char *n)
 	{
 	  /* we have a complete component name in partname, check it out */
 	  *d = '\0';
-	  if (lstat (partname, &statb) != 0)
+	  if (lstat (part_buf, &stat_buf) < 0)
 	    return NULL;
-	  if ((statb.st_mode & S_IFMT) == S_IFLNK)
+	  if ((stat_buf.st_mode & S_IFMT) == S_IFLNK)
 	    {
 	      /* This much of name is a symbolic link, do a readlink
-             * and tack the bits and pieces together
-             */
-	      linksize = readlink (partname, linkname, MAXPATHLEN);
-	      if (linksize < 0)
+		 and tack the bits and pieces together */
+	      int link_size = readlink (part_buf, link_buf, MAXPATHLEN);
+	      if (link_size < 0)
 		return NULL;
-	      linkname[linksize] = '\0';
-	      strcpy (lastcomp, linkname);
-	      lastcomp += linksize;
+	      link_buf[link_size] = '\0';
+	      strcpy (lastcomp, link_buf);
+	      lastcomp += link_size;
 	      strcpy (lastcomp, s);
-	      strcpy (newname, partname);
-	      cannoname (newname);
-	      s = &newname[0];
-	      d = &partname[0];
+	      strcpy (new_buf, part_buf);
+	      canonical_name (new_buf);
+	      s = new_buf;
+	      d = part_buf;
 	      if (*s == '/')
-		{
-		  *d++ = *s++;
-		}
+		*d++ = *s++;
 	      lastcomp = d;
 	    }
 	  else
@@ -569,9 +496,11 @@ unsymlink (char *n)
 	  *d++ = *s++;
 	}
     }
-  strcpy (n, newname);
-  return n;
+  strcpy (file_name_buf, new_buf);
+  return file_name_buf;
 }
+
+#endif
 
 FILE *
 open_source_FILE (char *file_name, char const *filter)

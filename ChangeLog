@@ -1,11 +1,12 @@
-Wed May 17 10:10:59 1995  Greg McGary  <gkm@magilla.cichlid.com>
+Wed Mar  1 11:21:37 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
-	* lid.c: (find_token, grep_id): Support ISO-8859 8-bit charsets.
+	* idtest: Write to temp dir rather than current	directory
+	(Thanks, Simon Leinen).
 
-Tue May 16 23:05:36 1995  Greg McGary  <gkm@magilla.cichlid.com>
+Mon Feb 27 18:43:56 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
-	* scanners.c (set_args_text, ctype_text, ctype_asm):
-	Support ISO-8859 8-bit charsets.
+	* Makefile.in (DIST_DOC_FILES): Removed unsupported man pages.
+	(DIST_MISC_FILES): Added symfunc.el.
 
 Sat Feb 25 16:23:49 1995  Greg McGary  <gkm@magilla.cichlid.com>
 

@@ -51,6 +51,13 @@
 
 #include <config.h>
 #include "strxtra.h"
+#include "obstack.h"
+#include "xmalloc.h"
+
+FILE *popen ();
+
+#define obstack_chunk_alloc xmalloc
+#define obstack_chunk_free free
 
 #if HAVE_ALLOCA
 
@@ -225,6 +232,8 @@ set_type * *       TheSets = NULL ;
  */
 int                VerboseQuery ;
 
+char const *program_name ;
+
 int yyerror __P(( char const * s )) ;
 void ScanInit __P(( char * line )) ;
 int yylex __P(( void )) ;
@@ -252,7 +261,7 @@ set_type * SetInverse __P(( set_type * sp )) ;
 void RunShell __P(( char * pp , id_list_type * idlp )) ;
 
 
-#line 231 "./iid.y"
+#line 240 "./iid.y"
 typedef union {
    set_type *     setdef ;   
    id_type *      strdef ;
@@ -344,9 +353,9 @@ static const short yyrhs[] = {     9,
 
 #if YYDEBUG != 0
 static const short yyrline[] = { 0,
-   257,   265,   266,   272,   278,   284,   290,   294,   301,   310,
-   319,   328,   335,   344,   353,   364,   371,   380,   389,   397,
-   405,   414,   423,   432,   440,   447,   453,   461,   469
+   266,   274,   275,   281,   287,   293,   299,   303,   310,   319,
+   328,   337,   344,   353,   362,   373,   380,   389,   398,   406,
+   414,   423,   432,   441,   449,   456,   462,   470,   478
 };
 
 static const char * const yytname[] = {   "$","error","$illegal.","SET","ID",
@@ -972,7 +981,7 @@ yyreduce:
   switch (yyn) {
 
 case 1:
-#line 259 "./iid.y"
+#line 268 "./iid.y"
 {
          /* cd to the directory specified as argument, flush sets */
 
@@ -981,7 +990,7 @@ case 1:
       ;
     break;}
 case 3:
-#line 267 "./iid.y"
+#line 276 "./iid.y"
 {
          /* print the list of files resulting from Query */
 
@@ -989,7 +998,7 @@ case 3:
       ;
     break;}
 case 4:
-#line 273 "./iid.y"
+#line 282 "./iid.y"
 {
          /* run PAGER on the list of files in SET */
 
@@ -997,7 +1006,7 @@ case 4:
       ;
     break;}
 case 5:
-#line 279 "./iid.y"
+#line 288 "./iid.y"
 {
          /* describe sets created so far */
 
@@ -1005,7 +1014,7 @@ case 5:
       ;
     break;}
 case 6:
-#line 285 "./iid.y"
+#line 294 "./iid.y"
 {
          /* run PAGER on the help file */
 
@@ -1013,13 +1022,13 @@ case 6:
       ;
     break;}
 case 7:
-#line 291 "./iid.y"
+#line 300 "./iid.y"
 {
          exit(0) ;
       ;
     break;}
 case 8:
-#line 295 "./iid.y"
+#line 304 "./iid.y"
 {
          /* run the shell command and eat the results as a file set */
 
@@ -1028,7 +1037,7 @@ case 8:
       ;
     break;}
 case 9:
-#line 302 "./iid.y"
+#line 311 "./iid.y"
 {
          /* run the shell command */
 
@@ -1037,7 +1046,7 @@ case 9:
       ;
     break;}
 case 10:
-#line 312 "./iid.y"
+#line 321 "./iid.y"
 {
          /* Turn on verbose query flag */
 
@@ -1045,7 +1054,7 @@ case 10:
       ;
     break;}
 case 11:
-#line 321 "./iid.y"
+#line 330 "./iid.y"
 {
          /* Turn off verbose query flag */
 
@@ -1053,7 +1062,7 @@ case 11:
       ;
     break;}
 case 12:
-#line 330 "./iid.y"
+#line 339 "./iid.y"
 {
          /* value of query is set associated with primitive */
 
@@ -1061,7 +1070,7 @@ case 12:
       ;
     break;}
 case 13:
-#line 336 "./iid.y"
+#line 345 "./iid.y"
 {
          /* value of query is intersection of the two query sets */
 
@@ -1072,7 +1081,7 @@ case 13:
       ;
     break;}
 case 14:
-#line 345 "./iid.y"
+#line 354 "./iid.y"
 {
          /* value of query is union of the two query sets */
 
@@ -1083,7 +1092,7 @@ case 14:
       ;
     break;}
 case 15:
-#line 354 "./iid.y"
+#line 363 "./iid.y"
 {
          /* value of query is inverse of other query */
          
@@ -1094,7 +1103,7 @@ case 15:
       ;
     break;}
 case 16:
-#line 366 "./iid.y"
+#line 375 "./iid.y"
 {
          /* Value of primitive is value of recorded set */
 
@@ -1102,7 +1111,7 @@ case 16:
       ;
     break;}
 case 17:
-#line 372 "./iid.y"
+#line 381 "./iid.y"
 {
          /* Value of primitive is obtained by running an lid query */
 
@@ -1113,7 +1122,7 @@ case 17:
       ;
     break;}
 case 18:
-#line 381 "./iid.y"
+#line 390 "./iid.y"
 {
          /* Value of primitive is obtained by running an aid query */
 
@@ -1124,7 +1133,7 @@ case 18:
       ;
     break;}
 case 19:
-#line 390 "./iid.y"
+#line 399 "./iid.y"
 {
          /* Match names from database against pattern */
          yyval. setdef  = RunProg("pid -kmn", yyvsp[0]. listdef ) ;
@@ -1134,7 +1143,7 @@ case 19:
       ;
     break;}
 case 20:
-#line 398 "./iid.y"
+#line 407 "./iid.y"
 {
          /* value of primitive is value of query */
 
@@ -1142,7 +1151,7 @@ case 20:
       ;
     break;}
 case 21:
-#line 407 "./iid.y"
+#line 416 "./iid.y"
 {
          /* make arg list holding single ID */
 
@@ -1152,7 +1161,7 @@ case 21:
       ;
     break;}
 case 22:
-#line 415 "./iid.y"
+#line 424 "./iid.y"
 {
          /* arg list is Id_list */
 
@@ -1161,7 +1170,7 @@ case 22:
       ;
     break;}
 case 23:
-#line 425 "./iid.y"
+#line 434 "./iid.y"
 {
          /* arg list is Id_list */
 
@@ -1169,7 +1178,7 @@ case 23:
       ;
     break;}
 case 24:
-#line 434 "./iid.y"
+#line 443 "./iid.y"
 {
          /* make arg list holding single ID */
 
@@ -1178,7 +1187,7 @@ case 24:
       ;
     break;}
 case 25:
-#line 441 "./iid.y"
+#line 450 "./iid.y"
 {
          /* make arg list holding names from set */
 
@@ -1187,7 +1196,7 @@ case 25:
       ;
     break;}
 case 26:
-#line 448 "./iid.y"
+#line 457 "./iid.y"
 {
          /* extend arg list with additional ID */
 
@@ -1195,7 +1204,7 @@ case 26:
       ;
     break;}
 case 27:
-#line 454 "./iid.y"
+#line 463 "./iid.y"
 {
          /* extend arg list with additional file names */
 
@@ -1203,7 +1212,7 @@ case 27:
       ;
     break;}
 case 28:
-#line 463 "./iid.y"
+#line 472 "./iid.y"
 {
          /* make arg list holding single ID */
 
@@ -1212,7 +1221,7 @@ case 28:
       ;
     break;}
 case 29:
-#line 470 "./iid.y"
+#line 479 "./iid.y"
 {
          /* extend arg list with additional ID */
 
@@ -1443,7 +1452,7 @@ yyerrhandle:
   yystate = yyn;
   goto yynewstate;
 }
-#line 477 "./iid.y"
+#line 486 "./iid.y"
 
 
 /* ScanLine - a global variable holding a pointer to the current
@@ -1605,6 +1614,7 @@ main( int argc , char * argv [ ] )
    int         DoPrompt ;              /* 1 if should write a prompt */
    int         errors = 0 ;            /* error count */
 
+   program_name = argv[0];
    DoPrompt = isatty(fileno(stdin)) ;
    while ((c = getopt(argc, argv, "Hac:")) != EOF) {
       switch(c) {
@@ -2061,7 +2071,7 @@ RunProg( char const * pp , id_list_type * idlp )
    int            c ;
    char *         cmd ;
    char *         dp ;
-   char           file [ MAXCMD ] ;
+   struct obstack pipe_output_obstack;
    int            i ;
    id_type *      idep ;
    id_type *      next_id ;
@@ -2084,23 +2094,38 @@ RunProg( char const * pp , id_list_type * idlp )
    /* run program with popen, reading the output. Assume each
     * white space terminated string is a file name.
     */
+
    prog = popen(cmd, "r") ;
-   dp = file ;
-   while ((c = getc(prog)) != EOF) {
-      if (isspace(c)) {
-         if (dp != file) {
-            *dp++ = '\0' ;
-            InstallFile(file) ;
-            dp = file ;
-         }
-      } else {
-         *dp++ = c ;
-      }
-   }
-   if (dp != file) {
-      *dp++ = '\0' ;
-      InstallFile(file) ;
-   }
+   obstack_init (&pipe_output_obstack);
+
+  while (1)
+    {
+      c = getc (prog);
+      if (c == EOF || isspace (c))
+	{
+	  int n;
+	  if ((n = obstack_object_size (&pipe_output_obstack)) > 0)
+	    {
+	      char *_file;
+
+	      obstack_1grow (&pipe_output_obstack, 0);
+	      ++n;
+	      _file = obstack_finish (&pipe_output_obstack);
+	      InstallFile(_file) ;
+	      if (n != strlen (_file) + 1)
+		abort ();
+	      obstack_free (&pipe_output_obstack, _file);
+	    }
+	  if (c == EOF)
+	    break;
+	}
+      else
+	{
+	  obstack_1grow (&pipe_output_obstack, c);
+	}
+    }
+  obstack_free (&pipe_output_obstack, NULL);
+
    if (pclose(prog) != 0) {
       /* if there was an error make an empty set, who knows what
        * garbage the program printed.

@@ -33,6 +33,8 @@
 #define strncaseequ(s1, s2, n)	(strncasecmp ((s1), (s2), (n)) == 0)
 #ifndef HAVE_STRDUP
 #define strdup(s)		(strcpy (calloc (1, strlen (s) + 1), (s)))
+#else
+char *strdup ();
 #endif
 #define strndup(s, n)		(strncpy (calloc (1, (n)+1), (s), (n)))
 
