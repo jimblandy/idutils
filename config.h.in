@@ -1,11 +1,18 @@
 /* config.h.in.  Generated automatically from configure.in by autoheader.  */
-/* Special definitions for `mkid', processed by autoheader.
-   This file is in the public domain.
+/* Special definitions for GNU id-utils, processed by autoheader.
+   Copyright (C) 1995, 96 Free Software Foundation, Inc.
 */
 
 #ifndef _config_h_
 #define _config_h_
 
+
+/* Define if on AIX 3.
+   System headers sometimes define this.
+   We just want to avoid a redefinition error message.  */
+#ifndef _ALL_SOURCE
+#undef _ALL_SOURCE
+#endif
 
 /* Define if using alloca.c.  */
 #undef C_ALLOCA
@@ -23,11 +30,27 @@
 /* Define if you have <alloca.h> and it should be used (not on Ultrix).  */
 #undef HAVE_ALLOCA_H
 
+/* Define if you have a working `mmap' system call.  */
+#undef HAVE_MMAP
+
 /* Define if you have <sys/wait.h> that is POSIX.1 compatible.  */
 #undef HAVE_SYS_WAIT_H
 
+/* Define as __inline if that's what the C compiler calls it.  */
+#undef inline
+
+/* Define if on MINIX.  */
+#undef _MINIX
+
 /* Define to `long' if <sys/types.h> doesn't define.  */
 #undef off_t
+
+/* Define if the system does not provide POSIX.1 features except
+   with this defined.  */
+#undef _POSIX_1_SOURCE
+
+/* Define if you need to in order for stat and other things to work.  */
+#undef _POSIX_SOURCE
 
 /* Define as the return type of signal handlers (int or void).  */
 #undef RETSIGTYPE
@@ -44,20 +67,38 @@
  */
 #undef STACK_DIRECTION
 
+/* Define if the `S_IS*' macros in <sys/stat.h> do not work properly.  */
+#undef STAT_MACROS_BROKEN
+
 /* Define if you have the ANSI C header files.  */
 #undef STDC_HEADERS
 
-/* Define to `unsigned short' if <sys/types.h> doesn't define.  */
-#undef dev_t
+/* Define to 1 if NLS is requested.  */
+#undef ENABLE_NLS
 
-/* Define to filename of iid help text.  */
-#undef IID_HELP_FILE
+/* Define as 1 if you have catgets and don't want to use GNU gettext.  */
+#undef HAVE_CATGETS
 
-/* Define to `unsigned long' if <sys/types.h> doesn't define.  */
-#undef ino_t
+/* Define if the sbrk system call is declared in unistd.h.  */
+#undef HAVE_DECL_SBRK
+
+/* Define if the sys_errlist array is declared in errno.h, error.h or stdio.h.  */
+#undef HAVE_DECL_SYS_ERRLIST
+
+/* Define as 1 if you have gettext and don't want to use GNU gettext.  */
+#undef HAVE_GETTEXT
+
+/* Define if your locale.h file contains LC_MESSAGES.  */
+#undef HAVE_LC_MESSAGES
+
+/* Define to 1 if you have the stpcpy function.  */
+#undef HAVE_STPCPY
 
 /* Define to the name of the distribution.  */
 #undef PACKAGE
+
+/* The concatenation of the strings PACKAGE, "-", and VERSION.  */
+#undef PACKAGE_VERSION
 
 /* Define to 1 if ANSI function prototypes are usable.  */
 #undef PROTOTYPES
@@ -65,31 +106,25 @@
 /* Define to the major.minor version # of the distribution.  */
 #undef VERSION
 
+/* Define to 1 if GNU regex should be used instead of GNU rx.  */
+#undef WITH_REGEX
+
 #ifndef __P
 # ifndef PROTOTYPES
-#  define __P(args) ()
+#  define	__P(protos)	()		/* traditional C */
 # else
-#  define __P(args) args
+#  define	__P(protos)	protos		/* full-blown ANSI C */
 # endif
 #endif
 
-/* Define if you have the basename function.  */
-#undef HAVE_BASENAME
-
-/* Define if you have the bcopy function.  */
-#undef HAVE_BCOPY
-
-/* Define if you have the bzero function.  */
-#undef HAVE_BZERO
-
-/* Define if you have the dirname function.  */
-#undef HAVE_DIRNAME
+/* Define if you have the dcgettext function.  */
+#undef HAVE_DCGETTEXT
 
 /* Define if you have the getcwd function.  */
 #undef HAVE_GETCWD
 
-/* Define if you have the getopt_long function.  */
-#undef HAVE_GETOPT_LONG
+/* Define if you have the getpagesize function.  */
+#undef HAVE_GETPAGESIZE
 
 /* Define if you have the getwd function.  */
 #undef HAVE_GETWD
@@ -97,20 +132,20 @@
 /* Define if you have the link function.  */
 #undef HAVE_LINK
 
-/* Define if you have the memcpy function.  */
-#undef HAVE_MEMCPY
+/* Define if you have the munmap function.  */
+#undef HAVE_MUNMAP
 
-/* Define if you have the memset function.  */
-#undef HAVE_MEMSET
+/* Define if you have the putenv function.  */
+#undef HAVE_PUTENV
 
-/* Define if you have the re_comp function.  */
-#undef HAVE_RE_COMP
+/* Define if you have the setenv function.  */
+#undef HAVE_SETENV
 
-/* Define if you have the regcmp function.  */
-#undef HAVE_REGCMP
+/* Define if you have the setlocale function.  */
+#undef HAVE_SETLOCALE
 
-/* Define if you have the regcomp function.  */
-#undef HAVE_REGCOMP
+/* Define if you have the stpcpy function.  */
+#undef HAVE_STPCPY
 
 /* Define if you have the strcasecmp function.  */
 #undef HAVE_STRCASECMP
@@ -118,32 +153,26 @@
 /* Define if you have the strchr function.  */
 #undef HAVE_STRCHR
 
-/* Define if you have the strdup function.  */
-#undef HAVE_STRDUP
+/* Define if you have the valloc function.  */
+#undef HAVE_VALLOC
 
-/* Define if you have the strerror function.  */
-#undef HAVE_STRERROR
-
-/* Define if you have the strrchr function.  */
-#undef HAVE_STRRCHR
-
-/* Define if you have the <assert.h> header file.  */
-#undef HAVE_ASSERT_H
-
-/* Define if you have the <ctype.h> header file.  */
-#undef HAVE_CTYPE_H
-
-/* Define if you have the <errno.h> header file.  */
-#undef HAVE_ERRNO_H
+/* Define if you have the <dirent.h> header file.  */
+#undef HAVE_DIRENT_H
 
 /* Define if you have the <limits.h> header file.  */
 #undef HAVE_LIMITS_H
 
+/* Define if you have the <locale.h> header file.  */
+#undef HAVE_LOCALE_H
+
 /* Define if you have the <malloc.h> header file.  */
 #undef HAVE_MALLOC_H
 
-/* Define if you have the <memory.h> header file.  */
-#undef HAVE_MEMORY_H
+/* Define if you have the <ndir.h> header file.  */
+#undef HAVE_NDIR_H
+
+/* Define if you have the <nl_types.h> header file.  */
+#undef HAVE_NL_TYPES_H
 
 /* Define if you have the <regex.h> header file.  */
 #undef HAVE_REGEX_H
@@ -151,23 +180,23 @@
 /* Define if you have the <sgtty.h> header file.  */
 #undef HAVE_SGTTY_H
 
-/* Define if you have the <stddef.h> header file.  */
-#undef HAVE_STDDEF_H
-
 /* Define if you have the <stdlib.h> header file.  */
 #undef HAVE_STDLIB_H
 
 /* Define if you have the <string.h> header file.  */
 #undef HAVE_STRING_H
 
+/* Define if you have the <sys/dir.h> header file.  */
+#undef HAVE_SYS_DIR_H
+
 /* Define if you have the <sys/ioctl.h> header file.  */
 #undef HAVE_SYS_IOCTL_H
 
+/* Define if you have the <sys/ndir.h> header file.  */
+#undef HAVE_SYS_NDIR_H
+
 /* Define if you have the <sys/param.h> header file.  */
 #undef HAVE_SYS_PARAM_H
-
-/* Define if you have the <sys/stat.h> header file.  */
-#undef HAVE_SYS_STAT_H
 
 /* Define if you have the <sys/types.h> header file.  */
 #undef HAVE_SYS_TYPES_H
@@ -181,6 +210,15 @@
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
 
+/* Define if you have the <values.h> header file.  */
+#undef HAVE_VALUES_H
+
+/* Define if you have the i library (-li).  */
+#undef HAVE_LIBI
+
+/* Define if you have the intl library (-lintl).  */
+#undef HAVE_LIBINTL
+
 /* According to Thomas Neumann, NeXT POSIX termios support is losing,
    and sgtty is the way to go.  Note: the comment between #undef &
    HAVE_TERMIOS_H is necessary to defeat configure's edits.  */
@@ -193,9 +231,9 @@
 
 #ifndef __P
 # ifndef PROTOTYPES
-#  define __P(args) ()
+#  define	__P(protos)	()		/* traditional C */
 # else
-#  define __P(args) args
+#  define	__P(protos)	protos		/* full-blown ANSI C */
 # endif
 #endif
 

@@ -1,13 +1,3 @@
-Wed Mar  1 11:21:37 1995  Greg McGary  <gkm@magilla.cichlid.com>
-
-	* idtest: Write to temp dir rather than current	directory
-	(Thanks, Simon Leinen).
-
-Mon Feb 27 18:43:56 1995  Greg McGary  <gkm@magilla.cichlid.com>
-
-	* Makefile.in (DIST_DOC_FILES): Removed unsupported man pages.
-	(DIST_MISC_FILES): Added symfunc.el.
-
 Sat Feb 25 16:23:49 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
 	* Version 3.0.8 released.

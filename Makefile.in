@@ -1,320 +1,283 @@
-# Main Makefile for `mkid'.
+# Makefile.in generated automatically by automake 1.0 from Makefile.am
 
-# Copyright (C) 1986, 1995 Greg McGary
+# Copyright (C) 1994, 1995, 1996 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy, distribute and modify it.
 
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+SHELL = /bin/sh
 
-# You should have received a copy of the GNU General Public License
-# along with this program; see the file COPYING.  If not, write to the
-# Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
 
-##############################################################################
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
 
-PACKAGE =	@PACKAGE@
-VERSION =	@VERSION@
-PREV_VERSION =	@PREV_VERSION@
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
 
-SHELL =		/bin/sh
-VPATH =		@srcdir@
-@SET_MAKE@
+top_builddir = .
 
-prefix =	@prefix@
-srcdir =	@srcdir@
-exec_prefix =	@exec_prefix@
-bindir =	$(exec_prefix)/bin
-infodir =	$(prefix)/info
-datadir =	@datadir@
-
-##############################################################################
-
-CC =		@CC@
-YACC =		@YACC@
-LN_S =		@LN_S@
-INSTALL =	@INSTALL@
-INSTALL_DATA =	@INSTALL_DATA@
+INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
-ANSI2KNR =	@ANSI2KNR@
-MAKEINFO =	makeinfo
-TEXI2DVI =	texi2dvi
-TOUCH =		echo timestamp >
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
 
-CFLAGS =	@CFLAGS@
-LDFLAGS =	@LDFLAGS@
-LIBS =		@LIBS@
-DEFS =		@DEFS@
-IID_HELP_FILE =	@IID_HELP_FILE@
-DEPEND =	@DEPEND@
+SUBDIRS = lib intl src doc po
 
-REGEXP =	@REGEXP@
-STRCASECMP =	@STRCASECMP@
-LIB_OFILES =	error$o @ALLOCA@ @GETOPT@ @STRERROR@
+TESTS = idtest
 
-##############################################################################
+EXTRA_DIST = idtest @README_ALPHA@
+ACLOCAL = aclocal.m4
+ACCONFIG = acconfig.h
+CONFIG_HEADER_IN = config.h.in
+mkinstalldirs = $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = ./config.h
+DIST_COMMON = README ABOUT-NLS AUTHORS COPYING ChangeLog INSTALL \
+Makefile.am Makefile.in NEWS README THANKS TODO acconfig.h aclocal.m4 \
+config.h.in configure configure.in install-sh mkinstalldirs stamp-h.in
 
-TARGETS =	$(PROGRAMS) $(LID_LINKS)
-PROGRAMS =	mkid lid fid idx iid
-LID_LINKS =	eid aid gid pid
 
-########################################
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
 
-MKID_OFILES =	mkid$o misc$o scanners$o idfile$o filenames$o bitops$o hash$o $(LIB_OFILES)
-LID_OFILES =	lid$o misc$o idfile$o filenames$o bitops$o token$o $(REGEXP) $(LIB_OFILES)
-FID_OFILES =	fid$o misc$o idfile$o filenames$o bitops$o token$o $(LIB_OFILES)
-IDX_OFILES =	idx$o scanners$o filenames$o misc$o $(LIB_OFILES)
-IID_OFILES =	iid$o $(STRCASECMP) $(LIB_OFILES)
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
+	$(TEXINFOS) $(INFOS) $(MANS) $(EXTRA_DIST) $(DATA)
+DEP_DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
+	$(TEXINFOS) $(INFO_DEPS) $(MANS) $(EXTRA_DIST) $(DATA)
 
-ALL_OFILES =	$(MKID_OFILES) $(LID_OFILES) $(FID_OFILES) $(IDX_OFILES) $(IID_OFILES)
+TAR = tar
+default: all
 
-########################################
 
-SRC_YFILES =	iid.y
-GEN_CFILES =	iid.c
+$(srcdir)/Makefile.in: @MAINT@Makefile.am configure.in
+	cd $(srcdir) && automake Makefile
 
-SRC_CFILES =	mkid.c lid.c fid.c idx.c misc.c scanners.c idfile.c \
-		filenames.c bitops.c token.c
-LIB_CFILES =	regex.c alloca.c getopt.c getopt1.c strcasecmp.c strerror.c
-ALL_CFILES =	$(SRC_CFILES) $(LIB_CFILES) $(GEN_CFILES)
-
-SRC_HFILES =	alloc.h bitops.h filenames.h hash.h \
-		idfile.h misc.h scanners.h strxtra.h token.h
-LIB_HFILES =	regex.h getopt.h
-
-TAG_SRC_FILES =	$(SRC_HFILES) $(LIB_HFILES) $(SRC_CFILES) $(LIB_CFILES) $(SRC_YFILES)
-DIST_SRC_FILES= $(ALL_CFILES) $(SRC_HFILES) $(LIB_HFILES) $(SRC_YFILES)
-
-INFO_FILES =	id.info
-DIST_DOC_FILES= id.texinfo version.texi stamp-vti $(INFO_FILES) iid.help texinfo.tex
-DIST_CONF_FILES=aclocal.m4 acconfig.h configure.in Makefile.in mkdirhier install-sh \
-		stamp-h.in config.h.in configure $(DEPEND) ansi2knr.c ansi2knr.1
-DIST_MISC_FILES=COPYING README README.alpha-test INSTALL NEWS TODO THANKS \
-		idtest gid.el symfunc.el ChangeLog
-
-DIST_FILES =	$(DIST_CONF_FILES) $(DIST_SRC_FILES) $(DIST_DOC_FILES) $(DIST_MISC_FILES)
-DIFF_EXCLUDE =	-x iid.c -x '*.info*'
-
-########################################
-
-DIST_DIR =	$(PACKAGE)-$(VERSION)
-DIST_TGZ =	$(DIST_DIR).tar.gz
-DIST_UU =	$(DIST_TGZ).uu
-DIST_SHAR =	$(DIST_DIR).shar
-
-OLD_DIST_DIR =	$(PACKAGE)-$(PREV_VERSION)
-
-CDIFF_GZ =	$(OLD_DIST_DIR)-$(VERSION).diff.gz
-UDIFF_GZ =	$(OLD_DIST_DIR)-$(VERSION).udiff.gz
-CDIFF_UU =	$(CDIFF_GZ).uu
-
-##############################################################################
-
-.PRECIOUS: $(DEPEND) Makefile configure config.h config.h.in
-
-.SUFFIXES:
-.SUFFIXES: .c .i ._c ._i ._o .o
-
-o =		.@U@o
-INCLUDES =	-I. -I$(srcdir)
-CC_FLAGS =	$(DEFS) $(CPPFLAGS) $(INCLUDES) $(CFLAGS)
-LINK =		$(CC) $(LDFLAGS) -o $@
-COMPILE =	$(CC) -c $(CC_FLAGS)
-PRE_PROCESS =	$(CPP) $(CC_FLAGS)
-
-########################################
-
-# This is a convenient diagnostic aid: get a cpp'ed foo.c with "make foo.i"
-.c.i:
-	$(PRE_PROCESS) $< >$@
-.c.o:
-	$(COMPILE) $<
-
-########################################
-
-.c._c:
-	./ansi2knr $< > $@.tmp && mv $@.tmp $@
-._c._o:
-	@echo $(COMPILE) $<
-	@rm -f _$*.c
-	@ln $< _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
-.c._o:
-	./ansi2knr $< > $*._c.tmp && mv $*._c.tmp $*._c
-	@echo $(COMPILE) $*._c
-	@rm -f _$*.c
-	@ln $*._c _$*.c && $(COMPILE) _$*.c && mv _$*.o $@ && rm _$*.c
-
-._c._i:
-	@echo $(PRE_PROCESS) $<
-	@rm -f _$*.c
-	@ln $< _$*.c && $(PRE_PROCESS) _$*.c >$@
-.c._i:
-	./ansi2knr $< > $*._c.tmp && mv $*._c.tmp $*._c
-	@echo $(PRE_PROCESS) $*._c
-	@rm -f _$*.c
-	@ln $*._c _$*.c && $(PRE_PROCESS) _$*.c >$@
-
-##############################################################################
-
-all: $(TARGETS)
-
-mkid: $(MKID_OFILES)
-	$(LINK) $(MKID_OFILES) $(LIBS)
-
-lid: $(LID_OFILES)
-	$(LINK) $(LID_OFILES) $(LIBS)
-
-fid: $(FID_OFILES)
-	$(LINK) $(FID_OFILES) $(LIBS)
-
-idx: $(IDX_OFILES)
-	$(LINK) $(IDX_OFILES) $(LIBS)
-
-iid: $(IID_OFILES)
-	$(LINK) $(IID_OFILES) $(LIBS)
-
-$(LID_LINKS): lid
-	rm -f $@; $(LN_S) lid $@
-
-iid.c: iid.y
-	$(YACC) $(srcdir)/iid.y && mv -f y.tab.c $@
-
-########################################
-
-$(ALL_OFILES): $(ANSI2KNR)
-
-ansi2knr: ansi2knr.o
-	$(LINK) ansi2knr.o $(LIBS)
-
-##############################################################################
-
-info: $(INFO_FILES)
-
-$(INFO_FILES): id.texinfo version.texi
-	cd $(srcdir) && $(MAKEINFO) id.texinfo
-
-dvi: id.dvi
-id.dvi: id.texinfo version.texi
-	$(TEXI2DVI) $(srcdir)/id.texinfo
-
-version.texi: stamp-vti
-stamp-vti: configure.in
-	if echo "@set VERSION $(VERSION)" |cmp -s - $(srcdir)/version.texi; then \
-	:; else \
-	    echo "@set VERSION $(VERSION)" >$(srcdir)/version.texi; \
-	fi
-	$(TOUCH) stamp-vti
-
-##############################################################################
-
-install: all
-	$(srcdir)/mkdirhier $(bindir) $(datadir) $(infodir)
-	@for file in $(PROGRAMS); do \
-	    cmd="$(INSTALL_PROGRAM) $$file $(bindir)/`echo $$file | sed '$(transform)'`"; \
-	    (echo $$cmd; eval $$cmd); \
-	done
-	@lid=`echo lid |sed '$(transform)'`; \
-	for file in $(LID_LINKS); do \
-	    file=`echo $$file |sed '$(transform)'`; \
-	    cmd="cd $(bindir); rm -f $$file; $(LN_S) $$lid $$file"; \
-	    (echo $$cmd; eval $$cmd); \
-	done
-	$(INSTALL_DATA) $(srcdir)/iid.help $(IID_HELP_FILE)
-	@for file in $(INFO_FILES); do \
-	    cmd="$(INSTALL_DATA) $(srcdir)/$$file $(infodir)/$$file"; \
-	    (echo $$cmd; eval $$cmd); \
-	done
-
-uninstall:
-	@for file in $(TARGETS); do \
-	    cmd="rm -f $(bindir)/`echo $$file |sed '$(transform)'`"; \
-	    (echo $$cmd; eval $$cmd); \
-	done
-	rm -f $(IID_HELP_FILE)
-	@for file in `cd $(infodir) && echo id.info*`; do \
-	    cmd="rm -f $(infodir)/$$file"; \
-	    (echo $$cmd; eval $$cmd); \
-	done
-
-##############################################################################
-
-check: mkid lid fid idx
-	ENV=; here=`pwd`; PATH=$$here:$$PATH; export PATH; cd $(srcdir) \
-	    && $$here/mkid -f$$here/ID $(TAG_SRC_FILES) \
-	    && $(SHELL) ./idtest -f$$here/ID $(TAG_SRC_FILES) \
-	    && rm -f $$here/ID
-
-id: ID
-ID: $(TAG_SRC_FILES)
-	ENV=; here=`pwd`; PATH=$$here:$$PATH; export PATH; cd $(srcdir) \
-	    && mkid -f$$here/ID $$here/config.h $(TAG_SRC_FILES)
-
-tags: TAGS
-TAGS: $(TAG_SRC_FILES)
-	here=`pwd`; cd $(srcdir) && etags -o $$here/TAGS $(TAG_SRC_FILES)
-
-##############################################################################
-
-mostlyclean:
-	rm -f a.out *.o *._? core *.core core.* *.aux *.cp *.cps *.fn *.fns
-	rm -f *.dvi *.ky *.kys *.log *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs *.tmp
-
-clean: mostlyclean
-	rm -f $(TARGETS)
-	rm -f iid.c
-
-distclean: clean
-	rm -f ansi2knr ID TAGS
-	rm -f Makefile config.h config.status config.cache stamp-h
-
-maintainer-clean: distclean
-	@echo "This command is intended only for maintainers to use;"
-	@echo "rebuilding the deleted files may require special tools."
-	rm -f stamp-vti version.texi id.info*
-
-##############################################################################
-
-dist: $(DIST_TGZ) $(UDIFF_GZ) $(CDIFF_GZ)
-
-dist-tgz: $(DIST_TGZ)
-$(DIST_TGZ): $(DIST_DIR)
-	tar cfzho $@ $(DIST_DIR)
-
-dist-dir: $(DIST_DIR)
-$(DIST_DIR): $(DIST_FILES)
-	rm -fr $@
-	mkdir $@
-	chmod 777 $@
-	distdir=`pwd`/$@; cd $(srcdir); cp -p $(DIST_FILES) $$distdir
-	chmod -R a+r $@
-
-##############################################################################
-
-Makefile: Makefile.in config.status $(DEPEND)
+# For an explanation of the following Makefile rules, see node
+# `Automatic Remaking' in GNU Autoconf documentation.
+Makefile: Makefile.in config.status
 	CONFIG_FILES=$@ CONFIG_HEADERS= ./config.status
 config.status: configure
 	./config.status --recheck
-$(srcdir)/configure: configure.in aclocal.m4
+$(srcdir)/configure: @MAINT@configure.in $(ACLOCAL) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && autoconf
 
-config.h: stamp-h
-stamp-h: $(srcdir)/config.h.in config.status
-	CONFIG_FILES= CONFIG_HEADERS=config.h ./config.status
-	$(TOUCH) stamp-h
-$(srcdir)/config.h.in: stamp-h.in
-$(srcdir)/stamp-h.in: configure.in aclocal.m4 acconfig.h 
+$(CONFIG_HEADER): @MAINT@stamp-h
+stamp-h: $(CONFIG_HEADER_IN) config.status
+	CONFIG_FILES= CONFIG_HEADERS=$(CONFIG_HEADER) ./config.status
+	@echo timestamp > stamp-h
+$(srcdir)/$(CONFIG_HEADER_IN): @MAINT@stamp-h.in
+$(srcdir)/stamp-h.in: configure.in $(ACLOCAL) $(ACCONFIG) $(CONFIG_TOP) $(CONFIG_BOT)
 	cd $(srcdir) && autoheader
-	$(TOUCH) $(srcdir)/stamp-h.in
+	echo timestamp > $(srcdir)/stamp-h.in
 
-depend $(DEPEND):
-	(cd $(srcdir) && $(CC) $(CC_FLAGS) -MM $(ALL_CFILES)) \
-	    | sed -e 's/\.o:/$$o:/' >$(DEPEND)
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
 
-##############################################################################
+@SET_MAKE@
 
-@DEPEND_FILE@
+all-recursive install-data-recursive install-exec-recursive \
+installdirs-recursive install-recursive uninstall-recursive \
+check-recursive installcheck-recursive info-recursive dvi-recursive \
+mostlyclean-recursive clean-recursive distclean-recursive \
+maintainer-clean-recursive:
+	for subdir in $(SUBDIRS); do		\
+	  target=`echo $@ | sed s/-recursive//`; \
+	  echo making $$target in $$subdir;	\
+	  (cd $$subdir && $(MAKE) $$target)	\
+	   || case "$(MFLAGS)" in *k*) fail=yes;; *) exit 1;; esac; \
+	done && test -z "$$fail"
+
+tags: TAGS
+
+tags-recursive:
+	list="$(SUBDIRS)"; for subdir in $$list; do \
+	  (cd $$subdir && $(MAKE) tags); \
+	done
+
+TAGS: tags-recursive $(HEADERS) $(SOURCES) $(CONFIG_HEADER) \
+		$(TAGS_DEPENDENCIES)
+	tags=; \
+	here=`pwd`; \
+	for subdir in $(SUBDIRS); do \
+	  test -f $$subdir/TAGS && { \
+	    tags="$$tags -i $$here/$$subdir/TAGS"; \
+	  } \
+	done; \
+	test -z "$(ETAGS_ARGS)$(CONFIG_HEADER)$(SOURCES)$(HEADERS)$$tags" \
+	  || etags $(ETAGS_ARGS) $$tags $(CONFIG_HEADER) $(SOURCES) $(HEADERS)
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	rm -f TAGS ID
+
+maintainer-clean-tags:
+
+distdir = $(PACKAGE)-$(VERSION)
+# This target untars the dist file and tries a VPATH configuration.  Then
+# it guarantees that the distribution is self-contained by making another
+# tarfile.
+distcheck: dist
+	rm -rf $(distdir)
+	$(TAR) zxf $(distdir).tar.gz
+	mkdir $(distdir)/=build
+	mkdir $(distdir)/=inst
+	dc_install_base=`cd $(distdir)/=inst && pwd`; \
+	cd $(distdir)/=build \
+	  && ../configure --srcdir=.. --prefix=$$dc_install_base \
+	  && $(MAKE) \
+	  && $(MAKE) check \
+	  && $(MAKE) install \
+	  && $(MAKE) installcheck \
+	  && $(MAKE) dist
+	rm -rf $(distdir)
+	@echo "========================"; \
+	echo "$(distdir).tar.gz is ready for distribution"; \
+	echo "========================"
+dist: distdir
+	chmod -R a+r $(distdir)
+	$(TAR) chozf $(distdir).tar.gz $(distdir)
+	rm -rf $(distdir)
+distdir: $(DEP_DISTFILES)
+	rm -rf $(distdir)
+	mkdir $(distdir)
+	chmod 777 $(distdir)
+	@for file in `cd $(srcdir) && echo $(DISTFILES)`; do \
+	  test -f $(distdir)/$$file \
+	  || ln $(srcdir)/$$file $(distdir)/$$file 2> /dev/null \
+	  || cp -p $(srcdir)/$$file $(distdir)/$$file; \
+	done
+	for subdir in $(SUBDIRS); do		\
+	  test -d $(distdir)/$$subdir		\
+	  || mkdir $(distdir)/$$subdir		\
+	  || exit 1;				\
+	  chmod 777 $(distdir)/$$subdir;	\
+	  (cd $$subdir && $(MAKE) distdir=../$(distdir)/$$subdir distdir) \
+	    || exit 1; \
+	done
+check-TESTS: $(TESTS)
+	@failed=0; all=0; \
+	srcdir=$(srcdir); export srcdir; \
+	for tst in $(TESTS); do \
+	  all=`expr $$all + 1`; \
+	  if test -f $$tst; then dir=.; \
+	  else dir="$(srcdir)"; fi; \
+	  if $$dir/$$tst; then \
+	    echo "PASS: $$tst"; \
+	  else \
+	    failed=`expr $$failed + 1`; \
+	    echo "FAIL: $$tst"; \
+	  fi; \
+	done; \
+	if test "$$failed" -eq 0; then \
+	  echo "========================"; \
+	  echo "All $$all tests passed"; \
+	  echo "========================"; \
+	else \
+	  echo "$$failed of $$all tests failed"; \
+	fi
+info: info-recursive
+
+dvi: dvi-recursive
+
+check: check-recursive check-TESTS
+
+installcheck: installcheck-recursive
+
+all-recursive-hack: $(CONFIG_HEADER)
+	$(MAKE) all-recursive
+
+all-am: Makefile config.h
+
+install-exec: install-exec-recursive
+
+install-data: install-data-recursive
+
+install: install-recursive
+	@:
+
+uninstall: uninstall-recursive
+
+all: all-recursive-hack all-am
+
+install-strip:
+	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' install
+installdirs: installdirs-recursive
+
+
+mostlyclean-generic:
+	test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
+
+clean-generic:
+	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+
+distclean-generic:
+	rm -f Makefile $(DISTCLEANFILES)
+	rm -f config.cache config.log $(CONFIG_HEADER) stamp-h
+
+maintainer-clean-generic:
+	test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
+	test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+mostlyclean-am:  mostlyclean-tags mostlyclean-generic
+
+clean-am:  clean-tags clean-generic mostlyclean-am 
+
+distclean-am:  distclean-tags distclean-generic clean-am 
+
+maintainer-clean-am:  maintainer-clean-tags maintainer-clean-generic \
+		distclean-am 
+
+mostlyclean:  mostlyclean-am mostlyclean-recursive
+
+clean:  clean-am clean-recursive
+
+distclean:  distclean-am distclean-recursive
+	rm -f config.status
+
+maintainer-clean:  maintainer-clean-am maintainer-clean-recursive
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+	rm -f config.status
+
+.PHONY: default install-data-recursive uninstall-data-recursive \
+install-exec-recursive uninstall-exec-recursive installdirs-recursive \
+uninstalldirs-recursive all-recursive check-recursive \
+installcheck-recursive info-recursive dvi-recursive \
+mostlyclean-recursive distclean-recursive clean-recursive \
+maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir check-TESTS \
+info dvi check installcheck all-recursive-hack all-am install-exec \
+install-data install uninstall all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
+
+
+idtest-real: all
+	$(SHELL) $(top_srcdir)/idtest $(top_srcdir) $(top_builddir)
+.SUFFIXES:
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

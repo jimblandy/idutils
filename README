@@ -7,7 +7,7 @@ form, literal numbers, or words of human-readable text.  Database
 queries can be issued from the command-line, or from within emacs,
 serving as an augmented tags facility.
 
-`mkid' was originally written by Greg McGary <gkm@magilla.cichlid.com>
+`mkid' was originally written by Greg McGary <gkm@gnu.ai.mit.edu>
 and posted to comp.sources.unix in September 1987.  It was then
 maintained and enhanced by a loose knit group of programmers on the
 Internet led by Tom Horsley <Tom.Horsley@mail.hcsc.com>.  Tom released
@@ -23,10 +23,13 @@ See file `NEWS' for a list of major changes in the current release.
 See file `THANKS' for a list of contributors.
 See file `TODO' for planned enhancements.
 
-Send bug reports to <gkm@magilla.cichlid.com>.  Please describe your
-problem adequately: your input, what you expected, what you got, and
-why it is wrong.  Diffs are welcome, but please include a description
-of the problem as well, since this is sometimes difficult to infer.
+Mail suggestions and bug reports for these programs to
+<bug-gnu-utils@prep.ai.mit.edu>.
+
+Please describe bugs completely: your input, what you expected, what you
+got, and why it is wrong.  Diffs are welcome, but please include a
+description of the problem as well, since this is sometimes difficult to
+infer.
 
 
 Local Variables:

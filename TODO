@@ -1,28 +1,31 @@
 `mkid' TODO - Future directions
 
-* Bring all code into conformance with GNU project coding standards.
-  - Use command-line arguments, not the name of the program in argv[0]
-    to determine lid's behavior
-  - Revise the command-line argument syntax, in particular the mkid
-    scanner-arg syntax.
-  - Use getopt_long () in all programs to parse command-line arguments
-  - Handle GNU standard arguments: In particular, --version & --help
-  - use xmalloc
-
-* Portability & uniformity
-  - configure tests for lots of things, but code doesn't use all
-    results.  Either use the results, or drop the tests.
+* Portability
   - Fix filenames.c to handle non-UNIX file names properly
     (notably DOS & OS/2).
   - Fix assumption that (sizeof (int) == sizeof (long))
-  - use alloca
-  - use xmalloc
 
 * all query interfaces
-  - add environment variable for setting default ID file name--allow this
-    variable to be a "path" to handle multiple ID files, e.g.,
-	IDFILE=/usr/src/ID:/usr/local/src/ID:$HOME/src/ID
-    also allow dirs (considered to contain a file named "ID" by default)
+  - add environment variable for setting default ID file name.
+
+* lid
+  - use "long long" (if the compiler supports it) integer comparisons
+    in find_number().
+  - generalize the command-line interface for different behaviors.
+    User passes a command-format string for operating on the results
+    of a query:
+    %p = pattern, %f = crunched file list, %F = uncrunched file list
+    filename list options:
+	{,} -vs- expanded; space -vs- newline separator
+    pattern list options:
+	tokens -vs- regexp
+    Recommend the following aliases to emulate old behavior:
+      alias lid="findid --format='echo %p %f'"
+      alias eid="findid --format='vi +/\\<%p\\>/ %F'" # for vi users
+      alias gid="findid --format='egrep \\<%p\\> %F'"
+      alias aid="findid --format='fgrep -i %p %F'"
+      alias pid="findid --format='echo %p %f' -f"
+      alias fid="findid --format='echo %t ' -f"
 
 * mkid & lid
   - store & retrieve floating point literals
@@ -30,8 +33,6 @@
     you can index and search archived source without having to unpack it.
 
 * mkid
-  - add a recursive file tree walker, so a complete list of file names
-    need not be supplied--implement with ftw(3)?
   - (Optinally?) store tokenized contents of comments.
   - Store attributes with symbols: type, func, variable struct-tag
     enum-tag, keyword, etc.  Store caller/callee relationships between
@@ -39,38 +40,11 @@
     is needed to support a cscope interface.
   - Add times(2) results to statistics output.
   - treat \ specially for TeX files and do likewise with @ for Texinfo.
-  - add time(1) style output to statistics report at end
-  - control stats reports with a command-line arg.
 
-* lid
-  - change the name of the program to something a bit more
-    descriptive, e.g., "findid".
-  - use "long long" (if the compiler supports it) integer comparisons
-    in find_number().
-  - generalize the command-line interface for different behaviors.
-    User passes a command-format string for operating on the results
-    of a query:
-    %t = token, %f = crunched file list, %F = uncrunched file list
-    Recommend the following aliases to emulate old behavior:
-      alias lid="findid -e 'echo %t %f'"
-      alias eid="findid -e 'vi +/\\<%t\\>/ %F'" # for vi users
-      alias gid="findid -e 'egrep \\<%t\\> %F'"
-  - make `pid' a separate program
-  - standardize & document regexp syntax (currently, it depends on whether
-    you link rx.o or your vendor's regexp stuff).
-  - gid bug: "gid -e file_" yeilds nothing.
-
-* iid
-  - don't use $PS1 for the prompt.  Use (iid), or iid> or something like that
-  - review (revise?) syntax
-
-* gid.el
-  - associate ID file with buffers so future `gid's will use the right ID.
-  - wire completion on token names
-
-* cscope
-  - add a cscope work-alike query interface (this is being done by
-    Maureen Lecuona <lecuona@paul.rutgers.edu>)
+* gscope
+  - add a cscope work-alike query interface
+  - rewrite scanners to be scanner/parsers that can distinguish defn
+    from use, lvalues from rvalues, types from vars from funcs from macros.
 
 * grep
   - Hack GNU grep to use a mkid database for hints about which files to

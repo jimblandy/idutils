@@ -1,5 +1,5 @@
-/* Special definitions for `mkid', processed by autoheader.
-   This file is in the public domain.
+/* Special definitions for GNU id-utils, processed by autoheader.
+   Copyright (C) 1995, 96 Free Software Foundation, Inc.
 */
 
 #ifndef _config_h_
@@ -7,26 +7,44 @@
 
 @TOP@
 
-/* Define to `unsigned short' if <sys/types.h> doesn't define.  */
-#undef dev_t
+/* Define to 1 if NLS is requested.  */
+#undef ENABLE_NLS
+
+/* Define as 1 if you have catgets and don't want to use GNU gettext.  */
+#undef HAVE_CATGETS
+
+/* Define if the sbrk system call is declared in unistd.h.  */
+#undef HAVE_DECL_SBRK
+
+/* Define if the sys_errlist array is declared in errno.h, error.h or stdio.h.  */
+#undef HAVE_DECL_SYS_ERRLIST
+
+/* Define as 1 if you have gettext and don't want to use GNU gettext.  */
+#undef HAVE_GETTEXT
+
+/* Define if your locale.h file contains LC_MESSAGES.  */
+#undef HAVE_LC_MESSAGES
+
+/* Define to 1 if you have the stpcpy function.  */
+#undef HAVE_STPCPY
 
 /* Define if you have the <sys/ioctl.h> header file.  */
 #undef HAVE_SYS_IOCTL_H
 
-/* Define to filename of iid help text.  */
-#undef IID_HELP_FILE
-
-/* Define to `unsigned long' if <sys/types.h> doesn't define.  */
-#undef ino_t
-
 /* Define to the name of the distribution.  */
 #undef PACKAGE
+
+/* The concatenation of the strings PACKAGE, "-", and VERSION.  */
+#undef PACKAGE_VERSION
 
 /* Define to 1 if ANSI function prototypes are usable.  */
 #undef PROTOTYPES
 
 /* Define to the major.minor version # of the distribution.  */
 #undef VERSION
+
+/* Define to 1 if GNU regex should be used instead of GNU rx.  */
+#undef WITH_REGEX
 
 @BOTTOM@
 
@@ -42,9 +60,9 @@
 
 #ifndef __P
 # ifndef PROTOTYPES
-#  define __P(args) ()
+#  define	__P(protos)	()		/* traditional C */
 # else
-#  define __P(args) args
+#  define	__P(protos)	protos		/* full-blown ANSI C */
 # endif
 #endif
 

@@ -2,49 +2,60 @@
 
 export LANG; LANG=C
 
-: ${TMP=/tmp}
-ID_idx=$TMP/ID.idx
-ID_lid=$TMP/ID.lid
-tmp_idx=$TMP/$$.idx
-tmp_fid=$TMP/$$.fid
-
 case $# in
-0) 1>&2 echo Usage: $0 files...; exit 1;;
+0) exec make idtest-real;;
 esac
-case $1 in
--f*) idfile_arg=$1; shift;;
-esac
+
+srcdir=$1
+buildir=$2
+PATH=$buildir/src:$PATH
+
+f_ID="-f $buildir/ID"
+
+files="`find $srcdir -name \*.h;
+	find $srcdir -name \*.c |egrep -v 'lib/ansi2knr\.c$'`"
+
+cmd="mkid $f_ID -m $srcdir/lib/language.map $files"
+echo $cmd
+eval $cmd
 
 errors=
 
-if idx "$@" |sort -u >$ID_idx &&
-    lid $idfile_arg |sed -e 's/[ 	].*//' |sort -u >$ID_lid &&
-    cmp -s $ID_idx $ID_lid
+if idx $files |sort -u >ID.idx &&
+    lid $idfile_arg |sed -e 's/[ 	].*//' |sort -u >ID.lid &&
+    cmp -s ID.idx ID.lid
 then
-    rm -f $ID_idx $ID_lid
+    rm -f ID.idx ID.lid
     echo "Good.  idx and lid agree."
 else
-    1>&2 echo "Oops!  idx and lid disagree--look at $ID_idx and $ID_lid"
+    mv ID.idx ID.bad-idx
+    mv ID.fid ID.bad-fid
+    1>&2 echo "Oops!  idx and lid disagree--look in ID.bad-{idx,lid}"
     errors=t
 fi
 
-for file
+idx_file=$$.idx
+fid_file=$$.fid
+
+for file in $files
 do
     case x$file in
     x-*) scan_args="$scan_args $file"
 	 continue;;
     esac
-    if fid $idfile_arg $file >$tmp_fid &&
-	idx $scan_args $file |sort -u >$tmp_idx &&
-	cmp -s $tmp_idx $tmp_fid;
+    if fid $idfile_arg $file >$fid_file &&
+	idx $scan_args $file |sort -u >$idx_file &&
+	cmp -s $idx_file $fid_file;
     then
 	echo "Good.  idx and fid agree for $file"
     else
-	1>&2 echo "Oops!  idx and fid disagree for $file"
+	1>&2 echo "Oops!  idx and fid disagree for $file--look in $file.bad-{idx,fid}"
+	mv $idx_file $file.bad-idx
+	mv $fid_file $file.bad-fid
 	errors=t
     fi
 done
-rm -f $tmp_idx $tmp_fid
+rm -f $idx_file $fid_file
 
 case x$errors in
 xt) echo "Some checks failed."

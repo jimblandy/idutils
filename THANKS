@@ -1,11 +1,10 @@
 `mkid' THANKS file
 
-mkid, lid, fid, and idx were originally written by Greg McGary.  iid
-and pid were written by Tom Horsley, who also maintained the programs
-for a time and released mkid2 to comp.sources.unix.  id.texinfo was
-originally written by Tom Horsley and revised for mkid-3.0 by Karl Berry.
+All programs were written by Greg McGary.  Tom Horsley maintained the
+programs for a time and released mkid2 to comp.sources.unix.  The
+texinfo manual was originally written by Tom Horsley.
 
-Special thanks go to Francois Pinard who worked tirelessly to refine
+Special thanks go to Francois Pinard worked tirelessly to refine
 mkid's autoconfiscation, ensure mkid's conformance to GNU standards,
 and generally pick all the nits that were fit to pick. ;-)
 
@@ -15,7 +14,6 @@ these people.  If you contributed, but don't see your name here,
 please notify me (Greg McGary) at the address in the README file.
 Help keep this list complete and accurate.
 
-Greg McGary		<gkm@magilla.cichlid.com>
 Tom Horsley		<Tom.Horsley@mail.hcsc.com>
 Wolfgang Rupprecht	<wolfgang@wsrcc.com>
 Marty Leisner		<leisner@sdsp.mc.xerox.com>
@@ -31,6 +29,4 @@ Dave Wiggins		<dpw@x.org>
 Thomas Neumann		<tom@smart.ruhr.de>
 Jim Meyering		<meyering@comco.com>
 Kazushi (Jam)Marukawa	<kazusi-m@is.aist-nara.ac.jp>
-Simon Leinen		<simon@lia.di.epfl.ch>
-Nelson H. F. Beebe	<beebe@math.utah.edu>
-Scott Bartram		<scottb@clark.net>
+Tom Tromey		<tromey@cygnus.com>

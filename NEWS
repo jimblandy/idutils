@@ -1,4 +1,40 @@
-`mkid' NEWS - User visible changes.
+id-utils NEWS - User visible changes.
+
+Version 3.0.9 - May 1996, by Greg McGary
+
+* The package name has been changed from `mkid' to `id-utils', and is now
+  officially a part of GNU.
+
+* Command-line arguments have been revised to conform with GNU standards.
+  Each command now processes --help and --version long arguments.
+
+* The texinfo manual is out-of-date.  Please use the `--help' option for
+  correct information about command-line arguments.  I'll work on updating
+  it tonight.
+
+* `mkid' and `idx' use a file-tree walker.  Give them one or more directory
+  names on the command-line, and they'll recursively descend looking for
+  source files.  lib/language.map (installe as $(prefix)/share/language.map)
+  contains patterns for mapping file names to the appropriate language scanner.
+
+* id-utils now uses automake.
+
+* gid, aid and eid are now shell-script wrappers that
+  call `lid' with the apropriate argument.
+
+* A new environment `IDPATH' contains a colon-separated list of ID ID file
+  names for use by `fid' and `lid'.  It is only partially implemented at
+  this time only the first ID file is actually handled, the rest are
+  ignored.
+
+* pid is temporarily gone, but will reappear soon.
+
+* iid has been removed from the distribution.
+
+* Support for non-ANSI compilers is broken.  Don't expect it to work.
+  If you use gcc, all will be well.
+
+* Miscellaneous bugs are fixed.
 
 Version 3.0 - February 1995, by Greg McGary
 
