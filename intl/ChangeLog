@@ -1,3 +1,28 @@
+Sat Aug 31 03:07:09 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* l10nflist.c (_nl_normalize_codeset): We convert to lower case,
+	so don't prepend uppercase `ISO' for only numeric arg.
+
+Fri Jul 19 00:15:46 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* l10nflist.c: Move inclusion of argz.h, ctype.h, stdlib.h after
+	definition of _GNU_SOURCE.  Patch by Roland McGrath.
+
+	* Makefile.in (uninstall): Fix another bug with `for' loop and
+	empty arguments.  Patch by Jim Meyering.  Correct name os
+	uninstalled files: no intl- prefix anymore.
+
+	* Makefile.in (install-data): Again work around shells which
+	cannot handle mpty for list.  Reported by Jim Meyering.
+
+Sat Jul 13 18:11:35 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* Makefile.in (install): Split goal.  Now depend on install-exec
+        and install-data.
+	(install-exec, install-data): New goals.  Created from former
+	install goal.
+	Reported by Karl Berry.
+
 Sat Jun 22 04:58:14 1996  Ulrich Drepper  <drepper@cygnus.com>
 
 	* Makefile.in (MKINSTALLDIRS): New variable.  Path to

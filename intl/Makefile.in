@@ -97,17 +97,26 @@ check: all
 # where configure found a previously installed GNU gettext library.
 # If you want to use the one which comes with this version of the
 # package, you have to use `configure --with-included-gettext'.
-install: all
+install: install-exec install-data
+install-exec: all
+	if test "$(PACKAGE)" = "gettext" \
+	   && test '@INTLOBJS@' = '$(GETTOBJS)'; then \
+	  if test -r $(MKINSTALLDIRS); then \
+	    $(MKINSTALLDIRS) $(libdir) $(includedir); \
+	  else \
+	    $(top_srcdir)/mkinstalldirs $(libdir) $(includedir); \
+	  fi; \
+	  $(INSTALL_DATA) intlh.inst $(includedir)/libintl.h; \
+	  $(INSTALL_DATA) libintl.a $(libdir)/libintl.a; \
+	else \
+	  : ; \
+	fi
+install-data: all
 	if test "$(PACKAGE)" = "gettext"; then \
 	  if test -r $(MKINSTALLDIRS); then \
-	    $(MKINSTALLDIRS) $(libdir) $(includedir) $(gettextsrcdir); \
+	    $(MKINSTALLDIRS) $(gettextsrcdir); \
 	  else \
-	    $(top_srcdir)/mkinstalldirs $(libdir) $(includedir) \
-	      $(gettextsrcdir); \
-	  fi; \
-	  if test '@INTLOBJS@' = '$(GETTOBJS)'; then \
-	    $(INSTALL_DATA) intlh.inst $(includedir)/libintl.h; \
-	    $(INSTALL_DATA) libintl.a $(libdir)/libintl.a; \
+	    $(top_srcdir)/mkinstalldirs $(gettextsrcdir); \
 	  fi; \
 	  $(INSTALL_DATA) VERSION $(gettextsrcdir)/VERSION; \
 	  cd $(srcdir) && \
@@ -125,7 +134,7 @@ installcheck:
 uninstall:
 	dists="$(DISTFILES)"; \
 	for file in $$dists; do \
-	  rm -f $(gettextsrcdir)/intl-$$file; \
+	  rm -f $(gettextsrcdir)/$$file; \
 	done
 
 info dvi:

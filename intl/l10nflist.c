@@ -21,15 +21,6 @@ Boston, MA 02111-1307, USA.  */
 # include <config.h>
 #endif
 
-#if defined _LIBC || defined HAVE_ARGZ_H
-# include <argz.h>
-#endif
-#include <ctype.h>
-
-#if defined STDC_HEADERS || defined _LIBC
-# include <stdlib.h>
-#endif
-
 #if defined HAVE_STRING_H || defined _LIBC
 # ifndef _GNU_SOURCE
 #  define _GNU_SOURCE	1
@@ -42,6 +33,15 @@ Boston, MA 02111-1307, USA.  */
 # ifndef strchr
 #  define strchr index
 # endif
+#endif
+
+#if defined _LIBC || defined HAVE_ARGZ_H
+# include <argz.h>
+#endif
+#include <ctype.h>
+
+#if defined STDC_HEADERS || defined _LIBC
+# include <stdlib.h>
 #endif
 
 #include "loadinfo.h"
@@ -366,7 +366,7 @@ _nl_normalize_codeset (codeset, name_len)
   if (retval != NULL)
     {
       if (only_digit)
-	wp = stpcpy (retval, "ISO");
+	wp = stpcpy (retval, "iso");
       else
 	wp = retval;
 
