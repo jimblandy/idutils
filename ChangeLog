@@ -1,3 +1,18 @@
+1999-01-28  Jim Meyering  <meyering@ascend.com>
+
+	* libidu/scanners.c (set_ushort_ctype): Use an unsigned char index.
+	(clear_ushort_ctype): Likewise.
+	(set_uchar_ctype): Likewise.
+	(clear_uchar_ctype): Likewise.
+	(id_0): Add `unsigned' to declaration of this file-scope static var..
+	(get_token_c): Add `unsigned' to declaration of `id'.
+	(get_token_asm): Likewise.
+	(get_token_text): Likewise.
+
+	* lisp/Makefile.am (DISTCLEANFILES): Arrange to remove id-utils.elc.
+	* doc/Makefile.am (DISTCLEANFILES): Arrange to remove id-utils.cm
+	and id-utils.fl.
+
 1999-01-27  Jim Meyering  <meyering@ascend.com> (with some changes from gkm)
 
 	* Makefile.maint: New file.
