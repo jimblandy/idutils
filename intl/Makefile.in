@@ -111,7 +111,8 @@ install: all
 	  fi; \
 	  $(INSTALL_DATA) VERSION $(gettextsrcdir)/VERSION; \
 	  cd $(srcdir) && \
-	  for file in $(DISTFILES.common); do \
+	  dists="$(DISTFILES.common)"; \
+	  for file in $$dists; do \
 	    $(INSTALL_DATA) $$file $(gettextsrcdir)/$$file; \
 	  done; \
 	else \
