@@ -16,14 +16,15 @@ License along with the GNU C Library; see the file COPYING.LIB.  If
 not, write to the Free Software Foundation, Inc., 675 Mass Ave,
 Cambridge, MA 02139, USA.  */
 
-#include <ansidecl.h>
-#include <string.h>
+#ifdef HAVE_CONFIG_H
 #include <config.h>
-#include "strxtra.h"
+#endif
+#include <ansidecl.h>
+#include "xstring.h"
 
 /* Return NAME with any leading path stripped off.  */
 
-CONST char *
+char *
 DEFUN(dirname, (name), CONST char *name)
 {
   char *base;

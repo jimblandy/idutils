@@ -1,5 +1,6 @@
 /* fid.c -- list all tokens in the given file(s)
    Copyright (C) 1986, 1995, 1996 Free Software Foundation, Inc.
+   Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,27 +16,23 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
 
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <getopt.h>
-
 #include <config.h>
-#include "system.h"
+#include <stdio.h>
+#include <getopt.h>
+#include "xstring.h"
+#include "xunistd.h"
+#include "xnls.h"
 #include "idfile.h"
-#include "bitops.h"
-#include "filenames.h"
-#include "misc.h"
-#include "strxtra.h"
-#include "alloc.h"
-#include "token.h"
 #include "error.h"
 #include "pathmax.h"
+#include "xmalloc.h"
+#include "xalloca.h"
 
 int get_file_index __P((char *file_name));
 int is_hit __P((unsigned char const *hits, int file_number));
 int is_hit_1 __P((unsigned char const **hits, int level, int file_number));
 void skip_hits __P((unsigned char const **hits, int level));
+void usage __P((void));
 
 struct idhead idh;
 int tree8_levels;
@@ -53,8 +50,6 @@ static int show_help;
 static int show_version;
 
 /* The file name of the ID database.  */
-
-char const *id_file_name;
 
 struct file_link *cw_dlink;
 struct file_link **members_0;
@@ -81,13 +76,15 @@ static void
 help_me (void)
 {
   printf (_("\
-Usage: %s [OPTION] FILENAME [FILENAME2]\n"),
-	  program_name);
+Usage: %s [OPTION] FILENAME [FILENAME2]\n\
+"), program_name);
   printf (_("\
 List identifiers that occur in FILENAME, or if FILENAME2 is\n\
 also given list the identifiers that occur in both files.\n\
 \n\
-  -f, --file=FILE     file name of ID database\n\
+  -f, --file=FILE  file name of ID database\n\
+      --help       display this help and exit\n\
+      --version    output version information and exit\n\
 "));
   exit (0);
 }
@@ -95,11 +92,19 @@ also given list the identifiers that occur in both files.\n\
 int
 main (int argc, char **argv)
 {
-  int optc;
   int index_1 = -1;
   int index_2 = -1;
 
   program_name = argv[0];
+  idh.idh_file_name = 0;
+
+  /* Set locale according to user's wishes.  */
+  setlocale (LC_ALL, "");
+
+  /* Tell program which translations to use and where to find.  */
+  bindtextdomain (PACKAGE, LOCALEDIR);
+  textdomain (PACKAGE);
+
   for (;;)
     {
       int optc = getopt_long (argc, argv, "f:",
@@ -112,7 +117,7 @@ main (int argc, char **argv)
 	  break;
 
 	case 'f':
-	  id_file_name = optarg;
+	  idh.idh_file_name = optarg;
 	  break;
 
 	default:
@@ -129,22 +134,6 @@ main (int argc, char **argv)
   if (show_help)
     help_me ();
 
-  /* Look for the ID database up the tree */
-  id_file_name = look_up (id_file_name);
-  if (id_file_name == 0)
-    error (1, errno, _("can't locate `ID'"));
-  
-  init_idh_obstacks (&idh);
-  init_idh_tables (&idh);
-
-  cw_dlink = get_current_dir_link ();
-
-  /* Determine absolute name of the directory name to which database
-     constituent files are relative. */
-  members_0 = read_id_file (id_file_name, &idh);
-  bits_vec_size = (idh.idh_files + 7) / 4; /* more than enough */
-  tree8_levels = tree8_count_levels (idh.idh_files);
-
   argc -= optind;
   argv += optind;
   if (argc < 1)
@@ -158,6 +147,22 @@ main (int argc, char **argv)
       usage ();
     }
 
+  /* Look for the ID database up the tree */
+  idh.idh_file_name = locate_id_file_name (idh.idh_file_name);
+  if (idh.idh_file_name == 0)
+    error (1, errno, _("can't locate `ID'"));
+
+  init_idh_obstacks (&idh);
+  init_idh_tables (&idh);
+
+  cw_dlink = get_current_dir_link ();
+
+  /* Determine absolute name of the directory name to which database
+     constituent files are relative. */
+  members_0 = read_id_file (idh.idh_file_name, &idh);
+  bits_vec_size = (idh.idh_files + 7) / 4; /* more than enough */
+  tree8_levels = tree8_count_levels (idh.idh_files);
+
   index_1 = get_file_index ((argc--, *argv++));
   if (argc)
     index_2 = get_file_index ((argc--, *argv++));
@@ -168,16 +173,25 @@ main (int argc, char **argv)
   hits_buf = xmalloc (idh.idh_buf_size);
   fseek (idh.idh_FILE, idh.idh_tokens_offset, SEEK_SET);
   {
+    int count = 0;
     int i;
+    int separator = (isatty (STDOUT_FILENO) ? ' ' : '\n');
+    
     for (i = 0; i < idh.idh_tokens; i++)
       {
 	unsigned char const *hits;
-	
+
 	gets_past_00 (hits_buf, idh.idh_FILE);
-	hits = tok_hits_addr (hits_buf);
+	hits = token_hits_addr (hits_buf);
 	if (is_hit (hits, index_1) && (index_2 < 0 || is_hit (hits, index_2)))
-	  printf ("%s\n", tok_string (hits_buf));
+	  {
+	    fputs (token_string (hits_buf), stdout);
+	    putchar (separator);
+	    count++;
+	  }
       }
+    if (count && separator == ' ')
+      putchar ('\n');
   }
 
   return 0;
@@ -191,11 +205,11 @@ get_file_index (char *file_name)
   struct file_link *fn_flink = 0;
   int has_slash = (strchr (file_name, '/') != 0);
   int file_name_length = strlen (file_name);
-  int index = -1;
+  int idx = -1;
 
   if (strstr (file_name, "./"))
     fn_flink = parse_file_name (file_name, cw_dlink);
-    
+
   for (members = members_0; members < end; members++)
     {
       struct file_link *flink = *members;
@@ -206,26 +220,26 @@ get_file_index (char *file_name)
 	}
       else if (has_slash)
 	{
-	  char buf[PATH_MAX];
+	  char *file_name = ALLOCA (char, PATH_MAX);
 	  int member_length;
-	  maybe_relative_path (buf, flink, cw_dlink);
-	  member_length = strlen (buf);
+	  maybe_relative_file_name (file_name, flink, cw_dlink);
+	  member_length = strlen (file_name);
 	  if (file_name_length > member_length
-	      || !strequ (&buf[member_length - file_name_length], file_name))
+	      || !strequ (&file_name[member_length - file_name_length], file_name))
 	    continue;
 	}
       else if (!strequ (flink->fl_name, file_name))
 	continue;
-      if (index >= 0)
+      if (idx >= 0)
 	{
 	  error (0, 0, _("`%s' is ambiguous"), file_name);
-	  return;
+	  return -1;
 	}
-      index = members - members_0;
+      idx = members - members_0;
     }
-  if (index < 0)
+  if (idx < 0)
     error (0, 0, _("`%s' not found"), file_name);
-  return index;
+  return idx;
 }
 
 int

@@ -1,5 +1,6 @@
 /* lid.c -- primary query interface for mkid database
    Copyright (C) 1986, 1995, 1996 Free Software Foundation, Inc.
+   Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,95 +16,131 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
 
-#include <stdlib.h>
-#include <unistd.h>
+#include <config.h>
 #include <stdio.h>
-#include <string.h>
 #include <ctype.h>
+#include "xstdlib.h"
 #include <signal.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <assert.h>
-#include <limits.h>
+#include <getopt.h>
+#include "xstring.h"
+#include "xunistd.h"
+#include "xnls.h"
+#include "xmalloc.h"
+#include "idfile.h"
+#include "xstring.h"
+#include "error.h"
+#include "pathmax.h"
+#include "xalloca.h"
+#if HAVE_LIMITS_H
+# include <limits.h>
+#endif
 #if WITH_REGEX
 # include <regex.h>
 #else
 # include <rx.h>
 #endif
 
-#include <config.h>
-#include <getopt.h>
-#include "system.h"
-#include "alloc.h"
-#include "idfile.h"
-#include "token.h"
-#include "bitops.h"
-#include "strxtra.h"
-#include "misc.h"
-#include "filenames.h"
-#include "error.h"
-#include "pathmax.h"
-
 typedef void (*report_func_t) __P((char const *name, struct file_link **flinkv));
 typedef int (*query_func_t) __P((char const *arg, report_func_t));
 
-unsigned char *tree8_to_bits __P((unsigned char *bits_vec, unsigned char const *hits_tree8));
-void tree8_to_bits_1 __P((unsigned char **bits_vec, unsigned char const **hits_tree8, int level));
-struct file_link **tree8_to_flinkv __P((unsigned char const *hits_tree8));
-struct file_link **bits_to_flinkv __P((unsigned char const *bits_vec));
+enum delimiter_style
+{
+  ds_bogus,
+  ds_contextual,
+  ds_word,
+  ds_substring
+};
 
-void usage __P((void));
-static void help_me __P((void));
-int common_prefix_suffix __P((struct file_link const *flink_1, struct file_link const *flink_2));
-int member_file_index_qsort_compare __P((void const *x, void const *y));
-void look_id __P((char const *name, struct file_link **flinkv));
-void grep_id __P((char const *name, struct file_link **flinkv));
-void edit_id __P((char const *name, struct file_link **flinkv));
-int vector_cardinality __P((void *vector));
-int skip_to_argv __P((struct file_link **flinkv));
-int query_plain __P((char const *arg, report_func_t report_function));
-int query_anchor __P((char const *arg, report_func_t report_function));
-int query_regexp __P((char const *arg, report_func_t report_function));
-int query_number __P((char const *arg, report_func_t report_function));
-int query_non_unique __P((unsigned int, report_func_t report_function));
-int query_apropos __P((char const *arg, report_func_t report_function));
-void parse_frequency_arg __P((char const *arg));
-int frequency_wanted __P((char const *tok));
-char const *strcpos __P((char const *s1, char const *s2));
-char const *file_regexp __P((char const *name0, char const *left_delimit, char const *right_delimit));
-off_t query_token __P((char const *token));
-int is_regexp __P((char *name));
-int file_name_wildcard __P((char const *re, char const *fn));
-int word_match __P((char const *name0, char const *line));
-int get_radix __P((char const *name));
-int stoi __P((char const *name));
-int otoi __P((char const *name));
-int dtoi __P((char const *name));
-int xtoi __P((char const *name));
-void savetty __P((void));
-void restoretty __P((void));
-void linetty __P((void));
-void chartty __P((void));
+enum pattern_style
+{
+  ps_bogus,
+  ps_contextual,
+  ps_literal,
+  ps_regexp
+};
 
-enum radix {
+enum key_style
+{
+  ks_bogus,
+  ks_none,
+  ks_token,
+  ks_pattern
+};
+
+enum result_style
+{
+  rs_bogus,
+  rs_none,
+  rs_filenames,
+  rs_grep,
+  rs_edit
+};
+
+enum radix
+{
   radix_oct = 1,
   radix_dec = 2,
   radix_hex = 4,
   radix_all = radix_dec | radix_oct | radix_hex
 };
 
+void usage __P((void));
+static void help_me __P((void));
+void lower_caseify __P((char *str));
+enum key_style parse_key_style __P((char const *arg));
+enum result_style parse_result_style __P((char const *arg));
+query_func_t get_query_func __P((char *pattern));
+report_func_t get_report_func __P((void));
+void report_filenames __P((char const *name, struct file_link **flinkv));
+void report_grep __P((char const *name, struct file_link **flinkv));
+void report_edit __P((char const *name, struct file_link **flinkv));
+void report_nothing __P((char const *name, struct file_link **flinkv));
+int vector_cardinality __P((void *vector));
+int search_flinkv __P((struct file_link **flinkv));
+int query_literal_word __P((char const *pattern, report_func_t report_func));
+int query_literal_prefix __P((char const *pattern, report_func_t report_func));
+int query_regexp __P((char const *pattern_0, report_func_t report_func));
+char const *maybe_add_word_delimiters __P((char const *pattern_0));
+int query_number __P((char const *pattern, report_func_t report_func));
+int query_ambiguous_prefix __P((unsigned int, report_func_t report_func));
+int query_literal_substring __P((char const *pattern, report_func_t report_func));
+void parse_frequency_arg __P((char const *arg));
+int desired_frequency __P((char const *tok));
+char *strcasestr __P((char const *s1, char const *s2));
+char const *file_regexp __P((char const *name_0, char const *left_delimit, char const *right_delimit));
+off_t query_binary_search __P((char const *token));
+int is_regexp __P((char *name));
+int has_left_delimiter __P((char const *pattern));
+int has_right_delimiter __P((char const *pattern));
+int file_name_wildcard __P((char const *re, char const *fn));
+int word_match __P((char const *name_0, char const *line));
+int get_radix __P((char const *str));
+int is_number __P((char const *str));
+int stoi __P((char const *str));
+int otoi __P((char const *str));
+int dtoi __P((char const *str));
+int xtoi __P((char const *str));
+unsigned char *tree8_to_bits __P((unsigned char *bits_vec, unsigned char const *hits_tree8));
+void tree8_to_bits_1 __P((unsigned char **bits_vec, unsigned char const **hits_tree8, int level));
+struct file_link **tree8_to_flinkv __P((unsigned char const *hits_tree8));
+struct file_link **bits_to_flinkv __P((unsigned char const *bits_vec));
+
+#if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTY_H
+void savetty __P((void));
+void restoretty __P((void));
+void linetty __P((void));
+void chartty __P((void));
+#endif
+
 #define	TOLOWER(c)	(isupper (c) ? tolower (c) : (c))
 #define IS_ALNUM(c)	(isalnum (c) || (c) == '_')
 
-#ifndef BRACE_NOTATION_DEFAULT
-#define BRACE_NOTATION_DEFAULT 1
-#endif
-
 /* Sorry about all the globals, but it's really cleaner this way. */
 
-int merging;
-int file_name_regexp = 0;
 char anchor_dir[BUFSIZ];
 int tree8_levels;
 unsigned int bits_vec_size;
@@ -128,44 +165,42 @@ static int show_version;
 
 int radix_flag = radix_all;
 
-/* If nonzero, don't print the name of the matched identifier.  */
-
-int no_id_flag = 0;
-
-/* If nonzero, merge multiple look_id regexp output lines into a
-   single line.  */
-
-int merge_flag = 0;
-
 /* If nonzero, ignore differences in alphabetic case while matching.  */
 
 int ignore_case_flag = 0;
 
-/* If nonzero, print file names in abbreviated fashion using the
-   shell's brace notation.  */
+/* How will patterns will be delimited? */
 
-int brace_notation_flag = BRACE_NOTATION_DEFAULT;
+enum delimiter_style delimiter_style = ds_contextual;
+
+/* How will patterns be interpreted? */
+
+enum pattern_style pattern_style = ps_contextual;
+
+/* How will keys be presented? */
+
+enum key_style key_style = ks_token;
+
+/* How will query results be presented? */
+
+enum result_style result_style = rs_filenames;
+
+/* How shall we separate file names when result_style == rs_filenames?  */
+
+enum separator_style separator_style = ss_contextual;
 
 /* If non-zero, list identifiers that are are non-unique within this
    number of leading characters.  */
 
 unsigned int ambiguous_prefix_length = 0;
 
-/* The file name of the ID database.  */
-
-char const *id_file_name;
-
 /* The style of report.  */
 
-report_func_t report_function = look_id;
+report_func_t report_function;
 
 /* The style of query.  */
 
-query_func_t query_func;
-
-/* The style of query explicitly set by user from the command-line.  */
-
-query_func_t forced_query_func;
+query_func_t query_function;
 
 /* Lower and upper bounds on occurrence frequency.  */
 
@@ -180,18 +215,17 @@ static struct option const long_options[] =
   { "file", required_argument, 0, 'f' },
   { "frequency", required_argument, 0, 'F' },
   { "ambiguous", required_argument, 0, 'a' },
-  { "grep", no_argument, 0, 'G' },
-  { "apropos", no_argument, 0, 'A' },
-  { "edit", no_argument, 0, 'E' },
-  { "regexp", no_argument, 0, 'e' },
-  { "braces", no_argument, 0, 'b' },
-  { "merge", no_argument, 0, 'm' },
+  { "key", required_argument, 0, 'k' },
+  { "result", required_argument, 0, 'R' },
+  { "separator", required_argument, 0, 'S' },
   { "ignore-case", no_argument, 0, 'i' },
+  { "literal", no_argument, 0, 'l' },
+  { "regexp", no_argument, 0, 'r' },
   { "word", no_argument, 0, 'w' },
+  { "substring", no_argument, 0, 's' },
   { "hex", no_argument, 0, 'x' },
   { "decimal", no_argument, 0, 'd' },
   { "octal", no_argument, 0, 'o' },
-  { "no-id", no_argument, 0, 'n' },
   { "help", no_argument, &show_help, 1 },
   { "version", no_argument, &show_version, 1 },
   { 0 }
@@ -209,41 +243,46 @@ static void
 help_me (void)
 {
   printf (_("\
-Usage: %s [OPTION]... PATTERN...\n"),
-	  program_name);
+Usage: %s [OPTION]... PATTERN...\n\
+"), program_name);
+
   printf (_("\
 Query ID database and report results.\n\
 By default, output consists of multiple lines, each line containing the\n\
 matched identifier followed by the list of file names in which it occurs.\n\
 \n\
-  -f, --file=FILE      file name of ID database\n\
-  -G, --grep           show every line where the matched identifier occurs\n\
-  -E, --edit           edit every file where the matched identifier occurs\n\
-  -m, --merge          output a multi-line regexp match as a single line\n\
-  -n, --no-id          print file names only - omit the identifier\n\
-  -b, --braces         toggle shell brace-notation for output file names\n\
+  -f, --file=FILE       file name of ID database\n\
 \n\
-If PATTERN contains regular expression metacharacters, it is interpreted\n\
-as a regular expression.  Otherwise, PATTERN is interpreted as a literal\n\
-word.\n\
+  -i, --ignore-case     match PATTERN case insensitively\n\
+  -l, --literal         match PATTERN as a literal string\n\
+  -r, --regexp          match PATTERN as a regular expression\n\
+  -w, --word            match PATTERN as a delimited word\n\
+  -s, --substring       match PATTERN as a substring\n\
+            Note: If PATTERN contains extended regular expression meta-\n\
+            characters, it is interpreted as a regular expression substring.\n\
+            Otherwise, PATTERN is interpreted as a literal word.\n\
 \n\
-  -e, --regexp         match PATTERN as a regular expression substring\n\
-  -w, --word           match PATTERN as a word\n\
-  -i, --ignore-case    match PATTERN case insinsitively\n\
-  -A, --apropos        match PATTERN as a case-insensitive substring\n\
+  -k, --key=STYLE       STYLE is one of `token', `pattern' or `none'\n\
+  -R, --result=STYLE    STYLE is one of `filenames', `grep', `edit' or `none'\n\
+  -S, --separator=STYLE STYLE is one of `braces', `space' or `newline' and\n\
+                        only applies to file names when `--result=filenames'\n\
+            The above STYLE options control how query results are presented.\n\
+            Defaults are --key=token --result=filenames --separator=%s\n\
 \n\
-  -F, --frequency=FREQ find identifiers that occur FREQ times, where FREQ\n\
-                       is a range expressed as `N..M'.  N omitted defaults\n\
-                       to 1, M omitted defaults to MAX_USHRT.\n\
-  -a, --ambiguous=LEN  find identifiers whose names are ambiguous for LEN chars\n\
+  -F, --frequency=FREQ  find tokens that occur FREQ times, where FREQ\n\
+                        is a range expressed as `N..M'.  If N is omitted, it\n\
+                        defaults to 1, if M is omitted it defaults to MAX_USHRT\n\
+  -a, --ambiguous=LEN   find tokens whose names are ambiguous for LEN chars\n\
 \n\
-  -x, --hex            only find numbers expressed as hexadecimal\n\
-  -d, --decimal        only find numbers expressed as decimal\n\
-  -o, --octal          only find numbers expressed as octal\n\
+  -x, --hex             only find numbers expressed as hexadecimal\n\
+  -d, --decimal         only find numbers expressed as decimal\n\
+  -o, --octal           only find numbers expressed as octal\n\
+            By default, searches match numbers of any radix.\n\
 \n\
-      --help           display this help and exit\n\
-      --version        output version information and exit\n\
-"));
+      --help            display this help and exit\n\
+      --version         output version information and exit\n\
+"),
+	  (separator_style == ss_braces ? _("braces") : _("space")));
   exit (0);
 }
 
@@ -251,9 +290,18 @@ int
 main (int argc, char **argv)
 {
   program_name = argv[0];
+  idh.idh_file_name = 0;
+
+  /* Set locale according to user's wishes.  */
+  setlocale (LC_ALL, "");
+
+  /* Tell program which translations to use and where to find.  */
+  bindtextdomain (PACKAGE, LOCALEDIR);
+  textdomain (PACKAGE);
+
   for (;;)
     {
-      int optc = getopt_long (argc, argv, "f:F:a:GAEebmiwxdon",
+      int optc = getopt_long (argc, argv, "f:F:a:k:R:S:ilrwsxdo",
 			      long_options, (int *) 0);
       if (optc < 0)
 	break;
@@ -263,7 +311,7 @@ main (int argc, char **argv)
 	  break;
 
 	case 'f':
-	  id_file_name = optarg;
+	  idh.idh_file_name = optarg;
 	  break;
 
 	case 'F':
@@ -274,38 +322,41 @@ main (int argc, char **argv)
 	  ambiguous_prefix_length = stoi (optarg);
 	  break;
 
-	case 'G':
-	  report_function = grep_id;
+	case 'k':
+	  key_style = parse_key_style (optarg);
 	  break;
 
-	case 'A':
-	  forced_query_func = query_apropos;
-	  report_function = look_id;
-	  break;
-	    
-	case 'E':
-	  report_function = edit_id;
+	case 'R':
+	  result_style = parse_result_style (optarg);
 	  break;
 
-	case 'e':
-	  forced_query_func = query_regexp;
-	  file_name_regexp = 1;
-	  break;
-
-	case 'b':
-	  brace_notation_flag = !brace_notation_flag;
-	  break;
-
-	case 'm':
-	  merge_flag = 1;
+	case 'S':
+	  separator_style = parse_separator_style (optarg);
 	  break;
 
 	case 'i':
 	  ignore_case_flag = REG_ICASE;
 	  break;
 
+	case 'l':
+	  pattern_style = ps_literal;
+	  break;
+
+	case 'r':
+	  pattern_style = ps_regexp;
+	  break;
+
+	case 'e':
+	  pattern_style = ps_regexp;
+	  error (0, 0, _("notice: use of `-e' is deprecated, use `-r' instead"));
+	  break;
+
 	case 'w':
-	  forced_query_func = query_plain;
+	  delimiter_style = ds_word;
+	  break;
+
+	case 's':
+	  delimiter_style = ds_substring;
 	  break;
 
 	case 'x':
@@ -318,10 +369,6 @@ main (int argc, char **argv)
 
 	case 'o':
 	  radix_flag |= radix_oct;
-	  break;
-
-	case 'n':
-	  no_id_flag = 1;
 	  break;
 
 	default:
@@ -338,11 +385,30 @@ main (int argc, char **argv)
   if (show_help)
     help_me ();
 
+  if (separator_style == ss_contextual)
+    {
+      if (isatty (STDOUT_FILENO))
+	separator_style = DEFAULT_SEPARATOR_STYLE;
+      else if (key_style == ks_none)
+	separator_style = ss_newline;
+      else
+	separator_style = ss_space;
+    }
+
+  argc -= optind;
+  argv += optind;
+  if (argc == 0)
+    {
+      static char *dot = (char *) ".";
+      argc = 1;
+      argv = &dot;
+    }
+
   /* Look for the ID database up the tree */
-  id_file_name = look_up (id_file_name);
-  if (id_file_name == 0)
+  idh.idh_file_name = locate_id_file_name (idh.idh_file_name);
+  if (idh.idh_file_name == 0)
     error (1, errno, _("can't locate `ID'"));
-  
+
   init_idh_obstacks (&idh);
   init_idh_tables (&idh);
 
@@ -350,138 +416,131 @@ main (int argc, char **argv)
 
   /* Determine absolute name of the directory name to which database
      constituent files are relative. */
-  members_0 = read_id_file (id_file_name, &idh);
+  members_0 = read_id_file (idh.idh_file_name, &idh);
   bits_vec_size = (idh.idh_files + 7) / 4; /* more than enough */
   tree8_levels = tree8_count_levels (idh.idh_files);
 
-  argc -= optind;
-  argv += optind;
-  if (argc == 0)
+  hits_buf_1 = MALLOC (char, idh.idh_buf_size);
+  hits_buf_2 = MALLOC (char, idh.idh_buf_size);
+  bits_vec = MALLOC (unsigned char, bits_vec_size);
+
+  report_function = get_report_func ();
+  if (ambiguous_prefix_length)
     {
-      argc++;
-      *(char const **)--argv = ".*";
+      if (!query_ambiguous_prefix (ambiguous_prefix_length, report_function))
+	fprintf (stderr, _("All identifiers are non-ambiguous within the first %d characters\n"),
+		 ambiguous_prefix_length);
     }
-
-  while (argc)
+  else
     {
-      long val = -1;
-      char *arg = (argc--, *argv++);
-
-      if (forced_query_func)
-	query_func = forced_query_func;
-      else if (get_radix (arg) && (val = stoi (arg)) >= 0)
-	query_func = query_number;
-      else if (is_regexp (arg))
-	query_func = query_regexp;
-      else if (arg[0] == '^')
-	query_func = query_anchor;
-      else
-	query_func = query_plain;
-
-      if ((report_function == look_id && !merge_flag)
-	  || (query_func == query_number
-	      && val > 7
-	      && radix_flag != radix_dec
-	      && radix_flag != radix_oct
-	      && radix_flag != radix_hex))
-	merging = 0;
-      else
-	merging = 1;
-
-      hits_buf_1 = xmalloc (idh.idh_buf_size);
-      hits_buf_2 = xmalloc (idh.idh_buf_size);
-      bits_vec = MALLOC (unsigned char, bits_vec_size);
-
-      if (ambiguous_prefix_length)
+      while (argc)
 	{
-	  if (!query_non_unique (ambiguous_prefix_length, report_function))
-	    fprintf (stderr, _("All identifiers are non-ambiguous within the first %d characters\n"),
-		     ambiguous_prefix_length);
-	  exit (0);
-	}
-      else if (!(*query_func) (arg, report_function))
-	{
-	  fprintf (stderr, _("%s: not found\n"), arg);
-	  continue;
+	  char *pattern = (argc--, *argv++);
+	  if (ignore_case_flag)
+	    lower_caseify (pattern);
+	  query_function = get_query_func (pattern);
+	  (*query_function) (pattern, report_function);
 	}
     }
+
   fclose (idh.idh_FILE);
   exit (0);
 }
 
-/* common_prefix_suffix returns non-zero if two file names have a
-   fully common directory prefix and a common suffix (i.e., they're
-   eligible for coalescing with brace notation.  */
-
-int
-common_prefix_suffix (struct file_link const *flink_1, struct file_link const *flink_2)
-{
-  return (flink_1->fl_parent == flink_2->fl_parent
-	  && strequ (suff_name (flink_1->fl_name), suff_name (flink_2->fl_name)));
-}
-
 void
-look_id (char const *name, struct file_link **flinkv)
+lower_caseify (char *str)
 {
-  struct file_link const *arg;
-  struct file_link const *dlink;
-  int brace_is_open = 0;
-
-  if (!no_id_flag)
-    printf ("%-14s ", name);
-  while (*flinkv)
+  while (*str)
     {
-      arg = *flinkv++;
-      if (*flinkv && brace_notation_flag
-	  && common_prefix_suffix (arg, *flinkv))
-	{
-	  if (brace_is_open)
-	    printf (",%s", root_name (arg->fl_name));
-	  else
-	    {
-	      dlink = arg->fl_parent;
-	      if (dlink && dlink != cw_dlink)
-		{
-		  char buf[PATH_MAX];
-		  maybe_relative_path (buf, dlink, cw_dlink);
-		  fputs (buf, stdout);
-		  putchar ('/');
-		}
-	      printf ("{%s", root_name (arg->fl_name));
-	    }
-	  brace_is_open = 1;
-	}
-      else
-	{
-	  if (brace_is_open)
-	    printf (",%s}%s", root_name (arg->fl_name), suff_name (arg->fl_name));
-	  else
-	    {
-	      char buf[PATH_MAX];
-	      maybe_relative_path (buf, arg, cw_dlink);
-	      fputs (buf, stdout);
-	    }
-	  brace_is_open = 0;
-	  if (*flinkv)
-	    putchar (' ');
-	}
+      *str = TOLOWER (*str);
+      str++;
     }
-  putchar ('\n');
 }
 
-/* FIXME: use regcomp regexec */
+enum key_style
+parse_key_style (char const *arg)
+{
+  MAYBE_RETURN_PREFIX_MATCH (arg, "none", ks_none);
+  MAYBE_RETURN_PREFIX_MATCH (arg, "token", ks_token);
+  MAYBE_RETURN_PREFIX_MATCH (arg, "pattern", ks_pattern);
+  error (0, 0, _("invalid `--key' style: `%s'"), arg);
+  usage ();
+  return ks_bogus;
+}
+
+enum result_style
+parse_result_style (char const *arg)
+{
+  MAYBE_RETURN_PREFIX_MATCH (arg, "none", rs_none);
+  MAYBE_RETURN_PREFIX_MATCH (arg, "filenames", rs_filenames);
+  MAYBE_RETURN_PREFIX_MATCH (arg, "grep", rs_grep);
+  MAYBE_RETURN_PREFIX_MATCH (arg, "edit", rs_edit);
+  error (0, 0, _("invalid `--result' style: `%s'"), arg);
+  usage ();
+  return rs_bogus;
+}
+
+query_func_t
+get_query_func (char *pattern)
+{
+  switch (pattern_style)
+    {
+    case ps_regexp:
+      return query_regexp;
+
+    case ps_literal:
+      if (delimiter_style == ds_substring)
+	return query_literal_substring;
+      else
+	return query_literal_word;
+
+    default:
+      if (is_regexp (pattern))
+	return query_regexp;
+      else if (has_left_delimiter (pattern))
+	return query_literal_prefix;
+      else if (delimiter_style == ds_substring)
+	return query_literal_substring;
+      else if (is_number (pattern))
+	return query_number;
+      else if (delimiter_style == ds_word)
+	return query_literal_word;
+      else
+	return query_literal_word;
+    }
+}
+
+report_func_t
+get_report_func (void)
+{
+  switch (result_style)
+    {
+    case rs_filenames: return report_filenames;
+    case rs_grep: return report_grep;
+    case rs_edit: return report_edit;
+    default: return report_nothing;
+    }
+}
 
 void
-grep_id (char const *name, struct file_link **flinkv)
+report_filenames (char const *name, struct file_link **flinkv)
+{
+  if (name && key_style != ks_none)
+    printf ("%-14s ", name);
+  print_filenames (flinkv, separator_style);
+}
+
+void
+report_grep (char const *name, struct file_link **flinkv)
 {
   char line[BUFSIZ];
   char const *pattern = 0;
   regex_t compiled;
   int line_number;
 
-  if (merging)
+  if (key_style == ks_pattern)
     {
-      pattern = file_regexp (name, "[^a-zA-Z0-9_À-ÿ]_*", "[^a-zA-Z0-9_À-ÿ]");
+      pattern = file_regexp (name, "[^a-zA-Z0-9_\300-\377]_*", "[^a-zA-Z0-9_\300-\377]");
       if (pattern)
 	{
 	  int regcomp_errno = regcomp (&compiled, pattern,
@@ -498,10 +557,10 @@ grep_id (char const *name, struct file_link **flinkv)
   line[0] = ' ';		/* sentry */
   while (*flinkv)
     {
+      char *file_name = ALLOCA (char, PATH_MAX);
       FILE *gid_FILE;
-      char file_name[PATH_MAX];
 
-      maybe_relative_path (file_name, *flinkv++, cw_dlink);
+      maybe_relative_file_name (file_name, *flinkv++, cw_dlink);
       gid_FILE = fopen (file_name, "r");
       if (gid_FILE == 0)
 	error (0, errno, "can't open `%s'", file_name);
@@ -520,20 +579,20 @@ grep_id (char const *name, struct file_link **flinkv)
 	    }
 	  else if (!word_match (name, line))
 	    continue;
-	  printf ("%s:%d: %s", file_name, line_number, &line[1]);
+	  printf ("%s:%d:%s", file_name, line_number, &line[1]);
 	}
       fclose (gid_FILE);
     }
 }
 
 void
-edit_id (char const *name, struct file_link **flinkv)
+report_edit (char const *name, struct file_link **flinkv)
 {
   static char const *editor;
   static char const *eid_arg;
   static char const *eid_right_del;
   static char const *eid_left_del;
-  char re_buffer[BUFSIZ];
+  char regexp_buf[BUFSIZ];
   char ed_arg_buffer[BUFSIZ];
   char const *pattern;
   int c;
@@ -541,9 +600,13 @@ edit_id (char const *name, struct file_link **flinkv)
 
   if (editor == 0)
     {
-      editor = getenv ("EDITOR");
+      editor = getenv ("VISUAL");
       if (editor == 0)
-	editor = "vi";
+	{
+	  editor = getenv ("EDITOR");
+	  if (editor == 0)
+	    editor = "vi";
+	}
     }
 
   if (eid_arg == 0)
@@ -563,55 +626,53 @@ edit_id (char const *name, struct file_link **flinkv)
 	eid_right_del = (using_vi ? "\\>" : "");
     }
 
-  look_id (name, flinkv);
+  report_filenames (name, flinkv);
   savetty ();
   for (;;)
     {
-      /* FIXME: i18n */
-      printf (_("Edit? [y1-9^S/nq] "));
+      /* FIXME: i18n of responses */
+      printf (_("edit? [y1-9^S/nq] "));
       fflush (stdout);
       chartty ();
       c = (getchar () & 0177);
       restoretty ();
       switch (TOLOWER (c))
 	{
-	case '/':
-	case ('s' & 037):
+	case '/': case ('s' & 037):
 	  putchar ('/');
-	  skip = skip_to_flinkv (flinkv);
+	  skip = search_flinkv (flinkv);
 	  if (skip < 0)
 	    continue;
 	  flinkv += skip;
 	  goto editit;
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
+
+	case '0': case '1': case '2': case '3': case '4':
+	case '5': case '6': case '7': case '8': case '9':
 	  putchar (c);
 	  skip = c - '0';
 	  break;
+
 	case 'y':
 	  putchar (c);
 	  skip = 0;
 	  break;
+
 	case '\n':
 	case '\r':
 	  putchar ('y');
 	  skip = 0;
 	  break;
+
 	case 'q':
 	  putchar (c);
 	  putchar ('\n');
 	  exit (0);
+
 	case 'n':
 	  putchar (c);
 	  putchar ('\n');
 	  return;
+
 	default:
 	  putchar (c);
 	  putchar ('\n');
@@ -626,14 +687,14 @@ edit_id (char const *name, struct file_link **flinkv)
     }
 editit:
 
-  if (merging)
+  if (key_style == ks_pattern)
     pattern = file_regexp (name, eid_left_del, eid_right_del);
   else
     pattern = 0;
   if (pattern == 0)
     {
-      pattern = re_buffer;
-      sprintf (re_buffer, "%s%s%s", eid_left_del, name, eid_right_del);
+      pattern = regexp_buf;
+      sprintf (regexp_buf, "%s%s%s", eid_left_del, name, eid_right_del);
     }
 
   switch (fork ())
@@ -647,11 +708,7 @@ editit:
 	char **argv_0 = MALLOC (char *, 3 + vector_cardinality (flinkv));
 	char **argv = argv_0 + 2;
 	while (*flinkv)
-	  {
-	    char buf[PATH_MAX];
-	    maybe_relative_path (buf, *flinkv++, cw_dlink);
-	    *argv++ = strdup (buf);
-	  }
+	  *argv++ = maybe_relative_file_name (0, *flinkv++, cw_dlink);
 	*argv = 0;
 	argv = argv_0 + 1;
 	if (eid_arg)
@@ -659,7 +716,7 @@ editit:
 	    sprintf (ed_arg_buffer, eid_arg, pattern);
 	    *--argv = ed_arg_buffer;
 	  }
-	*(char const **)argv = editor;
+	*(char const **) argv = editor;
 	execvp (editor, argv);
 	error (0, errno, _("can't exec `%s'"), editor);
       }
@@ -679,10 +736,17 @@ editit:
     }
 }
 
+void
+report_nothing (char const *name, struct file_link **flinkv)
+{
+  if (key_style != ks_none)
+    puts (name);
+}
+
 int
 vector_cardinality (void *vector)
 {
-  void **v = (void **)vector;
+  void **v = (void **) vector;
   int count = 0;
 
   while (*v++)
@@ -691,7 +755,7 @@ vector_cardinality (void *vector)
 }
 
 int
-skip_to_flinkv (struct file_link **flinkv)
+search_flinkv (struct file_link **flinkv)
 {
   char pattern[BUFSIZ];
   unsigned int count;
@@ -701,66 +765,68 @@ skip_to_flinkv (struct file_link **flinkv)
 
   for (count = 0; *flinkv; count++, flinkv++)
     {
-      char buf[PATH_MAX];
-      maybe_relative_path (buf, *flinkv, cw_dlink);
-      if (strcpos (buf, pattern))
+      char *file_name = ALLOCA (char, PATH_MAX);
+      maybe_relative_file_name (file_name, *flinkv, cw_dlink);
+      if (strcasestr (file_name, pattern))
 	return count;
     }
   return -1;
 }
 
 int
-query_plain (char const *arg, report_func_t report_function)
+query_literal_word (char const *arg, report_func_t report_func)
 {
-  if (query_token (arg) == 0)
+  if (query_binary_search (arg) == 0)
     return 0;
   gets_past_00 (hits_buf_1, idh.idh_FILE);
   assert (*hits_buf_1);
-  if (!frequency_wanted (hits_buf_1))
+  if (!desired_frequency (hits_buf_1))
     return 0;
-  (*report_function) (hits_buf_1, tree8_to_flinkv (tok_hits_addr (hits_buf_1)));
+  (*report_func) (hits_buf_1, tree8_to_flinkv (token_hits_addr (hits_buf_1)));
   return 1;
 }
 
 int
-query_anchor (char const *arg, report_func_t report_function)
+query_literal_prefix (char const *arg, report_func_t report_func)
 {
   int count;
   unsigned int length;
 
-  if (query_token (++arg) == 0)
+  if (query_binary_search (++arg) == 0)
     return 0;
 
   length = strlen (arg);
   count = 0;
-  if (merging)
+  if (key_style != ks_token)
     memset (bits_vec, 0, bits_vec_size);
   while (gets_past_00 (hits_buf_1, idh.idh_FILE) > 0)
     {
       assert (*hits_buf_1);
-      if (!frequency_wanted (hits_buf_1))
+      if (!desired_frequency (hits_buf_1))
 	continue;
       if (!strnequ (arg, hits_buf_1, length))
 	break;
-      if (merging)
-	tree8_to_bits (bits_vec, tok_hits_addr (hits_buf_1));
+      if (key_style == ks_token)
+	(*report_func) (hits_buf_1, tree8_to_flinkv (token_hits_addr (hits_buf_1)));
       else
-	(*report_function) (hits_buf_1, tree8_to_flinkv (tok_hits_addr (hits_buf_1)));
+	tree8_to_bits (bits_vec, token_hits_addr (hits_buf_1));
       count++;
     }
-  if (merging && count)
-    (*report_function) (--arg, bits_to_flinkv (bits_vec));
+  if (key_style != ks_token && count)
+    (*report_func) (--arg, bits_to_flinkv (bits_vec));
 
   return count;
 }
 
 int
-query_regexp (char const *pattern, report_func_t report_function)
+query_regexp (char const *pattern_0, report_func_t report_func)
 {
   int count;
   regex_t compiled;
   int regcomp_errno;
+  char const *pattern = pattern_0;
 
+  pattern = maybe_add_word_delimiters (pattern);
   regcomp_errno = regcomp (&compiled, pattern,
 			   ignore_case_flag | REG_EXTENDED);
   if (regcomp_errno)
@@ -772,33 +838,66 @@ query_regexp (char const *pattern, report_func_t report_function)
   fseek (idh.idh_FILE, idh.idh_tokens_offset, SEEK_SET);
 
   count = 0;
-  if (merging)
+  if (key_style != ks_token)
     memset (bits_vec, 0, bits_vec_size);
   while (gets_past_00 (hits_buf_1, idh.idh_FILE) > 0)
     {
       int regexec_errno;
       assert (*hits_buf_1);
-      if (!frequency_wanted (hits_buf_1))
+      if (!desired_frequency (hits_buf_1))
 	continue;
       regexec_errno = regexec (&compiled, hits_buf_1, 0, 0, 0);
       if (regexec_errno == REG_ESPACE)
 	error (0, 0, _("can't match regular-expression: memory exhausted"));
       else if (regexec_errno)
 	continue;
-      if (merging)
-	tree8_to_bits (bits_vec, tok_hits_addr (hits_buf_1));
+      if (key_style == ks_token)
+	(*report_func) (hits_buf_1, tree8_to_flinkv (token_hits_addr (hits_buf_1)));
       else
-	(*report_function) (hits_buf_1, tree8_to_flinkv (tok_hits_addr (hits_buf_1)));
+	tree8_to_bits (bits_vec, token_hits_addr (hits_buf_1));
       count++;
     }
-  if (merging && count)
-    (*report_function) (pattern, bits_to_flinkv (bits_vec));
+  if (key_style != ks_token && count)
+    (*report_func) (pattern, bits_to_flinkv (bits_vec));
+
+  if (pattern != pattern_0)
+    free ((char *) pattern);
 
   return count;
 }
 
+char const *
+maybe_add_word_delimiters (char const *pattern_0)
+{
+  if (delimiter_style != ds_word)
+    return pattern_0;
+  else
+    {
+      int length = strlen (pattern_0);
+      int has_left = has_left_delimiter (pattern_0);
+      int has_right = has_right_delimiter (&pattern_0[length]);
+      if (has_left && has_right)
+	return pattern_0;
+      else
+	{
+	  char *pattern = MALLOC (char, length + 4);
+	  if (has_left)
+	    strcpy (pattern, pattern_0);
+	  else
+	    {
+	      length += 2;
+	      strcpy (pattern, "\\<");
+	      strcpy (pattern + 2, pattern_0);
+	    }
+	  if (!has_right)
+	    strcpy (pattern + length, "\\>");
+	  return pattern;
+	}
+    }
+}
+
 int
-query_number (char const *arg, report_func_t report_function)
+query_number (char const *arg, report_func_t report_func)
 {
   int count;
   int radix;
@@ -809,7 +908,7 @@ query_number (char const *arg, report_func_t report_function)
   fseek (idh.idh_FILE, idh.idh_tokens_offset, SEEK_SET);
 
   count = 0;
-  if (merging)
+  if (key_style != ks_token)
     memset (bits_vec, 0, bits_vec_size);
   while (gets_past_00 (hits_buf_1, idh.idh_FILE) > 0)
     {
@@ -827,14 +926,14 @@ query_number (char const *arg, report_func_t report_function)
       if (!((radix_flag ? radix_flag : radix) & get_radix (hits_buf_1))
 	  || stoi (hits_buf_1) != val)
 	continue;
-      if (merging)
-	tree8_to_bits (bits_vec, tok_hits_addr (hits_buf_1));
+      if (key_style == ks_token)
+	(*report_func) (hits_buf_1, tree8_to_flinkv (token_hits_addr (hits_buf_1)));
       else
-	(*report_function) (hits_buf_1, tree8_to_flinkv (tok_hits_addr (hits_buf_1)));
+	tree8_to_bits (bits_vec, token_hits_addr (hits_buf_1));
       count++;
     }
-  if (merging && count)
-    (*report_function) (arg, bits_to_flinkv (bits_vec));
+  if (key_style != ks_token && count)
+    (*report_func) (arg, bits_to_flinkv (bits_vec));
 
   return count;
 }
@@ -843,7 +942,7 @@ query_number (char const *arg, report_func_t report_function)
    characters.  */
 
 int
-query_non_unique (unsigned int limit, report_func_t report_function)
+query_ambiguous_prefix (unsigned int limit, report_func_t report_func)
 {
   char *old = hits_buf_1;
   char *new = hits_buf_2;
@@ -861,68 +960,70 @@ query_non_unique (unsigned int limit, report_func_t report_function)
   while (gets_past_00 (old, idh.idh_FILE) > 0)
     {
       char *tmp;
-      if (!(tok_flags (old) & TOK_NAME))
+      if (!(token_flags (old) & TOK_NAME))
 	continue;
       tmp = old;
       old = new;
       new = tmp;
       if (!strnequ (new, old, limit))
 	{
-	  if (consecutive && merging)
+	  if (consecutive && key_style != ks_token)
 	    {
 	      strncpy (&name[1], old, limit);
-	      (*report_function) (name, bits_to_flinkv (bits_vec));
+	      (*report_func) (name, bits_to_flinkv (bits_vec));
 	    }
 	  consecutive = 0;
 	  continue;
 	}
       if (!consecutive++)
 	{
-	  if (merging)
-	    tree8_to_bits (bits_vec, tok_hits_addr (old));
+	  if (key_style != ks_token)
+	    tree8_to_bits (bits_vec, token_hits_addr (old));
 	  else
-	    (*report_function) (old, tree8_to_flinkv (tok_hits_addr (old)));
+	    (*report_func) (old, tree8_to_flinkv (token_hits_addr (old)));
 	  count++;
 	}
-      if (merging)
-	tree8_to_bits (bits_vec, tok_hits_addr (new));
+      if (key_style == ks_token)
+	(*report_func) (new, tree8_to_flinkv (token_hits_addr (new)));
       else
-	(*report_function) (new, tree8_to_flinkv (tok_hits_addr (new)));
+	tree8_to_bits (bits_vec, token_hits_addr (new));
       count++;
     }
-  if (consecutive && merging)
+  if (consecutive && key_style != ks_token)
     {
       strncpy (&name[1], new, limit);
-      (*report_function) (name, bits_to_flinkv (bits_vec));
+      (*report_func) (name, bits_to_flinkv (bits_vec));
     }
   return count;
 }
 
 int
-query_apropos (char const *arg, report_func_t report_function)
+query_literal_substring (char const *arg, report_func_t report_func)
 {
   int count;
+  char *(*strstr_func) __P((char const *, char const *));
 
   fseek (idh.idh_FILE, idh.idh_tokens_offset, SEEK_SET);
 
   count = 0;
-  if (merging)
+  if (key_style != ks_token)
     memset (bits_vec, 0, bits_vec_size);
+  strstr_func = (ignore_case_flag ? strcasestr : strstr);
   while (gets_past_00 (hits_buf_1, idh.idh_FILE) > 0)
     {
       assert (*hits_buf_1);
-      if (!frequency_wanted (hits_buf_1))
+      if (!desired_frequency (hits_buf_1))
 	continue;
-      if (strcpos (hits_buf_1, arg) == 0)
+      if ((*strstr_func) (hits_buf_1, arg) == 0)
 	continue;
-      if (merging)
-	tree8_to_bits (bits_vec, tok_hits_addr (hits_buf_1));
+      if (key_style == ks_token)
+	(*report_func) (hits_buf_1, tree8_to_flinkv (token_hits_addr (hits_buf_1)));
       else
-	(*report_function) (hits_buf_1, tree8_to_flinkv (tok_hits_addr (hits_buf_1)));
+	tree8_to_bits (bits_vec, token_hits_addr (hits_buf_1));
       count++;
     }
-  if (merging && count)
-    (*report_function) (arg, bits_to_flinkv (bits_vec));
+  if (key_style != ks_token && count)
+    (*report_func) (arg, bits_to_flinkv (bits_vec));
 
   return count;
 }
@@ -955,17 +1056,17 @@ parse_frequency_arg (char const *arg)
 }
 
 int
-frequency_wanted (char const *tok)
+desired_frequency (char const *tok)
 {
-  unsigned int count = tok_count (tok);
+  unsigned int count = token_count (tok);
   return (frequency_low <= count && count <= frequency_high);
 }
 
 /* if string `s2' occurs in `s1', return a pointer to the first match.
    Ignore differences in alphabetic case.  */
 
-char const *
-strcpos (char const *s1, char const *s2)
+char *
+strcasestr (char const *s1, char const *s2)
 {
   char const *s1p;
   char const *s2p;
@@ -974,7 +1075,7 @@ strcpos (char const *s1, char const *s2)
   for (s1last = &s1[strlen (s1) - strlen (s2)]; s1 <= s1last; s1++)
     for (s1p = s1, s2p = s2; TOLOWER (*s1p) == TOLOWER (*s2p); s1p++)
       if (*++s2p == '\0')
-	return s1;
+	return (char *) s1;
   return 0;
 }
 
@@ -983,12 +1084,12 @@ strcpos (char const *s1, char const *s2)
    in files.  */
 
 char const *
-file_regexp (char const *name0, char const *left_delimit, char const *right_delimit)
+file_regexp (char const *name_0, char const *left_delimit, char const *right_delimit)
 {
   static char pat_buf[BUFSIZ];
-  char *name = (char *) name0;
+  char *name = (char *) name_0;
 
-  if (query_func == query_number && merging)
+  if (query_function == query_number && key_style == ks_pattern)
     {
       sprintf (pat_buf, "%s0*[Xx]*0*%d[Ll]*%s", left_delimit, stoi (name), right_delimit);
       return pat_buf;
@@ -998,7 +1099,7 @@ file_regexp (char const *name0, char const *left_delimit, char const *right_deli
     return 0;
 
   if (name[0] == '^')
-    name0++;
+    name_0++;
   else
     left_delimit = "";
   while (*++name)
@@ -1008,12 +1109,12 @@ file_regexp (char const *name0, char const *left_delimit, char const *right_deli
   else
     right_delimit = "";
 
-  sprintf (pat_buf, "%s%s%s", left_delimit, name0, right_delimit);
+  sprintf (pat_buf, "%s%s%s", left_delimit, name_0, right_delimit);
   return pat_buf;
 }
 
 off_t
-query_token (char const *token_0)
+query_binary_search (char const *token_0)
 {
   off_t offset = 0;
   off_t start = idh.idh_tokens_offset - 2;
@@ -1043,7 +1144,7 @@ query_token (char const *token_0)
 	  token++;
 	  incr++;
 	}
-      if (c && !*token && query_func == query_anchor)
+      if (c && !*token && query_function == query_literal_prefix)
 	anchor_offset = offset;
       order = *token - c;
 
@@ -1075,6 +1176,8 @@ is_regexp (char *name)
 
   if (*name == '^')
     name++;
+  else if (strnequ (name, "\\<", 2))
+    name += 2;
   while (*name)
     {
       if (*name == '\\')
@@ -1083,7 +1186,7 @@ is_regexp (char *name)
 	    return 1;
 	  name++, backslash++;
 	}
-      else if (strchr ("[]{}().*+^$", *name))
+      else if (strchr ("[]().*+^$", *name))
 	return 1;
       name++;
     }
@@ -1095,6 +1198,18 @@ is_regexp (char *name)
 	name++;
       }
   return 0;
+}
+
+int
+has_left_delimiter (char const *pattern)
+{
+  return (*pattern == '^' || strnequ (pattern, "\\<", 2));
+}
+
+int
+has_right_delimiter (char const *pattern)
+{
+  return (pattern[-1] == '$' || strequ (pattern - 2, "\\>"));
 }
 
 /* file_name_wildcard implements a simple pattern matcher that
@@ -1160,7 +1275,7 @@ file_name_wildcard (char const *pattern, char const *fn)
 	  if (revset)
 	    for (i = 1; i < 256; ++i)
 	      set[i] = !set[i];
-	  if (!set[(int)*fn++])
+	  if (!set[(int) *fn++])
 	    return 0;
 	}
       else
@@ -1177,9 +1292,9 @@ file_name_wildcard (char const *pattern, char const *fn)
 /* Does `name' occur in `line' delimited by non-alphanumerics?? */
 
 int
-word_match (char const *name0, char const *line)
+word_match (char const *name_0, char const *line)
 {
-  char const *name = name0;
+  char const *name = name_0;
 
   for (;;)
     {
@@ -1202,7 +1317,7 @@ word_match (char const *name0, char const *line)
       /* is this the end of `name', is there a word delimiter ?? */
       if (*name == '\0' && !IS_ALNUM (*line))
 	return 1;
-      name = name0;
+      name = name_0;
     }
 }
 
@@ -1212,34 +1327,48 @@ word_match (char const *name0, char const *line)
    0, so return all possibilities.  */
 
 int
-get_radix (char const *name)
+get_radix (char const *str)
 {
-  if (!isdigit (*name))
+  if (!isdigit (*str))
     return 0;
-  if (*name != '0')
+  if (*str != '0')
     return radix_dec;
-  name++;
-  if (*name == 'x' || *name == 'X')
+  str++;
+  if (*str == 'x' || *str == 'X')
     return radix_hex;
-  while (*name && *name == '0')
-    name++;
-  return (*name ? radix_oct : (radix_oct | radix_dec));
+  while (*str && *str == '0')
+    str++;
+  return (*str ? radix_oct : (radix_oct | radix_dec));
+}
+
+int
+is_number (char const *str)
+{
+  if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X'))
+    {
+      str += 2;
+      str += strspn (str, "0123456789aAbBcCdDeEfF");
+    }
+  else
+    str += strspn (str, "0123456789");
+  str += strspn (str, "uUlL");
+  return (*str == '\0');
 }
 
 /* Convert an ascii string number to an integer.  Determine the radix
    before converting.  */
 
 int
-stoi (char const *name)
+stoi (char const *str)
 {
-  switch (get_radix (name))
+  switch (get_radix (str))
     {
     case radix_dec:
-      return (dtoi (name));
+      return (dtoi (str));
     case radix_oct:
-      return (otoi (&name[1]));
+      return (otoi (&str[1]));
     case radix_hex:
-      return (xtoi (&name[2]));
+      return (xtoi (&str[2]));
     case radix_dec | radix_oct:
       return 0;
     default:
@@ -1250,57 +1379,57 @@ stoi (char const *name)
 /* Convert an ascii octal number to an integer. */
 
 int
-otoi (char const *name)
+otoi (char const *str)
 {
   int n = 0;
 
-  while (*name >= '0' && *name <= '7')
+  while (*str >= '0' && *str <= '7')
     {
       n *= 010;
-      n += *name++ - '0';
+      n += *str++ - '0';
     }
-  if (*name == 'l' || *name == 'L')
-    name++;
-  return (*name ? -1 : n);
+  while (*str && strchr ("uUlL", *str))
+    str++;
+  return (*str ? -1 : n);
 }
 
 /* Convert an ascii decimal number to an integer. */
 
 int
-dtoi (char const *name)
+dtoi (char const *str)
 {
   int n = 0;
 
-  while (isdigit (*name))
+  while (isdigit (*str))
     {
       n *= 10;
-      n += *name++ - '0';
+      n += *str++ - '0';
     }
-  if (*name == 'l' || *name == 'L')
-    name++;
-  return (*name ? -1 : n);
+  while (*str && strchr ("uUlL", *str))
+    str++;
+  return (*str ? -1 : n);
 }
 
 /* Convert an ascii hex number to an integer. */
 
 int
-xtoi (char const *name)
+xtoi (char const *str)
 {
   int n = 0;
 
-  while (isxdigit (*name))
+  while (isxdigit (*str))
     {
       n *= 0x10;
-      if (isdigit (*name))
-	n += *name++ - '0';
-      else if (islower (*name))
-	n += 0xa + *name++ - 'a';
+      if (isdigit (*str))
+	n += *str++ - '0';
+      else if (islower (*str))
+	n += 0xa + *str++ - 'a';
       else
-	n += 0xA + *name++ - 'A';
+	n += 0xA + *str++ - 'A';
     }
-  if (*name == 'l' || *name == 'L')
-    name++;
-  return (*name ? -1 : n);
+  while (*str && strchr ("uUlL", *str))
+    str++;
+  return (*str ? -1 : n);
 }
 
 unsigned char *
@@ -1419,22 +1548,10 @@ struct sgttyb savemode;
 #define SET_TTY_MODES(modes) stty (0, (modes))
 #   endif
 
-void
-savetty (void)
-{
-#   ifdef TIOCGETP
-  ioctl(0, TIOCGETP, &savemode);
-#   else
-  gtty(0, &savemode);
-#   endif
-  charmode = linemode = savemode;
+#  else /* not HAVE_SGTTY_H */
 
-  charmode.sg_flags &= ~ECHO;
-  charmode.sg_flags |= RAW;
-
-  linemode.sg_flags |= ECHO;
-  linemode.sg_flags &= ~RAW;
-}
+#define GET_TTY_MODES(modes)
+#define SET_TTY_MODES(modes)
 
 #  endif /* not HAVE_SGTTY_H */
 # endif /* not HAVE_TERMIO_H */
@@ -1457,9 +1574,36 @@ savetty (void)
   linemode.c_cc[VEOL] = 0377;
 }
 
-#endif
+#else /* not (HAVE_TERMIOS_H || HAVE_TERMIO_H) */
 
-#if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTY_H
+# if HAVE_SGTTY_H
+
+void
+savetty (void)
+{
+#  ifdef TIOCGETP
+  ioctl(0, TIOCGETP, &savemode);
+#  else
+  gtty(0, &savemode);
+#  endif
+  charmode = linemode = savemode;
+
+  charmode.sg_flags &= ~ECHO;
+  charmode.sg_flags |= RAW;
+
+  linemode.sg_flags |= ECHO;
+  linemode.sg_flags &= ~RAW;
+}
+
+# else /* not HAVE_SGTTY_H */
+
+void
+savetty (void)
+{
+}
+
+# endif /* not HAVE_SGTTY_H */
+#endif /* not (HAVE_TERMIOS_H || HAVE_TERMIO_H) */
 
 void
 restoretty (void)
@@ -1478,5 +1622,3 @@ chartty (void)
 {
   SET_TTY_MODES (&charmode);
 }
-
-#endif

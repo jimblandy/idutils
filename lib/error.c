@@ -17,11 +17,14 @@
 
 /* Written by David MacKenzie <djm@gnu.ai.mit.edu>.  */
 
+#define sys_errlist sidestep_sys_errlist_declaration
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include <stdio.h>
+#include <errno.h>
 
 #if HAVE_VPRINTF || HAVE_DOPRNT || _LIBC
 # if __STDC__
@@ -68,9 +71,8 @@ static char *
 private_strerror (errnum)
      int errnum;
 {
-#if !HAVE_DECL_SYS_ERRLIST
+#undef sys_errlist
   extern char *sys_errlist[];
-#endif
   extern int sys_nerr;
 
   if (errnum > 0 && errnum <= sys_nerr)

@@ -1,6 +1,69 @@
 id-utils NEWS - User visible changes.
 
-Version 3.0.9 - May 1996, by Greg McGary
+Version 3.1 - July 17, 1996, by Greg McGary
+
+* A few more portability bugs are fixed
+
+Version 3.0m - July 9, 1996, by Greg McGary
+
+* NLS is now initialized properly
+
+* Assorted portability problems are fixed
+
+* A few bugs (one serious) are fixed
+
+Version 3.0l - skipped `l' (ell) is too easy to confuse with `1' (one)
+
+Version 3.0k - June 5, 1996, by Greg McGary
+
+* `lid's command line has been revised and expanded.  Control over output
+  formats is expanded.  Pattern searching options are now complete and
+  orthogonal: word/substring, literal/regexp, case (in)sensitivity.
+
+* The texinfo manual, id-utils.texi, is now up-to-date.
+
+* `mkid' and `xtokid' support the new `--prune' option.
+
+* `mkid' and `xtokid' now implement the `--include' and `--exclude 'options.
+
+* `lid -R grep' (a.k.a. `gid') no longer prepends a space to each line--
+  now its output is exactly like grep's.
+
+* `fid' separates tokens with spaces if output is to a termianal, and
+  otherwise with newlines.
+
+* If lid is in `brace' mode by default, it uses brace notation when
+  outputting to a terminal and separates file names with spaces otherwise.
+  If printing the token or pattern key is disabled, then file names are
+  separated with newlines.
+
+* All programs now accept directory names for the `-f, --file=' args.
+  When a directory is given, the file name "ID" is assumed.
+
+* gid.el is renamed id-utils.el and is installed in emacs's site-lisp/
+
+* Source files and directories are reorganized
+
+* Misc. bugs are fixed
+
+Version 3.0j - May 31, 1996, by Greg McGary
+
+* Pre-test versions are now designated with a lower-case letter to shorten
+  the top-level directory name to 14 chars.
+
+* `idx' has been renamed `xtokid'.
+
+* The old `pid' program has been reborn as `fnid'.
+
+* Some bugs & build problems are fixed.
+
+* Some missing prototypes are added to header files.
+
+* gcc -Wall (plus a bunch of other other warnings) is happier.
+
+* A number of idtest problems are fixed.
+
+Version 3.0.9 - May 30, 1996, by Greg McGary
 
 * The package name has been changed from `mkid' to `id-utils', and is now
   officially a part of GNU.
@@ -9,8 +72,9 @@ Version 3.0.9 - May 1996, by Greg McGary
   Each command now processes --help and --version long arguments.
 
 * The texinfo manual is out-of-date.  Please use the `--help' option for
-  correct information about command-line arguments.  I'll work on updating
-  it tonight.
+  correct information about command-line arguments.
+
+* Message catalogs for French and German exist, but are out-of-date.
 
 * `mkid' and `idx' use a file-tree walker.  Give them one or more directory
   names on the command-line, and they'll recursively descend looking for
@@ -22,7 +86,7 @@ Version 3.0.9 - May 1996, by Greg McGary
 * gid, aid and eid are now shell-script wrappers that
   call `lid' with the apropriate argument.
 
-* A new environment `IDPATH' contains a colon-separated list of ID ID file
+* A new environment `IDPATH' contains a colon-separated list of ID file
   names for use by `fid' and `lid'.  It is only partially implemented at
   this time only the first ID file is actually handled, the rest are
   ignored.

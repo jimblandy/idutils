@@ -1,3 +1,42 @@
+Sun Jun 30 13:06:18 1996  Greg McGary  <gkm@g2>
+
+	* src/lid.c (get_query_func): remove unreachable return stmt.
+
+	* libidu/hash.h (HASH_VACANT): cast item to (void *) for
+ 	comparison.
+
+	* libidu/walker.c (append_strings_to_vector): check length of
+	vector_0, not vector.
+
+	* libidu/scanners.c (get_token_c, get_token_asm, get_token_text):
+	cast return type of obstack_finish.
+	
+	* src/lid.c (radix, delimiter_style, pattern_style, key_style,
+ 	result_style, key_style, result_style) libidu/idfile.h
+ 	(separator_style): remove trailing comma from enum list.
+
+	* src/xtokid.c: removed include of string.h.
+
+	* src/lid.c (savetty, restoretty, linetty, chartty): define stub
+ 	versions if no UNIXy tty control is available.
+
+Wed Jun 12 22:15:12 1996  Greg McGary  <gkm@g2>
+
+	* src/lid.c, src/mkid.c, src/fnid.c (main): change default
+	argv variables from char* to char[]
+
+Mon Jun 10 15:29:19 1996  Greg McGary  <gkm@g2>
+
+	* src/mkid.c (main): -v implies -s; handle the case where there's
+	nothing to do.
+	* libidu/walker.c (get_lang_args): test lang_args_default before
+ 	dereference.
+
+Sun Jun  9 23:46:53 1996  Greg McGary  <gkm@g2>
+
+	* lid.c (get_radix, otoi, dtoi, xtoi): Test *str before passing it
+	to strchr--fixes query_number bug.
+
 Sat Feb 25 16:23:49 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
 	* Version 3.0.8 released.

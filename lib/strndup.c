@@ -15,22 +15,22 @@ License along with the GNU C Library; see the file COPYING.LIB.  If
 not, write to the Free Software Foundation, Inc., 675 Mass Ave,
 Cambridge, MA 02139, USA.  */
 
+#include <config.h>
 #include <ansidecl.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <string.h>
+#include "xstring.h"
+#include "xmalloc.h"
 
 
 /* Duplicate S, returning an identical malloc'd string.  */
 char *
-DEFUN(strndup, (s, n), CONST char *s AND size_t n)
+DEFUN(strndup, (s, n), const char *s AND size_t n)
 {
   char *new = malloc(n + 1);
 
   if (new == NULL)
     return NULL;
 
-  memcpy (new, (PTR) s, n);
+  memcpy (new, s, n);
   new[n] = '\0';
 
   return new;

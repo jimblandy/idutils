@@ -1,31 +1,13 @@
-`mkid' TODO - Future directions
+id-utils TODO - Future directions
 
 * Portability
-  - Fix filenames.c to handle non-UNIX file names properly
-    (notably DOS & OS/2).
+  - Fix file name handling for non-UNIX file systems
+    (notably DOS, Windoze & OS/2).
   - Fix assumption that (sizeof (int) == sizeof (long))
 
-* all query interfaces
-  - add environment variable for setting default ID file name.
-
 * lid
-  - use "long long" (if the compiler supports it) integer comparisons
-    in find_number().
-  - generalize the command-line interface for different behaviors.
-    User passes a command-format string for operating on the results
-    of a query:
-    %p = pattern, %f = crunched file list, %F = uncrunched file list
-    filename list options:
-	{,} -vs- expanded; space -vs- newline separator
-    pattern list options:
-	tokens -vs- regexp
-    Recommend the following aliases to emulate old behavior:
-      alias lid="findid --format='echo %p %f'"
-      alias eid="findid --format='vi +/\\<%p\\>/ %F'" # for vi users
-      alias gid="findid --format='egrep \\<%p\\> %F'"
-      alias aid="findid --format='fgrep -i %p %F'"
-      alias pid="findid --format='echo %p %f' -f"
-      alias fid="findid --format='echo %t ' -f"
+  - use "long long" (if available) integer comparisons
+    in query_number ().
 
 * mkid & lid
   - store & retrieve floating point literals
@@ -33,6 +15,7 @@
     you can index and search archived source without having to unpack it.
 
 * mkid
+  - relax static limit on maximum number of files (currently 32768)
   - (Optinally?) store tokenized contents of comments.
   - Store attributes with symbols: type, func, variable struct-tag
     enum-tag, keyword, etc.  Store caller/callee relationships between
@@ -40,6 +23,8 @@
     is needed to support a cscope interface.
   - Add times(2) results to statistics output.
   - treat \ specially for TeX files and do likewise with @ for Texinfo.
+  - report dangling symlinks as such, rather than just saying "can't stat"
+  - Reinstate "-" on command-line, meaning read stdin for newline-separated args.
 
 * gscope
   - add a cscope work-alike query interface

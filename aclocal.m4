@@ -20,27 +20,15 @@ AC_DEFUN(jm_MAINTAINER_MODE,
 ]
 )
 
-AC_DEFUN(gm_DECL_SBRK,
-[AC_CACHE_CHECK(for sbrk declaration in unistd.h, ac_cv_decl_sbrk,
-[AC_EGREP_HEADER(sbrk, unistd.h,
-  ac_cv_decl_sbrk=yes, ac_cv_decl_sbrk=no)])
-if test $ac_cv_decl_sbrk = yes; then
-  AC_DEFINE(HAVE_DECL_SBRK)
-fi
+AC_DEFUN(md_TYPE_PTRDIFF_T,
+  [AC_CACHE_CHECK([for ptrdiff_t], ac_cv_type_ptrdiff_t,
+     [AC_TRY_COMPILE([#include <stddef.h>
+#include <sys/types.h>], [ptrdiff_t p],
+		     ac_cv_type_ptrdiff_t=yes, ac_cv_type_ptrdiff_t=no)])
+   if test $ac_cv_type_ptrdiff_t = yes; then
+     AC_DEFINE(HAVE_PTRDIFF_T)
+   fi
 ])
-
-AC_DEFUN(gm_DECL_SYS_ERRLIST,
-[AC_CACHE_CHECK(for sys_errlist declaration, ac_cv_decl_sys_errlist,
-[ac_cv_decl_sys_errlist=no
-  AC_EGREP_HEADER(sys_errlist, errno.h, ac_cv_decl_sys_errlist=yes)
-  AC_EGREP_HEADER(sys_errlist, stdio.h, ac_cv_decl_sys_errlist=yes)
-  AC_EGREP_HEADER(sys_errlist, error.h, ac_cv_decl_sys_errlist=yes)
-  ])
-if test $ac_cv_decl_sys_errlist = yes; then
-  AC_DEFINE(HAVE_DECL_SYS_ERRLIST)
-fi
-])
-
 
 ## --------------------------------------------------------- ##
 ## Use A*_PROG_INSTALL, supplementing it with INSTALL_SCRIPT ##
@@ -110,7 +98,10 @@ do
 [#if !defined(__STDC__) || __STDC__ != 1
 choke me
 #endif
-], [int test (int i, double x);
+], [/* DYNIX/ptx V4.1.3 can't compile sys/stat.h with -Xc -D__EXTENSIONS__. */
+#include <sys/types.h>
+#include <sys/stat.h>
+int test (int i, double x);
 struct s1 {int (*f) (int a);};
 struct s2 {int (*f) (double a);};],
 [ac_cv_prog_cc_stdc="$ac_arg"; break])
@@ -178,19 +169,67 @@ AC_DEFUN(ud_PATH_LISPDIR,
   AC_SUBST(LISPDIR)
   AC_SUBST(ELCFILES)])
 
+dnl AC_REPLACE_GNU_GETOPT
+AC_DEFUN(AC_REPLACE_GNU_GETOPT,
+[AC_CHECK_FUNC(getopt_long, , [LIBOBJS="$LIBOBJS getopt1.o getopt.o"])
+AC_SUBST(LIBOBJS)dnl
+])
+
+dnl AC_REPLACE_OBSTACK
+AC_DEFUN(AC_REPLACE_OBSTACK,
+[AC_CACHE_CHECK([for obstacks], gt_cv_func_obstack,
+[AC_TRY_LINK([#include "obstack.h"],
+[struct obstack *mem;obstack_free(mem,NULL)],
+    gt_cv_func_obstack=yes, gt_cv_func_obstack=no)])
+if test $gt_cv_func_obstack = no; then
+  LIBOBJS="$LIBOBJS obstack.o"
+fi
+AC_SUBST(LIBOBJS)dnl
+])
+
 dnl --------------------------------------------------------- ##
-dnl The following definitions all have to go into the         ##
-dnl aclocal.m4 files of the packages to be internationalized. ##
-dnl Last updated for gettext-0.10.11.                         ##
+dnl The following definitions and this message have to go     ##
+dnl into the aclocal.m4 files of the packages to be           ##
+dnl internationalized.                                        ##
+dnl Last updated for gettext-0.10.20.                         ##
 dnl --------------------------------------------------------- ##
 
-AC_DEFUN(md_PATH_PROG,
-  [AC_PATH_PROG($1,$2,$3)dnl
-   if echo $$1 | grep openwin > /dev/null; then
-     echo "WARNING: Do not use OpenWin's $2.  (Better remove it.)" >&AC_FD_MSG
-     ac_cv_path_$1=$2
-     $1=$2
-   fi
+dnl ud_PATH_PROG_WITH_TEST(VARIABLE, PROG-TO-CHECK-FOR,
+dnl   TEST-PERFORMED-ON-FOUND_PROGRAM [, VALUE-IF-NOT-FOUND [, PATH]])
+AC_DEFUN(ud_PATH_PROG_WITH_TEST,
+[# Extract the first word of "$2", so it can be a program name with args.
+set dummy $2; ac_word=[$]2
+AC_MSG_CHECKING([for $ac_word])
+AC_CACHE_VAL(ac_cv_path_$1,
+[case "[$]$1" in
+  /*)
+  ac_cv_path_$1="[$]$1" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in ifelse([$5], , $PATH, [$5]); do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      if [$3]; then
+	ac_cv_path_$1="$ac_dir/$ac_word"
+	break
+      fi
+    fi
+  done
+  IFS="$ac_save_ifs"
+dnl If no 4th arg is given, leave the cache variable unset,
+dnl so AC_PATH_PROGS will keep looking.
+ifelse([$4], , , [  test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$4"
+])dnl
+  ;;
+esac])dnl
+$1="$ac_cv_path_$1"
+if test -n "[$]$1"; then
+  AC_MSG_RESULT([$]$1)
+else
+  AC_MSG_RESULT(no)
+fi
+AC_SUBST($1)dnl
 ])
 
 dnl Check NLS options
@@ -214,12 +253,14 @@ AC_DEFUN(ud_WITH_NLS,
     AC_MSG_RESULT($USE_NLS)
     AC_SUBST(USE_NLS)
 
+    USE_INCLUDED_LIBINTL=no
+
     dnl If we use NLS figure out what method
     if test "$USE_NLS" = "yes"; then
       AC_DEFINE(ENABLE_NLS)
       AC_MSG_CHECKING([for explicitly using GNU gettext])
-      AC_ARG_WITH(gnu-gettext,
-        [  --with-gnu-gettext      use the GNU gettext library],
+      AC_ARG_WITH(included-gettext,
+        [  --with-included-gettext use the GNU gettext library included here],
         nls_cv_force_use_gnu_gettext=$withval,
         nls_cv_force_use_gnu_gettext=no)
       AC_MSG_RESULT($nls_cv_force_use_gnu_gettext)
@@ -235,17 +276,23 @@ AC_DEFUN(ud_WITH_NLS,
 	CATOBJEXT=NONE
 
 	AC_CHECK_HEADER(libintl.h,
-	  [AC_CHECK_LIB(intl, main)
+	  [AC_CHECK_LIB(intl, bindtextdomain)
 	   AC_CHECK_FUNC(gettext,
 	     [AC_DEFINE(HAVE_GETTEXT)
-	      md_PATH_PROG(MSGFMT, msgfmt, no)dnl
+	      ud_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
+		[test -z "`$ac_dir/$ac_word -h 2>&1 | grep 'dv '`"], no)dnl
 	      if test "$MSGFMT" != "no"; then
 		AC_CHECK_FUNCS(dcgettext)
-		md_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
-		md_PATH_PROG(XGETTEXT, xgettext, :)
-		CATOBJEXT=.mo
+		AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
+		ud_PATH_PROG_WITH_TEST(XGETTEXT, xgettext,
+		  [test -z "`$ac_dir/$ac_word -h 2>&1 | grep '(HELP)'`"], :)
+		AC_TRY_LINK(, [extern int _nl_msg_cat_cntr;
+			       return _nl_msg_cat_cntr],
+		  [CATOBJEXT=.gmo
+		   DATADIRNAME=share],
+		  [CATOBJEXT=.mo
+		   DATADIRNAME=lib])
 		INSTOBJEXT=.mo
-		DATADIRNAME=lib
 	      fi])])
 
         if test "$CATOBJEXT" = "NONE"; then
@@ -263,14 +310,19 @@ AC_DEFUN(ud_WITH_NLS,
 	       INTLOBJS="\$(CATOBJS)"
 	       AC_PATH_PROG(GENCAT, gencat, no)dnl
 	       if test "$GENCAT" != "no"; then
-		 AC_PATH_PROGS(GMSGFMT, [gmsgfmt msgfmt], msgfmt)
-		 md_PATH_PROG(XGETTEXT, xgettext, :)
+		 AC_PATH_PROG(GMSGFMT, gmsgfmt, no)
+		 if test "$GMSGFMT" = "no"; then
+		   ud_PATH_PROG_WITH_TEST(GMSGFMT, msgfmt,
+		    [test -z "`$ac_dir/$ac_word -h 2>&1 | grep 'dv '`"], no)
+		 fi
+		 ud_PATH_PROG_WITH_TEST(XGETTEXT, xgettext,
+		   [test -z "`$ac_dir/$ac_word -h 2>&1 | grep '(HELP)'`"], :)
+		 USE_INCLUDED_LIBINTL=yes
 		 CATOBJEXT=.cat
 		 INSTOBJEXT=.cat
 		 DATADIRNAME=lib
 		 INTLDEPS="../intl/libintl.a"
 		 INTLLIBS=$INTLDEPS
-		 INTLSUB=intl
 		 LIBS=`echo $LIBS | sed -e 's/-lintl//'`
 		 nls_cv_header_intl=intl/libintl.h
 		 nls_cv_header_libgt=intl/libgettext.h
@@ -288,16 +340,18 @@ AC_DEFUN(ud_WITH_NLS,
       if test "$nls_cv_use_gnu_gettext" = "yes"; then
         dnl Mark actions used to generate GNU NLS library.
         INTLOBJS="\$(GETTOBJS)"
-        md_PATH_PROG(MSGFMT, msgfmt, msgfmt)
-        md_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
-        md_PATH_PROG(XGETTEXT, xgettext, :)
+        ud_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
+	  [test -z "`$ac_dir/$ac_word -h 2>&1 | grep 'dv '`"], msgfmt)
+        AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
+        ud_PATH_PROG_WITH_TEST(XGETTEXT, xgettext,
+	  [test -z "`$ac_dir/$ac_word -h 2>&1 | grep '(HELP)'`"], :)
         AC_SUBST(MSGFMT)
+	USE_INCLUDED_LIBINTL=yes
         CATOBJEXT=.gmo
         INSTOBJEXT=.mo
         DATADIRNAME=share
-        INTLDEPS="../intl/libintl.a"
-        INTLLIBS=$INTLDEPS
-        INTLSUB=intl
+	INTLDEPS="../intl/libintl.a"
+	INTLLIBS=$INTLDEPS
 	LIBS=`echo $LIBS | sed -e 's/-lintl//'`
         nls_cv_header_intl=intl/libintl.h
         nls_cv_header_libgt=intl/libgettext.h
@@ -324,6 +378,13 @@ AC_DEFUN(ud_WITH_NLS,
       nls_cv_header_libgt=intl/libgettext.h
     fi
 
+    # If this is used in GNU gettext we have to set USE_NLS to `yes'
+    # because some of the sources are only built for this goal.
+    if test "$PACKAGE" = gettext; then
+      USE_NLS=yes
+      USE_INCLUDED_LIBINTL=yes
+    fi
+
     dnl These rules are solely for the distribution goal.  While doing this
     dnl we only have to keep exactly one list of the available catalogs
     dnl in configure.in.
@@ -333,6 +394,7 @@ AC_DEFUN(ud_WITH_NLS,
     done
 
     dnl Make all variables we use known to autoconf.
+    AC_SUBST(USE_INCLUDED_LIBINTL)
     AC_SUBST(CATALOGS)
     AC_SUBST(CATOBJEXT)
     AC_SUBST(DATADIRNAME)
@@ -341,7 +403,6 @@ AC_DEFUN(ud_WITH_NLS,
     AC_SUBST(INTLDEPS)
     AC_SUBST(INTLLIBS)
     AC_SUBST(INTLOBJS)
-    AC_SUBST(INTLSUB)
     AC_SUBST(POFILES)
     AC_SUBST(POSUB)
   ])
@@ -359,8 +420,10 @@ AC_DEFUN(ud_GNU_GETTEXT,
    AC_REQUIRE([AC_FUNC_ALLOCA])dnl
    AC_REQUIRE([AC_FUNC_MMAP])dnl
 
-   AC_CHECK_HEADERS([limits.h locale.h nl_types.h malloc.h string.h unistd.h values.h])
-   AC_CHECK_FUNCS([getcwd munmap putenv setenv setlocale strchr strcasecmp])
+   AC_CHECK_HEADERS([argz.h limits.h locale.h nl_types.h malloc.h string.h \
+unistd.h values.h])
+   AC_CHECK_FUNCS([getcwd munmap putenv setenv setlocale strchr strcasecmp \
+__argz_count __argz_stringify __argz_next])
 
    if test "${ac_cv_func_stpcpy+set}" != "set"; then
      AC_CHECK_FUNCS(stpcpy)
@@ -408,6 +471,31 @@ AC_DEFUN(ud_GNU_GETTEXT,
    sed -e '/^#.*[^\\]$/d' -e '/^#$/d' \
      $srcdir/intl/po2tbl.sed.in > intl/po2tbl.sed
 
+   dnl In the intl/Makefile.in we have a special dependency which makes
+   dnl only sense for gettext.  We comment this out for non-gettext
+   dnl packages.
+   if test "$PACKAGE" = "gettext"; then
+     GT_NO="#NO#"
+     GT_YES=
+   else
+     GT_NO=
+     GT_YES="#YES#"
+   fi
+   AC_SUBST(GT_NO)
+   AC_SUBST(GT_YES)
+
+   dnl If the AC_CONFIG_AUX_DIR macro for autoconf is used we possibly
+   dnl find the mkinstalldirs script in another subdir but ($top_srcdir).
+   dnl Try to locate is.
+   MKINSTALLDIRS=
+   if test $ac_aux_dir; then
+     MKINSTALLDIRS="$ac_aux_dir/mkinstalldirs"
+   fi
+   if test -z $MKINSTALLDIRS; then
+     MKINSTALLDIRS="\$(top_srcdir)/mkinstalldirs"
+   fi
+   AC_SUBST(MKINSTALLDIRS)
+
    dnl Generate list of files to be processed by xgettext which will
    dnl be included in po/Makefile.
    test -d po || mkdir po
@@ -423,21 +511,3 @@ AC_DEFUN(ud_GNU_GETTEXT,
    sed -e "/^#/d" -e "/^\$/d" -e "s,.*,	$posrcprefix& \\\\," -e "\$s/\(.*\) \\\\/\1/" \
 	< $srcdir/po/POTFILES.in > po/POTFILES
   ])
-
-dnl AC_REPLACE_GNU_GETOPT
-AC_DEFUN(AC_REPLACE_GNU_GETOPT,
-[AC_CHECK_FUNC(getopt_long, , [LIBOBJS="$LIBOBJS getopt1.o getopt.o"])
-AC_SUBST(LIBOBJS)dnl
-])
-
-dnl AC_REPLACE_OBSTACK
-AC_DEFUN(AC_REPLACE_OBSTACK,
-[AC_CACHE_CHECK([for obstacks], gt_cv_func_obstack,
-[AC_TRY_LINK([#include "obstack.h"],
-[struct obstack *mem;obstack_free(mem,NULL)],
-    gt_cv_func_obstack=yes, gt_cv_func_obstack=no)])
-if test $gt_cv_func_obstack = no; then
-  LIBOBJS="$LIBOBJS obstack.o"
-fi
-AC_SUBST(LIBOBJS)dnl
-])

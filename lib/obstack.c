@@ -1,5 +1,5 @@
 /* obstack.c - subroutines used implicitly by object stack macros
-   Copyright (C) 1988, 89, 90, 91, 92, 93, 94 Free Software Foundation, Inc.
+   Copyright (C) 1988,89,90,91,92,93,94,96 Free Software Foundation, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,29 +17,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 
 #include "obstack.h"
 
-/* This is just to get __GNU_LIBRARY__ defined.  */
-#include <stdio.h>
+/* NOTE BEFORE MODIFYING THIS FILE: This version number must be
+   incremented whenever callers compiled using an old obstack.h can no
+   longer properly call the functions in this obstack.c.  */
+#define OBSTACK_INTERFACE_VERSION 1
 
 /* Comment out all this code if we are using the GNU C Library, and are not
-   actually compiling the library itself.  This code is part of the GNU C
-   Library, but also included in many other GNU distributions.  Compiling
+   actually compiling the library itself, and the installed library
+   supports the same library interface we do.  This code is part of the GNU
+   C Library, but also included in many other GNU distributions.  Compiling
    and linking in this code is a waste when using the GNU C library
    (especially if it is a shared library).  Rather than having every GNU
-   program understand `configure --with-gnu-libc' and omit the object files,
-   it is simpler to just do this in the source for each such file.  */
+   program understand `configure --with-gnu-libc' and omit the object
+   files, it is simpler to just do this in the source for each such file.  */
 
-/* CYGNUS LOCAL.  No, don't comment the code out.  We will be using
-   ../include/obstack.h, which was changed relatively recently in a
-   way that is not binary compatible.  Until we feel confident that
-   nobody is using the old obstack.c code, force the use of this code.
-   This issue will arise anytime a change is made which is not binary
-   compatible.
-#if defined (_LIBC) || !defined (__GNU_LIBRARY__)
-*/
-#if 1
+#include <stdio.h>		/* Random thing to get __GNU_LIBRARY__.  */
+#if !defined (_LIBC) && defined (__GNU_LIBRARY__) && __GNU_LIBRARY__ > 1
+#include <gnu-versions.h>
+#if _GNU_OBSTACK_INTERFACE_VERSION == OBSTACK_INTERFACE_VERSION
+#define ELIDE_CODE
+#endif
+#endif
 
 
-#if __STDC__
+#ifndef ELIDE_CODE
+
+
+#if defined (__STDC__) && __STDC__
 #define POINTER void *
 #else
 #define POINTER char *
@@ -77,14 +81,14 @@ struct obstack *_obstack;
 #define CALL_CHUNKFUN(h, size) \
   (((h) -> use_extra_arg) \
    ? (*(h)->chunkfun) ((h)->extra_arg, (size)) \
-   : (*(h)->chunkfun) ((size)))
+   : (*(struct _obstack_chunk *(*) ()) (h)->chunkfun) ((size)))
 
 #define CALL_FREEFUN(h, old_chunk) \
   do { \
     if ((h) -> use_extra_arg) \
       (*(h)->freefun) ((h)->extra_arg, (old_chunk)); \
     else \
-      (*(h)->freefun) ((old_chunk)); \
+      (*(void (*) ()) (h)->freefun) ((old_chunk)); \
   } while (0)
 
 
@@ -275,7 +279,7 @@ _obstack_newchunk (h, length)
    This is here for debugging.
    If you use it in a program, you are probably losing.  */
 
-#if __STDC__
+#if defined (__STDC__) && __STDC__
 /* Suppress -Wmissing-prototypes warning.  We don't want to declare this in
    obstack.h because it is just for debugging.  */
 int _obstack_allocated_p (struct obstack *h, POINTER obj);
@@ -382,7 +386,7 @@ obstack_free (h, obj)
 /* Now define the functional versions of the obstack macros.
    Define them to simply use the corresponding macros to do the job.  */
 
-#if __STDC__
+#if defined (__STDC__) && __STDC__
 /* These function definitions do not work with non-ANSI preprocessors;
    they won't pass through the macro names in parentheses.  */
 
@@ -490,4 +494,4 @@ POINTER (obstack_copy0) (obstack, pointer, length)
 
 #endif /* 0 */
 
-#endif	/* _LIBC or not __GNU_LIBRARY__.  */
+#endif	/* !ELIDE_CODE */

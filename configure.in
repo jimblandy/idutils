@@ -19,7 +19,7 @@ AC_ARG_PROGRAM
 ##############################################################################
 
 PACKAGE=id-utils
-VERSION=3.0.9
+VERSION=3.1
 PACKAGE_VERSION="$PACKAGE-$VERSION"
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
@@ -38,8 +38,8 @@ ALL_LINGUAS="de fr"
 
 changequote(,)dnl
 case $VERSION in
-*.*.*) README_ALPHA=README-alpha;;
-*) README_ALPHA=;;
+*[a-z]) README_ALPHA=README-alpha;;
+*)      README_ALPHA=;;
 esac
 changequote([, ])dnl
 AC_SUBST(README_ALPHA)
@@ -73,8 +73,9 @@ AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_STAT
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(limits.h sys/types.h sys/param.h stdlib.h unistd.h string.h)
-AC_CHECK_HEADERS(malloc.h sys/ioctl.h termios.h termio.h sgtty.h regex.h)
+AC_CHECK_HEADERS(sys/types.h sys/param.h sys/stat.h sys/ioctl.h)
+AC_CHECK_HEADERS(limits.h stddef.h stdlib.h unistd.h string.h fcntl.h)
+AC_CHECK_HEADERS(malloc.h termios.h termio.h sgtty.h regex.h memory.h)
 
 ##############################################################################
 ################ Check for typedefs, structs, and compiler params ############
@@ -85,12 +86,13 @@ fp_C_PROTOTYPES
 AC_TYPE_SIGNAL
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
+md_TYPE_PTRDIFF_T
 
 ##############################################################################
 ################ Set default compilation flags ###############################
 ##############################################################################
 
-: ${CFLAGS=-g}
+: ${CFLAGS="-O -g"}
 : ${LDFLAGS=-g}
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)
@@ -100,12 +102,11 @@ AC_SUBST(LDFLAGS)
 ##############################################################################
 
 AC_FUNC_ALLOCA
-gm_DECL_SBRK
-gm_DECL_SYS_ERRLIST
 ud_WITH_REGEX
-AC_CHECK_FUNCS(getwd getcwd link)
-AC_REPLACE_FUNCS(strcasecmp strdup strndup strtok fnmatch)
-AC_REPLACE_FUNCS(basename dirname error memcpy memset)
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(getwd getcwd link strerror isascii bcopy bzero memcpy)
+AC_REPLACE_FUNCS(strdup strndup strspn strcspn strpbrk strstr strtok)
+AC_REPLACE_FUNCS(basename dirname fnmatch error memcpy memset)
 AC_REPLACE_GNU_GETOPT
 AC_REPLACE_OBSTACK
 
@@ -117,10 +118,29 @@ ud_GNU_GETTEXT
 AC_LINK_FILES($nls_cv_header_libgt, $nls_cv_header_intl)
 
 ##############################################################################
+################ Find a home for language map ################################
+##############################################################################
+
+if test "x$prefix" != xNONE; then
+    datadir=$prefix/share
+else
+    datadir=$ac_default_prefix/share
+fi
+LANGUAGE_MAP_FILE=$datadir/id-lang.map
+AC_DEFINE_UNQUOTED(LANGUAGE_MAP_FILE, "$LANGUAGE_MAP_FILE")
+AC_SUBST(LANGUAGE_MAP_FILE)
+
+##############################################################################
+################ Find a home for Emacs Lisp code #############################
+##############################################################################
+
+ud_PATH_LISPDIR
+
+##############################################################################
 ################ Generate the configure script ###############################
 ##############################################################################
 
-AC_OUTPUT([Makefile doc/Makefile lib/Makefile src/Makefile intl/Makefile po/Makefile.in],
+AC_OUTPUT([Makefile doc/Makefile lib/Makefile libidu/Makefile src/Makefile lisp/Makefile intl/Makefile po/Makefile.in testsuite/Makefile],
 	[sed -e "/POTFILES =/r po/POTFILES" po/Makefile.in > po/Makefile; \
 	 test -z "$CONFIG_HEADERS" || echo timestamp >stamp-h])
 

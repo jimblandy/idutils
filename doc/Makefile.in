@@ -39,12 +39,14 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 transform = @program_transform_name@
 
 info_TEXINFOS = id-utils.texi
+
+EXTRA_DIST = texinfo.tex
 mkinstalldirs = $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 
 MAKEINFO = makeinfo
 TEXI2DVI = texi2dvi
-INFOS = id-utils.info*
+INFOS = id-utils.info id-utils.info-[0-9] id-utils.info-[0-9][0-9]
 INFO_DEPS = id-utils.info
 DVIS = id-utils.dvi
 TEXINFOS = id-utils.texi
@@ -106,8 +108,8 @@ id-utils.info: id-utils.texi version.texi
 install-info: $(INFO_DEPS)
 	$(mkinstalldirs) $(infodir)
 	for file in $(INFO_DEPS); do		\
-	  for ifile in `cd $(srcdir) && echo $$file*`; do \
-	    $(INSTALL_DATA) $(srcdir)/$$ifile $(infodir)/$$ifile; \
+	  for ifile in `cd $(srcdir) && echo $$file $$file-[0-9] $$file-[0-9][0-9]`; do \
+	    test -f $$ifile && $(INSTALL_DATA) $(srcdir)/$$ifile $(infodir)/$$ifile || true; \
 	  done;					\
 	done
 

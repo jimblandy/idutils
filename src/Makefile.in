@@ -40,19 +40,20 @@ transform = @program_transform_name@
 
 AUTOMAKE_OPTIONS = ansi2knr
 
-bin_PROGRAMS = mkid lid fid idx
-bin_SCRIPTS = eid aid gid pid defid
+bin_PROGRAMS = mkid lid fid fnid xtokid
+bin_SCRIPTS = eid aid gid defid
 
 EXTRA_DIST = ansi2knr.1 ansi2knr.c $(bin_SCRIPTS)
 
 localedir = $(datadir)/locale
 
 INCLUDES = -I. -I$(srcdir) \
+	   -I../libidu -I$(top_srcdir)/libidu \
 	   -I../lib -I$(top_srcdir)/lib \
 	   -I../intl -I$(top_srcdir)/intl \
 	   -I.. -I$(top_srcdir) 
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
-LDADD = @INTLLIBS@ ../lib/libidu.a
+LDADD = @INTLLIBS@ ../libidu/libidu.a ../lib/libsys.a
 mkinstalldirs = $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 PROGRAMS = $(bin_PROGRAMS)
@@ -83,10 +84,14 @@ fid_SOURCES = fid.c
 fid_OBJECTS = fid$o
 EXTRA_fid_SOURCES =
 fid_LDADD = $(LDADD)
-idx_SOURCES = idx.c
-idx_OBJECTS = idx$o
-EXTRA_idx_SOURCES =
-idx_LDADD = $(LDADD)
+fnid_SOURCES = fnid.c
+fnid_OBJECTS = fnid$o
+EXTRA_fnid_SOURCES =
+fnid_LDADD = $(LDADD)
+xtokid_SOURCES = xtokid.c
+xtokid_OBJECTS = xtokid$o
+EXTRA_xtokid_SOURCES =
+xtokid_LDADD = $(LDADD)
 SCRIPTS = $(bin_SCRIPTS)
 
 DIST_COMMON = Makefile.am Makefile.in
@@ -101,8 +106,8 @@ DEP_DISTFILES = $(DIST_COMMON) $(SOURCES) $(BUILT_SOURCES) $(HEADERS) \
 	$(TEXINFOS) $(INFO_DEPS) $(MANS) $(EXTRA_DIST) $(DATA)
 
 TAR = tar
-SOURCES = mkid.c lid.c fid.c idx.c
-OBJECTS = mkid$o lid$o fid$o idx$o
+SOURCES = mkid.c lid.c fid.c fnid.c xtokid.c
+OBJECTS = mkid$o lid$o fid$o fnid$o xtokid$o
 
 default: all
 
@@ -189,10 +194,14 @@ $(fid_OBJECTS): ../config.h
 
 fid: $(fid_OBJECTS) $(fid_DEPENDENCIES)
 	$(LINK) $(fid_OBJECTS) $(fid_LDADD) $(LIBS)
-$(idx_OBJECTS): ../config.h
+$(fnid_OBJECTS): ../config.h
 
-idx: $(idx_OBJECTS) $(idx_DEPENDENCIES)
-	$(LINK) $(idx_OBJECTS) $(idx_LDADD) $(LIBS)
+fnid: $(fnid_OBJECTS) $(fnid_DEPENDENCIES)
+	$(LINK) $(fnid_OBJECTS) $(fnid_LDADD) $(LIBS)
+$(xtokid_OBJECTS): ../config.h
+
+xtokid: $(xtokid_OBJECTS) $(xtokid_DEPENDENCIES)
+	$(LINK) $(xtokid_OBJECTS) $(xtokid_LDADD) $(LIBS)
 
 install-binSCRIPTS: $(bin_SCRIPTS)
 	$(mkinstalldirs) $(bindir)
@@ -235,22 +244,32 @@ distdir: $(DEP_DISTFILES)
 	  || ln $(srcdir)/$$file $(distdir)/$$file 2> /dev/null \
 	  || cp -p $(srcdir)/$$file $(distdir)/$$file; \
 	done
-fid$o: fid.c system.h idfile.h \
- hash.h bitops.h filenames.h \
- misc.h strxtra.h alloc.h \
- token.h error.h pathmax.h
-idx$o: idx.c alloc.h system.h \
- misc.h filenames.h scanners.h \
- idfile.h hash.h pathmax.h
-lid$o: lid.c system.h alloc.h \
- idfile.h hash.h token.h \
- bitops.h strxtra.h misc.h \
- filenames.h error.h pathmax.h
-mkid$o: mkid.c system.h pathmax.h \
- strxtra.h alloc.h idfile.h \
- hash.h token.h bitops.h \
- misc.h filenames.h scanners.h \
- error.h
+fid$o: ../src/fid.c ../lib/xstring.h ../lib/xunistd.h \
+ ../libidu/xnls.h ../libidu/idfile.h ../lib/xobstack.h \
+ ../lib/xmalloc.h ../libidu/hash.h ../libidu/dynvec.h \
+ ../libidu/tokflags.h ../lib/error.h ../lib/pathmax.h \
+ ../lib/xalloca.h
+fnid$o: ../src/fnid.c ../lib/xfnmatch.h ../lib/xstring.h \
+ ../lib/xmalloc.h ../libidu/xnls.h ../libidu/idfile.h \
+ ../lib/xobstack.h ../libidu/hash.h ../libidu/dynvec.h \
+ ../libidu/tokflags.h ../lib/pathmax.h ../lib/error.h \
+ ../lib/xalloca.h
+lid$o: ../src/lid.c ../lib/xstdlib.h ../lib/xstring.h \
+ ../lib/xunistd.h ../libidu/xnls.h ../lib/xmalloc.h \
+ ../libidu/idfile.h ../lib/xobstack.h ../libidu/hash.h \
+ ../libidu/dynvec.h ../libidu/tokflags.h ../lib/error.h \
+ ../lib/pathmax.h ../lib/xalloca.h
+mkid$o: ../src/mkid.c ../lib/xstdlib.h ../lib/xsysstat.h \
+ ../lib/xstddef.h ../lib/xunistd.h ../libidu/xnls.h \
+ ../lib/pathmax.h ../lib/xstring.h ../libidu/idfile.h \
+ ../lib/xobstack.h ../lib/xmalloc.h ../libidu/hash.h \
+ ../libidu/dynvec.h ../libidu/tokflags.h ../libidu/scanners.h \
+ ../lib/error.h ../lib/xalloca.h
+xtokid$o: ../src/xtokid.c ../libidu/xnls.h \
+ ../libidu/scanners.h ../lib/xobstack.h ../lib/xmalloc.h \
+ ../lib/xstring.h ../libidu/idfile.h ../libidu/hash.h \
+ ../libidu/dynvec.h ../libidu/tokflags.h ../lib/pathmax.h \
+ ../lib/error.h
 
 info:
 

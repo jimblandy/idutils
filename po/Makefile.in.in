@@ -30,11 +30,12 @@ exec_prefix = @exec_prefix@
 datadir = $(prefix)/@DATADIRNAME@
 localedir = $(datadir)/locale
 gnulocaledir = $(prefix)/share/locale
-gettextsrcdir = $(prefix)/share/gettext
+gettextsrcdir = $(prefix)/share/gettext/po
 subdir = po
 
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
+MKINSTALLDIRS = @MKINSTALLDIRS@
 
 CC = @CC@
 GENCAT = @GENCAT@
@@ -87,14 +88,15 @@ INSTOBJEXT = @INSTOBJEXT@
 
 all: all-@USE_NLS@
 
-all-yes all-gettext: cat-id-tbl.c @MAINT@$(CATALOGS) $(GMOFILES)
+all-yes: cat-id-tbl.c $(CATALOGS)
 all-no:
 
 $(PACKAGE).pot: $(POTFILES)
 	$(XGETTEXT) --default-domain=$(PACKAGE) --directory=$(top_srcdir) \
 	  --add-comments --keyword=_ --keyword=N_ \
 	  --files-from=$(srcdir)/POTFILES.in
-	if cmp -s $(PACKAGE).po $(srcdir)/$(PACKAGE).pot; then \
+	if [ ! -s $(PACKAGE).po ] \
+	  || cmp -s $(PACKAGE).po $(srcdir)/$(PACKAGE).pot; then \
 	  rm -f $(PACKAGE).po; \
 	else \
 	  rm -f $(srcdir)/$(PACKAGE).pot \
@@ -103,24 +105,30 @@ $(PACKAGE).pot: $(POTFILES)
 
 cat-id-tbl.c: stamp-cat-id
 stamp-cat-id: $(PACKAGE).pot
-	rm -f cat-id-tbl.tmp.c
+	rm -f cat-id-tbl.tmp
 	sed -f ../intl/po2tbl.sed $(srcdir)/$(PACKAGE).pot \
-		| sed -e "s/@PACKAGE NAME@/$(PACKAGE)/" > cat-id-tbl.tmp.c
-	if cmp -s cat-id-tbl.tmp.c $(srcdir)/cat-id-tbl.c; then \
-	  rm cat-id-tbl.tmp.c; \
+		| sed -e "s/@PACKAGE NAME@/$(PACKAGE)/" > cat-id-tbl.tmp
+	if cmp -s cat-id-tbl.tmp $(srcdir)/cat-id-tbl.c; then \
+	  rm cat-id-tbl.tmp; \
 	else \
 	  echo cat-id-tbl.c changed; \
 	  rm -f $(srcdir)/cat-id-tbl.c; \
-	  mv cat-id-tbl.tmp.c $(srcdir)/cat-id-tbl.c; \
+	  mv cat-id-tbl.tmp $(srcdir)/cat-id-tbl.c; \
 	fi
 	cd $(srcdir) && rm -f stamp-cat-id && echo timestamp > stamp-cat-id
 
 
 install: install-exec install-data
 install-exec:
-install-data: all
-	$(top_srcdir)/mkinstalldirs $(datadir)
-	catalogs='$(CATALOGS)'; \
+install-data: install-data-@USE_NLS@
+install-data-no: all
+install-data-yes: all
+	if test -r $(MKINSTALLDIRS); then \
+	  $(MKINSTALLDIRS) $(datadir); \
+	else \
+	  $(top_srcdir)/mkinstalldirs $(datadir); \
+	fi
+	@catalogs='$(CATALOGS)'; \
 	for cat in $$catalogs; do \
 	  case "$$cat" in \
 	    *.gmo) destdir=$(gnulocaledir);; \
@@ -128,28 +136,47 @@ install-data: all
 	  esac; \
 	  lang=`echo $$cat | sed 's/$(CATOBJEXT)$$//'`; \
 	  dir=$$destdir/$$lang/LC_MESSAGES; \
-	  $(top_srcdir)/mkinstalldirs $$dir; \
+	  if test -r $(MKINSTALLDIRS); then \
+	    $(MKINSTALLDIRS) $$dir; \
+	  else \
+	    $(top_srcdir)/mkinstalldirs $$dir; \
+	  fi; \
 	  if test -r $$cat; then \
 	    $(INSTALL_DATA) $$cat $$dir/$(PACKAGE)$(INSTOBJEXT); \
+	    echo "installing $$cat as $$dir/$(PACKAGE)$(INSTOBJEXT)"; \
 	  else \
 	    $(INSTALL_DATA) $(srcdir)/$$cat $$dir/$(PACKAGE)$(INSTOBJEXT); \
+	    echo "installing $(srcdir)/$$cat as" \
+		 "$$dir/$(PACKAGE)$(INSTOBJEXT)"; \
 	  fi; \
 	  if test -r $$cat.m; then \
 	    $(INSTALL_DATA) $$cat.m $$dir/$(PACKAGE)$(INSTOBJEXT).m; \
+	    echo "installing $$cat.m as $$dir/$(PACKAGE)$(INSTOBJEXT).m"; \
 	  else \
 	    if test -r $(srcdir)/$$cat.m ; then \
 	      $(INSTALL_DATA) $(srcdir)/$$cat.m \
 		$$dir/$(PACKAGE)$(INSTOBJEXT).m; \
+	      echo "installing $(srcdir)/$$cat as" \
+		   "$$dir/$(PACKAGE)$(INSTOBJEXT).m"; \
+	    else \
+	      true; \
 	    fi; \
 	  fi; \
 	done
+	if test "$(PACKAGE)" = "gettext"; then \
+	  if test -r $(MKINSTALLDIRS); then \
+	    $(MKINSTALLDIRS) $(gettextsrcdir); \
+	  else \
+	    $(top_srcdir)/mkinstalldirs $(gettextsrcdir); \
+	  fi; \
+	  cd $(srcdir) && \
+	    $(INSTALL_DATA) Makefile.in.in $(gettextsrcdir)/Makefile.in.in; \
+	else \
+	  : ; \
+	fi
 
-# This installation goal is only used in GNU gettext.  Packages which
-# only use the library should use install instead.
-install-src: install
-	$(top_srcdir)/mkinstalldirs $(gettextsrcdir)
-	cd $(srcdir) && \
-	  $(INSTALL_DATA) Makefile.in.in $(gettextsrcdir)/po-Makefile.in.in
+# Define this as empty until I found a useful application.
+installcheck:
 
 uninstall:
 	catalogs='$(CATALOGS)'; \
@@ -166,10 +193,10 @@ check: all
 
 cat-id-tbl.o: ../intl/libgettext.h
 
-TAGS ID:
+dvi info tags TAGS ID:
 
 mostlyclean:
-	rm -f core core.* *.pox $(PACKAGE).po *.old.po cat-id-tbl.tmp.c
+	rm -f core core.* *.pox $(PACKAGE).po *.old.po cat-id-tbl.tmp
 	rm -fr *.o
 
 clean: mostlyclean
@@ -181,9 +208,8 @@ maintainer-clean: distclean
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
-.PHONY: distdir
 distdir = ../$(PACKAGE)-$(VERSION)/$(subdir)
-distdir dist-gettext: update-po $(DISTFILES)
+dist distdir: update-po $(DISTFILES)
 	for file in $(DISTFILES); do \
 	  ln $(srcdir)/$$file $(distdir) 2> /dev/null \
 	    || cp -p $(srcdir)/$$file $(distdir); \

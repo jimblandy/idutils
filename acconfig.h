@@ -13,23 +13,23 @@
 /* Define as 1 if you have catgets and don't want to use GNU gettext.  */
 #undef HAVE_CATGETS
 
-/* Define if the sbrk system call is declared in unistd.h.  */
-#undef HAVE_DECL_SBRK
-
-/* Define if the sys_errlist array is declared in errno.h, error.h or stdio.h.  */
-#undef HAVE_DECL_SYS_ERRLIST
-
 /* Define as 1 if you have gettext and don't want to use GNU gettext.  */
 #undef HAVE_GETTEXT
 
 /* Define if your locale.h file contains LC_MESSAGES.  */
 #undef HAVE_LC_MESSAGES
 
+/* Define if your sys/types.h file defines the type ptrdiff_t.  */
+#undef HAVE_PTRDIFF_T
+
 /* Define to 1 if you have the stpcpy function.  */
 #undef HAVE_STPCPY
 
 /* Define if you have the <sys/ioctl.h> header file.  */
 #undef HAVE_SYS_IOCTL_H
+
+/* Define to the name of the installed language map file.  */
+#undef LANGUAGE_MAP_FILE
 
 /* Define to the name of the distribution.  */
 #undef PACKAGE

@@ -38,11 +38,9 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 transform = @program_transform_name@
 
-SUBDIRS = lib intl src doc po
+SUBDIRS = lib libidu intl src lisp po doc testsuite
 
-TESTS = idtest
-
-EXTRA_DIST = idtest @README_ALPHA@
+EXTRA_DIST = @README_ALPHA@
 ACLOCAL = aclocal.m4
 ACCONFIG = acconfig.h
 CONFIG_HEADER_IN = config.h.in
@@ -161,6 +159,10 @@ dist: distdir
 	$(TAR) chozf $(distdir).tar.gz $(distdir)
 	rm -rf $(distdir)
 distdir: $(DEP_DISTFILES)
+	@if sed 15q $(srcdir)/NEWS | grep -e "$(VERSION)" > /dev/null; then :; else \
+	  echo "NEWS not updated; not releasing" 1>&2; \
+	  exit 1;				\
+	fi
 	rm -rf $(distdir)
 	mkdir $(distdir)
 	chmod 777 $(distdir)
@@ -177,32 +179,11 @@ distdir: $(DEP_DISTFILES)
 	  (cd $$subdir && $(MAKE) distdir=../$(distdir)/$$subdir distdir) \
 	    || exit 1; \
 	done
-check-TESTS: $(TESTS)
-	@failed=0; all=0; \
-	srcdir=$(srcdir); export srcdir; \
-	for tst in $(TESTS); do \
-	  all=`expr $$all + 1`; \
-	  if test -f $$tst; then dir=.; \
-	  else dir="$(srcdir)"; fi; \
-	  if $$dir/$$tst; then \
-	    echo "PASS: $$tst"; \
-	  else \
-	    failed=`expr $$failed + 1`; \
-	    echo "FAIL: $$tst"; \
-	  fi; \
-	done; \
-	if test "$$failed" -eq 0; then \
-	  echo "========================"; \
-	  echo "All $$all tests passed"; \
-	  echo "========================"; \
-	else \
-	  echo "$$failed of $$all tests failed"; \
-	fi
 info: info-recursive
 
 dvi: dvi-recursive
 
-check: check-recursive check-TESTS
+check: check-recursive
 
 installcheck: installcheck-recursive
 
@@ -267,15 +248,12 @@ uninstalldirs-recursive all-recursive check-recursive \
 installcheck-recursive info-recursive dvi-recursive \
 mostlyclean-recursive distclean-recursive clean-recursive \
 maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir check-TESTS \
-info dvi check installcheck all-recursive-hack all-am install-exec \
-install-data install uninstall all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+distclean-tags clean-tags maintainer-clean-tags distdir info dvi check \
+installcheck all-recursive-hack all-am install-exec install-data \
+install uninstall all installdirs mostlyclean-generic distclean-generic \
+clean-generic maintainer-clean-generic clean mostlyclean distclean \
+maintainer-clean
 
-
-idtest-real: all
-	$(SHELL) $(top_srcdir)/idtest $(top_srcdir) $(top_builddir)
 .SUFFIXES:
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

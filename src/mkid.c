@@ -1,5 +1,6 @@
 /* mkid.c -- build an identifer database
    Copyright (C) 1986, 1995, 1996 Free Software Foundation, Inc.
+   Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,32 +16,27 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <unistd.h>
-#include <limits.h>
+#include <config.h>
+#include "xstdlib.h"
 #include <assert.h>
 #include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include <errno.h>
 #include <getopt.h>
-
-#include <config.h>
-#include "system.h"
+#include "xsysstat.h"
+#include "xstddef.h"
+#include "xunistd.h"
+#include "xnls.h"
 #include "pathmax.h"
-#include "strxtra.h"
-#include "alloc.h"
+#include "xstring.h"
 #include "idfile.h"
-#include "token.h"
-#include "bitops.h"
-#include "misc.h"
-#include "filenames.h"
+#include "xmalloc.h"
 #include "hash.h"
 #include "scanners.h"
 #include "error.h"
+#include "xalloca.h"
+#if HAVE_LIMITS_H
+# include <limits.h>
+#endif
 
 struct summary
 {
@@ -112,12 +108,11 @@ struct summary *summary_leaf;
 
 char const *program_name;
 
-char *include_languages = 0;
-char *exclude_languages = 0;
 char *lang_map_file_name = 0;
 int show_version = 0;
 int show_help = 0;
 struct idhead idh;
+struct file_link *cw_dlink;
 
 void
 usage (void)
@@ -132,9 +127,11 @@ static struct option const long_options[] =
   { "file", required_argument, 0, 'f' },
   { "output", required_argument, 0, 'o' },
   { "include", required_argument, 0, 'i' },
-  { "exclude", required_argument, 0, 'r' },
-  { "lang-arg", required_argument, 0, 'l' },
+  { "exclude", required_argument, 0, 'x' },
+  { "lang-option", required_argument, 0, 'l' },
   { "lang-map", required_argument, 0, 'm' },
+  { "default-lang", required_argument, 0, 'd' },
+  { "prune", required_argument, 0, 'p' },
   { "verbose", no_argument, 0, 'v' },
   { "statistics", no_argument, 0, 's' },
   { "help", no_argument, &show_help, 1 },
@@ -146,8 +143,8 @@ static void
 help_me (void)
 {
   printf (_("\
-Usage: %s [OPTION]... [FILE]...\n"),
-	  program_name);
+Usage: %s [OPTION]... [FILE]...\n\
+"), program_name);
 
   printf (_("\
 Build an identifier database.\n\
@@ -155,16 +152,19 @@ Build an identifier database.\n\
   -f, --file=OUTFILE      synonym for --output\n\
   -i, --include=LANGS     include languages in LANGS (default: \"C C++ asm\")\n\
   -x, --exclude=LANGS     exclude languages in LANGS\n\
-  -l, --lang-arg=LANG:ARG pass ARG as a default for LANG (see below)\n\
+  -l, --lang-option=L:OPT pass OPT as a default for language L (see below)\n\
   -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source language\n\
-  -v, --verbose           report progress and as files are scanned\n\
+  -d, --default-lang=LANG make LANG the default source language\n\
+  -p, --prune=NAMES       exclude the named files and/or directories\n\
+  -v, --verbose           report per file statistics\n\
   -s, --statistics        report statistics at end of run\n\
 \n\
       --help              display this help and exit\n\
       --version           output version information and exit\n\
 \n\
 FILE may be a file name, or a directory name to recursively search.\n\
-The `--include' and `--exclude' options are mutually-exclusive.\n\
+If no FILE is given, the current directory is searched by default.\n\
+Note that the `--include' and `--exclude' options are mutually-exclusive.\n\
 \n\
 The following arguments apply to the language-specific scanners:\n\
 "));
@@ -172,9 +172,6 @@ The following arguments apply to the language-specific scanners:\n\
   exit (0);
 }
 
-#if !HAVE_DECL_SBRK
-extern void *sbrk ();
-#endif
 char const *heap_initial;
 char const *heap_after_walk;
 char const *heap_after_scan;
@@ -183,10 +180,19 @@ int
 main (int argc, char **argv)
 {
   program_name = argv[0];
-  idh.idh_file_name = ID_FILE_NAME;
+  heap_initial = (char const *) sbrk (0);
+  idh.idh_file_name = DEFAULT_ID_FILE_NAME;
+
+  /* Set locale according to user's wishes.  */
+  setlocale (LC_ALL, "");
+
+  /* Tell program which translations to use and where to find.  */
+  bindtextdomain (PACKAGE, LOCALEDIR);
+  textdomain (PACKAGE);
+
   for (;;)
     {
-      int optc = getopt_long (argc, argv, "o:f:i:x:l:m:uvs",
+      int optc = getopt_long (argc, argv, "o:f:i:x:l:m:d:p:vs",
 			      long_options, (int *) 0);
       if (optc < 0)
 	break;
@@ -201,23 +207,34 @@ main (int argc, char **argv)
 	  break;
 
 	case 'i':
-	  include_languages = optarg;
+	  include_languages (optarg);
 	  break;
 
 	case 'x':
-	  exclude_languages = optarg;
+	  exclude_languages (optarg);
 	  break;
 
 	case 'l':
 	  language_save_arg (optarg);
 	  break;
-	  
+
 	case 'm':
 	  lang_map_file_name = optarg;
 	  break;
 
+	case 'd':
+	  set_default_language (optarg);
+	  break;
+
+	case 'p':
+	  if (cw_dlink == 0)
+	    cw_dlink = init_walker (&idh);
+	  prune_file_names (optarg, cw_dlink);
+	  break;
+
 	case 'v':
 	  verbose_flag = 1;
+	  statistics_flag = 1;
 	  break;
 
 	case 's':
@@ -237,38 +254,46 @@ main (int argc, char **argv)
 
   if (show_help)
     help_me ();
-  
+
   argc -= optind;
   argv += optind;
-  language_getopt ();
-
-  assert_writeable (idh.idh_file_name);
-
   if (argc == 0)
     {
-      argc++;
-      *(char const **)--argv = ".";
+      static char *dot = (char *) ".";
+      argc = 1;
+      argv = &dot;
     }
-  heap_initial = (char const *) sbrk (0);
-  init_idh_obstacks (&idh);
-  init_idh_tables (&idh);
+
+  language_getopt ();
+  assert_writeable (idh.idh_file_name);
+  if (cw_dlink == 0)
+    cw_dlink = init_walker (&idh);
   parse_language_map (lang_map_file_name);
-  
-  {
-    struct file_link *cwd_link = get_current_dir_link ();
-    while (argc--)
-      walk_flink (parse_file_name (*argv++, cwd_link), 0);
-    mark_member_file_links (&idh);
-    heap_after_walk = (char const *) sbrk (0);
-    scan_files (&idh);
-    heap_after_scan = sbrk (0);
-    free_summary_tokens ();
-    free (token_table.ht_vec);
-    chdir_to_link (cwd_link);
-    write_id_file (&idh);
-  }
-  if (statistics_flag)
-    report_statistics ();
+
+  while (argc--)
+    {
+      struct file_link *flink = parse_file_name (*argv++, cw_dlink);
+      if (flink)
+	walk_flink (flink, 0);
+    }
+  heap_after_walk = (char const *) sbrk (0);
+
+  mark_member_file_links (&idh);
+  if (idh.idh_member_file_table.ht_fill)
+    {
+      scan_files (&idh);
+      heap_after_scan = sbrk (0);
+
+      free_summary_tokens ();
+      free (token_table.ht_vec);
+      chdir_to_link (cw_dlink);
+      write_id_file (&idh);
+
+      if (statistics_flag)
+	report_statistics ();
+    }
+  else
+    error (0, 0, "nothing to do");
   exit (0);
 }
 
@@ -280,6 +305,8 @@ assert_writeable (char const *file_name)
       if (errno == ENOENT)
 	{
 	  char const *dir_name = dirname (file_name);
+	  if (!dir_name || !*dir_name)
+	    dir_name = ".";
 	  if (access (dir_name, 06) < 0)
 	    error (1, errno, _("can't create `%s' in `%s'"),
 		   basename (file_name), dir_name);
@@ -296,7 +323,7 @@ scan_files (struct idhead *idhp)
     = (struct member_file **) hash_dump (&idhp->idh_member_file_table,
 					 0, member_file_qsort_compare);
   struct member_file **end = &members_0[idhp->idh_member_file_table.ht_fill];
-  struct member_file **members;
+  struct member_file **members = members_0;
 
   hash_init (&token_table, idhp->idh_member_file_table.ht_fill * 64,
 	     token_hash_1, token_hash_2, token_hash_cmp);
@@ -304,8 +331,17 @@ scan_files (struct idhead *idhp)
   init_summary ();
   obstack_init (&tokens_obstack);
 
-  for (members = members_0; members < end; members++)
-    scan_member_file (*members);
+  for (;;)
+    {
+      struct member_file *member = *members++;
+      scan_member_file (member);
+      if (members == end)
+	break;
+      if (current_hits_signature[0] & 0x80)
+	summarize ();
+      bump_current_hits_signature ();
+    }
+
   free (members_0);
 }
 
@@ -318,48 +354,44 @@ scan_member_file (struct member_file const *member)
   struct file_link *flink = member->mf_link;
   struct stat st;
   FILE *source_FILE;
-  size_t bytes;
 
   chdir_to_link (flink->fl_parent);
-  source_FILE = open_source_FILE (flink->fl_name);
+  source_FILE = fopen (flink->fl_name, "r");
   if (source_FILE)
     {
-      char buf[PATH_MAX];
+      if (statistics_flag)
+	{
+	  if (fstat (fileno (source_FILE), &st) < 0)
+	    {
+	      char *file_name = ALLOCA (char, PATH_MAX);
+	      maybe_relative_file_name (file_name, flink, cw_dlink);
+	      error (0, errno, _("can't stat `%s'"), file_name);
+	    }
+	  else
+	    input_chars += st.st_size;
+	}
       if (verbose_flag)
 	{
-	  printf ("%d: %s: %s", member->mf_index, lang->lg_name,
-		  absolute_path (buf, flink));
+	  char *file_name = ALLOCA (char, PATH_MAX);
+	  maybe_relative_file_name (file_name, flink, cw_dlink);
+	  printf ("%d: %s: %s", member->mf_index, lang->lg_name, file_name);
 	  fflush (stdout);
-	}
-      if (fstat (fileno (source_FILE), &st) < 0)
-	error (0, errno, _("can't stat `%s'"), absolute_path (buf, flink));
-      else
-	{
-	  bytes = st.st_size;
-	  input_chars += bytes;
 	}
       scan_member_file_1 (get_token, lang_args->la_args_digested, source_FILE);
       if (verbose_flag)
 	putchar ('\n');
-      close_source_FILE (source_FILE);
+      fclose (source_FILE);
     }
-  if (current_hits_signature[0] & 0x80)
-    summarize ();
-#if 0
-  if (member->mf_index < file_name_count)
-#endif
-    bump_current_hits_signature ();
+  else
+    error (0, errno, _("can't open `%s'"), flink->fl_name);
 }
 
 void
 scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_FILE)
 {
-  struct stat st;
   struct token **slot;
   struct token *token;
   int flags;
-  int bytes = 0;
-  int total_tokens = 0;
   int new_tokens = 0;
   int distinct_tokens = 0;
 
@@ -369,16 +401,18 @@ scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_F
 	obstack_free (&tokens_obstack, token);
 	continue;
       }
-      total_tokens++;
       slot = (struct token **) hash_find_slot (&token_table, token);
       if (HASH_VACANT (*slot))
 	{
+	  token->tok_flags = flags;
 	  token->tok_count = 1;
 	  memset (token->tok_hits, 0, sizeof (token->tok_hits));
-	  token->tok_flags = flags;
 	  sign_token (token);
-	  distinct_tokens++;
-	  new_tokens++;
+	  if (verbose_flag)
+	    {
+	      distinct_tokens++;
+	      new_tokens++;
+	    }
 	  hash_insert_at (&token_table, token, slot);
 	}
       else
@@ -391,7 +425,8 @@ scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_F
 	  if (!(token->tok_hits[0] & current_hits_signature[0]))
 	    {
 	      sign_token (token);
-	      distinct_tokens++;
+	      if (verbose_flag)
+		distinct_tokens++;
 	    }
 	}
     }
