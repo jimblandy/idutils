@@ -19,8 +19,12 @@
 #ifndef _misc_h_
 #define _misc_h_
 
+#if !HAVE_BASENAME
 char const *basename (char const *path);
+#endif
+#if !HAVE_DIRNAME
 char const *dirname (char const *path);
+#endif
 int fgets0 (char *buf0, int size, FILE *in_FILE);
 void filerr (char const *syscall, char const *file_name);
 int tree8_count_levels (unsigned int cardinality);

@@ -1,32 +1,47 @@
 #!/bin/sh
 
-set -x
-
 case $# in
 0) 1>&2 echo Usage: $0 files...; exit 1;;
 esac
 case $1 in
--f*) _fID=$1; shift;;
+-f*) idfile_arg=$1; shift;;
 esac
 
-idx "$@" |sort -u >ids.idx
-lid $_fID |sed -e 's/[ 	].*//' |sort -u >ids.lid
+errors=
+
+echo "idx ..."
+idx "$@" |sort -u >ID.idx
+echo "lid ..."
+lid $idfile_arg |sed -e 's/[ 	].*//' |sort -u >ID.lid
+if cmp -s ID.idx ID.lid; then
+    rm -f ID.idx ID.lid
+    echo "Good.  idx and lid agree."
+else
+    1>&2 echo "Oops!  idx and lid disagree--look in ID.idx and ID.lid"
+    errors=t
+fi
+
+idx_file=$$.idx
+fid_file=$$.fid
+
 for file
 do
     case x$file in
-    x-*) continue;;
+    x-*) scan_args="$scan_args $file"
+	 continue;;
     esac
-    fid $_fID $file
-done |sort -u >ids.fid
-
-if cmp ids.idx ids.lid
-then
-    if cmp ids.idx ids.fid
-    then
-	echo OK
-	rm -f ids.idx ids.fid ids.lid
-	exit 0
+    fid $idfile_arg $file >$fid_file
+    idx $scan_args $file |sort -u >$idx_file
+    if cmp -s $idx_file $fid_file; then
+	echo "Good.  idx and fid agree for $file"
+    else
+	1>&2 echo "Oops!  idx and fid disagree for $file"
+	errors=t
     fi
-fi
-echo Oops!
-exit 1
+done
+rm -f $idx_file $fid_file
+
+case x$errors in
+xt) 1>&2 echo "mkid and friends are broken."; exit 1;;
+*) echo "mkid and friends are happy."; exit 0;;
+esac

@@ -286,6 +286,7 @@ scan_files (struct idarg *idarg)
 	{
 	  printf ("%s: ", lang_name);
 	  printf (filter ? filter : "%s", arg);
+	  fflush (stdout);
 	}
       scan_1_file (scanner, source_FILE);
       if (verbose_flag)
@@ -476,6 +477,7 @@ scan_1_file (char const *(*get_token) (FILE*, int*), FILE *source_FILE)
   int new_tokens = 0;
   int distinct_tokens = 0;
   int flags;
+  struct token *token;
 
   if (fstat (fileno (source_FILE), &stat_buf) == 0)
     {
@@ -485,8 +487,9 @@ scan_1_file (char const *(*get_token) (FILE*, int*), FILE *source_FILE)
 
   while ((key = (*get_token) (source_FILE, &flags)) != NULL)
     {
-      struct token *token = *(slot = hash_lookup (key));
-
+      if (*key == '\0')
+	continue;
+      token = *(slot = hash_lookup (key));
       total_tokens++;
       if (token)
 	{
@@ -508,11 +511,14 @@ scan_1_file (char const *(*get_token) (FILE*, int*), FILE *source_FILE)
 	}
     }
   if (verbose_flag)
-    printf ("  uniq=%d/%d=%.2f, new=%d/%d=%.2f",
-	    distinct_tokens, total_tokens,
-	    (double) distinct_tokens / (double) total_tokens,
-	    new_tokens, distinct_tokens,
-	    (double) new_tokens / (double) distinct_tokens);
+    {
+      printf ("  uniq=%d/%d", distinct_tokens, total_tokens);
+      if (total_tokens != 0)
+	printf ("=%.2f", (double) distinct_tokens / (double) total_tokens);
+      printf (", new=%d/%d", new_tokens, distinct_tokens);
+      if (distinct_tokens != 0)
+	printf ("=%.2f", (double) new_tokens / (double) distinct_tokens);
+    }
 }
 
 /* As the database is written, may need to adjust the file names.  If
@@ -537,6 +543,12 @@ write_idfile (char const *file_name, struct idarg *idarg)
   int tok_size;
   int max_buf_size = 0;
   int max_vec_size = 0;
+
+  if (verbose_flag)
+    printf ("Sorting tokens...\n");
+  assert (summary_root->sum_hits_count == hash_fill);
+  tokens = REALLOC (summary_root->sum_tokens, struct token *, hash_fill);
+  qsort (tokens, hash_fill, sizeof (struct token *), compare_tokens);
 
   if (verbose_flag)
     printf ("Writing `%s'...\n", file_name);
@@ -593,19 +605,9 @@ write_idfile (char const *file_name, struct idarg *idarg)
   putc ('\0', id_FILE);
   idh.idh_tokens_offset = ftell (id_FILE);
   
-  assert (summary_root->sum_hits_count == hash_fill);
-  tokens = REALLOC (summary_root->sum_tokens, struct token *, hash_fill);
-  qsort (tokens, hash_fill, sizeof (struct token *), compare_tokens);
   for (i = 0; i < hash_fill; i++, tokens++)
     {
       struct token *token = *tokens;
-      if (*token->tok_name == '\0')
-	{
-	  fprintf (stderr, "Blank token!\n");
-	  hash_fill--;
-	  i--;
-	  continue;
-	}
       occurrences += token->tok_count;
       if (token->tok_flags & TOK_NUMBER)
 	number_tokens++;
@@ -732,7 +734,7 @@ rehash (void)
 
   hash_size *= 2;
   if (verbose_flag)
-    printf ("Rehashing... (doubling size to %ld)\n", hash_size);
+    printf ("\n\tRehashing... (doubling size to %ld)\n", hash_size);
   hash_rehashes++;
   hash_capacity = hash_size - (hash_size >> 4);
   hash_table =  CALLOC (struct token *, hash_size);
@@ -905,14 +907,22 @@ make_sibling_summary (struct summary *summary)
   if (parent == NULL)
     {
       levels++;
-      size = INIT_TOKENS_SIZE (levels);
       summary_root = summary->sum_parent = parent = CALLOC (struct summary, 1);
       parent->sum_level = levels;
       parent->sum_kids[0] = summary;
       parent->sum_hits_count = summary->sum_hits_count;
       parent->sum_free_index = 1;
-      parent->sum_tokens_size = size;
-      parent->sum_tokens = REALLOC (summary->sum_tokens, struct token *, size);
+      size = INIT_TOKENS_SIZE (levels);
+      if (summary->sum_tokens_size >= size)
+	{
+	  parent->sum_tokens_size = summary->sum_tokens_size;
+	  parent->sum_tokens = summary->sum_tokens;
+	}
+      else
+	{
+	  parent->sum_tokens_size = size;
+	  parent->sum_tokens = REALLOC (summary->sum_tokens, struct token *, size);
+	}
       summary->sum_tokens = 0;
     }
   if (parent->sum_free_index == 8)

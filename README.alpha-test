@@ -37,10 +37,7 @@ Special instructions for alpha testers:
     (type ./mkid to get the usage banner which includes the version)
   * The output of "make -k all", to show me where it's dying.
   * The output of "uname -a"
-  * The output of "nm" on your system's libc.
-  * An ID file of the .h files in your system's /usr/include (I know--it's
-    a checken and egg problem.  Use mkid2.  You don't have mkid2?  It's ok,
-    don't knock yourself out.)
+  * The output of "nm" on your system's libc, if applicable.
 
 * Be aware that this is still work in progress.  See TODO for a list of
   things yet undone.

@@ -63,16 +63,18 @@ init_idfile (char const *id_file, struct idhead *idh, struct idarg **id_args)
   strings = malloc (i = idh->idh_tokens_offset - idh->idh_args_offset);
   fread (strings, i, 1, id_FILE);
   ida = *id_args =  CALLOC (struct idarg, idh->idh_paths);
-  for (i = 0; i < idh->idh_args; i++)
+  for (i = 0; i < idh->idh_paths; i++)
     {
-      if (*strings != '+' && *strings != '-')
+      while (*strings == '+' || *strings == '-')
 	{
-	  ida->ida_flags = 0;
-	  ida->ida_arg = strings;
-	  ida->ida_next = ida + 1;
-	  ida->ida_index = i;
-	  ida++;
+	  while (*strings++)
+	    ;
 	}
+      ida->ida_flags = 0;
+      ida->ida_arg = strings;
+      ida->ida_next = ida + 1;
+      ida->ida_index = i;
+      ida++;
       while (*strings++)
 	;
     }

@@ -65,11 +65,17 @@
 /* The number of bytes in a long.  */
 #undef SIZEOF_LONG
 
+/* Define if you have the basename function.  */
+#undef HAVE_BASENAME
+
 /* Define if you have the bcopy function.  */
 #undef HAVE_BCOPY
 
 /* Define if you have the bzero function.  */
 #undef HAVE_BZERO
+
+/* Define if you have the dirname function.  */
+#undef HAVE_DIRNAME
 
 /* Define if you have the getcwd function.  */
 #undef HAVE_GETCWD
@@ -131,8 +137,8 @@
 /* Define if you have the <regex.h> header file.  */
 #undef HAVE_REGEX_H
 
-/* Define if you have the <sgttyb.h> header file.  */
-#undef HAVE_SGTTYB_H
+/* Define if you have the <sgtty.h> header file.  */
+#undef HAVE_SGTTY_H
 
 /* Define if you have the <stddef.h> header file.  */
 #undef HAVE_STDDEF_H
@@ -166,12 +172,19 @@
 
 /* (u)intmin32_t are integer types that are *at least* 32 bits.
    Larger ints are OK.  */
-# if SIZEOF_LONG == 4
+#if SIZEOF_LONG == 4
   typedef unsigned long uintmin32_t;
   typedef long intmin32_t;
-# else
+#else
   typedef unsigned int uintmin32_t;
   typedef int intmin32_t;
-# endif
+#endif
 
-#endif /* _config_h_ */
+/* NeXT POSIX compatibility is losing.  sgtty is the way to go. */
+#if HAVE_SGTTY_H
+# ifdef NeXT
+#  undef HAVE_TERMIOS_H
+# endif
+#endif
+
+#endif /* not _config_h_ */

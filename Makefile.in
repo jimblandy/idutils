@@ -39,6 +39,7 @@ libdir =	@libdir@
 CC =		@CC@
 YACC =		@YACC@
 LN_S =		@LN_S@
+AWK =		@AWK@
 MAKEINFO =	makeinfo
 TEXI2DVI =	texi2dvi
 INSTALL =	@INSTALL@
@@ -48,6 +49,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 CFLAGS =	@CFLAGS@
 LDFLAGS =	@LDFLAGS@
 LIBS =		@LIBS@
+DEFS =		@DEFS@
 IID_HELP_FILE =	@IID_HELP_FILE@
 DEPEND =	@DEPEND@
 
@@ -100,6 +102,7 @@ DIST_FILES =	$(DIST_CONF_FILES) $(DIST_SRC_FILES) $(DIST_DOC_FILES) $(DIST_MISC_
 DIST_DIR =	$(PACKAGE)-$(VERSION).$(PATCH_LEVEL)
 DIST_TGZ =	$(DIST_DIR).tar.gz
 DIST_UU =	$(DIST_TGZ).uu
+DIST_SHAR =	$(DIST_DIR).shar
 
 OLD_DIST_DIR =	$(PACKAGE)-$(VERSION).$(OLD_PATCH_LEVEL)
 
@@ -109,7 +112,7 @@ PATCH_C_UU =	$(PATCH_C_GZ).uu
 
 ##############################################################################
 
-.PRECIOUS: $(DEPEND) Makefile
+.PRECIOUS: $(DEPEND) Makefile configure config.h config.h.in
 
 .SUFFIXES:
 .SUFFIXES: .c .i .o
@@ -234,28 +237,46 @@ realclean: distclean
 
 ##############################################################################
 
+dist: $(DIST_TGZ) $(PATCH_U_GZ) $(PATCH_C_GZ)
+
+bump-patch: dist
+	rm -fr $(OLD_DIST_DIR)
+	$(AWK) -F= '\
+		/^PATCH_LEVEL/ { print $$1 "=" $$2 + 1; next; } \
+		{ print; }' <configure.in >configure.new \
+	    && mv configure.new configure.in
+
+bump-minor: dist
+	rm -fr $(OLD_DIST_DIR)
+	$(AWK) -F'[=.]' '\
+		/^VERSION/ { print $$1 "=" $$2 "." $$3 + 1; next; } \
+		/^PATCH_LEVEL/ { print $$1 "=" 0; next; } \
+		{ print; }' <configure.in >configure.new \
+	    && mv configure.new configure.in
+
+bump-major: dist
+	rm -fr $(OLD_DIST_DIR)
+	$(AWK) -F'[=.]' '\
+		/^VERSION/ { print $$1 "=" $$2 + 1 ".0"; next; } \
+		/^PATCH_LEVEL/ { print $$1 "=" 0; next; } \
+		{ print; }' <configure.in >configure.new \
+	    && mv configure.new configure.in
+
+########################################
+
+shar: $(DIST_SHAR)
+$(DIST_SHAR): $(DIST_TGZ) $(PATCH_C_GZ)
+	shar $(PATCH_C_GZ) $(DIST_TGZ) >$@
+
 dist-uu: $(DIST_UU)
 $(DIST_UU): $(DIST_TGZ)
 	uuencode $(DIST_TGZ) <$(DIST_TGZ) >$@
 
-dist dist-tgz: $(DIST_TGZ)
+dist-tgz: $(DIST_TGZ)
 $(DIST_TGZ): $(DIST_DIR)
 	tar cfzho $@ $(DIST_DIR)
 
 dist-dir: $(DIST_DIR)
-dist-dir-links: $(OLD_DIST_DIR) $(DIST_DIR)
-	@cd $(DIST_DIR); \
-	for file in $(DIST_FILES); do \
-	    if cmp -s $$file ../$(OLD_DIST_DIR)/$$file; then \
-		rm -f $$file; \
-		if test -L ../$(OLD_DIST_DIR)/$$file; then \
-		    cp -a ../$(OLD_DIST_DIR)/$$file $$file; \
-		else \
-		    $(LN_S) ../$(OLD_DIST_DIR)/$$file $$file; \
-		fi; \
-	    fi; \
-	done
-
 $(DIST_DIR): $(DIST_FILES)
 	rm -fr $@
 	mkdir $@

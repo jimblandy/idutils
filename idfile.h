@@ -51,4 +51,4 @@ int read_idhead (FILE *input_FILE, struct idhead *idh);
 int write_idhead (FILE *input_FILE, struct idhead *idh);
 int sizeof_idhead (void);
 
-#endif /* _idfile_h_ */
+#endif /* not _idfile_h_ */

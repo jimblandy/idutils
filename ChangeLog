@@ -1,3 +1,35 @@
+Mon Feb 20 16:18:47 1995  Greg McGary  <gkm@magilla.cichlid.com>
+
+	* scanners.c (scanners, suffixes, init_scanners, get_scanner,
+	set_scan_args, get_lang_name, get_filter, get_suffix): Fixed
+	boundary conditions.
+
+	* mkid.c (make_sibling_summary): Don't realloc if kid's sum_tokens
+	is already large enough.  (scan_1_file): Ignore blank tokens.
+	Avoid division by 0 (pinard@iro.umontreal.ca).  (write_idfile):
+	Moved assertions & qsort to top.  Don't check for blank tokens--it
+	can't happen.  (rehash): Prefix "Rehashing..." with "\n\t".
+
+	* idtest: Test fid more rigorously.
+
+	* idfile.c (init_idfile): Don't increment i for non-file args.
+
+	* Makefile.in (DEFS, DIST_SHAR, AWK, bump-patch, bump-minor,
+	bump-major, shar): Added.  (.PRECIOUS): Added configure, config.h
+	config.h.in.
+
+	* configure.in (DEPEND): Fixed portability (kazusi-m@is.aist-nara.ac.jp).
+	(AC_CHECK_FUNCS(basename, dirname)): Added.
+	* misc.h, misc.c: Made decl/defn of basename, dirname conditional.
+
+
+Sun Feb 19 19:21:09 1995  Thomas Neumann  <tom@smart.ruhr.de>
+ 
+ 	* configure.in: Check for <sgtty.h>, not <sgttyb.h>.  *
+	accconfig.h: Disbale HAVE_TERMIOS_H for NeXT, if HAVE_SGTTY_H is
+	present.  * lid.c: Depend on HAVE_SGTTY_H, not HAVE_SGTTYB_H.
+	(savetty): ANSI'fy arglist declaration.
+ 
 Sat Feb 18 21:44:39 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
 	* Version 3.0.6 released.

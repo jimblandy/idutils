@@ -70,7 +70,7 @@ static struct suffix *get_suffix_entry (char const *suffix);
 static struct language *get_lang_entry (char const *lang_name);
 static void usage_scan (void);
 
-struct language languages[] =
+struct language languages_0[] =
 {
   /* must be sorted for bsearch(3) */
   { "C", get_token_c, set_args_c, NULL },
@@ -82,6 +82,7 @@ struct language languages[] =
   { "roff", get_token_text, set_args_text, "sed '/^\\.so/d' < %s | deroff" },
   { "text", get_token_text, set_args_text, NULL },
 };
+struct language *languages = languages_0;
 
 /*
 	This is a rather incomplete list of default associations
@@ -91,7 +92,7 @@ struct language languages[] =
 	associate a `.ada' suffix with the Ada language, use
 	`-S.ada=ada'
 */
-struct suffix suffixes[] =
+struct suffix suffixes_0[] =
 {
   { "", "text" },
   { ".1", "roff" },
@@ -129,14 +130,15 @@ struct suffix suffixes[] =
   { ".yacc", "C" },
   { ".z", "gzip" },
 };
+struct suffix *suffixes = suffixes_0;
 
 void
 init_scanners (void)
 {
   struct language *lang;
-  struct language *lang_N = &languages[(sizeof (languages) / sizeof (languages[0])) - 1];
+  struct language *lang_N = &languages_0[(sizeof (languages_0) / sizeof (languages_0[0])) - 1];
   struct suffix *suff;
-  struct suffix *suff_N = &suffixes[(sizeof (suffixes) / sizeof (suffixes[0])) - 1];
+  struct suffix *suff_N = &suffixes_0[(sizeof (suffixes_0) / sizeof (suffixes_0[0])) - 1];
   
   for (lang = languages; lang <= lang_N; ++lang)
     lang->lang_next = lang + 1;
@@ -163,7 +165,7 @@ get_suffix_entry (char const *suffix)
   for (stp = suffixes; stp; stp = stp->suff_next)
     if (strequ (stp->suff_suffix, suffix))
       return stp;
-  return stp;
+  return NULL;
 }
 
 static struct language *
@@ -174,7 +176,7 @@ get_lang_entry (char const *lang_name)
   if (lang_name == NULL)
     lang_name = "";
 
-  for (ltp = languages; ltp->lang_next; ltp = ltp->lang_next)
+  for (ltp = languages; ltp; ltp = ltp->lang_next)
     if (ltp->lang_name == lang_name || strequ (ltp->lang_name, lang_name))
       return ltp;
   return ltp;
@@ -186,7 +188,7 @@ get_lang_name (char const *suffix)
   struct suffix *stp;
 
   stp = get_suffix_entry (suffix);
-  if (stp->suff_next == NULL)
+  if (stp == NULL)
     return NULL;
   return stp->suff_language->lang_name;
 }
@@ -197,7 +199,7 @@ get_filter (char const *suffix)
   struct suffix *stp;
 
   stp = get_suffix_entry (suffix);
-  if (stp->suff_next == NULL)
+  if (stp == NULL)
     return NULL;
   return stp->suff_language->lang_filter;
 }
@@ -209,7 +211,7 @@ get_scanner (char const *lang)
   struct language *ltp;
 
   ltp = get_lang_entry (lang);
-  if (ltp->lang_next == NULL)
+  if (ltp == NULL)
     return NULL;
   return ltp->lang_get_token;
 }
@@ -244,7 +246,7 @@ set_scan_args (int op, char *arg)
     {
       lhs += 2;
       ltp = get_lang_entry (lhs);
-      if (ltp->lang_next == NULL)
+      if (ltp == NULL)
 	{
 	  printf ("No scanner for language `%s'\n", lhs);
 	  return;
@@ -265,7 +267,7 @@ set_scan_args (int op, char *arg)
     {
       lhs[strlen (lhs) - 2] = '\0';
       stp = get_suffix_entry (lhs);
-      if (stp->suff_next == NULL)
+      if (stp == NULL)
 	{
 	  printf ("No scanner assigned to suffix `%s'\n", lhs);
 	  return;
@@ -282,17 +284,19 @@ set_scan_args (int op, char *arg)
       *arg++ = '\0';
 
       ltp = get_lang_entry (arg);
-      if (ltp->lang_next == NULL)
+      if (ltp == NULL)
 	{
 	  fprintf (stderr, "%s: Language undefined: %s\n", program_name, arg);
 	  return;
 	}
       stp = get_suffix_entry (lhs);
-      if (stp->suff_next == NULL)
+      if (stp == NULL)
 	{
+	  stp = CALLOC (struct suffix, 1);
 	  stp->suff_suffix = lhs;
 	  stp->suff_language = ltp;
-	  stp->suff_next = CALLOC (struct suffix, 1);
+	  stp->suff_next = suffixes;
+	  suffixes = stp;
 	}
       else if (!strequ (arg, stp->suff_language->lang_name))
 	{
@@ -307,11 +311,13 @@ set_scan_args (int op, char *arg)
       ltp = get_lang_entry (lhs);
       if (ltp->lang_next == NULL)
 	{
+	  ltp = CALLOC (struct language, 1);
 	  ltp->lang_name = lhs;
 	  ltp->lang_get_token = get_token_text;
 	  ltp->lang_set_args = set_args_text;
 	  ltp->lang_filter = NULL;
-	  ltp->lang_next = CALLOC (struct language, 1);
+	  ltp->lang_next = languages;
+	  languages = ltp;
 	}
       lhs2 = arg;
       arg = strchr (arg, '/');
@@ -321,7 +327,7 @@ set_scan_args (int op, char *arg)
 	{
 	  *arg++ = '\0';
 	  ltp2 = get_lang_entry (lhs2);
-	  if (ltp2->lang_next == NULL)
+	  if (ltp2 == NULL)
 	    {
 	      fprintf (stderr, "%s: language %s not defined.\n", program_name, lhs2);
 	      ltp2 = ltp;
@@ -357,7 +363,7 @@ set_scan_args (int op, char *arg)
       *arg++ = '\0';
 
       ltp = get_lang_entry (lhs);
-      if (ltp->lang_next == NULL)
+      if (ltp == NULL)
 	{
 	  fprintf (stderr, "%s: Language undefined: %s\n", program_name, lhs);
 	  return;

@@ -29,12 +29,19 @@
 
 /* (u)intmin32_t are integer types that are *at least* 32 bits.
    Larger ints are OK.  */
-# if SIZEOF_LONG == 4
+#if SIZEOF_LONG == 4
   typedef unsigned long uintmin32_t;
   typedef long intmin32_t;
-# else
+#else
   typedef unsigned int uintmin32_t;
   typedef int intmin32_t;
-# endif
+#endif
 
-#endif /* _config_h_ */
+/* NeXT POSIX compatibility is losing.  sgtty is the way to go. */
+#if HAVE_SGTTY_H
+# ifdef NeXT
+#  undef HAVE_TERMIOS_H
+# endif
+#endif
+
+#endif /* not _config_h_ */

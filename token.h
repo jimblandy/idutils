@@ -37,4 +37,4 @@ unsigned int tok_flags (char const *buf);
 unsigned short tok_count (char const *buf);
 unsigned char const *tok_hits_addr (char const *buf);
 
-#endif /* _token_h_ */
+#endif /* not _token_h_ */

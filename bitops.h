@@ -28,4 +28,4 @@
 int vec_to_bits (char *bit_array, char *vec, int size);
 int bits_to_vec (char *vec, char *bit_array, int bit_count, int size);
 
-#endif /* _bitops_h_ */
+#endif /* not _bitops_h_ */

@@ -1286,41 +1286,44 @@ struct termios savemode;
 
 #else /* not HAVE_TERMIOS_H */
 
-#if HAVE_SYS_IOCTL_H
-#include <sys/ioctl.h>
-#endif
+# if HAVE_SYS_IOCTL_H
+#  include <sys/ioctl.h>
+# endif
 
-#if HAVE_TERMIO_H
-#include <termio.h>
+# if HAVE_TERMIO_H
+
+#  include <termio.h>
 struct termio linemode;
 struct termio charmode;
 struct termio savemode;
 #define GET_TTY_MODES(modes) ioctl (0, TCGETA, (modes))
 #define SET_TTY_MODES(modes) ioctl (0, TCSETA, (modes))
 
-#else /* not HAVE_TERMIO_H */
+# else /* not HAVE_TERMIO_H */
 
-#if HAVE_SGTTYB_H
-#include <sgttyb.h>
+#  if HAVE_SGTTY_H
+
+#   include <sgtty.h>
 struct sgttyb linemode;
 struct sgttyb charmode;
 struct sgttyb savemode;
 
-#ifdef TIOCGETP
+#   ifdef TIOCGETP
 #define GET_TTY_MODES(modes) ioctl (0, TIOCGETP, (modes))
 #define SET_TTY_MODES(modes) ioctl (0, TIOCSETP, (modes))
-#else /* not TIOCGETP */
+#   else
 #define GET_TTY_MODES(modes) gtty (0, (modes))
 #define SET_TTY_MODES(modes) stty (0, (modes))
-#endif /* not TIOCGETP */
+#   endif
 
-savetty()
+void
+savetty (void)
 {
-#ifdef TIOCGETP
+#   ifdef TIOCGETP
   ioctl(0, TIOCGETP, &savemode);
-#else
+#   else
   gtty(0, &savemode);
-#endif
+#   endif
   charmode = linemode = savemode;
 
   charmode.sg_flags &= ~ECHO;
@@ -1330,8 +1333,8 @@ savetty()
   linemode.sg_flags &= ~RAW;
 }
 
-#endif /* HAVE_SGTTYB_H */
-#endif /* not HAVE_TERMIO_H */
+#  endif /* not HAVE_SGTTY_H */
+# endif /* not HAVE_TERMIO_H */
 #endif /* not HAVE_TERMIOS_H */
 
 #if HAVE_TERMIOS_H || HAVE_TERMIO_H
@@ -1351,9 +1354,9 @@ savetty (void)
   linemode.c_cc[VEOL] = 0377;
 }
 
-#endif /* HAVE_TERMIOS_H || HAVE_TERMIO_H */
+#endif
 
-#if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTYB_H
+#if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTY_H
 
 void
 restoretty (void)
@@ -1373,4 +1376,4 @@ chartty (void)
   SET_TTY_MODES (&charmode);
 }
 
-#endif /* HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTYB_H */
+#endif

@@ -23,6 +23,7 @@
 #include "strxtra.h"
 #include "misc.h"
 
+#if !HAVE_BASENAME
 char const *
 basename (char const *path)
 {
@@ -34,7 +35,9 @@ basename (char const *path)
   else
     return path;
 }
+#endif
 
+#if !HAVE_DIRNAME
 char const *
 dirname (char const *path)
 {
@@ -46,6 +49,7 @@ dirname (char const *path)
   else
     return ".";
 }
+#endif
 
 /* This is like fgets(3s), except that lines are delimited by NULs
    rather than newlines.  Also, we return the number of characters

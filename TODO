@@ -15,6 +15,9 @@
     (notably DOS & OS/2).
   - Fix assumption that (sizeof (int) == sizeof (long))
 
+* all query interfaces
+  - add environment variable for setting default ID file name.
+
 * lid
   - change the name of the program to something a bit more
     descriptive, e.g., "findid".
@@ -37,6 +40,7 @@
 * mkid
   - add a recursive file tree walker, so a complete list of file names
     need not be supplied.
+  - (Optinally?) store tokenized contents of comments.
   - Store attributes with symbols: type, func, variable struct-tag
     enum-tag, keyword, etc.  Store caller/callee relationships between
     identifiers.  Indicate which files have defns vs. uses.  This info

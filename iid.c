@@ -943,6 +943,9 @@ yyreduce:
 	clog << "Reducing via rule " << yyn << " (line " << yyrline[yyn] << " ): ";
 #endif /* __cplusplus */
       else
+#ifndef YYFILE
+#define YYFILE "<parser>"
+#endif
 #ifndef __cplusplus
 	fprintf (stderr, YYFILE ":%d: ", yyrline[yyn]);
 #else /* __cplusplus */

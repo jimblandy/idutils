@@ -30,4 +30,4 @@ struct idarg
 #define	IDA_PREFIX_US	0x02	/* file has names with prefixed underscores */
 };
 
-#endif /* _idarg_h_ */
+#endif /* not _idarg_h_ */
