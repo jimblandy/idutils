@@ -142,8 +142,9 @@ maintainer-clean: distclean
 	@echo "it deletes files that may require special tools to rebuild."
 
 
+.PHONY: distdir
 distdir = ../$(PACKAGE)-$(VERSION)/$(subdir)
-dist: Makefile $(DISTFILES)
+distdir: Makefile $(DISTFILES)
 	for file in $(DISTFILES); do \
 	  ln $(srcdir)/$$file $(distdir) 2> /dev/null \
 	    || cp -p $(srcdir)/$$file $(distdir); \
