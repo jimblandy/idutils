@@ -1,3 +1,34 @@
+1999-03-29  Greg McGary  <gkm@gnu.org>
+
+	* libidu/idfile.h (struct member_file) [mf_index]: Change
+	type to long.
+	* libidu/scanners.h (MAX_LEVELS): Remove constant.
+	(struct token) [tok_hits, tok_name]: Remove members.
+	[tok_hits_name]: Add member.
+	(TOKEN_HITS, TOKEN_NAME, OFFSETOF_TOKEN_NAME): Add macros.
+	* libidu/scanners.c (log_8_member_files): Add variable definition.
+	(get_token_c, get_token_asm, get_token_text): Use OFFSETOF_TOKEN_NAME.
+	* libidu/walker.c (mark_member_file_links) [new_index]: Change
+	variable type to long.
+	* src/idx.c (scan_member_file): Use TOKEN_NAME.
+	* src/mkid.c (ceil_log_8) Add function.
+	(current_hits_signature): Change variable type to (char *).
+	(main) [log_8_member_files]: Initialize new variable.
+	[current_hits_signature] Allocate storage.
+	(scan_member_file): Print member->mf_index as long.
+	(scan_member_file_1, write_id_file, token_hash_1, token_hash_2,
+	token_hash_cmp, token_qsort_cmp, summarize, write_hits):
+	use TOKEN_NAME & TOKEN_HITS.
+	(init_hits_signature, write_hits): Replace MAX_LEVELS
+	with log_8_member_files.
+	* src/xtokid.c (scan_member_file): Use TOKEN_NAME.
+
+	* libidu/idfile.h (vectorize_string) [delimiter_class]:
+	Declare as pointer to const.
+	* libidu/walker.c (append_strings_to_vector, vectorize_string)
+	[delimiter_class]: Declare as pointer to const.
+	(white_space): Declare as array of const.
+
 1999-03-28  Greg McGary  <gkm@gnu.org>
 
 	* libidu/hash.c (hash_insert): hash_insert_at no longer
