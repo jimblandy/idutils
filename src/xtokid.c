@@ -182,8 +182,14 @@ scan_files (struct idhead *idhp)
   struct member_file **end = &members_0[idhp->idh_member_file_table.ht_fill];
   struct member_file **members;
 
+  if (largest_member_file > MAX_LARGEST_MEMBER_FILE)
+    largest_member_file = MAX_LARGEST_MEMBER_FILE;
+  scanner_buffer = MALLOC (unsigned char, largest_member_file + 1);
+
   for (members = members_0; members < end; members++)
     scan_member_file (*members);
+
+  free (scanner_buffer);
   free (members_0);
 }
 

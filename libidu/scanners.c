@@ -478,7 +478,7 @@ parse_args_c (char **argv, int argc)
   return args;
 }
 
-static unsigned char id_0[1<<020];
+unsigned char *scanner_buffer;
 
 #define SCAN_CPP_DIRECTIVE						\
   do									\
@@ -488,12 +488,12 @@ static unsigned char id_0[1<<020];
 	c = getc (in_FILE);						\
       if (!ISID1ST (c))							\
 	goto next;							\
-      id = id_0;							\
+      id = scanner_buffer;						\
       *id++ = c;							\
       while (ISIDREST (c = getc (in_FILE)))				\
 	*id++ = c;							\
       *id = '\0';							\
-      if (strequ (id_0, "include"))					\
+      if (strequ (scanner_buffer, "include"))				\
 	{								\
 	  while (c == ' ' || c == '\t')					\
 	    c = getc (in_FILE);						\
@@ -502,7 +502,7 @@ static unsigned char id_0[1<<020];
 	      new_line = 1;						\
 	      goto top;							\
 	    }								\
-	  id = id_0;							\
+	  id = scanner_buffer;						\
 	  if (c == '"')							\
 	    {								\
 	      c = getc (in_FILE);					\
@@ -540,13 +540,14 @@ static unsigned char id_0[1<<020];
 	  while (c != '\n' && c != EOF)					\
 	    c = getc (in_FILE);						\
 	  new_line = 1;							\
-	  obstack_grow0 (&tokens_obstack, id_0, id - id_0);		\
+	  obstack_grow0 (&tokens_obstack, scanner_buffer,		\
+			 id - scanner_buffer);				\
 	  return (struct token *) obstack_finish (&tokens_obstack);	\
 	}								\
-      if (strnequ (id_0, "if", 2)					\
-	  || strequ (id_0, "define")					\
-	  || strequ (id_0, "elif")	/* ansi C */			\
-	  || strequ (id_0, "undef"))					\
+      if (strnequ (scanner_buffer, "if", 2)				\
+	  || strequ (scanner_buffer, "define")				\
+	  || strequ (scanner_buffer, "elif")	/* ansi C */		\
+	  || strequ (scanner_buffer, "undef"))				\
 	goto next;							\
       while ((c != '\n') && (c != EOF))					\
 	c = getc (in_FILE);						\
@@ -564,7 +565,7 @@ get_token_c (FILE *in_FILE, void const *args, int *flags)
 #define ARGS ((struct args_c const *) args)
   static int new_line = 1;
   unsigned short const *rct = &ARGS->ctype[1];
-  unsigned char *id = id_0;
+  unsigned char *id = scanner_buffer;
   int c;
 
   obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
@@ -586,7 +587,7 @@ next:
   switch (c)
     {
     case '"':
-      id = id_0;
+      id = scanner_buffer;
       *id++ = c = getc (in_FILE);
       for (;;)
 	{
@@ -602,19 +603,19 @@ next:
 	  break;
 	}
       *--id = '\0';
-      id = id_0;
+      id = scanner_buffer;
       while (ISSTRKEEP (*id))
 	id++;
-      if (*id || id == id_0)
+      if (*id || id == scanner_buffer)
 	{
 	  c = getc (in_FILE);
 	  goto next;
 	}
       *flags = TOK_STRING;
-      if (ARGS->strip_underscore && id_0[0] == '_' && id_0[1])
-	obstack_grow0 (&tokens_obstack, id_0 + 1, id - id_0 - 1);
+      if (ARGS->strip_underscore && scanner_buffer[0] == '_' && scanner_buffer[1])
+	obstack_grow0 (&tokens_obstack, scanner_buffer + 1, id - scanner_buffer - 1);
       else
-	obstack_grow0 (&tokens_obstack, id_0, id - id_0);
+	obstack_grow0 (&tokens_obstack, scanner_buffer, id - scanner_buffer);
       return (struct token *) obstack_finish (&tokens_obstack);
 
     case '\'':
@@ -674,7 +675,7 @@ next:
 	  obstack_free (&tokens_obstack, obstack_finish (&tokens_obstack));
 	  return 0;
 	}
-      id = id_0;
+      id = scanner_buffer;
       *id++ = c;
       if (ISID1ST (c))
 	{
@@ -697,7 +698,7 @@ next:
 	}
       ungetc (c, in_FILE);
       *flags |= TOK_LITERAL;
-      obstack_grow0 (&tokens_obstack, id_0, id - id_0);
+      obstack_grow0 (&tokens_obstack, scanner_buffer, id - scanner_buffer);
       return (struct token *) obstack_finish (&tokens_obstack);
     }
 #undef ARGS
@@ -881,7 +882,7 @@ get_token_asm (FILE *in_FILE, void const *args, int *flags)
 #define ARGS ((struct args_asm const *) args)
   static int new_line = 1;
   unsigned char const *rct = &ARGS->ctype[1];
-  unsigned char *id = id_0;
+  unsigned char *id = scanner_buffer;
   int c;
 
   obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
@@ -945,7 +946,7 @@ next:
       goto next;
     }
 
-  id = id_0;
+  id = scanner_buffer;
   if (ARGS->strip_underscore && c == '_' && !ISID1ST (c = getc (in_FILE)))
     {
       obstack_grow0 (&tokens_obstack, "_", 1);
@@ -974,12 +975,12 @@ next:
     }
 
   *id = '\0';
-  for (id = id_0; *id; id++)
+  for (id = scanner_buffer; *id; id++)
     if (ISIGNORE (*id))
       goto next;
   ungetc (c, in_FILE);
   *flags |= TOK_LITERAL;
-  obstack_grow0 (&tokens_obstack, id_0, id - id_0);
+  obstack_grow0 (&tokens_obstack, scanner_buffer, id - scanner_buffer);
   return (struct token *) obstack_finish (&tokens_obstack);
 #undef ARGS
 }
@@ -1139,7 +1140,7 @@ get_token_text (FILE *in_FILE, void const *args, int *flags)
 #define ARGS ((struct args_text const *) args)
   unsigned char const *rct = &ARGS->ctype[1];
   int c;
-  unsigned char *id = id_0;
+  unsigned char *id = scanner_buffer;
 
   obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
 
@@ -1152,7 +1153,7 @@ top:
       obstack_free (&tokens_obstack, obstack_finish (&tokens_obstack));
       return 0;
     }
-  id = id_0;
+  id = scanner_buffer;
   *id++ = c;
   if (ISID1ST (c))
     {
@@ -1178,7 +1179,7 @@ top:
 
   ungetc (c, in_FILE);
   *flags |= TOK_LITERAL;
-  obstack_grow0 (&tokens_obstack, id_0, id - id_0);
+  obstack_grow0 (&tokens_obstack, scanner_buffer, id - scanner_buffer);
   return (struct token *) obstack_finish (&tokens_obstack);
 #undef ARGS
 }

@@ -70,5 +70,6 @@ extern struct lang_args *lang_args_default;
 extern struct lang_args *lang_args_list;
 
 extern struct obstack tokens_obstack;
+extern unsigned char *scanner_buffer;
 
 #endif /* not _scanners_h_ */

@@ -383,12 +383,16 @@ scan_files (struct idhead *idhp)
 
   hash_init (&token_table, n, token_hash_1, token_hash_2, token_hash_cmp);
   if (verbose_flag)
-    printf ("member files=%ld, token table slots=%ld\n",
+    printf ("files=%ld, largest=%lu, slots=%ld\n",
 	    idhp->idh_member_file_table.ht_fill,
-	    token_table.ht_size);
+	    largest_member_file, token_table.ht_size);
   init_hits_signature (0);
   init_summary ();
   obstack_init (&tokens_obstack);
+
+  if (largest_member_file > MAX_LARGEST_MEMBER_FILE)
+    largest_member_file = MAX_LARGEST_MEMBER_FILE;
+  scanner_buffer = MALLOC (unsigned char, largest_member_file + 1);
 
   for (;;)
     {
@@ -401,6 +405,7 @@ scan_files (struct idhead *idhp)
       bump_current_hits_signature ();
     }
 
+  free (scanner_buffer);
   free (members_0);
 }
 

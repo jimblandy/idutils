@@ -36,6 +36,7 @@
 #include "xalloca.h"
 
 int walker_verbose_flag = 0;
+off_t largest_member_file = 0;
 
 int walk_dir __P((struct file_link *dir_link));
 struct member_file *get_member_file __P((struct file_link *flink));
@@ -198,8 +199,13 @@ walk_flink (struct file_link *flink, struct dynvec *sub_dirs_vec)
 #else
       member = get_member_file (flink);
 #endif
-      if (member == 0)
-	return;
+      if (member)
+	{
+	  if (st.st_size > largest_member_file)
+	    largest_member_file = st.st_size;
+	  if (walker_verbose_flag)
+	    print_member_file (member);
+	}
     }
 }
 
@@ -305,8 +311,6 @@ maybe_get_member_file (struct file_link *flink, struct stat *stp)
 	  alias_member->mf_link->fl_flags &= ~FL_MEMBER;
 	}
     }
-  if (member && walker_verbose_flag)
-    print_member_file (member);
   return member;
 }
 
@@ -721,7 +725,9 @@ classify_link (struct file_link *flink, struct stat *stp)
       flags |= FL_SYM_LINK;
     }
 #endif
-  if (S_ISDIR (stp->st_mode))
+  if (stp->st_size == 0)
+    return 0;
+  else if (S_ISDIR (stp->st_mode))
     flags |= FL_TYPE_DIR;
   else if (S_ISREG (stp->st_mode))
     flags |= FL_TYPE_FILE;

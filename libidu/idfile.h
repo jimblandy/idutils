@@ -221,6 +221,9 @@ extern struct idhead idh;
 
 extern int walker_verbose_flag;
 
+extern off_t largest_member_file;
+#define MAX_LARGEST_MEMBER_FILE (2*1024*1024-1)
+
 #define DEFAULT_ID_FILE_NAME "ID"
 
 #endif /* not _idfile_h_ */
