@@ -2,6 +2,7 @@
 
 	* lisp/Makefile.am (lisp_LISP): Add variable.  Remove all
 	other obsolete contents.
+	* src/lid.c (search_flinkv): Replace `gets' with `fgets'.
 
 1999-04-03  Greg McGary  <gkm@gnu.org>
 

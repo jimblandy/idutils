@@ -94,6 +94,7 @@ lispdir = @lispdir@
 
 
 lisp_LISP = id-utils.el
+EXTRA_DIST = $(lisp_LISP)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 

@@ -13,7 +13,7 @@ AC_INIT(src/mkid.c)
 AM_CONFIG_HEADER(config.h)
 AC_PREREQ(2.13)
 
-AM_INIT_AUTOMAKE([id-utils], [3.2c])
+AM_INIT_AUTOMAKE([id-utils], [3.2d])
 GNU_PACKAGE="GNU $PACKAGE"
 AC_DEFINE_UNQUOTED(GNU_PACKAGE, "$GNU_PACKAGE",
   [The concatenation of the strings \`GNU ', and PACKAGE.])

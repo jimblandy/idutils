@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
-"POT-Creation-Date: 1999-04-03 17:52-0700\n"
+"POT-Creation-Date: 1999-04-04 01:11-0700\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Karl Eichwalder <ke@ke.Central.DE>\n"
 "Language-Team: German <de@li.org>\n"
