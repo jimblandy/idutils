@@ -1,3 +1,17 @@
+Fri Nov 22 04:01:58 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* finddomain.c [!HAVE_STRING_H && !_LIBC]: Define memcpy using
+ 	bcopy if not already defined.  Reported by Thomas Esken.
+	* bindtextdom.c: Likewise.
+	* l10nflist.c: Likewise.
+	* localealias.c: Likewise.
+	* textdomain.c: Likewise.
+
+Tue Oct 29 11:10:27 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* Makefile.in (libdir): Change to use exec_prefix instead of
+ 	prefix.  Reported by Knut-HåvardAksnes <etokna@eto.ericsson.se>.
+
 Sat Aug 31 03:07:09 1996  Ulrich Drepper  <drepper@cygnus.com>
 
 	* l10nflist.c (_nl_normalize_codeset): We convert to lower case,

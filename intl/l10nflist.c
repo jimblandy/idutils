@@ -28,10 +28,11 @@ Boston, MA 02111-1307, USA.  */
 # include <string.h>
 #else
 # include <strings.h>
-#endif
-#if !HAVE_STRCHR && !defined _LIBC
 # ifndef strchr
 #  define strchr index
+# endif
+# ifndef memcpy
+#  define memcpy(Dst, Src, Num) bcopy (Src, Dst, Num)
 # endif
 #endif
 
