@@ -622,7 +622,8 @@ write_id_file (struct idhead *idhp)
   idhp->idh_vec_size = max_vec_size;
 
   write_idhead (&idh);
-  fclose (idhp->idh_FILE);
+  if (fclose (idhp->idh_FILE) != 0)
+    error (1, errno, _("error closing `%s'"), idhp->idh_file_name);
 }
 
 /* Define primary and secondary hash and comparison functions for the
