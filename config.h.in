@@ -1,6 +1,6 @@
 /* config.h.in.  Generated automatically from configure.in by autoheader.  */
 /* Special definitions for GNU id-utils, processed by autoheader.
-   Copyright (C) 1995, 96 Free Software Foundation, Inc.
+   Copyright (C) 1995, 96, 99 Free Software Foundation, Inc.
 */
 
 #ifndef _config_h_
@@ -67,9 +67,9 @@
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at run-time.
-	STACK_DIRECTION > 0 => grows toward higher addresses
-	STACK_DIRECTION < 0 => grows toward lower addresses
-	STACK_DIRECTION = 0 => direction of growth unknown
+ STACK_DIRECTION > 0 => grows toward higher addresses
+ STACK_DIRECTION < 0 => grows toward lower addresses
+ STACK_DIRECTION = 0 => direction of growth unknown
  */
 #undef STACK_DIRECTION
 
@@ -79,49 +79,8 @@
 /* Define if you have the ANSI C header files.  */
 #undef STDC_HEADERS
 
-/* Define to 1 if NLS is requested.  */
-#undef ENABLE_NLS
-
-/* Define as 1 if you have catgets and don't want to use GNU gettext.  */
-#undef HAVE_CATGETS
-
-/* Define as 1 if you have gettext and don't want to use GNU gettext.  */
-#undef HAVE_GETTEXT
-
-/* Define if your locale.h file contains LC_MESSAGES.  */
-#undef HAVE_LC_MESSAGES
-
-/* Define if your sys/types.h file defines the type ptrdiff_t.  */
-#undef HAVE_PTRDIFF_T
-
-/* Define to 1 if you have the stpcpy function.  */
-#undef HAVE_STPCPY
-
 /* Define to the name of the installed language map file.  */
 #undef LANGUAGE_MAP_FILE
-
-/* Define to the name of the distribution.  */
-#undef PACKAGE
-
-/* The concatenation of the strings PACKAGE, "-", and VERSION.  */
-#undef PACKAGE_VERSION
-
-/* Define to 1 if ANSI function prototypes are usable.  */
-#undef PROTOTYPES
-
-/* Define to the major.minor version # of the distribution.  */
-#undef VERSION
-
-/* Define to 1 if GNU regex should be used instead of GNU rx.  */
-#undef WITH_REGEX
-
-#ifndef __P
-# ifndef PROTOTYPES
-#  define	__P(protos)	()		/* traditional C */
-# else
-#  define	__P(protos)	protos		/* full-blown ANSI C */
-# endif
-#endif
 
 /* Define if you have the __argz_count function.  */
 #undef HAVE___ARGZ_COUNT
@@ -132,6 +91,9 @@
 /* Define if you have the __argz_stringify function.  */
 #undef HAVE___ARGZ_STRINGIFY
 
+/* Define if you have the basename function.  */
+#undef HAVE_BASENAME
+
 /* Define if you have the bcopy function.  */
 #undef HAVE_BCOPY
 
@@ -140,6 +102,15 @@
 
 /* Define if you have the dcgettext function.  */
 #undef HAVE_DCGETTEXT
+
+/* Define if you have the dirname function.  */
+#undef HAVE_DIRNAME
+
+/* Define if you have the error function.  */
+#undef HAVE_ERROR
+
+/* Define if you have the fnmatch function.  */
+#undef HAVE_FNMATCH
 
 /* Define if you have the getcwd function.  */
 #undef HAVE_GETCWD
@@ -158,6 +129,9 @@
 
 /* Define if you have the memcpy function.  */
 #undef HAVE_MEMCPY
+
+/* Define if you have the memset function.  */
+#undef HAVE_MEMSET
 
 /* Define if you have the munmap function.  */
 #undef HAVE_MUNMAP
@@ -180,11 +154,29 @@
 /* Define if you have the strchr function.  */
 #undef HAVE_STRCHR
 
+/* Define if you have the strcspn function.  */
+#undef HAVE_STRCSPN
+
+/* Define if you have the strdup function.  */
+#undef HAVE_STRDUP
+
 /* Define if you have the strerror function.  */
 #undef HAVE_STRERROR
 
-/* Define if you have the valloc function.  */
-#undef HAVE_VALLOC
+/* Define if you have the strndup function.  */
+#undef HAVE_STRNDUP
+
+/* Define if you have the strpbrk function.  */
+#undef HAVE_STRPBRK
+
+/* Define if you have the strspn function.  */
+#undef HAVE_STRSPN
+
+/* Define if you have the strstr function.  */
+#undef HAVE_STRSTR
+
+/* Define if you have the strtok function.  */
+#undef HAVE_STRTOK
 
 /* Define if you have the <argz.h> header file.  */
 #undef HAVE_ARGZ_H
@@ -255,14 +247,48 @@
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
 
-/* Define if you have the <values.h> header file.  */
-#undef HAVE_VALUES_H
-
 /* Define if you have the i library (-li).  */
 #undef HAVE_LIBI
 
-/* Define if you have the intl library (-lintl).  */
-#undef HAVE_LIBINTL
+/* Name of package */
+#undef PACKAGE
+
+/* Version number of package */
+#undef VERSION
+
+/* The concatenation of the strings `GNU ', and PACKAGE. */
+#undef GNU_PACKAGE
+
+/* The concatenation of `GNU', and the macros PACKAGE and VERSION. */
+#undef PACKAGE_VERSION
+
+/* Define if compiler has function prototypes */
+#undef PROTOTYPES
+
+/* Define if system has ptrdiff_t type */
+#undef HAVE_PTRDIFF_T
+
+/* Define if using GNU regex */
+#undef WITH_REGEX
+
+/* Define if libc includes obstacks */
+#undef HAVE_OBSTACK
+
+/* Define to 1 if you have the stpcpy function. */
+#undef HAVE_STPCPY
+
+/* Define if your locale.h file contains LC_MESSAGES. */
+#undef HAVE_LC_MESSAGES
+
+/* Define to 1 if NLS is requested. */
+#undef ENABLE_NLS
+
+/* Define to 1 if you have gettext and don't want to use GNU gettext. */
+#undef HAVE_GETTEXT
+
+/* Define as 1 if you have catgets and don't want to use GNU gettext. */
+#undef HAVE_CATGETS
+
 
 /* According to Thomas Neumann, NeXT POSIX termios support is losing,
    and sgtty is the way to go.  Note: the comment between #undef &
