@@ -4,7 +4,9 @@
 EXTRA_DIST = README Makefile.am.in \
 gettext.m4 \
 lcmessage.m4 \
-progtest.m4
+malloc.m4 \
+progtest.m4 \
+realloc.m4
 ##m4-files-end
 
 Makefile.am: Makefile.am.in

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.2\n"
-"POT-Creation-Date: 1999-04-09 01:47-0700\n"
+"POT-Creation-Date: 2000-06-06 18:36+0200\n"
 "PO-Revision-Date: 1998-09-30 13:31+02:00\n"
 "Last-Translator: Ivo Timmermans <zarq@iname.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "herverfrommeling=%d, "
 msgid "Collisions=%ld/%ld=%.0f%%"
 msgstr "Botsingen=%ld/%ld=%.0f%%"
 
-#: libidu/idfile.c:105
+#: libidu/idfile.c:112
 msgid "can't determine the io_size of a string!"
 msgstr "kan de io_size van een letterreeks niet vaststellen!"
 
@@ -65,45 +65,45 @@ msgstr "onbekend I/O type: %d"
 msgid "unsupported size in io_write (): %d"
 msgstr "niet-ondersteunde afmeting in io_write(): %d"
 
-#: libidu/scanners.c:95
+#: libidu/scanners.c:102
 #, c-format
 msgid "unrecognized language: `%s'"
 msgstr "niet herkende taal: `%s'"
 
-#: libidu/scanners.c:141
+#: libidu/scanners.c:148
 msgid "can't allocate language args obstack: memory exhausted"
 msgstr "kan geen objectstapel voor taalargumenten vrijmaken: geheugen vol"
 
-#: libidu/scanners.c:195 libidu/scanners.c:264
+#: libidu/scanners.c:202 libidu/scanners.c:271
 msgid "can't allocate language args: memory exhausted"
 msgstr "kan geen geheugen vrijmaken voor taalargumenten: geheugen vol"
 
-#: libidu/scanners.c:203
+#: libidu/scanners.c:210
 #, c-format
 msgid "language name expected following `%s' in file `%s'"
 msgstr "taalnaam verwacht na `%s' in bestand `%s'"
 
-#: libidu/scanners.c:258
+#: libidu/scanners.c:265
 #, c-format
 msgid "can't open language map file `%s'"
 msgstr "kan taalbestand `%s' niet openen"
 
-#: libidu/scanners.c:260
+#: libidu/scanners.c:267
 #, c-format
 msgid "can't get size of map file `%s'"
 msgstr "kan grootte van mapbestand `%s' niet krijgen"
 
-#: libidu/scanners.c:270
+#: libidu/scanners.c:277
 #, c-format
 msgid "can't read language map file `%s'"
 msgstr "kan taalbestand `%s' niet lezen"
 
-#: libidu/scanners.c:273
+#: libidu/scanners.c:280
 #, c-format
 msgid "can't read entire language map file `%s'"
 msgstr "kan niet het hele taalbestand `%s' lezen"
 
-#: libidu/scanners.c:418
+#: libidu/scanners.c:425
 msgid ""
 "C language:\n"
 "  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the "
@@ -121,17 +121,17 @@ msgstr ""
 "  -u,--strip-underscore Haal een voorgaand laag liggend streepje (`_')\n"
 "                        weg van reeksen van een eenheid\n"
 
-#: libidu/scanners.c:701 libidu/scanners.c:972 libidu/scanners.c:1175
+#: libidu/scanners.c:708 libidu/scanners.c:979 libidu/scanners.c:1182
 #, c-format
 msgid "junk: `%c'"
 msgstr "onzin: `%c'"
 
-#: libidu/scanners.c:703 libidu/scanners.c:974 libidu/scanners.c:1177
+#: libidu/scanners.c:710 libidu/scanners.c:981 libidu/scanners.c:1184
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "onzin: `\\%03o'"
 
-#: libidu/scanners.c:807
+#: libidu/scanners.c:814
 msgid ""
 "Assembly language:\n"
 "  -c,--comment=CHARS     Any of CHARS starts a comment until end-of-line\n"
@@ -149,7 +149,7 @@ msgstr ""
 "eenheden\n"
 "  -n,--no-cpp            Behandel geen C pre-processor aanwijzingen\n"
 
-#: libidu/scanners.c:1078
+#: libidu/scanners.c:1085
 msgid ""
 "Text language:\n"
 "  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
@@ -163,118 +163,107 @@ msgstr ""
 "  -x,--exclude=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als "
 "eenheidscheiding\n"
 
-#: libidu/walker.c:107
+#: libidu/walker.c:114
 #, c-format
 msgid "can't read directory `%s' (`.' from `%s')"
 msgstr "kan map `%s' niet lezen (`.' van `%s')"
 
-#: libidu/walker.c:174
+#: libidu/walker.c:181
 #, c-format
 msgid "notice: `%s' was a %s, but is now a %s!"
 msgstr "opmerking: `%s' was een %s, maar is nu een %s!"
 
-#: libidu/walker.c:175 libidu/walker.c:176
+#: libidu/walker.c:182 libidu/walker.c:183
 msgid "file"
 msgstr "bestand"
 
-#: libidu/walker.c:175 libidu/walker.c:176
+#: libidu/walker.c:182 libidu/walker.c:183
 msgid "directory"
 msgstr "map"
 
-#: libidu/walker.c:299
+#: libidu/walker.c:306
 #, c-format
 msgid "warning: `%s' and `%s' are the same file, but yield different scans!"
 msgstr ""
 "waarschuwing: `%s' en `%s' zijn het zelfde bestand, maar leveren "
 "verschillende resultaten op!"
 
-#: libidu/walker.c:393
+#: libidu/walker.c:400
 #, c-format
 msgid "notice: scan parameters changed for `%s'"
 msgstr "opmerking: leesparameters veranderd voor `%s'"
 
-#: libidu/walker.c:597
+#: libidu/walker.c:604
 msgid "can't get working directory"
 msgstr "kan huidige map niet verkrijgen"
 
-#: libidu/walker.c:654
+#: libidu/walker.c:661
 #, c-format
 msgid "can't chdir to `%s'"
 msgstr "kan niet naar map `%s' gaan"
 
-#: libidu/walker.c:659
+#: libidu/walker.c:666
 #, c-format
 msgid "can't chdir to `%s' from `%s'"
 msgstr "kan niet van map `%s' naar `%s' gaan"
 
-#: libidu/walker.c:713
+#: libidu/walker.c:727
 #, c-format
 msgid "can't lstat `%s' from `%s'"
 msgstr "kan de status van de link `%s' niet opvragen vanuit `%s'"
 
-#: libidu/walker.c:721
+#: libidu/walker.c:735
 #, c-format
 msgid "can't stat `%s' from `%s'"
 msgstr "kan de status van `%s' niet opvragen vanuit `%s'"
 
-#: lib/getopt.c:677
+#: lib/getopt.c:527
 #, c-format
 msgid "%s: option `%s' is ambiguous\n"
 msgstr "%s: optie `%s' is dubbelzinnig\n"
 
-#: lib/getopt.c:702
+#: lib/getopt.c:550
 #, c-format
 msgid "%s: option `--%s' doesn't allow an argument\n"
 msgstr "%s: optie `--%s' staat geen argumenten toe\n"
 
-#: lib/getopt.c:707
+#: lib/getopt.c:555
 #, c-format
 msgid "%s: option `%c%s' doesn't allow an argument\n"
 msgstr "%s: optie `%c%s' staat geen argumenten toe\n"
 
-#: lib/getopt.c:725 lib/getopt.c:898
+#: lib/getopt.c:570
 #, c-format
 msgid "%s: option `%s' requires an argument\n"
 msgstr "%s: optie `%s' vereist een argument\n"
 
 #. --option
-#: lib/getopt.c:754
+#: lib/getopt.c:598
 #, c-format
 msgid "%s: unrecognized option `--%s'\n"
 msgstr "%s: onbekende optie `--%s'\n"
 
 #. +option or -option
-#: lib/getopt.c:758
+#: lib/getopt.c:602
 #, c-format
 msgid "%s: unrecognized option `%c%s'\n"
 msgstr "%s: onbekende optie `%c%s'\n"
 
 #. 1003.2 specifies the format of this message.
-#: lib/getopt.c:784
+#: lib/getopt.c:627
 #, c-format
 msgid "%s: illegal option -- %c\n"
 msgstr "%s: ongeldige optie -- %c\n"
 
-#: lib/getopt.c:787
+#: lib/getopt.c:630
 #, c-format
 msgid "%s: invalid option -- %c\n"
 msgstr "%s: ongeldige optie -- %c\n"
 
-#. 1003.2 specifies the format of this message.
-#: lib/getopt.c:817 lib/getopt.c:947
+#: lib/getopt.c:666
 #, c-format
 msgid "%s: option requires an argument -- %c\n"
 msgstr "%s: optie vereist een argument -- %c\n"
-
-#: lib/getopt.c:864
-#, fuzzy, c-format
-msgid "%s: option `-W %s' is ambiguous\n"
-msgstr "%s: optie `%s' is dubbelzinnig\n"
-
-#: lib/getopt.c:882
-#, fuzzy, c-format
-msgid "%s: option `-W %s' doesn't allow an argument\n"
-msgstr "%s: optie `--%s' staat geen argumenten toe\n"
 
 #: src/fid.c:70 src/fnid.c:49 src/lid.c:233 src/mkid.c:122 src/xtokid.c:43
 #, c-format
@@ -480,7 +469,7 @@ msgstr "kan geen nieuw proces beginnen"
 msgid "can't exec `%s'"
 msgstr "kan `%s' niet uitvoeren"
 
-#: src/lid.c:853
+#: src/lid.c:860
 msgid "can't match regular-expression: memory exhausted"
 msgstr "kan reguliere expressie niet vergelijken: geheugen vol"
 
@@ -664,3 +653,11 @@ msgstr ""
 "      --version           output version information and exit\n"
 "\n"
 "The following arguments apply to the language-specific scanners:\n"
+
+#, fuzzy
+#~ msgid "%s: option `-W %s' is ambiguous\n"
+#~ msgstr "%s: optie `%s' is dubbelzinnig\n"
+
+#, fuzzy
+#~ msgid "%s: option `-W %s' doesn't allow an argument\n"
+#~ msgstr "%s: optie `--%s' staat geen argumenten toe\n"

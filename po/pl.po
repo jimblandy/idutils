@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.0.8\n"
-"POT-Creation-Date: 1999-04-09 01:47-0700\n"
+"POT-Creation-Date: 2000-06-06 18:36+0200\n"
 "PO-Revision-Date: 1997-03-26 23:59 +0100\n"
 "Last-Translator: Wojciech Marek Ga³±zka <wgalazka@chem.uw.edu.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -33,7 +33,7 @@ msgstr "Ponownie mieszanie=%d, "
 msgid "Collisions=%ld/%ld=%.0f%%"
 msgstr "Próby=%ld/%ld=%.2f, "
 
-#: libidu/idfile.c:105
+#: libidu/idfile.c:112
 msgid "can't determine the io_size of a string!"
 msgstr ""
 
@@ -67,45 +67,45 @@ msgstr ""
 msgid "unsupported size in io_write (): %d"
 msgstr "Nie obs³ugiwany rozmiar w io_write (): %d\n"
 
-#: libidu/scanners.c:95
+#: libidu/scanners.c:102
 #, fuzzy, c-format
 msgid "unrecognized language: `%s'"
 msgstr "Brak skanera dla jêzyka `%s'\n"
 
-#: libidu/scanners.c:141
+#: libidu/scanners.c:148
 msgid "can't allocate language args obstack: memory exhausted"
 msgstr ""
 
-#: libidu/scanners.c:195 libidu/scanners.c:264
+#: libidu/scanners.c:202 libidu/scanners.c:271
 msgid "can't allocate language args: memory exhausted"
 msgstr ""
 
-#: libidu/scanners.c:203
+#: libidu/scanners.c:210
 #, c-format
 msgid "language name expected following `%s' in file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:258
+#: libidu/scanners.c:265
 #, fuzzy, c-format
 msgid "can't open language map file `%s'"
 msgstr "Brak skanera dla jêzyka `%s'\n"
 
-#: libidu/scanners.c:260
+#: libidu/scanners.c:267
 #, c-format
 msgid "can't get size of map file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:270
+#: libidu/scanners.c:277
 #, fuzzy, c-format
 msgid "can't read language map file `%s'"
 msgstr "Brak skanera dla jêzyka `%s'\n"
 
-#: libidu/scanners.c:273
+#: libidu/scanners.c:280
 #, c-format
 msgid "can't read entire language map file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:418
+#: libidu/scanners.c:425
 msgid ""
 "C language:\n"
 "  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the "
@@ -116,17 +116,17 @@ msgid ""
 "strings\n"
 msgstr ""
 
-#: libidu/scanners.c:701 libidu/scanners.c:972 libidu/scanners.c:1175
+#: libidu/scanners.c:708 libidu/scanners.c:979 libidu/scanners.c:1182
 #, c-format
 msgid "junk: `%c'"
 msgstr "¶mieæ: `%c'"
 
-#: libidu/scanners.c:703 libidu/scanners.c:974 libidu/scanners.c:1177
+#: libidu/scanners.c:710 libidu/scanners.c:981 libidu/scanners.c:1184
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "¶mieæ: `\\%03o'"
 
-#: libidu/scanners.c:807
+#: libidu/scanners.c:814
 msgid ""
 "Assembly language:\n"
 "  -c,--comment=CHARS     Any of CHARS starts a comment until end-of-line\n"
@@ -136,7 +136,7 @@ msgid ""
 "  -n,--no-cpp            Don't handle C pre-processor directives\n"
 msgstr ""
 
-#: libidu/scanners.c:1078
+#: libidu/scanners.c:1085
 msgid ""
 "Text language:\n"
 "  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
@@ -145,116 +145,105 @@ msgid ""
 "delimiters\n"
 msgstr ""
 
-#: libidu/walker.c:107
+#: libidu/walker.c:114
 #, c-format
 msgid "can't read directory `%s' (`.' from `%s')"
 msgstr ""
 
-#: libidu/walker.c:174
+#: libidu/walker.c:181
 #, c-format
 msgid "notice: `%s' was a %s, but is now a %s!"
 msgstr ""
 
-#: libidu/walker.c:175 libidu/walker.c:176
+#: libidu/walker.c:182 libidu/walker.c:183
 msgid "file"
 msgstr ""
 
-#: libidu/walker.c:175 libidu/walker.c:176
+#: libidu/walker.c:182 libidu/walker.c:183
 msgid "directory"
 msgstr ""
 
-#: libidu/walker.c:299
+#: libidu/walker.c:306
 #, c-format
 msgid "warning: `%s' and `%s' are the same file, but yield different scans!"
 msgstr ""
 
-#: libidu/walker.c:393
+#: libidu/walker.c:400
 #, c-format
 msgid "notice: scan parameters changed for `%s'"
 msgstr ""
 
-#: libidu/walker.c:597
+#: libidu/walker.c:604
 #, fuzzy
 msgid "can't get working directory"
 msgstr "%s: nie mogê pobraæ nazwy bie¿±cego katalogu.\n"
 
-#: libidu/walker.c:654
+#: libidu/walker.c:661
 #, c-format
 msgid "can't chdir to `%s'"
 msgstr ""
 
-#: libidu/walker.c:659
+#: libidu/walker.c:666
 #, c-format
 msgid "can't chdir to `%s' from `%s'"
 msgstr ""
 
-#: libidu/walker.c:713
+#: libidu/walker.c:727
 #, c-format
 msgid "can't lstat `%s' from `%s'"
 msgstr ""
 
-#: libidu/walker.c:721
+#: libidu/walker.c:735
 #, c-format
 msgid "can't stat `%s' from `%s'"
 msgstr ""
 
-#: lib/getopt.c:677
+#: lib/getopt.c:527
 #, c-format
 msgid "%s: option `%s' is ambiguous\n"
 msgstr ""
 
-#: lib/getopt.c:702
+#: lib/getopt.c:550
 #, c-format
 msgid "%s: option `--%s' doesn't allow an argument\n"
 msgstr ""
 
-#: lib/getopt.c:707
+#: lib/getopt.c:555
 #, c-format
 msgid "%s: option `%c%s' doesn't allow an argument\n"
 msgstr ""
 
-#: lib/getopt.c:725 lib/getopt.c:898
+#: lib/getopt.c:570
 #, c-format
 msgid "%s: option `%s' requires an argument\n"
 msgstr ""
 
 #. --option
-#: lib/getopt.c:754
+#: lib/getopt.c:598
 #, c-format
 msgid "%s: unrecognized option `--%s'\n"
 msgstr ""
 
 #. +option or -option
-#: lib/getopt.c:758
+#: lib/getopt.c:602
 #, c-format
 msgid "%s: unrecognized option `%c%s'\n"
 msgstr ""
 
 #. 1003.2 specifies the format of this message.
-#: lib/getopt.c:784
+#: lib/getopt.c:627
 #, c-format
 msgid "%s: illegal option -- %c\n"
 msgstr ""
 
-#: lib/getopt.c:787
+#: lib/getopt.c:630
 #, c-format
 msgid "%s: invalid option -- %c\n"
 msgstr ""
 
-#. 1003.2 specifies the format of this message.
-#: lib/getopt.c:817 lib/getopt.c:947
+#: lib/getopt.c:666
 #, c-format
 msgid "%s: option requires an argument -- %c\n"
-msgstr ""
-
-#: lib/getopt.c:864
-#, c-format
-msgid "%s: option `-W %s' is ambiguous\n"
-msgstr ""
-
-#: lib/getopt.c:882
-#, c-format
-msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr ""
 
 #: src/fid.c:70 src/fnid.c:49 src/lid.c:233 src/mkid.c:122 src/xtokid.c:43
@@ -406,7 +395,7 @@ msgstr ""
 msgid "can't exec `%s'"
 msgstr ""
 
-#: src/lid.c:853
+#: src/lid.c:860
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 
