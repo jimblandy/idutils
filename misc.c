@@ -74,7 +74,7 @@ filerr (char const *syscall, char const *file_name)
 }
 
 int
-tree8_count_levels (int cardinality)
+tree8_count_levels (unsigned int cardinality)
 {
   int levels = 1;
   cardinality--;

@@ -54,7 +54,7 @@ int find_plain (char const *arg, doit_t doit);
 int find_anchor (char const *arg, doit_t doit);
 int find_regexp (char const *arg, doit_t doit);
 int find_number (char const *arg, doit_t doit);
-int find_non_unique (int, doit_t doit);
+int find_non_unique (unsigned int, doit_t doit);
 int find_apropos (char const *arg, doit_t doit);
 void parse_frequency_arg (char const *arg);
 int frequency_wanted (char const *tok);
@@ -99,13 +99,12 @@ int crunch_on = CRUNCH_DEFAULT;
 int file_name_regexp = 0;
 int match_base = 0;
 char id_dir[BUFSIZ];
-off_t anchor_offset;
 int tree8_levels;
-int bits_vec_size;
+unsigned int bits_vec_size;
 char PWD_name[BUFSIZ];
 struct idhead idh;
 struct idarg *id_args;
-int (*find_func) (char const *arg, doit_t doit);
+int (*find_func) (char const *, doit_t);
 unsigned short frequency_low = 1;
 unsigned short frequency_high = USHRT_MAX;
 char *buf;
@@ -127,12 +126,12 @@ main (int argc, char **argv)
   char const *id_file_name = IDFILE;
   doit_t doit = look_id;
   int force_merge = 0;
-  int unique_limit = 0;
+  unsigned int unique_limit = 0;
   int use_id_file_name = 1;
   int use_pwd_file_name = 0;
   int use_relative_file_name = 0;
   char const *REL_file_name = NULL;
-  int (*forced_find_func) (char const *arg, doit_t doit) = NULL;
+  int (*forced_find_func) (char const *, doit_t) = NULL;
 
   program_name = basename ((argc--, *argv++));
 
@@ -556,7 +555,7 @@ int
 skip_to_argv (char **argv)
 {
   char pattern[BUFSIZ];
-  int count;
+  unsigned int count;
 
   if (gets (pattern) == NULL)
     return -1;
@@ -584,7 +583,7 @@ int
 find_anchor (char const *arg, doit_t doit)
 {
   int count;
-  int length;
+  unsigned int length;
 
   if (find_token (++arg) == 0)
     return 0;
@@ -693,7 +692,7 @@ find_number (char const *arg, doit_t doit)
 /* Find identifiers that are non-unique within the first `count'
    characters.  */
 int
-find_non_unique (int limit, doit_t doit)
+find_non_unique (unsigned int limit, doit_t doit)
 {
   char *old = buf;
   char *new = buf2;
@@ -1190,15 +1189,15 @@ xtoi (char const *name)
 }
 
 unsigned char *
-tree8_to_bits (unsigned char *bits_vec, unsigned char const *hits_tree8)
+tree8_to_bits (unsigned char *bv_0, unsigned char const *hits_tree8)
 {
-  unsigned char* bv = bits_vec;
+  unsigned char* bv = bv_0;
   tree8_to_bits_1 (&bv, &hits_tree8, tree8_levels);
-  return bits_vec;
+  return bv_0;
 }
 
 void
-tree8_to_bits_1 (unsigned char **bits_vec, unsigned char const **hits_tree8, int level)
+tree8_to_bits_1 (unsigned char **bv, unsigned char const **hits_tree8, int level)
 {
   int hits = *(*hits_tree8)++;
 
@@ -1209,17 +1208,17 @@ tree8_to_bits_1 (unsigned char **bits_vec, unsigned char const **hits_tree8, int
       for (bit = 1; bit & 0xff; bit <<= 1)
 	{
 	  if (bit & hits)
-	    tree8_to_bits_1 (bits_vec, hits_tree8, level);
+	    tree8_to_bits_1 (bv, hits_tree8, level);
 	  else
-	    *bits_vec += incr;
+	    *bv += incr;
 	}
     }
   else
-    *(*bits_vec)++ |= hits;
+    *(*bv)++ |= hits;
 }
 
 char **
-bits_to_argv (unsigned char const *bits_vec)
+bits_to_argv (unsigned char const *bv)
 {
   int const reserved_argv_slots = 3;
   static char **argv_0;
@@ -1236,14 +1235,14 @@ bits_to_argv (unsigned char const *bits_vec)
       int hits;
       int bit;
 
-      while (*bits_vec == 0)
+      while (*bv == 0)
 	{
-	  bits_vec++;
+	  bv++;
 	  ida += 8;
 	  if (ida >= end)
 	    goto out;
 	}
-      hits = *bits_vec++;
+      hits = *bv++;
       for (bit = 1; bit & 0xff; bit <<= 1)
 	{
 	  if (bit & hits)
@@ -1280,63 +1279,40 @@ tree8_to_argv (unsigned char const *hits_tree8)
 #include <sys/ioctl.h>
 #endif
 
-#if HAVE_TERMIOS_H || HAVE_TERMIO_H
-
 #if HAVE_TERMIOS_H
+
 #include <termios.h>
 struct termios linemode;
 struct termios charmode;
 struct termios savemode;
+#define GET_TTY_MODES(modes) tcgetattr (0, (modes))
+#define SET_TTY_MODES(modes) tcsetattr(0, TCSANOW, (modes))
+
 #else /* not HAVE_TERMIOS_H */
+
 #if HAVE_TERMIO_H
 #include <termio.h>
 struct termio linemode;
 struct termio charmode;
 struct termio savemode;
-#endif /* HAVE_TERMIO_H */
-#endif /* not HAVE_TERMIOS_H */
+#define GET_TTY_MODES(modes) ioctl (0, TCGETA, (modes))
+#define SET_TTY_MODES(modes) ioctl (0, TCSETA, (modes))
 
-void
-savetty (void)
-{
-  ioctl (0, TCGETA, &savemode);
-  charmode = linemode = savemode;
-
-  charmode.c_lflag &= ~(ECHO | ICANON | ISIG);
-  charmode.c_cc[VMIN] = 1;
-  charmode.c_cc[VTIME] = 0;
-
-  linemode.c_lflag |= (ECHO | ICANON | ISIG);
-  linemode.c_cc[VEOF] = 'd' & 037;
-  linemode.c_cc[VEOL] = 0377;
-}
-
-void
-restoretty (void)
-{
-  ioctl (0, TCSETA, &savemode);
-}
-
-void
-linetty (void)
-{
-  ioctl (0, TCSETA, &linemode);
-}
-
-void
-chartty (void)
-{
-  ioctl (0, TCSETA, &charmode);
-}
-
-#else /* not HAVE_TERMIOS_H || HAVE_TERMIO_H */
+#else /* not HAVE_TERMIO_H */
 
 #if HAVE_SGTTYB_H
 #include <sgttyb.h>
-
 struct sgttyb linemode;
 struct sgttyb charmode;
 struct sgttyb savemode;
+
+#ifdef TIOCGETP
+#define GET_TTY_MODES(modes) ioctl (0, TIOCGETP, (modes))
+#define SET_TTY_MODES(modes) ioctl (0, TIOCSETP, (modes))
+#else /* not TIOCGETP */
+#define GET_TTY_MODES(modes) gtty (0, (modes))
+#define SET_TTY_MODES(modes) stty (0, (modes))
+#endif /* not TIOCGETP */
 
 savetty()
 {
@@ -1354,32 +1330,47 @@ savetty()
   linemode.sg_flags &= ~RAW;
 }
 
-restoretty()
-{
-#ifdef TIOCSETP
-  ioctl(0, TIOCSETP, &savemode);
-#else
-  stty(0, &savemode);
-#endif
-}
-
-linetty()
-{
-#ifdef TIOCSETP
-  ioctl(0, TIOCSETP, &linemode);
-#else
-  stty(0, &linemode);
-#endif
-}
-
-chartty()
-{
-#ifdef TIOCSETP
-  ioctl(0, TIOCSETP, &charmode);
-#else
-  stty(0, &charmode);
-#endif
-}
-
 #endif /* HAVE_SGTTYB_H */
-#endif /* not HAVE_TERMIOS_H || HAVE_TERMIO_H */
+#endif /* not HAVE_TERMIO_H */
+#endif /* not HAVE_TERMIOS_H */
+
+#if HAVE_TERMIOS_H || HAVE_TERMIO_H
+
+void
+savetty (void)
+{
+  GET_TTY_MODES (&savemode);
+  charmode = linemode = savemode;
+
+  charmode.c_lflag &= ~(ECHO | ICANON | ISIG);
+  charmode.c_cc[VMIN] = 1;
+  charmode.c_cc[VTIME] = 0;
+
+  linemode.c_lflag |= (ECHO | ICANON | ISIG);
+  linemode.c_cc[VEOF] = 'd' & 037;
+  linemode.c_cc[VEOL] = 0377;
+}
+
+#endif /* HAVE_TERMIOS_H || HAVE_TERMIO_H */
+
+#if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTYB_H
+
+void
+restoretty (void)
+{
+  SET_TTY_MODES (&savemode);
+}
+
+void
+linetty (void)
+{
+  SET_TTY_MODES (&linemode);
+}
+
+void
+chartty (void)
+{
+  SET_TTY_MODES (&charmode);
+}
+
+#endif /* HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTYB_H */

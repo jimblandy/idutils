@@ -1,4 +1,4 @@
-mkid TODO - Future directions
+`mkid' TODO - Future directions
 
 * Bring all code into conformance with GNU project coding standards.
   - Use command-line arguments, not the name of the program in argv[0]

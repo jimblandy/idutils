@@ -22,7 +22,8 @@ PRODUCT =	@PRODUCT@
 MAJOR_VERSION =	@MAJOR_VERSION@
 MINOR_VERSION =	@MINOR_VERSION@
 PATCH_LEVEL =	@PATCH_LEVEL@
-VERISON =	@VERSION@
+OLD_PATCH_LEVEL=@OLD_PATCH_LEVEL@
+VERSION =	@VERSION@
 FULL_VERSION =	@FULL_VERSION@
 
 SHELL =		/bin/sh
@@ -80,15 +81,15 @@ ALL_CFILES =	$(SRC_CFILES) $(LIB_CFILES) $(GEN_CFILES)
 SRC_HFILES =	alloc.h bitops.h filenames.h idarg.h \
 		idfile.h misc.h scanners.h strxtra.h token.h
 LIB_HFILES =	regex.h getopt.h
-GEN_HFILES =	config.h
 
-ID_SRC_FILES =	$(SRC_HFILES) $(GEN_HFILES) $(LIB_HFILES) $(SRC_CFILES) $(LIB_CFILES) $(SRC_YFILES)
+ID_SRC_FILES =	$(SRC_HFILES) $(LIB_HFILES) $(SRC_CFILES) $(LIB_CFILES) $(SRC_YFILES)
 DIST_SRC_FILES =$(ALL_CFILES) $(SRC_HFILES) $(LIB_HFILES) $(SRC_YFILES)
 
-DIST_DOC_FILES =mkid.texinfo mkid.info fid.1 iid.1 lid.1 mkid.1
+INFO_FILES =	mkid.info
+DIST_DOC_FILES =mkid.texinfo $(INFO_FILES) fid.1 iid.1 lid.1 mkid.1
 DIST_CONF_FILES=aclocal.m4 acconfig.h configure.in Makefile.in mkdirhier \
 		stamp-h.in config.h.in configure $(DEPEND)
-DIST_MISC_FILES=COPYING README INSTALL NEWS TODO THANKS idtest gid.el install-sh iid.help
+DIST_MISC_FILES=COPYING README INSTALL NEWS TODO THANKS idtest gid.el install-sh iid.help ChangeLog
 
 DIST_FILES =	$(DIST_CONF_FILES) $(DIST_SRC_FILES) $(DIST_DOC_FILES) $(DIST_MISC_FILES)
 
@@ -96,17 +97,19 @@ DIST_DIR =	$(PRODUCT)-$(FULL_VERSION)
 DIST_TGZ =	$(DIST_DIR).tar.gz
 DIST_UU =	$(DIST_TGZ).uu
 
-# Note: OLD_DIST_DIR must be passed in through the environment
-# do "OLD_DIST_DIR=mkid-X.X.X make patch"
+OLD_DIST_DIR =	$(PRODUCT)-$(VERSION).$(OLD_PATCH_LEVEL)
+
 PATCH_GZ =	$(OLD_DIST_DIR)-$(FULL_VERSION).diff.gz
 PATCH_UU =	$(PATCH_GZ).uu
 
 ##############################################################################
 
+.PRECIOUS: $(DEPEND) Makefile
+
 .SUFFIXES:
 .SUFFIXES: .c .i .o
 
-INCLUDES =	-I$(srcdir)
+INCLUDES =	-I. -I$(srcdir)
 CC_FLAGS =	$(DEFS) $(CPPFLAGS) $(INCLUDES) $(CFLAGS)
 LINK =		$(CC) $(LDFLAGS) -o $@
 
@@ -143,9 +146,9 @@ iid.c: iid.y
 
 ##############################################################################
 
-info: mkid.info
+info: $(INFO_FILES)
 
-mkid.info: mkid.texinfo version.texi
+$(INFO_FILES): mkid.texinfo version.texi
 	cd $(srcdir) && $(MAKEINFO) mkid.texinfo
 
 dvi: mkid.dvi
@@ -154,9 +157,9 @@ mkid.dvi: mkid.texinfo version.texi
 	$(TEXI2DVI) $(srcdir)/mkid.texinfo
 
 version.texi: configure.in
-	echo "@set VERSION $(VERSION)" >version.tmp
-	if cmp -s version.tmp $(srcdir)/version.texi; then rm version.tmp; \
-	else mv version.tmp $(srcdir)/version.texi; fi
+	if ! echo "@set VERSION $(VERSION)" |cmp -s - $(srcdir)/version.texi; then \
+	    echo "@set VERSION $(VERSION)" >$(srcdir)/version.texi; \
+	fi
 
 ##############################################################################
 
@@ -164,39 +167,42 @@ install: all
 	$(srcdir)/mkdirhier $(bindir) $(libdir) $(infodir)
 	@for file in $(PROGRAMS); do \
 	    cmd="$(INSTALL_PROGRAM) $$file $(bindir)/`echo $$file | sed '$(transform)'`"; \
-	    echo $$cmd; eval $$cmd; \
+	    (echo $$cmd; eval $$cmd); \
 	done
-	@for file in $(LID_LINKS); do \
-	    lid=`echo lid |sed '$(transform)'`; \
+	@lid=`echo lid |sed '$(transform)'`; \
+	for file in $(LID_LINKS); do \
 	    file=`echo $$file |sed '$(transform)'`; \
-	    cmd="rm -f $(bindir)/$$file; $(LN_S) $(bindir)/$$lid $(bindir)/$$file"; \
-	    echo $$cmd; eval $$cmd; \
+	    cmd="cd $(bindir); rm -f $$file; $(LN_S) $$lid $$file"; \
+	    (echo $$cmd; eval $$cmd); \
 	done
 	$(INSTALL_DATA) $(srcdir)/iid.help $(IID_HELP_FILE)
-	@for file in `cd $(srcdir) && echo mkid.info*`; do \
+	@for file in $(INFO_FILES); do \
 	    cmd="$(INSTALL_DATA) $(srcdir)/$$file $(infodir)/$$file"; \
-	    echo $$cmd; eval $$cmd; \
+	    (echo $$cmd; eval $$cmd); \
 	done
 
 uninstall:
 	@for file in $(TARGETS); do \
 	    cmd="rm -f $(bindir)/`echo $$file |sed '$(transform)'`"; \
-	    echo $$cmd; eval $$cmd; \
+	    (echo $$cmd; eval $$cmd); \
 	done
+	rm -f $(IID_HELP_FILE)
 	@for file in `cd $(infodir) && echo mkid.info*`; do \
 	    cmd="rm -f $(infodir)/$$file"; \
-	    echo $$cmd; eval $$cmd; \
+	    (echo $$cmd; eval $$cmd); \
 	done
 
 ##############################################################################
 
 check: mkid lid fid idx
 	here=`pwd`; PATH=$$here:$$PATH; cd $(srcdir) \
-	    && $$here/mkid -v -f$$here/ID $(SRC_FILES) \
-	    && $(srcdir)/idtest -f$$here/ID $(SRC_FILES)
+	    && $$here/mkid -v -f$$here/ID $(ID_SRC_FILES) \
+	    && $(srcdir)/idtest -f$$here/ID $(ID_SRC_FILES) \
+	    && rm -f $$here/ID
 
-ID: $(SRC_FILES) mkid
-	./mkid $(SRC_FILES)
+ID: $(ID_SRC_FILES) mkid
+	here=`pwd`; PATH=$$here:$$PATH; cd $(srcdir) \
+	    && $$here/mkid -f$$here/ID $$here/config.h $(ID_SRC_FILES) \
 
 tags: TAGS
 
@@ -217,39 +223,52 @@ distclean: clean
 	rm -f Makefile config.h config.status config.cache stamp-h
 
 realclean: distclean
-	rm -f *.info* TAGS ID
+	rm -f *.info* TAGS ID *~
 
 ##############################################################################
-
-dist-dir: $(DIST_DIR)
-$(DIST_DIR): $(DIST_FILES)
-	rm -fr $@
-	mkdir $@
-	chmod 777 $@
-	distdir=`pwd`/$@; cd $(srcdir); ln $(DIST_FILES) $$distdir
-	chmod -R a+r $@
-
-dist dist-tgz: $(DIST_TGZ)
-$(DIST_TGZ): $(DIST_DIR)
-	tar cfzho $@ $(DIST_DIR)
 
 dist-uu: $(DIST_UU)
 $(DIST_UU): $(DIST_TGZ)
 	uuencode $(DIST_TGZ) <$(DIST_TGZ) >$@
 
-patch patch-gz: $(PATCH_GZ)
-$(PATCH_GZ): $(OLD_DIST_DIR) $(DIST_DIR)
-	diff -r -c --show-c-function --new-file $(OLD_DIST_DIR) $(DIST_DIR) |gzip >$@
+dist dist-tgz: $(DIST_TGZ)
+$(DIST_TGZ): $(DIST_DIR)
+	tar cfzho $@ $(DIST_DIR)
+
+dist-dir: $(DIST_DIR)
+dist-dir-links: $(OLD_DIST_DIR) $(DIST_DIR)
+	cd $(DIST_DIR); \
+	for file in $(DIST_FILES); do \
+	    if cmp -s $$file ../$(OLD_DIST_DIR)/$$file; then \
+		rm -f $$file; \
+		if test -L ../$(OLD_DIST_DIR)/$$file; then \
+		    cp -a ../$(OLD_DIST_DIR)/$$file $$file; \
+		else \
+		    $(LN_S) ../$(OLD_DIST_DIR)/$$file $$file; \
+		fi; \
+	    fi; \
+	done
+
+$(DIST_DIR): $(DIST_FILES)
+	rm -fr $@
+	mkdir $@
+	chmod 777 $@
+	distdir=`pwd`/$@; cd $(srcdir); cp -p $(DIST_FILES) $$distdir
+	chmod -R a+r $@
 
 patch-uu: $(PATCH_UU)
 $(PATCH_UU): $(PATCH_GZ)
 	uuencode $(PATCH_GZ) <$(PATCH_GZ) >$@
 
+patch patch-gz: $(PATCH_GZ)
+$(PATCH_GZ): $(OLD_DIST_DIR) $(DIST_DIR)
+	diff -r -c --show-c-function --new-file $(OLD_DIST_DIR) $(DIST_DIR) |gzip >$@
+
 ##############################################################################
 
 Makefile: Makefile.in config.status $(DEPEND)
 	CONFIG_FILES=$@ CONFIG_HEADERS= ./config.status
-config.status: configure
+config.status: configure config.cache
 	./config.status --recheck
 $(srcdir)/configure: configure.in aclocal.m4
 	cd $(srcdir) && autoconf
@@ -263,7 +282,7 @@ $(srcdir)/stamp-h.in: configure.in aclocal.m4 acconfig.h
 	cd $(srcdir) && autoheader
 	date >$(srcdir)/stamp-h.in
 
-depend $(DEPEND): $(ALL_CFILES)
+depend $(DEPEND):
 	(cd $(srcdir) && $(CC) $(CC_FLAGS) -MM $(ALL_CFILES);) >$(DEPEND)
 
 ##############################################################################

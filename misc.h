@@ -23,7 +23,7 @@ char const *basename (char const *path);
 char const *dirname (char const *path);
 int fgets0 (char *buf0, int size, FILE *in_FILE);
 void filerr (char const *syscall, char const *file_name);
-int tree8_count_levels (int cardinality);
+int tree8_count_levels (unsigned int cardinality);
 int gets_past_00 (char *tok, FILE *input_FILE);
 int skip_past_00 (FILE *input_FILE);
 
