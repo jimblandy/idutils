@@ -1,7 +1,7 @@
 1999-04-09  Greg McGary  <gkm@gnu.org>
 
 	* po/Makefile.in.in (DISTFILES): Remove ChangeLog.
-	* po/ChangeLog: Remove empty file.
+	* po/ChangeLog: Remove empty file.w
 
 1999-04-08  Greg McGary  <gkm@gnu.org>
 
