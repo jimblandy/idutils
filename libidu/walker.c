@@ -388,7 +388,7 @@ get_member_file (struct file_link *flink)
       member = *slot;
     }
   member->mf_lang_args = args;
-  return *slot;
+  return member;
 }
 
 struct member_file *
@@ -729,7 +729,8 @@ get_link_from_dirent (struct dirent *dirent, struct file_link *parent)
   new_link = make_link_from_dirent (dirent, parent);
   slot = (struct file_link **) hash_find_slot (&idh.idh_file_link_table, new_link);
   if (HASH_VACANT (*slot))
-    hash_insert_at (&idh.idh_file_link_table, new_link, slot);
+    slot = (struct file_link **) hash_insert_at (&idh.idh_file_link_table,
+						 new_link, slot);
   else
     obstack_free (&idh.idh_file_link_obstack, new_link);
   return *slot;
@@ -744,7 +745,8 @@ get_link_from_string (char const *name, struct file_link *parent)
   new_link = make_link_from_string (name, parent);
   slot = (struct file_link **) hash_find_slot (&idh.idh_file_link_table, new_link);
   if (HASH_VACANT (*slot))
-    hash_insert_at (&idh.idh_file_link_table, new_link, slot);
+    slot = (struct file_link **) hash_insert_at (&idh.idh_file_link_table,
+						 new_link, slot);
   else
     obstack_free (&idh.idh_file_link_obstack, new_link);
   return *slot;

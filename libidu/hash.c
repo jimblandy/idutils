@@ -124,7 +124,9 @@ void *
 hash_insert (struct hash_table* ht, void *item)
 {
   void **slot = hash_find_slot (ht, item);
-  return hash_insert_at (ht, item, slot);
+  void *old_item = slot ? *slot : 0;
+  hash_insert_at (ht, item, slot);
+  return ((HASH_VACANT (old_item)) ? 0 : old_item);
 }
 
 void *
@@ -140,8 +142,12 @@ hash_insert_at (struct hash_table* ht, void *item, void const *slot)
     }
   *(void const **) slot = item;
   if (ht->ht_empty_slots < ht->ht_size - ht->ht_capacity)
-    hash_rehash (ht);
-  return old_item;
+    {
+      hash_rehash (ht);
+      return (void *) hash_find_slot (ht, item);
+    }
+  else
+    return (void *) slot;
 }
 
 void *
