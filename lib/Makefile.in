@@ -126,8 +126,8 @@ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 HEADERS =  $(noinst_HEADERS)
 
 DIST_COMMON =  Makefile.am Makefile.in alloca.c basename.c dirname.c \
-error.c fnmatch.c memcpy.c memset.c obstack.c obstack.h strcspn.c \
-strdup.c strndup.c strpbrk.c strspn.c strstr.c strtok.c
+error.c fnmatch.c memcpy.c memset.c obstack.c obstack.h regex.c \
+strcspn.c strdup.c strndup.c strpbrk.c strspn.c strstr.c strtok.c
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -136,9 +136,10 @@ TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/alloca.P .deps/basename.P .deps/dirname.P \
 .deps/error.P .deps/fnmatch.P .deps/getopt.P .deps/getopt1.P \
-.deps/memcpy.P .deps/memset.P .deps/obstack.P .deps/strcspn.P \
-.deps/strdup.P .deps/strndup.P .deps/strpbrk.P .deps/strspn.P \
-.deps/strstr.P .deps/strtok.P .deps/xgetcwd.P .deps/xmalloc.P
+.deps/memcpy.P .deps/memset.P .deps/obstack.P .deps/regex.P \
+.deps/strcspn.P .deps/strdup.P .deps/strndup.P .deps/strpbrk.P \
+.deps/strspn.P .deps/strstr.P .deps/strtok.P .deps/xgetcwd.P \
+.deps/xmalloc.P
 SOURCES = $(libsys_a_SOURCES)
 OBJECTS = $(libsys_a_OBJECTS)
 
@@ -217,6 +218,8 @@ memset_.c: memset.c $(ANSI2KNR)
 	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/memset.c; then echo $(srcdir)/memset.c; else echo memset.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > memset_.c
 obstack_.c: obstack.c $(ANSI2KNR)
 	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/obstack.c; then echo $(srcdir)/obstack.c; else echo obstack.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > obstack_.c
+regex_.c: regex.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/regex.c; then echo $(srcdir)/regex.c; else echo regex.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > regex_.c
 strcspn_.c: strcspn.c $(ANSI2KNR)
 	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/strcspn.c; then echo $(srcdir)/strcspn.c; else echo strcspn.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > strcspn_.c
 strdup_.c: strdup.c $(ANSI2KNR)
@@ -236,7 +239,7 @@ xgetcwd_.c: xgetcwd.c $(ANSI2KNR)
 xmalloc_.c: xmalloc.c $(ANSI2KNR)
 	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/xmalloc.c; then echo $(srcdir)/xmalloc.c; else echo xmalloc.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > xmalloc_.c
 alloca_.o basename_.o dirname_.o error_.o fnmatch_.o getopt_.o \
-getopt1_.o memcpy_.o memset_.o obstack_.o strcspn_.o strdup_.o \
+getopt1_.o memcpy_.o memset_.o obstack_.o regex_.o strcspn_.o strdup_.o \
 strndup_.o strpbrk_.o strspn_.o strstr_.o strtok_.o xgetcwd_.o \
 xmalloc_.o : $(ANSI2KNR)
 

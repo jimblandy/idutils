@@ -1,5 +1,7 @@
 1999-04-04  Greg McGary  <gkm@gnu.org>
 
+	* configure.in: Check for regcomp and compile lib/regex.c
+	if the system doesn't provide it.
 	* lisp/Makefile.am (lisp_LISP): Add variable.  Remove all
 	other obsolete contents.
 	* src/lid.c (search_flinkv): Replace `gets' with `fgets'.
