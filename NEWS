@@ -1,5 +1,13 @@
 id-utils NEWS - User visible changes.
 
+Version 3.2a - March 29, 1999, by Greg McGary
+
+* Fixed assorted bugs
+
+* Remove arbitrary limit of 32767 on number of files that
+  can be scanned.  Now the number of files is only
+  limited by available virtual memory.
+
 Version 3.2a - November 22, 1998, by Greg McGary
 
 * Fixed assorted bugs

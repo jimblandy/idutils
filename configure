@@ -703,7 +703,7 @@ fi
 
 PACKAGE=id-utils
 
-VERSION=3.2a
+VERSION=3.2b
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -2708,7 +2708,7 @@ echo "$ac_t""$am_cv_func_obstack" 1>&6
 EOF
 
  else
-   LIBOBJS="$LIBOBJS obstack.o"
+   LIBOBJS="$LIBOBJS obstack.$ac_objext"
  fi
 
 for ac_func in getwd getcwd link strerror isascii bcopy bzero memcpy
