@@ -1,3 +1,11 @@
+2000-06-06  Jim Meyering  <meyering@lucent.com>
+
+	* configure.in: Require 2.14a.
+	Check for declaration of strsep.
+	* libidu/idfile.c: Declare strsep if necessary.
+	* libidu/scanners.c: Likewise.
+	* libidu/walker.c: Likewise.
+
 2000-04-26  Greg McGary  <gkm@gnu.org>
 
 	* lid.c (add_regexp_word_delimiters): Rename from
