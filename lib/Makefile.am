@@ -6,7 +6,7 @@ noinst_LIBRARIES = libsys.a
 
 EXTRA_DIST = alloca.c basename.c dirname.c error.c fnmatch.c memcpy.c \
 	memset.c obstack.c regex.c strcasecmp.c strcspn.c strdup.c \
-	strndup.c strpbrk.c strspn.c strstr.c strtok.c
+	strndup.c strpbrk.c strspn.c strstr.c strsep.c
 
 libsys_a_SOURCES = xgetcwd.c xmalloc.c getopt.c getopt1.c
 
