@@ -1,4 +1,4 @@
-dnl aclocal.m4 generated automatically by aclocal 1.4
+dnl aclocal.m4 generated automatically by aclocal 1.4a
 
 dnl Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
@@ -44,6 +44,8 @@ dnl AM_INIT_AUTOMAKE(package,version, [no-define])
 
 AC_DEFUN(AM_INIT_AUTOMAKE,
 [AC_REQUIRE([AC_PROG_INSTALL])
+dnl We require 2.13 because we rely on SHELL being computed by configure.
+AC_PREREQ([2.13])
 PACKAGE=[$1]
 AC_SUBST(PACKAGE)
 VERSION=[$2]
@@ -183,9 +185,10 @@ ac_save_CC="$CC"
 # breaks some systems' header files.
 # AIX			-qlanglvl=ansi
 # Ultrix and OSF/1	-std1
-# HP-UX			-Aa -D_HPUX_SOURCE
+# HP-UX 10.20 and later	-Ae
+# HP-UX older versions	-Aa -D_HPUX_SOURCE
 # SVR4			-Xc -D__EXTENSIONS__
-for ac_arg in "" -qlanglvl=ansi -std1 "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
+for ac_arg in "" -qlanglvl=ansi -std1 -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
 do
   CC="$ac_save_CC $ac_arg"
   AC_TRY_COMPILE(
@@ -246,41 +249,6 @@ AC_DEFUN(AM_TYPE_PTRDIFF_T,
    if test $am_cv_type_ptrdiff_t = yes; then
      AC_DEFINE(HAVE_PTRDIFF_T,1,[Define if system has ptrdiff_t type])
    fi
-])
-
-
-# serial 1
-
-# The idea is to distribute rx.[hc] and regex.[hc] together, for a while.
-# The WITH_REGEX symbol (which should also be documented in acconfig.h)
-# is used to decide which of regex.h or rx.h should be included in the
-# application.  If `./configure --with-regex' is given (the default), the
-# package will use gawk's regex.  If `./configure --without-regex', a
-# check is made to see if rx is already installed, as with newer Linux'es.
-# If not found, the package will use the rx from the distribution.
-# If found, the package will use the system's rx which, on Linux at least,
-# will result in a smaller executable file.
-
-AC_DEFUN(AM_WITH_REGEX,
-[AC_MSG_CHECKING(which of GNU rx or gawk's regex is wanted)
-AC_ARG_WITH(regex,
-[  --without-regex         use GNU rx in lieu of gawk's regex for matching],
-[test "$withval" = yes && am_with_regex=1],
-[am_with_regex=1])
-if test -n "$am_with_regex"; then
-  AC_MSG_RESULT(regex)
-  AC_DEFINE(WITH_REGEX,1,[Define if using GNU regex])
-  AC_CACHE_CHECK([for GNU regex in libc], am_cv_gnu_regex,
-    AC_TRY_LINK([], [extern int re_max_failures; re_max_failures = 1],
-		am_cv_gnu_regex=yes, am_cv_gnu_regex=no))
-  if test $am_cv_gnu_regex = no; then
-    LIBOBJS="$LIBOBJS regex.o"
-  fi
-else
-  AC_MSG_RESULT(rx)
-  AC_CHECK_FUNC(re_rx_search, , [LIBOBJS="$LIBOBJS rx.o"])
-fi
-AC_SUBST(LIBOBJS)dnl
 ])
 
 dnl From Jim Meyering.
