@@ -1,3 +1,8 @@
+Mon Nov 25 22:57:51 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* textdomain.c: Move definition of `memcpy` macro to right
+	position.
+
 Fri Nov 22 04:01:58 1996  Ulrich Drepper  <drepper@cygnus.com>
 
 	* finddomain.c [!HAVE_STRING_H && !_LIBC]: Define memcpy using

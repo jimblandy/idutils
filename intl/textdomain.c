@@ -27,15 +27,15 @@
 # include <string.h>
 #else
 # include <strings.h>
+# ifndef memcpy
+#  define memcpy(Dst, Src, Num) bcopy (Src, Dst, Num)
+# endif
 #endif
 
 #ifdef _LIBC
 # include <libintl.h>
 #else
 # include "libgettext.h"
-# ifndef memcpy
-#  define memcpy(Dst, Src, Num) bcopy (Src, Dst, Num)
-# endif
 #endif
 
 /* @@ end of prolog @@ */
