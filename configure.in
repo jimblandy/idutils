@@ -102,6 +102,7 @@ AM_FUNC_OBSTACK
 AC_CHECK_FUNCS(getwd getcwd link strerror isascii bcopy bzero memcpy)
 AC_REPLACE_FUNCS(strdup strndup strspn strcspn strpbrk strstr strtok)
 AC_REPLACE_FUNCS(basename dirname fnmatch error memcpy memset)
+AC_CHECK_FUNC(regcomp, , [LIBOBJS="$LIBOBJS regex.o"])
 
 ##############################################################################
 ################ Internationalization ########################################
