@@ -40,6 +40,7 @@ struct obstack lang_args_obstack;
 struct lang_args *lang_args_default = 0;
 struct lang_args *lang_args_list = 0;
 struct obstack tokens_obstack;
+int log_8_member_files = 0;
 
 extern void usage __P((void));
 extern char *program_name;
@@ -491,7 +492,7 @@ get_token_c (FILE *in_FILE, void const *args, int *flags)
   unsigned char *id = id_0;
   int c;
 
-  obstack_blank (&tokens_obstack, offsetof (struct token, tok_name));
+  obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
 
 top:
   c = getc (in_FILE);
@@ -876,7 +877,7 @@ get_token_asm (FILE *in_FILE, void const *args, int *flags)
   unsigned char *id = id_0;
   int c;
 
-  obstack_blank (&tokens_obstack, offsetof (struct token, tok_name));
+  obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
 
 top:
   c = getc (in_FILE);
@@ -1161,7 +1162,7 @@ get_token_text (FILE *in_FILE, void const *args, int *flags)
   int c;
   unsigned char *id = id_0;
 
-  obstack_blank (&tokens_obstack, offsetof (struct token, tok_name));
+  obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
 
 top:
   c = getc (in_FILE);

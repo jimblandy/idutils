@@ -121,7 +121,7 @@ struct member_file
 {
   struct file_link *mf_link;
   struct lang_args const *mf_lang_args;
-  short mf_index;		/* order in ID file */
+  long mf_index;	/* order in ID file */
 };
 
 #if HAVE_LINK
@@ -199,7 +199,7 @@ extern enum separator_style parse_separator_style __P((char const *arg));
 extern void walk_flink __P((struct file_link *flink, struct dynvec *sub_dirs_vec));
 extern int chdir_to_link __P((struct file_link* dir_link));
 void prune_file_names __P((char *str, struct file_link *from_link));
-char **vectorize_string __P((char *string, char *delimiter_class));
+char **vectorize_string __P((char *string, char const *delimiter_class));
 void include_languages __P((char *lang_names));
 void exclude_languages __P((char *lang_names));
 

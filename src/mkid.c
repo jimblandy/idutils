@@ -58,6 +58,7 @@ struct summary
 void usage __P((void));
 static void help_me __P((void));
 int main __P((int argc, char **argv));
+int ceil_log_8 __P((unsigned long n));
 void assert_writeable __P((char const *file_name));
 void scan_files __P((struct idhead *idhp));
 void scan_member_file __P((struct member_file const *member));
@@ -101,7 +102,7 @@ int statistics_flag = 0;
 int file_name_count = 0;	/* # of files in database */
 int levels = 0;			/* ceil(log(8)) of file_name_count */
 
-unsigned char current_hits_signature[MAX_LEVELS];
+char *current_hits_signature;
 #define INIT_TOKENS_SIZE(level) (1 << ((level) + 13))
 struct summary *summary_root;
 struct summary *summary_leaf;
@@ -280,6 +281,8 @@ main (int argc, char **argv)
   heap_after_walk = (char const *) sbrk (0);
 
   mark_member_file_links (&idh);
+  log_8_member_files = ceil_log_8 (idh.idh_member_file_table.ht_fill);
+  current_hits_signature = MALLOC (char, log_8_member_files);
   if (idh.idh_member_file_table.ht_fill)
     {
       scan_files (&idh);
@@ -295,7 +298,24 @@ main (int argc, char **argv)
     }
   else
     error (0, 0, "nothing to do");
+
   exit (0);
+}
+
+/* Return the integer ceiling of the base-8 logarithm of N.  */
+
+int
+ceil_log_8 (unsigned long n)
+{
+  int log_8 = 0;
+
+  n--;
+  while (n)
+    {
+      log_8++;
+      n >>= 3;
+    }
+  return log_8;
 }
 
 void
@@ -374,7 +394,7 @@ scan_member_file (struct member_file const *member)
       if (verbose_flag)
 	{
 	  maybe_relative_file_name (file_name, flink, cw_dlink);
-	  printf ("%d: %s: %s", member->mf_index, lang->lg_name, file_name);
+	  printf ("%ld: %s: %s", member->mf_index, lang->lg_name, file_name);
 	  fflush (stdout);
 	}
       scan_member_file_1 (get_token, lang_args->la_args_digested, source_FILE);
@@ -397,7 +417,7 @@ scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_F
 
   while ((token = (*get_token) (source_FILE, args, &flags)) != NULL)
     {
-      if (*token->tok_name == '\0') {
+      if (*TOKEN_NAME (token) == '\0') {
 	obstack_free (&tokens_obstack, token);
 	continue;
       }
@@ -406,7 +426,7 @@ scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_F
 	{
 	  token->tok_flags = flags;
 	  token->tok_count = 1;
-	  memset (token->tok_hits, 0, sizeof (token->tok_hits));
+	  memset (TOKEN_HITS (token), 0, log_8_member_files);
 	  sign_token (token);
 	  if (verbose_flag)
 	    {
@@ -422,7 +442,7 @@ scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_F
 	  token->tok_flags |= flags;
 	  if (token->tok_count < USHRT_MAX)
 	    token->tok_count++;
-	  if (!(token->tok_hits[0] & current_hits_signature[0]))
+	  if (!(TOKEN_HITS (token)[0] & current_hits_signature[0]))
 	    {
 	      sign_token (token);
 	      if (verbose_flag)
@@ -521,7 +541,7 @@ write_id_file (struct idhead *idhp)
       if (token->tok_flags & TOK_COMMENT)
 	comment_tokens++;
 
-      fputs (token->tok_name, idhp->idh_FILE);
+      fputs (TOKEN_NAME (token), idhp->idh_FILE);
       putc ('\0', idhp->idh_FILE);
       if (token->tok_count > 0xff)
 	token->tok_flags |= TOK_SHORT_COUNT;
@@ -530,10 +550,10 @@ write_id_file (struct idhead *idhp)
       if (token->tok_flags & TOK_SHORT_COUNT)
 	putc (token->tok_count >> 8, idhp->idh_FILE);
 
-      vec_size = count_vec_size (summary_root, token->tok_hits + levels);
-      buf_size = count_buf_size (summary_root, token->tok_hits + levels);
+      vec_size = count_vec_size (summary_root, TOKEN_HITS (token) + levels);
+      buf_size = count_buf_size (summary_root, TOKEN_HITS (token) + levels);
       hits_length += buf_size;
-      tok_size = strlen (token->tok_name) + 1;
+      tok_size = strlen (TOKEN_NAME (token)) + 1;
       tokens_length += tok_size;
       buf_size += tok_size + sizeof (token->tok_flags) + sizeof (token->tok_count) + 2;
       if (buf_size > max_buf_size)
@@ -541,7 +561,7 @@ write_id_file (struct idhead *idhp)
       if (vec_size > max_vec_size)
 	max_vec_size = vec_size;
 
-      write_hits (idhp->idh_FILE, summary_root, token->tok_hits + levels);
+      write_hits (idhp->idh_FILE, summary_root, TOKEN_HITS (token) + levels);
       putc ('\0', idhp->idh_FILE);
       putc ('\0', idhp->idh_FILE);
     }
@@ -559,27 +579,27 @@ write_id_file (struct idhead *idhp)
 unsigned long
 token_hash_1 (void const *key)
 {
-  return_STRING_HASH_1 (((struct token const *) key)->tok_name);
+  return_STRING_HASH_1 (TOKEN_NAME ((struct token const *) key));
 }
 
 unsigned long
 token_hash_2 (void const *key)
 {
-  return_STRING_HASH_2 (((struct token const *) key)->tok_name);
+  return_STRING_HASH_2 (TOKEN_NAME ((struct token const *) key));
 }
 
 int
 token_hash_cmp (void const *x, void const *y)
 {
-  return_STRING_COMPARE (((struct token const *) x)->tok_name,
-			 ((struct token const *) y)->tok_name);
+  return_STRING_COMPARE (TOKEN_NAME ((struct token const *) x),
+			 TOKEN_NAME ((struct token const *) y));
 }
 
 int
 token_qsort_cmp (void const *x, void const *y)
 {
-  return_STRING_COMPARE ((*(struct token const *const *) x)->tok_name,
-			 (*(struct token const *const *) y)->tok_name);
+  return_STRING_COMPARE (TOKEN_NAME (*(struct token const *const *) x),
+			 TOKEN_NAME (*(struct token const *const *) y));
 }
 
 
@@ -598,7 +618,7 @@ void
 init_hits_signature (int i)
 {
   unsigned char *hits = current_hits_signature;
-  unsigned char const *end = &current_hits_signature[MAX_LEVELS];
+  unsigned char const *end = current_hits_signature + log_8_member_files;
   while (hits < end)
     {
       *hits = 1 << (i & 7);
@@ -641,7 +661,7 @@ summarize (void)
       summary->sum_hits = hits;
       while (count--)
 	{
-	  unsigned char *hit = &(*tokens++)->tok_hits[level];
+	  unsigned char *hit = TOKEN_HITS (*tokens++) + level;
 	  *hits++ = *hit;
 	  *hit = 0;
 	}
@@ -788,9 +808,9 @@ write_hits (FILE *fp, struct summary *summary, unsigned char const *tail_hits)
 void
 sign_token (struct token *token)
 {
-  unsigned char *tok_hits = token->tok_hits;
+  unsigned char *tok_hits = TOKEN_HITS (token);
   unsigned char *hits_sig = current_hits_signature;
-  unsigned char *end = &current_hits_signature[MAX_LEVELS];
+  unsigned char *end = current_hits_signature + log_8_member_files;
   struct summary *summary = summary_leaf;
 
   while (summary)

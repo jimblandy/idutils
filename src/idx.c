@@ -106,7 +106,7 @@ main (int argc, char **argv)
 
   if (show_help)
     help_me ();
-  
+
   argc -= optind;
   argv += optind;
 
@@ -159,7 +159,7 @@ scan_member_file (struct member_file const *member)
 
       while ((token = (*get_token) (source_FILE, args, &flags)) != NULL)
 	{
-	  puts (token->tok_name);
+	  puts (TOKEN_NAME (token));
 	  obstack_free (&tokens_obstack, token);
 	}
       close_source_FILE (source_FILE);

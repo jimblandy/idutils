@@ -46,7 +46,7 @@ struct file_link *make_link_from_dirent __P((struct dirent *dirent, struct file_
 struct file_link *get_link_from_string __P((char const *name, struct file_link *parent));
 struct file_link *make_link_from_string __P((char const *name, struct file_link *parent));
 int lang_wanted __P((char const *lang_name));
-char **append_strings_to_vector __P((char **vector_0, char *string, char *delimiter_class));
+char **append_strings_to_vector __P((char **vector_0, char *string, char const *delimiter_class));
 int vector_length __P((char **vector));
 int string_in_vector __P((char const *string, char **vector));
 static int same_as_dot __P((char const *cwd));
@@ -77,7 +77,7 @@ struct member_file *maybe_get_member_file __P((struct file_link *flink, struct s
 
 static struct file_link *current_dir_link = 0;
 
-static char white_space[] = " \t\r\n\v\f";
+static char const white_space[] = " \t\r\n\v\f";
 
 char* xgetcwd __P((void));
 
@@ -242,7 +242,7 @@ mark_member_file_links (struct idhead *idhp)
 					 0, member_file_qsort_compare);
   struct member_file **end = &members_0[idhp->idh_member_file_table.ht_fill];
   struct member_file **members;
-  int new_index = 0;
+  long new_index = 0;
 
   for (members = members_0; members < end; members++)
     {
@@ -467,7 +467,7 @@ exclude_languages (char *lang_names)
 }
 
 char **
-append_strings_to_vector (char **vector_0, char *string, char *delimiter_class)
+append_strings_to_vector (char **vector_0, char *string, char const *delimiter_class)
 {
   char **vector;
   if (vector_0)
@@ -650,7 +650,7 @@ chdir_to_link (struct file_link *dir_link)
 }
 
 char **
-vectorize_string (char *string, char *delimiter_class)
+vectorize_string (char *string, char const *delimiter_class)
 {
   char **vector_0 = MALLOC (char *, 2 + strlen (string) / 2);
   char **vector = vector_0;

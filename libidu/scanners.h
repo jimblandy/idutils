@@ -21,15 +21,19 @@
 
 #include "xobstack.h"
 
-#define MAX_LEVELS 5		/* log_8 of the max # of files: log_8 (32768) == 5 */
+extern int log_8_member_files;	/* log base 8 of the # of files.
+				   e.g., log_8 (32768) == 5 */
 
 struct token
 {
   unsigned short tok_count;
   unsigned char tok_flags;
-  unsigned char tok_hits[MAX_LEVELS];
-  char tok_name[1];
+  unsigned char tok_hits_name[1];
 };
+
+#define TOKEN_HITS(TOKEN) ((TOKEN)->tok_hits_name)
+#define TOKEN_NAME(TOKEN) ((TOKEN)->tok_hits_name + log_8_member_files)
+#define OFFSETOF_TOKEN_NAME (offsetof (struct token, tok_hits_name) + log_8_member_files)
 
 typedef struct token *(*get_token_func_t) __P((FILE *in_FILE, void const *args, int *flags));
 typedef void *(*parse_args_func_t) __P((char **argv, int argc));
