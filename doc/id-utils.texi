@@ -1217,7 +1217,7 @@ source.  Tom Horsley at Harris Computer Systems Division stepped forward
 to take over maintenance and integrated some of the fixes from divergent
 versions.  A first release of the renamed @file{mkid} @w{version 2} was
 posted to @file{alt.sources} near the end of 1990.  At that time, Tom
-wrote a Texinfo manual with the encouragement the net community.
+wrote a Texinfo manual with the encouragement of the net community.
 (Tom especially thanks Doug Scofield and Bill Leonard whom he dragooned
 into helping proofread and edit---they found several problems in the
 initial version.)  Karl Berry revamped the manual for Texinfo style,
