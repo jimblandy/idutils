@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
-"POT-Creation-Date: 1999-04-08 03:00-0700\n"
+"POT-Creation-Date: 1999-04-09 01:47-0700\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Karl Eichwalder <ke@ke.Central.DE>\n"
 "Language-Team: German <de@li.org>\n"
@@ -197,52 +197,63 @@ msgstr ""
 msgid "can't stat `%s' from `%s'"
 msgstr ""
 
-#: lib/getopt.c:527
+#: lib/getopt.c:677
 #, c-format
 msgid "%s: option `%s' is ambiguous\n"
 msgstr ""
 
-#: lib/getopt.c:550
+#: lib/getopt.c:702
 #, c-format
 msgid "%s: option `--%s' doesn't allow an argument\n"
 msgstr ""
 
-#: lib/getopt.c:555
+#: lib/getopt.c:707
 #, c-format
 msgid "%s: option `%c%s' doesn't allow an argument\n"
 msgstr ""
 
-#: lib/getopt.c:570
+#: lib/getopt.c:725 lib/getopt.c:898
 #, c-format
 msgid "%s: option `%s' requires an argument\n"
 msgstr ""
 
 #. --option
-#: lib/getopt.c:598
+#: lib/getopt.c:754
 #, c-format
 msgid "%s: unrecognized option `--%s'\n"
 msgstr ""
 
 #. +option or -option
-#: lib/getopt.c:602
+#: lib/getopt.c:758
 #, c-format
 msgid "%s: unrecognized option `%c%s'\n"
 msgstr ""
 
 #. 1003.2 specifies the format of this message.
-#: lib/getopt.c:627
+#: lib/getopt.c:784
 #, c-format
 msgid "%s: illegal option -- %c\n"
 msgstr ""
 
-#: lib/getopt.c:630
+#: lib/getopt.c:787
 #, c-format
 msgid "%s: invalid option -- %c\n"
 msgstr ""
 
-#: lib/getopt.c:666
+#. 1003.2 specifies the format of this message.
+#: lib/getopt.c:817 lib/getopt.c:947
 #, c-format
 msgid "%s: option requires an argument -- %c\n"
+msgstr ""
+
+#: lib/getopt.c:864
+#, c-format
+msgid "%s: option `-W %s' is ambiguous\n"
+msgstr ""
+
+#: lib/getopt.c:882
+#, c-format
+msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr ""
 
 #: src/fid.c:70 src/fnid.c:49 src/lid.c:233 src/mkid.c:122 src/xtokid.c:43

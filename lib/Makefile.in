@@ -76,6 +76,7 @@ INTLLIBS = @INTLLIBS@
 INTLOBJS = @INTLOBJS@
 LANGUAGE_MAP_FILE = @LANGUAGE_MAP_FILE@
 LDFLAGS = @LDFLAGS@
+LIBOBJS = @LIBOBJS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MKINSTALLDIRS = @MKINSTALLDIRS@
@@ -126,8 +127,9 @@ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 HEADERS =  $(noinst_HEADERS)
 
 DIST_COMMON =  Makefile.am Makefile.in alloca.c basename.c dirname.c \
-error.c fnmatch.c memcpy.c memset.c obstack.c obstack.h regex.c \
-strcspn.c strdup.c strndup.c strpbrk.c strspn.c strstr.c strtok.c
+error.c fnmatch.c malloc.c memcpy.c memset.c obstack.c obstack.h \
+regex.c strcspn.c strdup.c strndup.c strpbrk.c strspn.c strstr.c \
+strtok.c
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -136,10 +138,10 @@ TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/alloca.P .deps/basename.P .deps/dirname.P \
 .deps/error.P .deps/fnmatch.P .deps/getopt.P .deps/getopt1.P \
-.deps/memcpy.P .deps/memset.P .deps/obstack.P .deps/regex.P \
-.deps/strcspn.P .deps/strdup.P .deps/strndup.P .deps/strpbrk.P \
-.deps/strspn.P .deps/strstr.P .deps/strtok.P .deps/xgetcwd.P \
-.deps/xmalloc.P
+.deps/malloc.P .deps/memcpy.P .deps/memset.P .deps/obstack.P \
+.deps/realloc.P .deps/regex.P .deps/strcspn.P .deps/strdup.P \
+.deps/strndup.P .deps/strpbrk.P .deps/strspn.P .deps/strstr.P \
+.deps/strtok.P .deps/xgetcwd.P .deps/xmalloc.P
 SOURCES = $(libsys_a_SOURCES)
 OBJECTS = $(libsys_a_OBJECTS)
 
@@ -212,6 +214,8 @@ getopt_.c: getopt.c $(ANSI2KNR)
 	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/getopt.c; then echo $(srcdir)/getopt.c; else echo getopt.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > getopt_.c
 getopt1_.c: getopt1.c $(ANSI2KNR)
 	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/getopt1.c; then echo $(srcdir)/getopt1.c; else echo getopt1.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > getopt1_.c
+malloc_.c: malloc.c $(ANSI2KNR)
+	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/malloc.c; then echo $(srcdir)/malloc.c; else echo malloc.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > malloc_.c
 memcpy_.c: memcpy.c $(ANSI2KNR)
 	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/memcpy.c; then echo $(srcdir)/memcpy.c; else echo memcpy.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > memcpy_.c
 memset_.c: memset.c $(ANSI2KNR)
@@ -239,9 +243,9 @@ xgetcwd_.c: xgetcwd.c $(ANSI2KNR)
 xmalloc_.c: xmalloc.c $(ANSI2KNR)
 	$(CPP) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) `if test -f $(srcdir)/xmalloc.c; then echo $(srcdir)/xmalloc.c; else echo xmalloc.c; fi` | sed 's/^# \([0-9]\)/#line \1/' | $(ANSI2KNR) > xmalloc_.c
 alloca_.o basename_.o dirname_.o error_.o fnmatch_.o getopt_.o \
-getopt1_.o memcpy_.o memset_.o obstack_.o regex_.o strcspn_.o strdup_.o \
-strndup_.o strpbrk_.o strspn_.o strstr_.o strtok_.o xgetcwd_.o \
-xmalloc_.o : $(ANSI2KNR)
+getopt1_.o malloc_.o memcpy_.o memset_.o obstack_.o regex_.o strcspn_.o \
+strdup_.o strndup_.o strpbrk_.o strspn_.o strstr_.o strtok_.o \
+xgetcwd_.o xmalloc_.o : $(ANSI2KNR)
 
 tags: TAGS
 

@@ -1,7 +1,14 @@
+1999-04-10  Greg McGary  <gkm@gnu.org>
+
+	* walker.c (classify_link): Only return 0 for zero-length files.
+	Keep directories, no matter what their size.  DOS always
+	returns zero size for directories.
+	[From tbisp@uswest.net]
+
 1999-04-09  Greg McGary  <gkm@gnu.org>
 
 	* po/Makefile.in.in (DISTFILES): Remove ChangeLog.
-	* po/ChangeLog: Remove empty file.w
+	* po/ChangeLog: Remove empty file.
 
 1999-04-08  Greg McGary  <gkm@gnu.org>
 

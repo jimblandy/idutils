@@ -5,6 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.0.8\n"
+"POT-Creation-Date: 1999-04-09 01:47-0700\n"
 "PO-Revision-Date: 1997-03-26 23:59 +0100\n"
 "Last-Translator: Wojciech Marek Ga³±zka <wgalazka@chem.uw.edu.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -12,444 +13,830 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: fid.c:47
-msgid "Usage: %s [-f<file>] file1 file2\n"
-msgstr "U¿ycie: %s [-f<plik>] plik1 plik2\n"
-
-#: fid.c:91 fid.c:97 filenames.c:590 lid.c:223 lid.c:251 lid.c:399 mkid.c:383
-msgid "open"
-msgstr "otwarty"
-
-#: fid.c:149 lid.c:324
-msgid "%s: not found\n"
-msgstr "%s: nie odnaleziony\n"
-
-#: idfile.c:55
-msgid "%s: Not an id file: `%s'\n"
-msgstr "%s: nie jest plikiem identyfikatorów: `%s'\n"
-
-#: idfile.c:60
-msgid "%s: ID version mismatch (want: %d, got: %d)\n"
-msgstr "%s: Niezgodno¶æ identyfikatorów wersji (chcê: %d, dosta³em: %d)\n"
-
-#: idfile.c:132 idfile.c:164
-msgid "Unsupported size in io_write (): %d\n"
-msgstr "Nie obs³ugiwany rozmiar w io_write (): %d\n"
-
-#: idx.c:19
-msgid "Usage: %s [-u] [+/-a<ccc>] [-c<ccc>] files\n"
-msgstr "U¿ycie: %s [-u] [+/-a<ccc>] [-c<ccc>] pliki\n"
-
-#: iid.y:498
-msgid "Syntax error near end of command.\n"
-msgstr "B³±d sk³adni w pobli¿u koñca polecenia.\n"
-
-#: iid.y:500
-msgid "Syntax error on or before %s\n"
-msgstr "B³±d sk³adni w lub przed %s\n"
-
-#: iid.y:614
-msgid "Out of memory in yylex"
-msgstr "Za ma³o pamiêci w yylex"
-
-#: iid.y:648
-msgid ""
-"iid: interactive ID database query tool. Call with:\n"
-"   iid [-a] [-c] [-H]\n"
-"\n"
-"-a\tUse the aid as the default query command (not lid).\n"
-"-c cmd\tExecute the single query cmd and exit.\n"
-"-H\tPrint this message and exit.\n"
-"\n"
-"To get help after starting program type 'help'.\n"
+#: libidu/hash.c:51
+#, c-format
+msgid "can't allocate %ld bytes for hash table: memory exhausted"
 msgstr ""
-"iid: interaktywne narzêdzie odpytywania bazy danych identyfikatorów\n"
-"Wywo³anie: iid [-a] [-c] [-H]\n"
-"\n"
-"-a\tU¿yj aid jako domy¶lnej komendy zapytania (a nie lid).\n"
-"-c pol\tWykonaj pojedyñcze zapytanie pol i zakoñcz pracê.\n"
-"-H\tWy¶wietl ten tekst pomocy i zakoñcz pracê.\n"
-"\n"
-"Aby uzyskaæ pomoc po uruchomieniu programu napisz 'help'.\n"
 
-#: iid.y:665
-msgid "iid: Excess arguments ignored.\n"
-msgstr "iid: Pominiêto nadmiarowe argumenty.\n"
-
-#: iid.y:669
-msgid "run iid -H for help.\n"
-msgstr "napisz iid -H aby uzyskaæ tekst pomocy.\n"
-
-#: iid.y:757
-msgid "Fatal error: %s\n"
-msgstr "Powa¿ny b³±d: %s\n"
-
-#: iid.y:820
-msgid "No sets defined yet.\n"
-msgstr "Nie zdefiniowano jeszcze zbiorów\n"
-
-#: iid.y:839
-msgid "Out of memory in SetList"
-msgstr "Za ma³o pamiêci w SetList"
-
-#: iid.y:891
-msgid "Out of memory in InitList"
-msgstr "Za ma³o pamiêci w InitList"
-
-#: iid.y:940
-msgid "No memory for set in InitIid"
-msgstr "Brak pamiêci dla zbioru w InitIid"
-
-#: iid.y:986
-msgid "No memory for symbol table entry in InstallFile"
-msgstr "Brak pamiêci dla rekordu tablicy symboli w InstallFile"
-
-#: iid.y:1001
-msgid "No memory for TheFiles in InstallFile"
-msgstr "Brak pamiêci dla TheFiles w InstallFile"
-
-#: iid.y:1024
-msgid "No memory for FileList in InstallFile"
-msgstr "Brak pamiêci dla FileList w InstallFile"
-
-#: iid.y:1076
-msgid "No memory for TheSets in AddSet"
-msgstr "Brak pamiêci dla TheSets w AddSet"
-
-#: iid.y:1144
-msgid "No memory for set in RunProg"
-msgstr "Brak pamiêci dla zbioru w RunProg"
-
-#: iid.y:1149
-msgid "No memory for set description in RunProg"
-msgstr "Brak pamiêci dla opisu zbioru w RunProg"
-
-#: iid.y:1168
-msgid "Directory %s not accessible.\n"
-msgstr "Katalog %s jest niedostêpny.\n"
-
-#: iid.y:1194
-msgid "No memory for set in SetIntersect"
-msgstr "Brak pamiêci dla zbioru w SetIntersect"
-
-#: iid.y:1200
-msgid "No memory for set description in SetIntersect"
-msgstr "Brak pamiêci dla opisu zbioru w SetIntersect"
-
-#: iid.y:1240
-msgid "No memory for set in SetUnion"
-msgstr "Brak pamiêci dla zbioru w SetUnion"
-
-#: iid.y:1246
-msgid "No memory for set description in SetUnion"
-msgstr "Brak pamiêci dla opisu zbioru w SetUnion"
-
-#: iid.y:1293
-msgid "No memory for set in SetInverse"
-msgstr "Brak pamiêci dla zbioru w SetInverse"
-
-#: iid.y:1297
-msgid "No memory for set description in SetInverse"
-msgstr "Brak pamiêci dla opisu zbioru w SetInverse"
-
-#: lid.c:120
-msgid "Usage: %s [-f<file>] [-u<n>] [-r<dir>] [-mewdoxasknc] pattern...\n"
-msgstr "U¿ycie: %s [-f<plik>] [-u<n>] [-r<katalog>] [-mewdoxasknc] wzór...\n"
-
-#: lid.c:216
-msgid "%s: please use only one of -c or -r\n"
-msgstr "%s: proszê u¿yj albo opcji -c albo -r\n"
-
-#: lid.c:229
-msgid "%s: cannot determine current directory\n"
-msgstr "%s: nie mogê okre¶liæ bie¿±cego katalogu\n"
-
-#: lid.c:319
-msgid "All identifiers are unique within the first %d characters\n"
-msgstr "Identyfikatory s± jednoznaczne w zakresie pierwszych %d znaków\n"
-
-#: lid.c:385 lid.c:624 lid.c:1037
-msgid "%s: Syntax Error: %s (%s)\n"
-msgstr "%s: B³±d sk³adni: %s (%s)\n"
-
-#: lid.c:458
-msgid "Edit? [y1-9^S/nq] "
-msgstr "Edytowaæ? [y1-9^S/nq] "
-
-#: lid.c:527
-msgid "%s: Cannot fork (%s)\n"
-msgstr "%s: Nie mogê wywo³aæ (%s)\n"
-
-#: lid.c:539
-msgid "exec"
-msgstr "uruchomienie"
-
-#: lid.c:800
-msgid "Bogus frequencies: %u > %u\n"
-msgstr "Bezsensowne czêsto¶ci: %u > %u\n"
-
-#: misc.c:78
-msgid "%s: Cannot %s `%s' (%s)\n"
-msgstr "%s: Nie mogê %s `%s' (%s)\n"
-
-#: mkid.c:151
-msgid ""
-"Usage: %s [-v] [-f<idfile>] [(+|-)l[<lang>]] [(+|-)S<scanarg>] [-a<argfile>] [-] [-u] [files...]\n"
-"\t-v\t Verbose: print reports of progress\n"
-"\t-a<file> Open file for arguments\n"
-"\t-\t Read newline-separated args from stdin\n"
-"\t-l<lang> Force files to be scanned as <lang> until +l<lang>\n"
-"\t-S<lang>-<arg> Pass arg to <lang> scanner\n"
-"\t-S.<suffix>=<lang> Scan files with .<suffix> as <lang>\n"
-"\t-S<lang>? Print usage documentation for <lang>\n"
-"\t-u\t Update an existing database (unimplemented)\n"
-"\n"
-"Version %s; Made %s %s\n"
-msgstr ""
-"U¿ycie: %s [-v] [-f<plikID>] [(+|-)l[<jêzyk>]] [(+|-)S<arg>] [-a<plik arg>] [-] [-u] [pliki...]\n"
-"\t-v\t Wszystko: wy¶wietlaj raporty postepu\n"
-"\t-a<plik> Pobierz argumenty z pliku \n"
-"\t-\t Czytaj ze std. wej¶cia argumenty oddzielone znakiem nowej linii\n"
-"\t-l<jêzyk> Wymu¶ odczytywanie linii w <jêzyku> dopóki nie napotka +l<jêzyk>\n"
-"\t-S<jêzyk>-<arg> Prze¶lij argument do skanera <jêzyka>\n"
-"\t-S.<rozsz>=<jêzyk> Przegl±daj pliki z .<rozsz> jako <jêzyk>\n"
-"\t-S<jêzyk>? Wy¶wietl dokumentacje u¿ycia <jêzyka>\n"
-"\t-u\t Uaktualnij istniej±c± bazê danych (nie zaimplementowane)\n"
-"\n"
-"Wersja %s; Wykonano %s %s\n"
-
-#: mkid.c:177
-msgid "%s: cannot get current working directory name.\n"
-msgstr "%s: nie mogê pobraæ nazwy bie¿±cego katalogu.\n"
-
-#: mkid.c:187
-msgid "Nothing to do...\n"
-msgstr "Nic do zrobienia...\n"
-
-#: mkid.c:198
-msgid "modify"
-msgstr "zmodyfikuj"
-
-#: mkid.c:272
-msgid "%s: No language assigned to suffix: `%s'\n"
-msgstr "%s: Nie przypisano ¿adnego jêzyka do rozszerzenia: `%s'\n"
-
-#: mkid.c:279
-msgid "%s: No scanner for language: `%s'\n"
-msgstr "%s: Brak skanera dla jêzyka: `%s'\n"
-
-#: mkid.c:311
-msgid "Name=%ld, "
-msgstr "Nazwa=%ld, "
-
-#: mkid.c:312
-msgid "Number=%ld, "
-msgstr "Numer=%ld, "
-
-#: mkid.c:313
-msgid "String=%ld, "
-msgstr "£añcuch=%ld, "
-
-#: mkid.c:314
-msgid "Literal=%ld, "
-msgstr "Litera³=%ld, "
-
-#: mkid.c:315
-msgid "Comment=%ld\n"
-msgstr "Komentarz=%ld\n"
-
-#: mkid.c:317
-msgid "Files=%d, "
-msgstr "Pliki=%d, "
-
-#: mkid.c:318
-msgid "Tokens=%ld, "
-msgstr "Znaczniki=%ld, "
-
-#: mkid.c:319
-msgid "Bytes=%ld Kb, "
-msgstr "Bajty=%ld Kb, "
-
-#: mkid.c:320
-msgid "Heap=%ld Kb, "
-msgstr "Sterta=%ld Kb, "
-
-#: mkid.c:321
-msgid "Output=%ld (%ld tok, %ld hit)\n"
-msgstr "Wynik=%ld (%ld tok, %ld hit)\n"
-
-#: mkid.c:323
-msgid "Load=%ld/%ld=%.2f, "
+#: libidu/hash.c:264
+#, fuzzy
+msgid "Load=%ld/%ld=%.0f%%, "
 msgstr "Obci±¿enie=%ld/%ld=%.2f, "
 
-#: mkid.c:325
+#: libidu/hash.c:266
+#, c-format
 msgid "Rehash=%d, "
 msgstr "Ponownie mieszanie=%d, "
 
-#: mkid.c:326
-msgid "Probes=%ld/%ld=%.2f, "
+#: libidu/hash.c:267
+#, fuzzy
+msgid "Collisions=%ld/%ld=%.0f%%"
 msgstr "Próby=%ld/%ld=%.2f, "
 
-#: mkid.c:328
-msgid "Freq=%ld/%ld=%.2f\n"
-msgstr "Czêsto¶æ=%ld/%ld=%.2f\n"
-
-#: mkid.c:431
-msgid "%s: Use -u, -f<file>, or cmd-line for file args!\n"
-msgstr "%s: U¿yj -u, -f<plik>, lub linii poleceñ dla argumentów pliku!\n"
-
-#: mkid.c:434
-msgid "%s: Use only one of: -u, -f<file>, or cmd-line for file args!\n"
-msgstr "%s: U¿yj albo -u, -f<plik>, lub linii poleceñ dla argumentów pliku!\n"
-
-#: mkid.c:516
-msgid "  uniq=%d/%d"
-msgstr "  jednozn=%d/%d"
-
-#: mkid.c:519
-msgid ", new=%d/%d"
-msgstr ", nowy=%d/%d"
-
-#: mkid.c:548
-msgid "Sorting tokens...\n"
-msgstr "Sortowanie znaczników...\n"
-
-#: mkid.c:554
-msgid "Writing `%s'...\n"
-msgstr "Zapisujê `%s'...\n"
-
-#: mkid.c:572
-msgid "create"
-msgstr "utwórz"
-
-#: mkid.c:731
-msgid ""
-"\n"
-"\tRehashing... (doubling size to %ld)\n"
+#: libidu/idfile.c:105
+msgid "can't determine the io_size of a string!"
 msgstr ""
-"\n"
-"\tPonowne mieszanie... (podwojenie rozmiaru do %ld)\n"
 
-#: mkid.c:744
-msgid "%s: Duplicate hash entry! \n"
-msgstr "%s Dwukrotne wystapienie hash rekordu \n"
+#: libidu/idread.c:45 src/mkid.c:451 src/xtokid.c:221
+#, c-format
+msgid "can't open `%s'"
+msgstr ""
 
-#: mkid.c:774
-msgid "malloc failure! \n"
-msgstr "b³±d przydzia³u pamiêci! \n"
+#: libidu/idread.c:64
+#, c-format
+msgid "`%s' is not an ID file! (bad magic #)"
+msgstr ""
 
-#: mkid.c:854
-msgid "level %d: %ld < %ld/2\n"
-msgstr "poziom %d: %ld < %ld/2\n"
+#: libidu/idread.c:66
+#, c-format
+msgid "`%s' is version %d, but I only grok version %d"
+msgstr ""
 
-#: mkid.c:856
-msgid "level %d: %ld > %ld*2\n"
-msgstr "poziom %d: %ld > %ld*2\n"
+#: libidu/idread.c:186
+#, fuzzy, c-format
+msgid "unsupported size in io_read (): %d"
+msgstr "Nie obs³ugiwany rozmiar w io_write (): %d\n"
 
-#: mkid.c:858
-msgid "level %d: %ld < %ld\n"
-msgstr "poziom %d: %ld < %ld\n"
+#: libidu/idread.c:194 libidu/idwrite.c:167
+#, c-format
+msgid "unknown I/O type: %d"
+msgstr ""
 
-#: mkid.c:860
-msgid "level %d: %ld > %ld\n"
-msgstr "poziom %d: %ld > %ld\n"
+#: libidu/idwrite.c:156
+#, fuzzy, c-format
+msgid "unsupported size in io_write (): %d"
+msgstr "Nie obs³ugiwany rozmiar w io_write (): %d\n"
 
-#: mkid.c:862
-msgid "level %d: %ld == %ld\n"
-msgstr "poziom %d: %ld == %ld\n"
-
-#: scanners.c:250
-msgid "No scanner for language `%s'\n"
+#: libidu/scanners.c:95
+#, fuzzy, c-format
+msgid "unrecognized language: `%s'"
 msgstr "Brak skanera dla jêzyka `%s'\n"
 
-#: scanners.c:271
-msgid "No scanner assigned to suffix `%s'\n"
-msgstr "Nie przypisano ¿adnego skanera do rozszerzenia: `%s'\n"
-
-#: scanners.c:288 scanners.c:367
-msgid "%s: Language undefined: %s\n"
-msgstr "%s: Niezdefiniowany jêzyk: %s\n"
-
-#: scanners.c:302
-msgid "%s: Note: `%s=%s' overrides `%s=%s'\n"
-msgstr "%s: Uwaga: `%s=%s' zastêpuje `%s=%s'\n"
-
-#: scanners.c:331
-msgid "%s: language %s not defined.\n"
-msgstr "%s: jêzyk %s nie zosta³ zdefiniowany.\n"
-
-#: scanners.c:338
-msgid "%s: Note: `%s/%s' overrides `%s/%s'\n"
-msgstr "%s: Note: `%s/%s' zastêpuje `%s/%s'\n"
-
-#: scanners.c:380
-msgid "Usage: %s [-S<suffix>=<lang>] [+S(+|-)<arg>] [-S<lang>(+|-)<arg>] [-S<lang>/<lang>/<filter>]\n"
-msgstr "U¿ycie: %s [-S<rozsz>=<jêzyk>] [+S(+|-)<arg>] [-S<jêzyk>(+|-)<arg>] [-S<jêzyk>/<jêzyk>/<filtr>]\n"
-
-#: scanners.c:683
-msgid "junk: `\\%3o'"
-msgstr "¶mieæ: `\\%3o'"
-
-#: scanners.c:712
-msgid "Usage: %s does not accept %s scanner arguments\n"
-msgstr "U¿ycie: %s nie przyjmuje argumentów %s skanera\n"
-
-#: scanners.c:716
-msgid ""
-"The C scanner arguments take the form -Sc<arg>, where <arg>\n"
-"is one of the following: (<cc> denotes one or more characters)\n"
-"  (+|-)u . . . . (Do|Don't) strip a leading `_' from ids in strings.\n"
-"  (+|-)s<cc> . . Allow <cc> in string ids, and (keep|ignore) those ids.\n"
-"  -v . . . . . . Skip vhil comments."
+#: libidu/scanners.c:141
+msgid "can't allocate language args obstack: memory exhausted"
 msgstr ""
-"Argumenty skanera jêzyka C przyjmuj± postaæ -Sc<arg>, gdzie <arg>\n"
-"jest jednym z nastêpuj±cych: (<zn> oznacza jeden lub wiêcej znaków)\n"
-"  (+|-)u . . . . (Tak|Nie) usuñ poprzedzaj±cy '_' z identyfikatorów w ³añcuchach.\n"
-"  (+|-)s<zn> . . Pozwól na obecno¶æ <zn> in identyfikatorach ³añcuchowych, i (zatrzymaj|pomiñ) te identyfikatory.\n"
-"  -v . . . . . . Pomiñ komentarze."
 
-#: scanners.c:952 scanners.c:1135
-msgid "junk: `\\%03o'"
-msgstr "¶mieæ: `\\%03o'"
-
-#: scanners.c:986
-msgid "Usage: %s -S%s([-c<cc>] [-u] [(+|-)a<cc>] [(+|-)p] [(+|-)C])\n"
-msgstr "U¿ycie: %s -S%s([-c<zn>] [-u] [(+|-)a<zn>] [(+|-)p] [(+|-)C])\n"
-
-#: scanners.c:990
-msgid ""
-"The Assembler scanner arguments take the form -Sasm<arg>, where\n"
-"<arg> is one of the following: (<cc> denotes one or more characters)\n"
-"  -c<cc> . . . . <cc> introduce(s) a comment until end-of-line.\n"
-"  (+|-)u . . . . (Do|Don't) strip a leading `_' from ids.\n"
-"  (+|-)a<cc> . . Allow <cc> in ids, and (keep|ignore) those ids.\n"
-"  (+|-)p . . . . (Do|Don't) handle C-preprocessor directives.\n"
-"  (+|-)C . . . . (Do|Don't) handle C-style comments. (/* */)"
+#: libidu/scanners.c:195 libidu/scanners.c:264
+msgid "can't allocate language args: memory exhausted"
 msgstr ""
-"Argumenty skanera asemblera przyjmuj± postaæ -Sasm<arg>, gdzie <arg>\n"
-"jest jednym z nastêpuj±cych: (<zn> oznacza jeden lub wiêcej znaków)\n"
-"  -c<zn> . . . . <zn> wprowadzaja komentarz do koñca linii.\n"
-"  (+|-)u . . . . (Tak|Nie) usuñ poprzedzaj±cy '_' z identyfikatorów. \n"
-"  (+|-)a<zn> . . Pozwól na obecno¶æ <zn> in identyfikatorach i (pozostaw|pomiñ) te identyfikatory.\n"
-"  (+|-)p . . . . (Tak|Nie) rozpoznawaj dyrektywy preprocesora C.\n"
-"  (+|-)C . . . . (Tak|Nie) rozpoznawaj kometarze w stylu C (/* */)"
 
-#: scanners.c:1133
+#: libidu/scanners.c:203
+#, c-format
+msgid "language name expected following `%s' in file `%s'"
+msgstr ""
+
+#: libidu/scanners.c:258
+#, fuzzy, c-format
+msgid "can't open language map file `%s'"
+msgstr "Brak skanera dla jêzyka `%s'\n"
+
+#: libidu/scanners.c:260
+#, c-format
+msgid "can't get size of map file `%s'"
+msgstr ""
+
+#: libidu/scanners.c:270
+#, fuzzy, c-format
+msgid "can't read language map file `%s'"
+msgstr "Brak skanera dla jêzyka `%s'\n"
+
+#: libidu/scanners.c:273
+#, c-format
+msgid "can't read entire language map file `%s'"
+msgstr ""
+
+#: libidu/scanners.c:418
+msgid ""
+"C language:\n"
+"  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the "
+"result\n"
+"  -i,--ignore=CHARS      Allow CHARS in single-token strings, toss the "
+"result\n"
+"  -u,--strip-underscore  Strip a leading underscore from single-token "
+"strings\n"
+msgstr ""
+
+#: libidu/scanners.c:701 libidu/scanners.c:972 libidu/scanners.c:1175
+#, c-format
 msgid "junk: `%c'"
 msgstr "¶mieæ: `%c'"
 
-#: scanners.c:1166
-msgid "Usage: %s -S%s([(+|-)a<cc>] [(+|-)s<cc>]\n"
-msgstr "U¿ycie: %s -S%s([(+|-)a<zn>] [(+|-)s<zn>]\n"
+#: libidu/scanners.c:703 libidu/scanners.c:974 libidu/scanners.c:1177
+#, c-format
+msgid "junk: `\\%03o'"
+msgstr "¶mieæ: `\\%03o'"
 
-#: scanners.c:1170
+#: libidu/scanners.c:807
 msgid ""
-"The Text scanner arguments take the form -Stext<arg>, where\n"
-"<arg> is one of the following: (<cc> denotes one or more characters)\n"
-"  (+|-)a<cc> . . Include (or exculde) <cc> in ids.\n"
-"  (+|-)s<cc> . . Squeeze (or don't squeeze) <cc> out of ids."
+"Assembly language:\n"
+"  -c,--comment=CHARS     Any of CHARS starts a comment until end-of-line\n"
+"  -k,--keep=CHARS        Allow CHARS in tokens, and keep the result\n"
+"  -i,--ignore=CHARS      Allow CHARS in tokens, and toss the result\n"
+"  -u,--strip-underscore  Strip a leading underscore from tokens\n"
+"  -n,--no-cpp            Don't handle C pre-processor directives\n"
 msgstr ""
-"Argumenty skanera tekstowego przyjmuj± postaæ -Stext<arg>, gdzie <arg>\n"
-"jest jednym z nastêpuj±cych: (<zn> oznacza jeden lub wiêcej znaków)\n"
-"  (+|-)a<zn> . . Do³±cz (lub pomiñ) <zn> w identyfikatorach .\n"
-"  (+|-)s<zn> . . Usuñ (lub nie) <zn> z identyfikatorów."
+
+#: libidu/scanners.c:1078
+msgid ""
+"Text language:\n"
+"  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
+"constituents\n"
+"  -x,--exclude=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
+"delimiters\n"
+msgstr ""
+
+#: libidu/walker.c:107
+#, c-format
+msgid "can't read directory `%s' (`.' from `%s')"
+msgstr ""
+
+#: libidu/walker.c:174
+#, c-format
+msgid "notice: `%s' was a %s, but is now a %s!"
+msgstr ""
+
+#: libidu/walker.c:175 libidu/walker.c:176
+msgid "file"
+msgstr ""
+
+#: libidu/walker.c:175 libidu/walker.c:176
+msgid "directory"
+msgstr ""
+
+#: libidu/walker.c:299
+#, c-format
+msgid "warning: `%s' and `%s' are the same file, but yield different scans!"
+msgstr ""
+
+#: libidu/walker.c:393
+#, c-format
+msgid "notice: scan parameters changed for `%s'"
+msgstr ""
+
+#: libidu/walker.c:597
+#, fuzzy
+msgid "can't get working directory"
+msgstr "%s: nie mogê pobraæ nazwy bie¿±cego katalogu.\n"
+
+#: libidu/walker.c:654
+#, c-format
+msgid "can't chdir to `%s'"
+msgstr ""
+
+#: libidu/walker.c:659
+#, c-format
+msgid "can't chdir to `%s' from `%s'"
+msgstr ""
+
+#: libidu/walker.c:713
+#, c-format
+msgid "can't lstat `%s' from `%s'"
+msgstr ""
+
+#: libidu/walker.c:721
+#, c-format
+msgid "can't stat `%s' from `%s'"
+msgstr ""
+
+#: lib/getopt.c:677
+#, c-format
+msgid "%s: option `%s' is ambiguous\n"
+msgstr ""
+
+#: lib/getopt.c:702
+#, c-format
+msgid "%s: option `--%s' doesn't allow an argument\n"
+msgstr ""
+
+#: lib/getopt.c:707
+#, c-format
+msgid "%s: option `%c%s' doesn't allow an argument\n"
+msgstr ""
+
+#: lib/getopt.c:725 lib/getopt.c:898
+#, c-format
+msgid "%s: option `%s' requires an argument\n"
+msgstr ""
+
+#. --option
+#: lib/getopt.c:754
+#, c-format
+msgid "%s: unrecognized option `--%s'\n"
+msgstr ""
+
+#. +option or -option
+#: lib/getopt.c:758
+#, c-format
+msgid "%s: unrecognized option `%c%s'\n"
+msgstr ""
+
+#. 1003.2 specifies the format of this message.
+#: lib/getopt.c:784
+#, c-format
+msgid "%s: illegal option -- %c\n"
+msgstr ""
+
+#: lib/getopt.c:787
+#, c-format
+msgid "%s: invalid option -- %c\n"
+msgstr ""
+
+#. 1003.2 specifies the format of this message.
+#: lib/getopt.c:817 lib/getopt.c:947
+#, c-format
+msgid "%s: option requires an argument -- %c\n"
+msgstr ""
+
+#: lib/getopt.c:864
+#, c-format
+msgid "%s: option `-W %s' is ambiguous\n"
+msgstr ""
+
+#: lib/getopt.c:882
+#, c-format
+msgid "%s: option `-W %s' doesn't allow an argument\n"
+msgstr ""
+
+#: src/fid.c:70 src/fnid.c:49 src/lid.c:233 src/mkid.c:122 src/xtokid.c:43
+#, c-format
+msgid "Try `%s --help' for more information.\n"
+msgstr ""
+
+#: src/fid.c:78
+#, c-format
+msgid "Usage: %s [OPTION] FILENAME [FILENAME2]\n"
+msgstr ""
+
+#: src/fid.c:81
+msgid ""
+"List identifiers that occur in FILENAME, or if FILENAME2 is\n"
+"also given list the identifiers that occur in both files.\n"
+"\n"
+"  -f, --file=FILE  file name of ID database\n"
+"      --help       display this help and exit\n"
+"      --version    output version information and exit\n"
+msgstr ""
+
+#: src/fid.c:141
+msgid "no file name arguments"
+msgstr ""
+
+#: src/fid.c:146
+msgid "too many file name arguments"
+msgstr ""
+
+#: src/fid.c:153 src/fnid.c:148 src/lid.c:407
+msgid "can't locate `ID'"
+msgstr ""
+
+#: src/fid.c:235
+#, c-format
+msgid "`%s' is ambiguous"
+msgstr ""
+
+#: src/fid.c:241
+#, fuzzy, c-format
+msgid "`%s' not found"
+msgstr "%s: nie odnaleziony\n"
+
+#: src/fnid.c:66
+#, c-format
+msgid "Usage: %s [OPTION]... [PATTERN]...\n"
+msgstr ""
+
+#: src/fnid.c:70
+msgid ""
+"Print constituent file names that match PATTERN,\n"
+"using shell-style wildcards.\n"
+"  -f, --file=FILE        file name of ID database\n"
+"  -S, --separator=STYLE  STYLE is one of `braces', `space' or `newline'\n"
+"      --help             display this help and exit\n"
+"      --version          output version information and exit\n"
+msgstr ""
+
+#: src/lid.c:241
+#, c-format
+msgid "Usage: %s [OPTION]... PATTERN...\n"
+msgstr ""
+
+#: src/lid.c:245
+#, c-format
+msgid ""
+"Query ID database and report results.\n"
+"By default, output consists of multiple lines, each line containing the\n"
+"matched identifier followed by the list of file names in which it occurs.\n"
+"\n"
+"  -f, --file=FILE       file name of ID database\n"
+"\n"
+"  -i, --ignore-case     match PATTERN case insensitively\n"
+"  -l, --literal         match PATTERN as a literal string\n"
+"  -r, --regexp          match PATTERN as a regular expression\n"
+"  -w, --word            match PATTERN as a delimited word\n"
+"  -s, --substring       match PATTERN as a substring\n"
+"            Note: If PATTERN contains extended regular expression meta-\n"
+"            characters, it is interpreted as a regular expression "
+"substring.\n"
+"            Otherwise, PATTERN is interpreted as a literal word.\n"
+"\n"
+"  -k, --key=STYLE       STYLE is one of `token', `pattern' or `none'\n"
+"  -R, --result=STYLE    STYLE is one of `filenames', `grep', `edit' or "
+"`none'\n"
+"  -S, --separator=STYLE STYLE is one of `braces', `space' or `newline' and\n"
+"                        only applies to file names when "
+"`--result=filenames'\n"
+"            The above STYLE options control how query results are "
+"presented.\n"
+"            Defaults are --key=token --result=filenames --separator=%s\n"
+"\n"
+"  -F, --frequency=FREQ  find tokens that occur FREQ times, where FREQ\n"
+"                        is a range expressed as `N..M'.  If N is omitted, "
+"it\n"
+"                        defaults to 1, if M is omitted it defaults to "
+"MAX_USHRT\n"
+"  -a, --ambiguous=LEN   find tokens whose names are ambiguous for LEN chars\n"
+"\n"
+"  -x, --hex             only find numbers expressed as hexadecimal\n"
+"  -d, --decimal         only find numbers expressed as decimal\n"
+"  -o, --octal           only find numbers expressed as octal\n"
+"            By default, searches match numbers of any radix.\n"
+"\n"
+"      --help            display this help and exit\n"
+"      --version         output version information and exit\n"
+msgstr ""
+
+#: src/lid.c:281
+msgid "braces"
+msgstr ""
+
+#: src/lid.c:281
+msgid "space"
+msgstr ""
+
+#: src/lid.c:347
+msgid "notice: use of `-e' is deprecated, use `-r' instead"
+msgstr ""
+
+#: src/lid.c:428
+#, fuzzy, c-format
+msgid "All identifiers are non-ambiguous within the first %d characters\n"
+msgstr "Identyfikatory s± jednoznaczne w zakresie pierwszych %d znaków\n"
+
+#: src/lid.c:463
+#, c-format
+msgid "invalid `--key' style: `%s'"
+msgstr ""
+
+#: src/lid.c:475
+#, c-format
+msgid "invalid `--result' style: `%s'"
+msgstr ""
+
+#. FIXME: i18n of responses
+#: src/lid.c:632
+#, fuzzy
+msgid "edit? [y1-9^S/nq] "
+msgstr "Edytowaæ? [y1-9^S/nq] "
+
+#: src/lid.c:701
+msgid "can't fork"
+msgstr ""
+
+#: src/lid.c:719
+#, c-format
+msgid "can't exec `%s'"
+msgstr ""
+
+#: src/lid.c:853
+msgid "can't match regular-expression: memory exhausted"
+msgstr ""
+
+#: src/mkid.c:147 src/xtokid.c:64
+#, c-format
+msgid "Usage: %s [OPTION]... [FILE]...\n"
+msgstr ""
+
+#: src/mkid.c:151
+msgid ""
+"Build an identifier database.\n"
+"  -o, --output=OUTFILE    file name of ID database output\n"
+"  -f, --file=OUTFILE      synonym for --output\n"
+"  -i, --include=LANGS     include languages in LANGS (default: \"C C++ "
+"asm\")\n"
+"  -x, --exclude=LANGS     exclude languages in LANGS\n"
+"  -l, --lang-option=L:OPT pass OPT as a default for language L (see below)\n"
+"  -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source "
+"language\n"
+"  -d, --default-lang=LANG make LANG the default source language\n"
+"  -p, --prune=NAMES       exclude the named files and/or directories\n"
+"  -v, --verbose           report per file statistics\n"
+"  -s, --statistics        report statistics at end of run\n"
+"\n"
+"      --help              display this help and exit\n"
+"      --version           output version information and exit\n"
+"\n"
+"FILE may be a file name, or a directory name to recursively search.\n"
+"If no FILE is given, the current directory is searched by default.\n"
+"Note that the `--include' and `--exclude' options are mutually-exclusive.\n"
+"\n"
+"The following arguments apply to the language-specific scanners:\n"
+msgstr ""
+
+#: src/mkid.c:357
+#, c-format
+msgid "can't create `%s' in `%s'"
+msgstr ""
+
+#: src/mkid.c:361
+#, c-format
+msgid "can't modify `%s'"
+msgstr ""
+
+#: src/mkid.c:434
+#, c-format
+msgid "can't stat `%s'"
+msgstr ""
+
+#: src/mkid.c:503
+#, fuzzy, c-format
+msgid "  new = %d/%d"
+msgstr ", nowy=%d/%d"
+
+#: src/mkid.c:512
+#, c-format
+msgid "Name=%ld, "
+msgstr "Nazwa=%ld, "
+
+#: src/mkid.c:513
+#, c-format
+msgid "Number=%ld, "
+msgstr "Numer=%ld, "
+
+#: src/mkid.c:514
+#, c-format
+msgid "String=%ld, "
+msgstr "£añcuch=%ld, "
+
+#: src/mkid.c:515
+#, c-format
+msgid "Literal=%ld, "
+msgstr "Litera³=%ld, "
+
+#: src/mkid.c:516
+#, c-format
+msgid "Comment=%ld\n"
+msgstr "Komentarz=%ld\n"
+
+#: src/mkid.c:518
+#, fuzzy, c-format
+msgid "Files=%ld, "
+msgstr "Pliki=%d, "
+
+#: src/mkid.c:519
+#, c-format
+msgid "Tokens=%ld, "
+msgstr "Znaczniki=%ld, "
+
+#: src/mkid.c:520
+#, c-format
+msgid "Bytes=%ld Kb, "
+msgstr "Bajty=%ld Kb, "
+
+#: src/mkid.c:521
+#, fuzzy, c-format
+msgid "Heap=%d+%d Kb, "
+msgstr "Sterta=%ld Kb, "
+
+#: src/mkid.c:523
+#, c-format
+msgid "Output=%ld (%ld tok, %ld hit)\n"
+msgstr "Wynik=%ld (%ld tok, %ld hit)\n"
+
+#: src/mkid.c:526
+#, fuzzy, c-format
+msgid ", Freq=%ld/%ld=%.2f\n"
+msgstr "Czêsto¶æ=%ld/%ld=%.2f\n"
+
+#: src/mkid.c:550
+msgid "Sorting tokens...\n"
+msgstr "Sortowanie znaczników...\n"
+
+#: src/mkid.c:556
+#, c-format
+msgid "Writing `%s'...\n"
+msgstr "Zapisujê `%s'...\n"
+
+#: src/mkid.c:559
+#, c-format
+msgid "can't create `%s'"
+msgstr ""
+
+#: src/mkid.c:626
+#, c-format
+msgid "error closing `%s'"
+msgstr ""
+
+#: src/mkid.c:714
+#, fuzzy
+msgid "level %d: %ld/%ld = %.0f%%\n"
+msgstr "poziom %d: %ld == %ld\n"
+
+#: src/xtokid.c:68
+msgid ""
+"Print all tokens found in a source file.\n"
+"  -i, --include=LANGS     include languages in LANGS (default: \"C C++ "
+"asm\")\n"
+"  -x, --exclude=LANGS     exclude languages in LANGS\n"
+"  -l, --lang-option=L:OPT pass OPT as a default for language L (see below)\n"
+"  -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source "
+"language\n"
+"  -d, --default-lang=LANG make LANG the default source language\n"
+"  -p, --prune=NAMES       exclude the named files and/or directories\n"
+"      --help              display this help and exit\n"
+"      --version           output version information and exit\n"
+"\n"
+"The following arguments apply to the language-specific scanners:\n"
+msgstr ""
+
+#~ msgid "Usage: %s [-f<file>] file1 file2\n"
+#~ msgstr "U¿ycie: %s [-f<plik>] plik1 plik2\n"
+
+#~ msgid "open"
+#~ msgstr "otwarty"
+
+#~ msgid "%s: Not an id file: `%s'\n"
+#~ msgstr "%s: nie jest plikiem identyfikatorów: `%s'\n"
+
+#~ msgid "%s: ID version mismatch (want: %d, got: %d)\n"
+#~ msgstr "%s: Niezgodno¶æ identyfikatorów wersji (chcê: %d, dosta³em: %d)\n"
+
+#~ msgid "Usage: %s [-u] [+/-a<ccc>] [-c<ccc>] files\n"
+#~ msgstr "U¿ycie: %s [-u] [+/-a<ccc>] [-c<ccc>] pliki\n"
+
+#~ msgid "Syntax error near end of command.\n"
+#~ msgstr "B³±d sk³adni w pobli¿u koñca polecenia.\n"
+
+#~ msgid "Syntax error on or before %s\n"
+#~ msgstr "B³±d sk³adni w lub przed %s\n"
+
+#~ msgid "Out of memory in yylex"
+#~ msgstr "Za ma³o pamiêci w yylex"
+
+#~ msgid ""
+#~ "iid: interactive ID database query tool. Call with:\n"
+#~ "   iid [-a] [-c] [-H]\n"
+#~ "\n"
+#~ "-a\tUse the aid as the default query command (not lid).\n"
+#~ "-c cmd\tExecute the single query cmd and exit.\n"
+#~ "-H\tPrint this message and exit.\n"
+#~ "\n"
+#~ "To get help after starting program type 'help'.\n"
+#~ msgstr ""
+#~ "iid: interaktywne narzêdzie odpytywania bazy danych identyfikatorów\n"
+#~ "Wywo³anie: iid [-a] [-c] [-H]\n"
+#~ "\n"
+#~ "-a\tU¿yj aid jako domy¶lnej komendy zapytania (a nie lid).\n"
+#~ "-c pol\tWykonaj pojedyñcze zapytanie pol i zakoñcz pracê.\n"
+#~ "-H\tWy¶wietl ten tekst pomocy i zakoñcz pracê.\n"
+#~ "\n"
+#~ "Aby uzyskaæ pomoc po uruchomieniu programu napisz 'help'.\n"
+
+#~ msgid "iid: Excess arguments ignored.\n"
+#~ msgstr "iid: Pominiêto nadmiarowe argumenty.\n"
+
+#~ msgid "run iid -H for help.\n"
+#~ msgstr "napisz iid -H aby uzyskaæ tekst pomocy.\n"
+
+#~ msgid "Fatal error: %s\n"
+#~ msgstr "Powa¿ny b³±d: %s\n"
+
+#~ msgid "No sets defined yet.\n"
+#~ msgstr "Nie zdefiniowano jeszcze zbiorów\n"
+
+#~ msgid "Out of memory in SetList"
+#~ msgstr "Za ma³o pamiêci w SetList"
+
+#~ msgid "Out of memory in InitList"
+#~ msgstr "Za ma³o pamiêci w InitList"
+
+#~ msgid "No memory for set in InitIid"
+#~ msgstr "Brak pamiêci dla zbioru w InitIid"
+
+#~ msgid "No memory for symbol table entry in InstallFile"
+#~ msgstr "Brak pamiêci dla rekordu tablicy symboli w InstallFile"
+
+#~ msgid "No memory for TheFiles in InstallFile"
+#~ msgstr "Brak pamiêci dla TheFiles w InstallFile"
+
+#~ msgid "No memory for FileList in InstallFile"
+#~ msgstr "Brak pamiêci dla FileList w InstallFile"
+
+#~ msgid "No memory for TheSets in AddSet"
+#~ msgstr "Brak pamiêci dla TheSets w AddSet"
+
+#~ msgid "No memory for set in RunProg"
+#~ msgstr "Brak pamiêci dla zbioru w RunProg"
+
+#~ msgid "No memory for set description in RunProg"
+#~ msgstr "Brak pamiêci dla opisu zbioru w RunProg"
+
+#~ msgid "Directory %s not accessible.\n"
+#~ msgstr "Katalog %s jest niedostêpny.\n"
+
+#~ msgid "No memory for set in SetIntersect"
+#~ msgstr "Brak pamiêci dla zbioru w SetIntersect"
+
+#~ msgid "No memory for set description in SetIntersect"
+#~ msgstr "Brak pamiêci dla opisu zbioru w SetIntersect"
+
+#~ msgid "No memory for set in SetUnion"
+#~ msgstr "Brak pamiêci dla zbioru w SetUnion"
+
+#~ msgid "No memory for set description in SetUnion"
+#~ msgstr "Brak pamiêci dla opisu zbioru w SetUnion"
+
+#~ msgid "No memory for set in SetInverse"
+#~ msgstr "Brak pamiêci dla zbioru w SetInverse"
+
+#~ msgid "No memory for set description in SetInverse"
+#~ msgstr "Brak pamiêci dla opisu zbioru w SetInverse"
+
+#~ msgid "Usage: %s [-f<file>] [-u<n>] [-r<dir>] [-mewdoxasknc] pattern...\n"
+#~ msgstr ""
+#~ "U¿ycie: %s [-f<plik>] [-u<n>] [-r<katalog>] [-mewdoxasknc] wzór...\n"
+
+#~ msgid "%s: please use only one of -c or -r\n"
+#~ msgstr "%s: proszê u¿yj albo opcji -c albo -r\n"
+
+#~ msgid "%s: cannot determine current directory\n"
+#~ msgstr "%s: nie mogê okre¶liæ bie¿±cego katalogu\n"
+
+#~ msgid "%s: Syntax Error: %s (%s)\n"
+#~ msgstr "%s: B³±d sk³adni: %s (%s)\n"
+
+#~ msgid "%s: Cannot fork (%s)\n"
+#~ msgstr "%s: Nie mogê wywo³aæ (%s)\n"
+
+#~ msgid "exec"
+#~ msgstr "uruchomienie"
+
+#~ msgid "Bogus frequencies: %u > %u\n"
+#~ msgstr "Bezsensowne czêsto¶ci: %u > %u\n"
+
+#~ msgid "%s: Cannot %s `%s' (%s)\n"
+#~ msgstr "%s: Nie mogê %s `%s' (%s)\n"
+
+#~ msgid ""
+#~ "Usage: %s [-v] [-f<idfile>] [(+|-)l[<lang>]] [(+|-)S<scanarg>] [-a<argfile>] "
+#~ "[-] [-u] [files...]\n"
+#~ "\t-v\t Verbose: print reports of progress\n"
+#~ "\t-a<file> Open file for arguments\n"
+#~ "\t-\t Read newline-separated args from stdin\n"
+#~ "\t-l<lang> Force files to be scanned as <lang> until +l<lang>\n"
+#~ "\t-S<lang>-<arg> Pass arg to <lang> scanner\n"
+#~ "\t-S.<suffix>=<lang> Scan files with .<suffix> as <lang>\n"
+#~ "\t-S<lang>? Print usage documentation for <lang>\n"
+#~ "\t-u\t Update an existing database (unimplemented)\n"
+#~ "\n"
+#~ "Version %s; Made %s %s\n"
+#~ msgstr ""
+#~ "U¿ycie: %s [-v] [-f<plikID>] [(+|-)l[<jêzyk>]] [(+|-)S<arg>] [-a<plik arg>] "
+#~ "[-] [-u] [pliki...]\n"
+#~ "\t-v\t Wszystko: wy¶wietlaj raporty postepu\n"
+#~ "\t-a<plik> Pobierz argumenty z pliku \n"
+#~ "\t-\t Czytaj ze std. wej¶cia argumenty oddzielone znakiem nowej linii\n"
+#~ "\t-l<jêzyk> Wymu¶ odczytywanie linii w <jêzyku> dopóki nie napotka "
+#~ "+l<jêzyk>\n"
+#~ "\t-S<jêzyk>-<arg> Prze¶lij argument do skanera <jêzyka>\n"
+#~ "\t-S.<rozsz>=<jêzyk> Przegl±daj pliki z .<rozsz> jako <jêzyk>\n"
+#~ "\t-S<jêzyk>? Wy¶wietl dokumentacje u¿ycia <jêzyka>\n"
+#~ "\t-u\t Uaktualnij istniej±c± bazê danych (nie zaimplementowane)\n"
+#~ "\n"
+#~ "Wersja %s; Wykonano %s %s\n"
+
+#~ msgid "Nothing to do...\n"
+#~ msgstr "Nic do zrobienia...\n"
+
+#~ msgid "modify"
+#~ msgstr "zmodyfikuj"
+
+#~ msgid "%s: No language assigned to suffix: `%s'\n"
+#~ msgstr "%s: Nie przypisano ¿adnego jêzyka do rozszerzenia: `%s'\n"
+
+#~ msgid "%s: No scanner for language: `%s'\n"
+#~ msgstr "%s: Brak skanera dla jêzyka: `%s'\n"
+
+#~ msgid "%s: Use -u, -f<file>, or cmd-line for file args!\n"
+#~ msgstr "%s: U¿yj -u, -f<plik>, lub linii poleceñ dla argumentów pliku!\n"
+
+#~ msgid "%s: Use only one of: -u, -f<file>, or cmd-line for file args!\n"
+#~ msgstr ""
+#~ "%s: U¿yj albo -u, -f<plik>, lub linii poleceñ dla argumentów pliku!\n"
+
+#~ msgid "  uniq=%d/%d"
+#~ msgstr "  jednozn=%d/%d"
+
+#~ msgid "create"
+#~ msgstr "utwórz"
+
+#~ msgid ""
+#~ "\n"
+#~ "\tRehashing... (doubling size to %ld)\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\tPonowne mieszanie... (podwojenie rozmiaru do %ld)\n"
+
+#~ msgid "%s: Duplicate hash entry! \n"
+#~ msgstr "%s Dwukrotne wystapienie hash rekordu \n"
+
+#~ msgid "malloc failure! \n"
+#~ msgstr "b³±d przydzia³u pamiêci! \n"
+
+#~ msgid "level %d: %ld < %ld/2\n"
+#~ msgstr "poziom %d: %ld < %ld/2\n"
+
+#~ msgid "level %d: %ld > %ld*2\n"
+#~ msgstr "poziom %d: %ld > %ld*2\n"
+
+#~ msgid "level %d: %ld < %ld\n"
+#~ msgstr "poziom %d: %ld < %ld\n"
+
+#~ msgid "level %d: %ld > %ld\n"
+#~ msgstr "poziom %d: %ld > %ld\n"
+
+#~ msgid "No scanner assigned to suffix `%s'\n"
+#~ msgstr "Nie przypisano ¿adnego skanera do rozszerzenia: `%s'\n"
+
+#~ msgid "%s: Language undefined: %s\n"
+#~ msgstr "%s: Niezdefiniowany jêzyk: %s\n"
+
+#~ msgid "%s: Note: `%s=%s' overrides `%s=%s'\n"
+#~ msgstr "%s: Uwaga: `%s=%s' zastêpuje `%s=%s'\n"
+
+#~ msgid "%s: language %s not defined.\n"
+#~ msgstr "%s: jêzyk %s nie zosta³ zdefiniowany.\n"
+
+#~ msgid "%s: Note: `%s/%s' overrides `%s/%s'\n"
+#~ msgstr "%s: Note: `%s/%s' zastêpuje `%s/%s'\n"
+
+#~ msgid ""
+#~ "Usage: %s [-S<suffix>=<lang>] [+S(+|-)<arg>] [-S<lang>(+|-)<arg>] "
+#~ "[-S<lang>/<lang>/<filter>]\n"
+#~ msgstr ""
+#~ "U¿ycie: %s [-S<rozsz>=<jêzyk>] [+S(+|-)<arg>] [-S<jêzyk>(+|-)<arg>] "
+#~ "[-S<jêzyk>/<jêzyk>/<filtr>]\n"
+
+#~ msgid "junk: `\\%3o'"
+#~ msgstr "¶mieæ: `\\%3o'"
+
+#~ msgid "Usage: %s does not accept %s scanner arguments\n"
+#~ msgstr "U¿ycie: %s nie przyjmuje argumentów %s skanera\n"
+
+#~ msgid ""
+#~ "The C scanner arguments take the form -Sc<arg>, where <arg>\n"
+#~ "is one of the following: (<cc> denotes one or more characters)\n"
+#~ "  (+|-)u . . . . (Do|Don't) strip a leading `_' from ids in strings.\n"
+#~ "  (+|-)s<cc> . . Allow <cc> in string ids, and (keep|ignore) those ids.\n"
+#~ "  -v . . . . . . Skip vhil comments."
+#~ msgstr ""
+#~ "Argumenty skanera jêzyka C przyjmuj± postaæ -Sc<arg>, gdzie <arg>\n"
+#~ "jest jednym z nastêpuj±cych: (<zn> oznacza jeden lub wiêcej znaków)\n"
+#~ "  (+|-)u . . . . (Tak|Nie) usuñ poprzedzaj±cy '_' z identyfikatorów w "
+#~ "³añcuchach.\n"
+#~ "  (+|-)s<zn> . . Pozwól na obecno¶æ <zn> in identyfikatorach ³añcuchowych, i "
+#~ "(zatrzymaj|pomiñ) te identyfikatory.\n"
+#~ "  -v . . . . . . Pomiñ komentarze."
+
+#~ msgid "Usage: %s -S%s([-c<cc>] [-u] [(+|-)a<cc>] [(+|-)p] [(+|-)C])\n"
+#~ msgstr "U¿ycie: %s -S%s([-c<zn>] [-u] [(+|-)a<zn>] [(+|-)p] [(+|-)C])\n"
+
+#~ msgid ""
+#~ "The Assembler scanner arguments take the form -Sasm<arg>, where\n"
+#~ "<arg> is one of the following: (<cc> denotes one or more characters)\n"
+#~ "  -c<cc> . . . . <cc> introduce(s) a comment until end-of-line.\n"
+#~ "  (+|-)u . . . . (Do|Don't) strip a leading `_' from ids.\n"
+#~ "  (+|-)a<cc> . . Allow <cc> in ids, and (keep|ignore) those ids.\n"
+#~ "  (+|-)p . . . . (Do|Don't) handle C-preprocessor directives.\n"
+#~ "  (+|-)C . . . . (Do|Don't) handle C-style comments. (/* */)"
+#~ msgstr ""
+#~ "Argumenty skanera asemblera przyjmuj± postaæ -Sasm<arg>, gdzie <arg>\n"
+#~ "jest jednym z nastêpuj±cych: (<zn> oznacza jeden lub wiêcej znaków)\n"
+#~ "  -c<zn> . . . . <zn> wprowadzaja komentarz do koñca linii.\n"
+#~ "  (+|-)u . . . . (Tak|Nie) usuñ poprzedzaj±cy '_' z identyfikatorów. \n"
+#~ "  (+|-)a<zn> . . Pozwól na obecno¶æ <zn> in identyfikatorach i "
+#~ "(pozostaw|pomiñ) te identyfikatory.\n"
+#~ "  (+|-)p . . . . (Tak|Nie) rozpoznawaj dyrektywy preprocesora C.\n"
+#~ "  (+|-)C . . . . (Tak|Nie) rozpoznawaj kometarze w stylu C (/* */)"
+
+#~ msgid "Usage: %s -S%s([(+|-)a<cc>] [(+|-)s<cc>]\n"
+#~ msgstr "U¿ycie: %s -S%s([(+|-)a<zn>] [(+|-)s<zn>]\n"
+
+#~ msgid ""
+#~ "The Text scanner arguments take the form -Stext<arg>, where\n"
+#~ "<arg> is one of the following: (<cc> denotes one or more characters)\n"
+#~ "  (+|-)a<cc> . . Include (or exculde) <cc> in ids.\n"
+#~ "  (+|-)s<cc> . . Squeeze (or don't squeeze) <cc> out of ids."
+#~ msgstr ""
+#~ "Argumenty skanera tekstowego przyjmuj± postaæ -Stext<arg>, gdzie <arg>\n"
+#~ "jest jednym z nastêpuj±cych: (<zn> oznacza jeden lub wiêcej znaków)\n"
+#~ "  (+|-)a<zn> . . Do³±cz (lub pomiñ) <zn> w identyfikatorach .\n"
+#~ "  (+|-)s<zn> . . Usuñ (lub nie) <zn> z identyfikatorów."

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.2\n"
-"POT-Creation-Date: 1996-08-06 23:24-0400\n"
+"POT-Creation-Date: 1999-04-09 01:47-0700\n"
 "PO-Revision-Date: 1998-09-30 13:31+02:00\n"
 "Last-Translator: Ivo Timmermans <zarq@iname.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -13,29 +13,29 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: libidu/hash.c:52
+#: libidu/hash.c:51
 #, c-format
 msgid "can't allocate %ld bytes for hash table: memory exhausted"
 msgstr "kan geen %ld bytes voor frommeltabel reserveren: geheugen vol"
 
-#: libidu/hash.c:247
+#: libidu/hash.c:264
 msgid "Load=%ld/%ld=%.0f%%, "
 msgstr "Belasting=%ld/%ld=%.0f%%, "
 
-#: libidu/hash.c:249
+#: libidu/hash.c:266
 #, c-format
 msgid "Rehash=%d, "
 msgstr "herverfrommeling=%d, "
 
-#: libidu/hash.c:250
+#: libidu/hash.c:267
 msgid "Collisions=%ld/%ld=%.0f%%"
 msgstr "Botsingen=%ld/%ld=%.0f%%"
 
-#: libidu/idfile.c:106
+#: libidu/idfile.c:105
 msgid "can't determine the io_size of a string!"
 msgstr "kan de io_size van een letterreeks niet vaststellen!"
 
-#: libidu/idread.c:45 src/mkid.c:386 src/xtokid.c:214
+#: libidu/idread.c:45 src/mkid.c:451 src/xtokid.c:221
 #, c-format
 msgid "can't open `%s'"
 msgstr "kan `%s' niet openen"
@@ -65,50 +65,53 @@ msgstr "onbekend I/O type: %d"
 msgid "unsupported size in io_write (): %d"
 msgstr "niet-ondersteunde afmeting in io_write(): %d"
 
-#: libidu/scanners.c:93
+#: libidu/scanners.c:95
 #, c-format
 msgid "unrecognized language: `%s'"
 msgstr "niet herkende taal: `%s'"
 
-#: libidu/scanners.c:139
+#: libidu/scanners.c:141
 msgid "can't allocate language args obstack: memory exhausted"
 msgstr "kan geen objectstapel voor taalargumenten vrijmaken: geheugen vol"
 
-#: libidu/scanners.c:193 libidu/scanners.c:262
+#: libidu/scanners.c:195 libidu/scanners.c:264
 msgid "can't allocate language args: memory exhausted"
 msgstr "kan geen geheugen vrijmaken voor taalargumenten: geheugen vol"
 
-#: libidu/scanners.c:201
+#: libidu/scanners.c:203
 #, c-format
 msgid "language name expected following `%s' in file `%s'"
 msgstr "taalnaam verwacht na `%s' in bestand `%s'"
 
-#: libidu/scanners.c:256
+#: libidu/scanners.c:258
 #, c-format
 msgid "can't open language map file `%s'"
 msgstr "kan taalbestand `%s' niet openen"
 
-#: libidu/scanners.c:258
+#: libidu/scanners.c:260
 #, c-format
 msgid "can't get size of map file `%s'"
 msgstr "kan grootte van mapbestand `%s' niet krijgen"
 
-#: libidu/scanners.c:268
+#: libidu/scanners.c:270
 #, c-format
 msgid "can't read language map file `%s'"
 msgstr "kan taalbestand `%s' niet lezen"
 
-#: libidu/scanners.c:271
+#: libidu/scanners.c:273
 #, c-format
 msgid "can't read entire language map file `%s'"
 msgstr "kan niet het hele taalbestand `%s' lezen"
 
-#: libidu/scanners.c:412
+#: libidu/scanners.c:418
 msgid ""
 "C language:\n"
-"  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the result\n"
-"  -i,--ignore=CHARS      Allow CHARS in single-token strings, toss the result\n"
-"  -u,--strip-underscore  Strip a leading underscore from single-token strings\n"
+"  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the "
+"result\n"
+"  -i,--ignore=CHARS      Allow CHARS in single-token strings, toss the "
+"result\n"
+"  -u,--strip-underscore  Strip a leading underscore from single-token "
+"strings\n"
 msgstr ""
 "C taal:\n"
 "  -k,--keep=TEKENS      Sta TEKENS toe in reeksen van een eenheid, behoud\n"
@@ -118,17 +121,17 @@ msgstr ""
 "  -u,--strip-underscore Haal een voorgaand laag liggend streepje (`_')\n"
 "                        weg van reeksen van een eenheid\n"
 
-#: libidu/scanners.c:681 libidu/scanners.c:986 libidu/scanners.c:1190
+#: libidu/scanners.c:701 libidu/scanners.c:972 libidu/scanners.c:1175
 #, c-format
 msgid "junk: `%c'"
 msgstr "onzin: `%c'"
 
-#: libidu/scanners.c:683 libidu/scanners.c:988 libidu/scanners.c:1192
+#: libidu/scanners.c:703 libidu/scanners.c:974 libidu/scanners.c:1177
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "onzin: `\\%03o'"
 
-#: libidu/scanners.c:787
+#: libidu/scanners.c:807
 msgid ""
 "Assembly language:\n"
 "  -c,--comment=CHARS     Any of CHARS starts a comment until end-of-line\n"
@@ -138,123 +141,142 @@ msgid ""
 "  -n,--no-cpp            Don't handle C pre-processor directives\n"
 msgstr ""
 "Assembeertaal:\n"
-"  -c,--comment=TEKENS    Een van TEKENS begint een commentaar tot einde van de regel\n"
+"  -c,--comment=TEKENS    Een van TEKENS begint een commentaar tot einde van "
+"de regel\n"
 "  -k,--keep=TEKENS       Sta TEKENS in eenheden toe, behoud resultaat\n"
 "  -i,--ignore=TEKENS     Sta TEKENS in eenheden toe, gooi resultaat weg\n"
-"  -u,--strip-underscore  Verwijder een voorgaande underscore `_' uit eenheden\n"
+"  -u,--strip-underscore  Verwijder een voorgaande underscore `_' uit "
+"eenheden\n"
 "  -n,--no-cpp            Behandel geen C pre-processor aanwijzingen\n"
 
-#: libidu/scanners.c:1092
+#: libidu/scanners.c:1078
 msgid ""
 "Text language:\n"
-"  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token constituents\n"
-"  -x,--exclude=CHAR-CLASS  Treat characters of CHAR-CLASS as token delimiters\n"
+"  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
+"constituents\n"
+"  -x,--exclude=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
+"delimiters\n"
 msgstr ""
 "Tekst taal:\n"
-"  -i,--include=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als onderdeel van een eenheid\n"
-"  -x,--exclude=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als eenheidscheiding\n"
+"  -i,--include=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als onderdeel "
+"van een eenheid\n"
+"  -x,--exclude=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als "
+"eenheidscheiding\n"
 
-#: libidu/walker.c:103
+#: libidu/walker.c:107
 #, c-format
 msgid "can't read directory `%s' (`.' from `%s')"
 msgstr "kan map `%s' niet lezen (`.' van `%s')"
 
-#: libidu/walker.c:170
+#: libidu/walker.c:174
 #, c-format
 msgid "notice: `%s' was a %s, but is now a %s!"
 msgstr "opmerking: `%s' was een %s, maar is nu een %s!"
 
-#: libidu/walker.c:171 libidu/walker.c:172
+#: libidu/walker.c:175 libidu/walker.c:176
 msgid "file"
 msgstr "bestand"
 
-#: libidu/walker.c:171 libidu/walker.c:172
+#: libidu/walker.c:175 libidu/walker.c:176
 msgid "directory"
 msgstr "map"
 
-#: libidu/walker.c:291
+#: libidu/walker.c:299
 #, c-format
 msgid "warning: `%s' and `%s' are the same file, but yield different scans!"
-msgstr "waarschuwing: `%s' en `%s' zijn het zelfde bestand, maar leveren verschillende resultaten op!"
+msgstr ""
+"waarschuwing: `%s' en `%s' zijn het zelfde bestand, maar leveren "
+"verschillende resultaten op!"
 
-#: libidu/walker.c:385
+#: libidu/walker.c:393
 #, c-format
 msgid "notice: scan parameters changed for `%s'"
 msgstr "opmerking: leesparameters veranderd voor `%s'"
 
-#: libidu/walker.c:580
+#: libidu/walker.c:597
 msgid "can't get working directory"
 msgstr "kan huidige map niet verkrijgen"
 
-#: libidu/walker.c:637
+#: libidu/walker.c:654
 #, c-format
 msgid "can't chdir to `%s'"
 msgstr "kan niet naar map `%s' gaan"
 
-#: libidu/walker.c:642
+#: libidu/walker.c:659
 #, c-format
 msgid "can't chdir to `%s' from `%s'"
 msgstr "kan niet van map `%s' naar `%s' gaan"
 
-#: libidu/walker.c:696
+#: libidu/walker.c:713
 #, c-format
 msgid "can't lstat `%s' from `%s'"
 msgstr "kan de status van de link `%s' niet opvragen vanuit `%s'"
 
-#: libidu/walker.c:704
+#: libidu/walker.c:721
 #, c-format
 msgid "can't stat `%s' from `%s'"
 msgstr "kan de status van `%s' niet opvragen vanuit `%s'"
 
-#: lib/getopt.c:527
+#: lib/getopt.c:677
 #, c-format
 msgid "%s: option `%s' is ambiguous\n"
 msgstr "%s: optie `%s' is dubbelzinnig\n"
 
-#: lib/getopt.c:550
+#: lib/getopt.c:702
 #, c-format
 msgid "%s: option `--%s' doesn't allow an argument\n"
 msgstr "%s: optie `--%s' staat geen argumenten toe\n"
 
-#: lib/getopt.c:555
+#: lib/getopt.c:707
 #, c-format
 msgid "%s: option `%c%s' doesn't allow an argument\n"
 msgstr "%s: optie `%c%s' staat geen argumenten toe\n"
 
-#: lib/getopt.c:570
+#: lib/getopt.c:725 lib/getopt.c:898
 #, c-format
 msgid "%s: option `%s' requires an argument\n"
 msgstr "%s: optie `%s' vereist een argument\n"
 
 #. --option
-#: lib/getopt.c:598
+#: lib/getopt.c:754
 #, c-format
 msgid "%s: unrecognized option `--%s'\n"
 msgstr "%s: onbekende optie `--%s'\n"
 
 #. +option or -option
-#: lib/getopt.c:602
+#: lib/getopt.c:758
 #, c-format
 msgid "%s: unrecognized option `%c%s'\n"
 msgstr "%s: onbekende optie `%c%s'\n"
 
 #. 1003.2 specifies the format of this message.
-#: lib/getopt.c:627
+#: lib/getopt.c:784
 #, c-format
 msgid "%s: illegal option -- %c\n"
 msgstr "%s: ongeldige optie -- %c\n"
 
-#: lib/getopt.c:630
+#: lib/getopt.c:787
 #, c-format
 msgid "%s: invalid option -- %c\n"
 msgstr "%s: ongeldige optie -- %c\n"
 
-#: lib/getopt.c:666
+#. 1003.2 specifies the format of this message.
+#: lib/getopt.c:817 lib/getopt.c:947
 #, c-format
 msgid "%s: option requires an argument -- %c\n"
 msgstr "%s: optie vereist een argument -- %c\n"
 
-#: src/fid.c:70 src/fnid.c:49 src/lid.c:237 src/mkid.c:120 src/xtokid.c:43
+#: lib/getopt.c:864
+#, fuzzy, c-format
+msgid "%s: option `-W %s' is ambiguous\n"
+msgstr "%s: optie `%s' is dubbelzinnig\n"
+
+#: lib/getopt.c:882
+#, fuzzy, c-format
+msgid "%s: option `-W %s' doesn't allow an argument\n"
+msgstr "%s: optie `--%s' staat geen argumenten toe\n"
+
+#: src/fid.c:70 src/fnid.c:49 src/lid.c:233 src/mkid.c:122 src/xtokid.c:43
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr "Probeer `%s --help' voor meer informatie.\n"
@@ -289,7 +311,7 @@ msgstr "geen bestandsnaam argumenten"
 msgid "too many file name arguments"
 msgstr "te veel bestandsnaam argumenten"
 
-#: src/fid.c:153 src/fnid.c:147 src/lid.c:410
+#: src/fid.c:153 src/fnid.c:148 src/lid.c:407
 msgid "can't locate `ID'"
 msgstr "kan `ID' niet vinden"
 
@@ -325,12 +347,12 @@ msgstr ""
 "      --help             geef deze hulp en beëindig\n"
 "      --version          geef versie informatie en beëindig\n"
 
-#: src/lid.c:245
+#: src/lid.c:241
 #, c-format
 msgid "Usage: %s [OPTION]... PATTERN...\n"
 msgstr "Aanroep: %s [OPTIE]... PATROON...\n"
 
-#: src/lid.c:249
+#: src/lid.c:245
 #, c-format
 msgid ""
 "Query ID database and report results.\n"
@@ -345,19 +367,25 @@ msgid ""
 "  -w, --word            match PATTERN as a delimited word\n"
 "  -s, --substring       match PATTERN as a substring\n"
 "            Note: If PATTERN contains extended regular expression meta-\n"
-"            characters, it is interpreted as a regular expression substring.\n"
+"            characters, it is interpreted as a regular expression "
+"substring.\n"
 "            Otherwise, PATTERN is interpreted as a literal word.\n"
 "\n"
 "  -k, --key=STYLE       STYLE is one of `token', `pattern' or `none'\n"
-"  -R, --result=STYLE    STYLE is one of `filenames', `grep', `edit' or `none'\n"
+"  -R, --result=STYLE    STYLE is one of `filenames', `grep', `edit' or "
+"`none'\n"
 "  -S, --separator=STYLE STYLE is one of `braces', `space' or `newline' and\n"
-"                        only applies to file names when `--result=filenames'\n"
-"            The above STYLE options control how query results are presented.\n"
+"                        only applies to file names when "
+"`--result=filenames'\n"
+"            The above STYLE options control how query results are "
+"presented.\n"
 "            Defaults are --key=token --result=filenames --separator=%s\n"
 "\n"
 "  -F, --frequency=FREQ  find tokens that occur FREQ times, where FREQ\n"
-"                        is a range expressed as `N..M'.  If N is omitted, it\n"
-"                        defaults to 1, if M is omitted it defaults to MAX_USHRT\n"
+"                        is a range expressed as `N..M'.  If N is omitted, "
+"it\n"
+"                        defaults to 1, if M is omitted it defaults to "
+"MAX_USHRT\n"
 "  -a, --ambiguous=LEN   find tokens whose names are ambiguous for LEN chars\n"
 "\n"
 "  -x, --hex             only find numbers expressed as hexadecimal\n"
@@ -380,19 +408,25 @@ msgstr ""
 "  -w, --word            match PATTERN as a delimited word\n"
 "  -s, --substring       match PATTERN as a substring\n"
 "            Note: If PATTERN contains extended regular expression meta-\n"
-"            characters, it is interpreted as a regular expression substring.\n"
+"            characters, it is interpreted as a regular expression "
+"substring.\n"
 "            Otherwise, PATTERN is interpreted as a literal word.\n"
 "\n"
 "  -k, --key=STYLE       STYLE is one of `token', `pattern' or `none'\n"
-"  -R, --result=STYLE    STYLE is one of `filenames', `grep', `edit' or `none'\n"
+"  -R, --result=STYLE    STYLE is one of `filenames', `grep', `edit' or "
+"`none'\n"
 "  -S, --separator=STYLE STYLE is one of `braces', `space' or `newline' and\n"
-"                        only applies to file names when `--result=filenames'\n"
-"            The above STYLE options control how query results are presented.\n"
+"                        only applies to file names when "
+"`--result=filenames'\n"
+"            The above STYLE options control how query results are "
+"presented.\n"
 "            Defaults are --key=token --result=filenames --separator=%s\n"
 "\n"
 "  -F, --frequency=FREQ  find tokens that occur FREQ times, where FREQ\n"
-"                        is a range expressed as `N..M'.  If N is omitted, it\n"
-"                        defaults to 1, if M is omitted it defaults to MAX_USHRT\n"
+"                        is a range expressed as `N..M'.  If N is omitted, "
+"it\n"
+"                        defaults to 1, if M is omitted it defaults to "
+"MAX_USHRT\n"
 "  -a, --ambiguous=LEN   find tokens whose names are ambiguous for LEN chars\n"
 "\n"
 "  -x, --hex             only find numbers expressed as hexadecimal\n"
@@ -403,65 +437,69 @@ msgstr ""
 "      --help            display this help and exit\n"
 "      --version         output version information and exit\n"
 
-#: src/lid.c:285
+#: src/lid.c:281
 msgid "braces"
 msgstr "accolades"
 
-#: src/lid.c:285
+#: src/lid.c:281
 msgid "space"
 msgstr "spatie"
 
-#: src/lid.c:351
+#: src/lid.c:347
 msgid "notice: use of `-e' is deprecated, use `-r' instead"
-msgstr "opmerking: gebruik van `-e' is verouderd, gebruik `-r' in plaats daarvan"
+msgstr ""
+"opmerking: gebruik van `-e' is verouderd, gebruik `-r' in plaats daarvan"
 
-#: src/lid.c:431
+#: src/lid.c:428
 #, c-format
 msgid "All identifiers are non-ambiguous within the first %d characters\n"
-msgstr "Alle namen van variabelen zijn niet dubbelzinnig in de eerste %d tekens\n"
+msgstr ""
+"Alle namen van variabelen zijn niet dubbelzinnig in de eerste %d tekens\n"
 
-#: src/lid.c:466
+#: src/lid.c:463
 #, c-format
 msgid "invalid `--key' style: `%s'"
 msgstr "ongeldige `--key' stijl: `%s'"
 
-#: src/lid.c:478
+#: src/lid.c:475
 #, c-format
 msgid "invalid `--result' style: `%s'"
 msgstr "ongeldige `--result' stijl: `%s'"
 
 #. FIXME: i18n of responses
-#: src/lid.c:634
+#: src/lid.c:632
 msgid "edit? [y1-9^S/nq] "
 msgstr "bewerken? [j1-9^S/nq]"
 
-#: src/lid.c:703
+#: src/lid.c:701
 msgid "can't fork"
 msgstr "kan geen nieuw proces beginnen"
 
-#: src/lid.c:721
+#: src/lid.c:719
 #, c-format
 msgid "can't exec `%s'"
 msgstr "kan `%s' niet uitvoeren"
 
-#: src/lid.c:851
+#: src/lid.c:853
 msgid "can't match regular-expression: memory exhausted"
 msgstr "kan reguliere expressie niet vergelijken: geheugen vol"
 
-#: src/mkid.c:145 src/xtokid.c:64
+#: src/mkid.c:147 src/xtokid.c:64
 #, c-format
 msgid "Usage: %s [OPTION]... [FILE]...\n"
 msgstr "Aanroep: %s [OPTIE]... [BESTAND]...\n"
 
-#: src/mkid.c:149
+#: src/mkid.c:151
 msgid ""
 "Build an identifier database.\n"
 "  -o, --output=OUTFILE    file name of ID database output\n"
 "  -f, --file=OUTFILE      synonym for --output\n"
-"  -i, --include=LANGS     include languages in LANGS (default: \"C C++ asm\")\n"
+"  -i, --include=LANGS     include languages in LANGS (default: \"C C++ "
+"asm\")\n"
 "  -x, --exclude=LANGS     exclude languages in LANGS\n"
 "  -l, --lang-option=L:OPT pass OPT as a default for language L (see below)\n"
-"  -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source language\n"
+"  -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source "
+"language\n"
 "  -d, --default-lang=LANG make LANG the default source language\n"
 "  -p, --prune=NAMES       exclude the named files and/or directories\n"
 "  -v, --verbose           report per file statistics\n"
@@ -479,10 +517,12 @@ msgstr ""
 "Maak een namendatabase aan\n"
 "  -o, --output=UITBESTAND bestandsnaam van databaseuitvoer\n"
 "  -f, --file=OUTFILE      synonym for --output\n"
-"  -i, --include=LANGS     include languages in LANGS (default: \"C C++ asm\")\n"
+"  -i, --include=LANGS     include languages in LANGS (default: \"C C++ "
+"asm\")\n"
 "  -x, --exclude=LANGS     exclude languages in LANGS\n"
 "  -l, --lang-option=L:OPT pass OPT as a default for language L (see below)\n"
-"  -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source language\n"
+"  -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source "
+"language\n"
 "  -d, --default-lang=LANG make LANG the default source language\n"
 "  -p, --prune=NAMES       exclude the named files and/or directories\n"
 "  -v, --verbose           report per file statistics\n"
@@ -497,106 +537,113 @@ msgstr ""
 "\n"
 "The following arguments apply to the language-specific scanners:\n"
 
-#: src/mkid.c:311
+#: src/mkid.c:357
 #, c-format
 msgid "can't create `%s' in `%s'"
 msgstr "kan `%s' niet aanmaken in `%s'"
 
-#: src/mkid.c:315
+#: src/mkid.c:361
 #, c-format
 msgid "can't modify `%s'"
 msgstr "kan `%s' niet veranderen"
 
-#: src/mkid.c:368
+#: src/mkid.c:434
 #, c-format
 msgid "can't stat `%s'"
 msgstr "kan de status van `%s' niet opvragen"
 
-#: src/mkid.c:435
+#: src/mkid.c:503
 #, c-format
 msgid "  new = %d/%d"
 msgstr "  nieuw = %d/%d"
 
-#: src/mkid.c:444
+#: src/mkid.c:512
 #, c-format
 msgid "Name=%ld, "
 msgstr "Naam=%ld, "
 
-#: src/mkid.c:445
+#: src/mkid.c:513
 #, c-format
 msgid "Number=%ld, "
 msgstr "Nummer = %ld, "
 
-#: src/mkid.c:446
+#: src/mkid.c:514
 #, c-format
 msgid "String=%ld, "
 msgstr "Letterreeks=%ld, "
 
-#: src/mkid.c:447
+#: src/mkid.c:515
 #, c-format
 msgid "Literal=%ld, "
 msgstr "Letterlijk=%ld, "
 
-#: src/mkid.c:448
+#: src/mkid.c:516
 #, c-format
 msgid "Comment=%ld\n"
 msgstr "Commentaar=%ld\n"
 
-#: src/mkid.c:450
-#, c-format
-msgid "Files=%d, "
+#: src/mkid.c:518
+#, fuzzy, c-format
+msgid "Files=%ld, "
 msgstr "Bestanden=%d, "
 
-#: src/mkid.c:451
+#: src/mkid.c:519
 #, c-format
 msgid "Tokens=%ld, "
 msgstr "Eenheden=%ld, "
 
-#: src/mkid.c:452
+#: src/mkid.c:520
 #, c-format
 msgid "Bytes=%ld Kb, "
 msgstr "Bytes=%ld Kb, "
 
-#: src/mkid.c:453
-#, c-format
-msgid "Heap=%ld+%ld Kb, "
+#: src/mkid.c:521
+#, fuzzy, c-format
+msgid "Heap=%d+%d Kb, "
 msgstr "Data=%ld+%ld Kb, "
 
-#: src/mkid.c:455
+#: src/mkid.c:523
 #, c-format
 msgid "Output=%ld (%ld tok, %ld hit)\n"
 msgstr "Uitvoer=%ld (%ld eenheden, %ld gevonden)\n"
 
-#: src/mkid.c:458
+#: src/mkid.c:526
 #, c-format
 msgid ", Freq=%ld/%ld=%.2f\n"
 msgstr ", Freq=%ld/%ld=%.2f\n"
 
-#: src/mkid.c:481
+#: src/mkid.c:550
 msgid "Sorting tokens...\n"
 msgstr "Eenheden sorteren...\n"
 
-#: src/mkid.c:487
+#: src/mkid.c:556
 #, c-format
 msgid "Writing `%s'...\n"
 msgstr "`%s' schrijven...\n"
 
-#: src/mkid.c:490
+#: src/mkid.c:559
 #, c-format
 msgid "can't create `%s'"
 msgstr "kan `%s' niet aanmaken"
 
-#: src/mkid.c:636
+#: src/mkid.c:626
+#, c-format
+msgid "error closing `%s'"
+msgstr ""
+
+#: src/mkid.c:714
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "niveau %d: %ld/%ld = %.0f%%\n"
 
 #: src/xtokid.c:68
 msgid ""
 "Print all tokens found in a source file.\n"
-"  -i, --include=LANGS     include languages in LANGS (default: \"C C++ asm\")\n"
+"  -i, --include=LANGS     include languages in LANGS (default: \"C C++ "
+"asm\")\n"
 "  -x, --exclude=LANGS     exclude languages in LANGS\n"
 "  -l, --lang-option=L:OPT pass OPT as a default for language L (see below)\n"
-"  -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source language\n"
+"  -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source "
+"language\n"
 "  -d, --default-lang=LANG make LANG the default source language\n"
 "  -p, --prune=NAMES       exclude the named files and/or directories\n"
 "      --help              display this help and exit\n"
@@ -605,10 +652,12 @@ msgid ""
 "The following arguments apply to the language-specific scanners:\n"
 msgstr ""
 "Print all tokens found in a source file.\n"
-"  -i, --include=LANGS     include languages in LANGS (default: \"C C++ asm\")\n"
+"  -i, --include=LANGS     include languages in LANGS (default: \"C C++ "
+"asm\")\n"
 "  -x, --exclude=LANGS     exclude languages in LANGS\n"
 "  -l, --lang-option=L:OPT pass OPT as a default for language L (see below)\n"
-"  -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source language\n"
+"  -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source "
+"language\n"
 "  -d, --default-lang=LANG make LANG the default source language\n"
 "  -p, --prune=NAMES       exclude the named files and/or directories\n"
 "      --help              display this help and exit\n"

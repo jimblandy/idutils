@@ -76,6 +76,7 @@ INTLLIBS = @INTLLIBS@
 INTLOBJS = @INTLOBJS@
 LANGUAGE_MAP_FILE = @LANGUAGE_MAP_FILE@
 LDFLAGS = @LDFLAGS@
+LIBOBJS = @LIBOBJS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MKINSTALLDIRS = @MKINSTALLDIRS@
@@ -93,7 +94,7 @@ l = @l@
 lispdir = @lispdir@
 
 
-EXTRA_DIST = README Makefile.am.in gettext.m4 lcmessage.m4 progtest.m4
+EXTRA_DIST = README Makefile.am.in gettext.m4 lcmessage.m4 malloc.m4 progtest.m4 realloc.m4
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
