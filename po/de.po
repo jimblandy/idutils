@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
-"POT-Creation-Date: 1999-04-04 01:11-0700\n"
+"POT-Creation-Date: 1999-04-06 00:45-0700\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Karl Eichwalder <ke@ke.Central.DE>\n"
 "Language-Team: German <de@li.org>\n"
@@ -36,7 +36,7 @@ msgstr ""
 msgid "can't determine the io_size of a string!"
 msgstr ""
 
-#: libidu/idread.c:45 src/mkid.c:446 src/xtokid.c:215
+#: libidu/idread.c:45 src/mkid.c:451 src/xtokid.c:221
 #, c-format
 msgid "can't open `%s'"
 msgstr ""
@@ -115,17 +115,17 @@ msgid ""
 "strings\n"
 msgstr ""
 
-#: libidu/scanners.c:694 libidu/scanners.c:970 libidu/scanners.c:1173
+#: libidu/scanners.c:695 libidu/scanners.c:971 libidu/scanners.c:1174
 #, c-format
 msgid "junk: `%c'"
 msgstr "\"junk\": '%c'"
 
-#: libidu/scanners.c:696 libidu/scanners.c:972 libidu/scanners.c:1175
+#: libidu/scanners.c:697 libidu/scanners.c:973 libidu/scanners.c:1176
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "\"junk\": '\\%03o'"
 
-#: libidu/scanners.c:800
+#: libidu/scanners.c:801
 msgid ""
 "Assembly language:\n"
 "  -c,--comment=CHARS     Any of CHARS starts a comment until end-of-line\n"
@@ -135,7 +135,7 @@ msgid ""
 "  -n,--no-cpp            Don't handle C pre-processor directives\n"
 msgstr ""
 
-#: libidu/scanners.c:1076
+#: libidu/scanners.c:1077
 msgid ""
 "Text language:\n"
 "  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
@@ -144,55 +144,55 @@ msgid ""
 "delimiters\n"
 msgstr ""
 
-#: libidu/walker.c:106
+#: libidu/walker.c:107
 #, c-format
 msgid "can't read directory `%s' (`.' from `%s')"
 msgstr ""
 
-#: libidu/walker.c:173
+#: libidu/walker.c:174
 #, c-format
 msgid "notice: `%s' was a %s, but is now a %s!"
 msgstr ""
 
-#: libidu/walker.c:174 libidu/walker.c:175
+#: libidu/walker.c:175 libidu/walker.c:176
 msgid "file"
 msgstr ""
 
-#: libidu/walker.c:174 libidu/walker.c:175
+#: libidu/walker.c:175 libidu/walker.c:176
 msgid "directory"
 msgstr ""
 
-#: libidu/walker.c:293
+#: libidu/walker.c:299
 #, c-format
 msgid "warning: `%s' and `%s' are the same file, but yield different scans!"
 msgstr ""
 
-#: libidu/walker.c:389
+#: libidu/walker.c:393
 #, c-format
 msgid "notice: scan parameters changed for `%s'"
 msgstr ""
 
-#: libidu/walker.c:593
+#: libidu/walker.c:597
 #, fuzzy
 msgid "can't get working directory"
 msgstr "%s: Name des aktuellen Verzeichnisses nicht zu erreichen."
 
-#: libidu/walker.c:650
+#: libidu/walker.c:654
 #, c-format
 msgid "can't chdir to `%s'"
 msgstr ""
 
-#: libidu/walker.c:655
+#: libidu/walker.c:659
 #, c-format
 msgid "can't chdir to `%s' from `%s'"
 msgstr ""
 
-#: libidu/walker.c:709
+#: libidu/walker.c:713
 #, c-format
 msgid "can't lstat `%s' from `%s'"
 msgstr ""
 
-#: libidu/walker.c:717
+#: libidu/walker.c:721
 #, c-format
 msgid "can't stat `%s' from `%s'"
 msgstr ""
@@ -441,88 +441,88 @@ msgstr ""
 msgid "can't modify `%s'"
 msgstr ""
 
-#: src/mkid.c:429
+#: src/mkid.c:434
 #, c-format
 msgid "can't stat `%s'"
 msgstr ""
 
-#: src/mkid.c:498
+#: src/mkid.c:503
 #, fuzzy, c-format
 msgid "  new = %d/%d"
 msgstr ", new=%d/%d"
 
-#: src/mkid.c:507
+#: src/mkid.c:512
 #, c-format
 msgid "Name=%ld, "
 msgstr "Name=%ld, "
 
-#: src/mkid.c:508
+#: src/mkid.c:513
 #, c-format
 msgid "Number=%ld, "
 msgstr "Zahl=%ld, "
 
-#: src/mkid.c:509
+#: src/mkid.c:514
 #, c-format
 msgid "String=%ld, "
 msgstr "Zeichenkette=%ld, "
 
 # ist das gemeint? ###
-#: src/mkid.c:510
+#: src/mkid.c:515
 #, c-format
 msgid "Literal=%ld, "
 msgstr "Zeichen=%ld, "
 
-#: src/mkid.c:511
+#: src/mkid.c:516
 #, c-format
 msgid "Comment=%ld\n"
 msgstr "Kommentar=%ld\n"
 
-#: src/mkid.c:513
+#: src/mkid.c:518
 #, fuzzy, c-format
 msgid "Files=%ld, "
 msgstr "Dateien=%d, "
 
-#: src/mkid.c:514
+#: src/mkid.c:519
 #, c-format
 msgid "Tokens=%ld, "
 msgstr "Tokens=%ld, "
 
-#: src/mkid.c:515
+#: src/mkid.c:520
 #, c-format
 msgid "Bytes=%ld Kb, "
 msgstr "Bytes=%ld Kb, "
 
-#: src/mkid.c:516
+#: src/mkid.c:521
 #, fuzzy, c-format
 msgid "Heap=%d+%d Kb, "
 msgstr "\"Heap\"=%ld Kb, "
 
-#: src/mkid.c:518
+#: src/mkid.c:523
 #, c-format
 msgid "Output=%ld (%ld tok, %ld hit)\n"
 msgstr "Ausgabe=%ld (%ld tok, %ld hit)\n"
 
 # Frequenz übersetzen? ke
-#: src/mkid.c:521
+#: src/mkid.c:526
 #, fuzzy, c-format
 msgid ", Freq=%ld/%ld=%.2f\n"
 msgstr "\"Freq\"=%ld/%ld=%.2f\n"
 
-#: src/mkid.c:545
+#: src/mkid.c:550
 msgid "Sorting tokens...\n"
 msgstr "Sortiere \"Token\"...\n"
 
-#: src/mkid.c:551
+#: src/mkid.c:556
 #, c-format
 msgid "Writing `%s'...\n"
 msgstr "Schreibe '%s'...\n"
 
-#: src/mkid.c:554
+#: src/mkid.c:559
 #, c-format
 msgid "can't create `%s'"
 msgstr ""
 
-#: src/mkid.c:708
+#: src/mkid.c:713
 #, fuzzy
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "level %d: %ld == %ld\n"
