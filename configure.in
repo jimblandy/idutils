@@ -11,7 +11,7 @@ dnl they are there to delimit sections in the output configure script.
 
 AC_INIT(src/mkid.c)
 AM_CONFIG_HEADER(config.h)
-AC_PREREQ(2.13)
+AC_PREREQ(2.14a)
 
 AM_INIT_AUTOMAKE([id-utils], [3.2e])
 GNU_PACKAGE="GNU $PACKAGE"
@@ -82,6 +82,8 @@ AC_TYPE_SIGNAL
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AM_TYPE_PTRDIFF_T
+
+AC_CHECK_DECLS([strsep])
 
 ##############################################################################
 ################ Set default compilation flags ###############################
