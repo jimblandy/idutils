@@ -158,8 +158,8 @@ Usage: %s [-v] [-f<idfile>] [(+|-)l[<lang>]] [(+|-)S<scanarg>] [-a<argfile>] [-]
 	-S<lang>? Print usage documentation for <lang>\n\
 	-u	 Update an existing database (unimplemented)\n\
 \n\
-Version %s; Made %s %s\n",
-	   program_name, FULL_VERSION, __DATE__, __TIME__);
+Version %s.%s; Made %s %s\n",
+	   program_name, VERSION, PATCH_LEVEL, __DATE__, __TIME__);
 
   exit (1);
 }
@@ -768,9 +768,6 @@ round2 (int rough)
   return round;
 }
 
-/* Allocate a new token struct and fill in the name field.  We
-   allocate memory in large chunks to avoid frequent calls to malloc ()
-   which is a major pig.  */
 struct token *
 make_token (char const *name, int flags)
 {

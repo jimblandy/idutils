@@ -412,7 +412,7 @@ usage_scan (void)
 #define ISQ1BORING(c)	(!((rct)[c] & (EF|NL|Q1|ES)))	/* char const fluff */
 #define ISQ2BORING(c)	(!((rct)[c] & (EF|NL|Q2|ES)))	/* quoted str fluff */
 
-static short ctype_c[257] =
+static unsigned short ctype_c[257] =
 {
   EF,
 /*      0       1       2       3       4       5       6       7   */
@@ -456,7 +456,7 @@ get_token_c (FILE *input_FILE, int *flags)
 {
   static char input_buffer[BUFSIZ];
   static int new_line = 1;
-  short *rct = &ctype_c[1];
+  unsigned short *rct = &ctype_c[1];
   int c;
   char *id = input_buffer;
 
@@ -686,7 +686,7 @@ next:
 static void
 set_ctype_c (char const *chars, int type)
 {
-  short *rct = &ctype_c[1];
+  unsigned short *rct = &ctype_c[1];
 
   while (*chars)
     rct[*chars++] |= type;
@@ -695,7 +695,7 @@ set_ctype_c (char const *chars, int type)
 static void
 clear_ctype_c (char const *chars, int type)
 {
-  short *rct = &ctype_c[1];
+  unsigned short *rct = &ctype_c[1];
 
   while (*chars)
     rct[*chars++] &= ~type;
@@ -795,7 +795,7 @@ set_args_c (char const *lang_name, int op, char const *arg)
 #define ISCCBORING(c)	(!((rct)[c] & (EF|C2)))
 #define ISIGNORE(c)	((rct)[c] & (IG))
 
-static char ctype_asm[257] =
+static unsigned char ctype_asm[257] =
 {
   EF,
 /*      0       1       2       3       4       5       6       7   */
@@ -830,7 +830,7 @@ static char const *
 get_token_asm (FILE *input_FILE, int *flags)
 {
   static char input_buffer[BUFSIZ];
-  char *rct = &ctype_asm[1];
+  unsigned char *rct = &ctype_asm[1];
   int c;
   char *id = input_buffer;
   static int new_line = 1;
@@ -960,7 +960,7 @@ next:
 static void
 set_ctype_asm (char const *chars, int type)
 {
-  char *rct = &ctype_asm[1];
+  unsigned char *rct = &ctype_asm[1];
 
   while (*chars)
     rct[*chars++] |= type;
@@ -969,7 +969,7 @@ set_ctype_asm (char const *chars, int type)
 static void
 clear_ctype_asm (char const *chars, int type)
 {
-  char *rct = &ctype_asm[1];
+  unsigned char *rct = &ctype_asm[1];
 
   while (*chars)
     rct[*chars++] &= ~type;
@@ -1065,7 +1065,7 @@ set_args_asm (char const *lang_name, int op, char const *arg)
 #define ISBORING(c)	(!((rct)[c] & (I1|NM|EF)))
 #define ISIDSQUEEZE(c)	((rct)[c] & (SQ))
 
-static char ctype_text[257] =
+static unsigned char ctype_text[257] =
 {
   EF,
 /*      0       1       2       3       4       5       6       7   */
@@ -1097,7 +1097,7 @@ static char const *
 get_token_text (FILE *input_FILE, int *flags)
 {
   static char input_buffer[BUFSIZ];
-  char *rct = &ctype_text[1];
+  unsigned char *rct = &ctype_text[1];
   int c;
   char *id = input_buffer;
 
@@ -1140,7 +1140,7 @@ top:
 static void
 set_ctype_text (char const *chars, int type)
 {
-  char *rct = &ctype_text[1];
+  unsigned char *rct = &ctype_text[1];
 
   while (*chars)
     rct[*chars++] |= type;
@@ -1149,7 +1149,7 @@ set_ctype_text (char const *chars, int type)
 static void
 clear_ctype_text (char const *chars, int type)
 {
-  char *rct = &ctype_text[1];
+  unsigned char *rct = &ctype_text[1];
 
   while (*chars)
     rct[*chars++] &= ~type;

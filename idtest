@@ -3,21 +3,21 @@
 set -x
 
 case $# in
-0) 1>&2 echo Usage: $(basename $0) files...; exit 1;;
+0) 1>&2 echo Usage: $0 files...; exit 1;;
 esac
 case $1 in
 -f*) _fID=$1; shift;;
 esac
 
-idx "$@" |sort -u >|ids.idx
-lid $_fID |sed -e 's/[ 	].*//' |sort -u >|ids.lid
+idx "$@" |sort -u >ids.idx
+lid $_fID |sed -e 's/[ 	].*//' |sort -u >ids.lid
 for file
 do
     case x$file in
     x-*) continue;;
     esac
     fid $_fID $file
-done |sort -u >|ids.fid
+done |sort -u >ids.fid
 
 if cmp ids.idx ids.lid
 then

@@ -31,6 +31,8 @@
 
 * mkid & lid
   - store & retrieve floating point literals
+  - automatically crack (optionally gzipped or compressed) tar files, so
+    you can index and search archived source without having to unpack it.
 
 * mkid
   - add a recursive file tree walker, so a complete list of file names

@@ -111,18 +111,18 @@ io_read (FILE *input_FILE, void *addr, unsigned int size, int is_int)
     {
       switch (size)
 	{
-	case sizeof (uint32_t):
-	  *(uint32_t *)addr = getc (input_FILE);
-	  *(uint32_t *)addr += getc (input_FILE) << 010;
-	  *(uint32_t *)addr += getc (input_FILE) << 020;
-	  *(uint32_t *)addr += getc (input_FILE) << 030;
+	case 4: /* This must be a literal 4.  Don't use sizeof (uintmin32_t)! */
+	  *(uintmin32_t *)addr = getc (input_FILE);
+	  *(uintmin32_t *)addr += getc (input_FILE) << 010;
+	  *(uintmin32_t *)addr += getc (input_FILE) << 020;
+	  *(uintmin32_t *)addr += getc (input_FILE) << 030;
 	  break;
-	case sizeof (uint16_t):
-	  *(uint16_t *)addr = getc (input_FILE);
-	  *(uint16_t *)addr += getc (input_FILE) << 010;
+	case 2:
+	  *(unsigned short *)addr = getc (input_FILE);
+	  *(unsigned short *)addr += getc (input_FILE) << 010;
 	  break;
-	case sizeof (uint8_t):
-	  *(uint8_t *)addr = getc (input_FILE);
+	case 1:
+	  *(unsigned char *)addr = getc (input_FILE);
 	  break;
 	default:
 	  fprintf (stderr, "Unsupported size in io_write (): %d\n", size);
@@ -143,18 +143,18 @@ io_write (FILE *output_FILE, void *addr, unsigned int size, int is_int)
     {
       switch (size)
 	{
-	case sizeof (uint32_t):
-	  putc (*(uint32_t *)addr, output_FILE);
-	  putc (*(uint32_t *)addr >> 010, output_FILE);
-	  putc (*(uint32_t *)addr >> 020, output_FILE);
-	  putc (*(uint32_t *)addr >> 030, output_FILE);
+	case 4: /* This must be a literal 4.  Don't use sizeof (uintmin32_t)! */
+	  putc (*(uintmin32_t *)addr, output_FILE);
+	  putc (*(uintmin32_t *)addr >> 010, output_FILE);
+	  putc (*(uintmin32_t *)addr >> 020, output_FILE);
+	  putc (*(uintmin32_t *)addr >> 030, output_FILE);
 	  break;
-	case sizeof (uint16_t):
-	  putc (*(uint16_t *)addr, output_FILE);
-	  putc (*(uint16_t *)addr >> 010, output_FILE);
+	case 2:
+	  putc (*(unsigned short *)addr, output_FILE);
+	  putc (*(unsigned short *)addr >> 010, output_FILE);
 	  break;
-	case sizeof (uint8_t):
-	  putc (*(uint8_t *)addr, output_FILE);
+	case 1:
+	  putc (*(unsigned char *)addr, output_FILE);
 	  break;
 	default:
 	  fprintf (stderr, "Unsupported size in io_write (): %d\n", size);
@@ -168,23 +168,28 @@ io_write (FILE *output_FILE, void *addr, unsigned int size, int is_int)
   return size;
 }
 
+/* The sizes of the fields must be hard-coded.  They aren't
+   necessarily the sizes of the struct members, because some
+   architectures don't have any way to declare 4-byte integers
+   (e.g., Cray) */
+
 static int
 io_idhead (FILE *fp, int (*io) (FILE *, void *, unsigned int, int), struct idhead *idh)
 {
   unsigned int size = 0;
   if (fp)
     fseek (fp, 0L, 0);
-  size += io (fp, idh->idh_magic, sizeof (idh->idh_magic), 0);
-  size += io (fp, &idh->idh_pad_1, sizeof (idh->idh_pad_1), 0);
-  size += io (fp, &idh->idh_version, sizeof (idh->idh_version), 0);
-  size += io (fp, &idh->idh_flags, sizeof (idh->idh_flags), 1);
-  size += io (fp, &idh->idh_args, sizeof (idh->idh_args), 1);
-  size += io (fp, &idh->idh_paths, sizeof (idh->idh_paths), 1);
-  size += io (fp, &idh->idh_tokens, sizeof (idh->idh_tokens), 1);
-  size += io (fp, &idh->idh_buf_size, sizeof (idh->idh_buf_size), 1);
-  size += io (fp, &idh->idh_vec_size, sizeof (idh->idh_vec_size), 1);
-  size += io (fp, &idh->idh_args_offset, sizeof (idh->idh_args_offset), 1);
-  size += io (fp, &idh->idh_tokens_offset, sizeof (idh->idh_tokens_offset), 1);
-  size += io (fp, &idh->idh_end_offset, sizeof (idh->idh_end_offset), 1);
+  size += io (fp, idh->idh_magic, 2, 0);
+  size += io (fp, &idh->idh_pad_1, 1, 0);
+  size += io (fp, &idh->idh_version, 1, 0);
+  size += io (fp, &idh->idh_flags, 2, 1);
+  size += io (fp, &idh->idh_args, 4, 1);
+  size += io (fp, &idh->idh_paths, 4, 1);
+  size += io (fp, &idh->idh_tokens, 4, 1);
+  size += io (fp, &idh->idh_buf_size, 4, 1);
+  size += io (fp, &idh->idh_vec_size, 4, 1);
+  size += io (fp, &idh->idh_args_offset, 4, 1);
+  size += io (fp, &idh->idh_tokens_offset, 4, 1);
+  size += io (fp, &idh->idh_end_offset, 4, 1);
   return size;
 }

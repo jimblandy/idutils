@@ -24,7 +24,7 @@ Special instructions for alpha testers:
   vendor-supplied compiler and gcc.  By default, configure will use gcc if
   it is available.  You can override this by doing this:
 
-	rm config.cache
+	make distclean
 	CC=vendor-supplied-cc ./configure	# bourne-shell syntax
 		-or-
 	setenv CC vendor-supplied-cc; ./configure # csh syntax

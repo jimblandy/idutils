@@ -80,7 +80,7 @@ enum radix {
   RADIX_OCT = 1,
   RADIX_DEC = 2,
   RADIX_HEX = 4,
-  RADIX_ALL = RADIX_DEC | RADIX_OCT | RADIX_HEX,
+  RADIX_ALL = RADIX_DEC | RADIX_OCT | RADIX_HEX
 };
 
 #define	TOLOWER(c)	(isupper (c) ? tolower (c) : (c))
