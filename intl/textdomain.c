@@ -27,7 +27,7 @@
 # include <string.h>
 #else
 # include <strings.h>
-# ifndef memcpy
+# if !defined (HAVE_MEMCPY) && defined (HAVE_BCOPY) && !defined (memcpy)
 #  define memcpy(Dst, Src, Num) bcopy (Src, Dst, Num)
 # endif
 #endif
