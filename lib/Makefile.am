@@ -1,5 +1,7 @@
 ## Process this file with automake to create Makefile.in
 
+AUTOMAKE_OPTIONS = ../src/ansi2knr
+
 noinst_LIBRARIES = libsys.a
 
 EXTRA_DIST = alloca.c basename.c dirname.c error.c fnmatch.c memcpy.c \
