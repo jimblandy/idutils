@@ -759,7 +759,7 @@ search_flinkv (struct file_link **flinkv)
   unsigned int count;
   char *file_name = ALLOCA (char, PATH_MAX);
 
-  if (gets (pattern) == 0)
+  if (fgets (pattern, sizeof (pattern), stdin) == 0)
     return -1;
 
   for (count = 0; *flinkv; count++, flinkv++)
