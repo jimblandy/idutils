@@ -3,3 +3,5 @@
 info_TEXINFOS = id-utils.texi
 
 EXTRA_DIST = texinfo.tex
+
+DISTCLEANFILES = id-utils.cm id-utils.fl
