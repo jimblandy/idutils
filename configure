@@ -703,7 +703,7 @@ fi
 
 PACKAGE=id-utils
 
-VERSION=3.2d
+VERSION=3.2e
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -804,7 +804,7 @@ EOF
 ################ Maintainer Stuff ############################################
 ##############################################################################
 
-ALL_LINGUAS="de fr"
+ALL_LINGUAS="de fr pl nl"
 
 case $VERSION in
 *[a-z]) README_ALPHA=README-alpha;;

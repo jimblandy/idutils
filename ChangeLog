@@ -1,5 +1,9 @@
 1999-04-08  Greg McGary  <gkm@gnu.org>
 
+	* libidu/idread.c (maybe_read_id_file): Add `b' for binary
+	to fopen mode string.  [From tbisp@uswest.net]
+	* src/lid.c (report_grep): Change name of gid_FILE to source_FILE.
+
 	* src/mkid.c (write_id_file): Complain if fclose fails.
 	[From jbb6@acpub.duke.edu]
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
-"POT-Creation-Date: 1999-04-06 01:20-0700\n"
+"POT-Creation-Date: 1999-04-08 03:00-0700\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Karl Eichwalder <ke@ke.Central.DE>\n"
 "Language-Team: German <de@li.org>\n"
@@ -115,17 +115,17 @@ msgid ""
 "strings\n"
 msgstr ""
 
-#: libidu/scanners.c:695 libidu/scanners.c:971 libidu/scanners.c:1174
+#: libidu/scanners.c:701 libidu/scanners.c:972 libidu/scanners.c:1175
 #, c-format
 msgid "junk: `%c'"
 msgstr "\"junk\": '%c'"
 
-#: libidu/scanners.c:697 libidu/scanners.c:973 libidu/scanners.c:1176
+#: libidu/scanners.c:703 libidu/scanners.c:974 libidu/scanners.c:1177
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "\"junk\": '\\%03o'"
 
-#: libidu/scanners.c:801
+#: libidu/scanners.c:807
 msgid ""
 "Assembly language:\n"
 "  -c,--comment=CHARS     Any of CHARS starts a comment until end-of-line\n"
@@ -135,7 +135,7 @@ msgid ""
 "  -n,--no-cpp            Don't handle C pre-processor directives\n"
 msgstr ""
 
-#: libidu/scanners.c:1077
+#: libidu/scanners.c:1078
 msgid ""
 "Text language:\n"
 "  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
@@ -396,7 +396,7 @@ msgstr ""
 msgid "can't exec `%s'"
 msgstr ""
 
-#: src/lid.c:849
+#: src/lid.c:853
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 
@@ -522,7 +522,12 @@ msgstr "Schreibe '%s'...\n"
 msgid "can't create `%s'"
 msgstr ""
 
-#: src/mkid.c:713
+#: src/mkid.c:626
+#, c-format
+msgid "error closing `%s'"
+msgstr ""
+
+#: src/mkid.c:714
 #, fuzzy
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "level %d: %ld == %ld\n"
