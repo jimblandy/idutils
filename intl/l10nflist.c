@@ -72,10 +72,10 @@ static char *stpcpy PARAMS ((char *dest, const char *src));
 
 #if !defined _LIBC && !defined HAVE___ARGZ_COUNT
 /* Returns the number of strings in ARGZ.  */
-static size_t __argz_count PARAMS ((const char *argz, size_t len));
+static size_t argz_count__ PARAMS ((const char *argz, size_t len));
 
 static size_t
-__argz_count (argz, len)
+argz_count__ (argz, len)
      const char *argz;
      size_t len;
 {
@@ -89,15 +89,17 @@ __argz_count (argz, len)
     }
   return count;
 }
+# undef __argz_count
+# define __argz_count(argz, len) argz_count__ (argz, len)
 #endif	/* !_LIBC && !HAVE___ARGZ_COUNT */
 
 #if !defined _LIBC && !defined HAVE___ARGZ_STRINGIFY
 /* Make '\0' separated arg vector ARGZ printable by converting all the '\0's
    except the last into the character SEP.  */
-static void __argz_stringify PARAMS ((char *argz, size_t len, int sep));
+static void argz_stringify__ PARAMS ((char *argz, size_t len, int sep));
 
 static void
-__argz_stringify (argz, len, sep)
+argz_stringify__ (argz, len, sep)
      char *argz;
      size_t len;
      int sep;
@@ -111,11 +113,16 @@ __argz_stringify (argz, len, sep)
 	*argz++ = sep;
     }
 }
-#endif	/* !_LIBC && !HAVE___ARGZ_COUNT */
+# undef __argz_stringify
+# define __argz_stringify(argz, len, sep) argz_stringify__ (argz, len, sep)
+#endif	/* !_LIBC && !HAVE___ARGZ_STRINGIFY */
 
 #if !defined _LIBC && !defined HAVE___ARGZ_NEXT
+static char *argz_next__ PARAMS ((char *argz, size_t argz_len,
+				  const char *entry));
+
 static char *
-__argz_next (argz, argz_len, entry)
+argz_next__ (argz, argz_len, entry)
      char *argz;
      size_t argz_len;
      const char *entry;
@@ -133,6 +140,8 @@ __argz_next (argz, argz_len, entry)
     else
       return 0;
 }
+# undef __argz_next
+# define __argz_next(argz, len, entry) argz_next__ (argz, len, entry)
 #endif	/* !_LIBC && !HAVE___ARGZ_NEXT */
 
 

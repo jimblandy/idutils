@@ -1,3 +1,16 @@
+Sat Jun 22 04:58:14 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* Makefile.in (MKINSTALLDIRS): New variable.  Path to
+        mkinstalldirs script.
+	(install): use MKINSTALLDIRS variable or if the script is not present
+	try to find it in the $top_scrdir).
+
+Wed Jun 19 02:56:56 1996  Ulrich Drepper  <drepper@cygnus.com>
+
+	* l10nflist.c: Linux libc *partly* includes the argz_* functions.
+	Grr.  Work around by renaming the static version and use macros
+	for renaming.
+
 Tue Jun 18 20:11:17 1996  Ulrich Drepper  <drepper@cygnus.com>
 
 	* l10nflist.c: Correct presence test macros of __argz_* functions.

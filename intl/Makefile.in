@@ -38,6 +38,7 @@ subdir = intl
 
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
+MKINSTALLDIRS = @MKINSTALLDIRS@
 
 AR = ar
 CC = @CC@
@@ -98,8 +99,12 @@ check: all
 # package, you have to use `configure --with-included-gettext'.
 install: all
 	if test "$(PACKAGE)" = "gettext"; then \
-	  $(top_srcdir)/mkinstalldirs $(libdir) $(includedir) \
-	    $(gettextsrcdir); \
+	  if test -r $(MKINSTALLDIRS); then \
+	    $(MKINSTALLDIRS) $(libdir) $(includedir) $(gettextsrcdir); \
+	  else \
+	    $(top_srcdir)/mkinstalldirs $(libdir) $(includedir) \
+	      $(gettextsrcdir); \
+	  fi; \
 	  if test '@INTLOBJS@' = '$(GETTOBJS)'; then \
 	    $(INSTALL_DATA) intlh.inst $(includedir)/libintl.h; \
 	    $(INSTALL_DATA) libintl.a $(libdir)/libintl.a; \
