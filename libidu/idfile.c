@@ -1,5 +1,5 @@
 /* idfile.c -- read & write mkid database file header
-   Copyright (C) 1986, 1995, 1996 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 1999 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ locate_id_file_name (char const *arg)
       if (id_path)
 	{
 	  id_path = strdup (id_path);
-	  arg = strtok (id_path, ":");
+	  arg = strsep (&id_path, ":");
 	  /* FIXME: handle multiple ID file names */
 	}
     }

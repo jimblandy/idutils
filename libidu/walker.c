@@ -498,10 +498,10 @@ append_strings_to_vector (char **vector_0, char *string, char const *delimiter_c
   else
     vector = vector_0 = MALLOC (char *, 2 + strlen (string) / 2);
 
-  *vector = strtok (string, delimiter_class);
-  while (*vector)
-    *++vector = strtok (0, delimiter_class);
-  return REALLOC (vector_0, char *, ++vector - vector_0);
+  do
+    *vector = strsep (&string, delimiter_class);
+  while (*vector++);
+  return REALLOC (vector_0, char *, vector - vector_0);
 }
 
 int
@@ -673,10 +673,17 @@ vectorize_string (char *string, char const *delimiter_class)
   char **vector_0 = MALLOC (char *, 2 + strlen (string) / 2);
   char **vector = vector_0;
 
-  *vector = strtok (string, delimiter_class);
-  while (*vector)
-    *++vector = strtok (0, delimiter_class);
-  return REALLOC (vector_0, char *, ++vector - vector_0);
+  *vector++ = strsep (&string, delimiter_class);
+  if (vector[-1])
+    {
+      /* Toss first field if empty */
+      if (vector[-1][0] == '\0')
+	vector--;
+      do
+	*vector = strsep (&string, delimiter_class);
+      while (*vector++);
+    }
+  return REALLOC (vector_0, char *, vector - vector_0);
 }
 
 void

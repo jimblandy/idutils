@@ -87,7 +87,7 @@ void
 language_save_arg (char *arg)
 {
   static char horizontal_space[] = " \t";
-  char *lang_name = strtok (arg, ":");
+  char *lang_name = strsep (&arg, ":");
   struct language *lang = get_language (lang_name);
 
   if (lang == 0)
@@ -97,7 +97,7 @@ language_save_arg (char *arg)
     }
   if (lang->lg_argc == 0)
     lang->lg_argv[lang->lg_argc++] = program_name;
-  lang->lg_argv[lang->lg_argc++] = strtok (0, horizontal_space);
+  lang->lg_argv[lang->lg_argc++] = strsep (&arg, horizontal_space);
 }
 
 void
@@ -287,11 +287,11 @@ tokenize_args_string (char *args_string, int *argcp, char ***argvp)
   char *arg;
 
   *argv++ = program_name;
-  arg = strtok (args_string, horizontal_space);
+  arg = strsep (&args_string, horizontal_space);
   while (arg)
     {
       *argv++ = arg;
-      arg = strtok (0, horizontal_space);
+      arg = strsep (&args_string, horizontal_space);
     }
   *argcp = argv - argv_0;
   *argvp = REALLOC (argv_0, char *, *argcp);
