@@ -97,7 +97,6 @@ AC_SUBST(LDFLAGS)
 ##############################################################################
 
 AC_FUNC_ALLOCA
-AM_WITH_REGEX
 AC_FUNC_VPRINTF
 AM_FUNC_OBSTACK
 AC_CHECK_FUNCS(getwd getcwd link strerror isascii bcopy bzero memcpy)

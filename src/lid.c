@@ -26,6 +26,7 @@
 #include <sys/wait.h>
 #include <assert.h>
 #include <getopt.h>
+#include <regex.h>
 #include "xstring.h"
 #include "xunistd.h"
 #include "xnls.h"
@@ -37,11 +38,6 @@
 #include "xalloca.h"
 #if HAVE_LIMITS_H
 # include <limits.h>
-#endif
-#if WITH_REGEX
-# include <regex.h>
-#else
-# include <rx.h>
 #endif
 
 typedef void (*report_func_t) __P((char const *name, struct file_link **flinkv));
