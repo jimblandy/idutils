@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
-"POT-Creation-Date: 1999-01-27 14:27-0600\n"
+"POT-Creation-Date: 1999-01-28 09:05-0600\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Karl Eichwalder <ke@ke.Central.DE>\n"
 "Language-Team: German <de@li.org>\n"
@@ -104,7 +104,7 @@ msgstr "Kein Scanner für die Sprache '%s'"
 msgid "can't read entire language map file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:413
+#: libidu/scanners.c:417
 msgid ""
 "C language:\n"
 "  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the "
@@ -115,17 +115,17 @@ msgid ""
 "strings\n"
 msgstr ""
 
-#: libidu/scanners.c:682 libidu/scanners.c:986 libidu/scanners.c:1189
+#: libidu/scanners.c:686 libidu/scanners.c:990 libidu/scanners.c:1193
 #, c-format
 msgid "junk: `%c'"
 msgstr "\"junk\": '%c'"
 
-#: libidu/scanners.c:684 libidu/scanners.c:988 libidu/scanners.c:1191
+#: libidu/scanners.c:688 libidu/scanners.c:992 libidu/scanners.c:1195
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "\"junk\": '\\%03o'"
 
-#: libidu/scanners.c:788
+#: libidu/scanners.c:792
 msgid ""
 "Assembly language:\n"
 "  -c,--comment=CHARS     Any of CHARS starts a comment until end-of-line\n"
@@ -135,7 +135,7 @@ msgid ""
 "  -n,--no-cpp            Don't handle C pre-processor directives\n"
 msgstr ""
 
-#: libidu/scanners.c:1092
+#: libidu/scanners.c:1096
 msgid ""
 "Text language:\n"
 "  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
@@ -396,7 +396,7 @@ msgstr ""
 msgid "can't exec `%s'"
 msgstr ""
 
-#: src/lid.c:853
+#: src/lid.c:854
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 
@@ -478,8 +478,8 @@ msgid "Comment=%ld\n"
 msgstr "Kommentar=%ld\n"
 
 #: src/mkid.c:450
-#, c-format
-msgid "Files=%d, "
+#, fuzzy, c-format
+msgid "Files=%lu, "
 msgstr "Dateien=%d, "
 
 #: src/mkid.c:451
@@ -497,32 +497,32 @@ msgstr "Bytes=%ld Kb, "
 msgid "Heap=%ld+%ld Kb, "
 msgstr "\"Heap\"=%ld Kb, "
 
-#: src/mkid.c:455
+#: src/mkid.c:456
 #, c-format
 msgid "Output=%ld (%ld tok, %ld hit)\n"
 msgstr "Ausgabe=%ld (%ld tok, %ld hit)\n"
 
 # Frequenz übersetzen? ke
-#: src/mkid.c:458
+#: src/mkid.c:460
 #, fuzzy, c-format
 msgid ", Freq=%ld/%ld=%.2f\n"
 msgstr "\"Freq\"=%ld/%ld=%.2f\n"
 
-#: src/mkid.c:481
+#: src/mkid.c:484
 msgid "Sorting tokens...\n"
 msgstr "Sortiere \"Token\"...\n"
 
-#: src/mkid.c:487
+#: src/mkid.c:490
 #, c-format
 msgid "Writing `%s'...\n"
 msgstr "Schreibe '%s'...\n"
 
-#: src/mkid.c:490
+#: src/mkid.c:493
 #, c-format
 msgid "can't create `%s'"
 msgstr ""
 
-#: src/mkid.c:636
+#: src/mkid.c:639
 #, fuzzy
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "level %d: %ld == %ld\n"

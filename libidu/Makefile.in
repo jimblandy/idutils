@@ -102,6 +102,7 @@ libidu_a_SOURCES = dynvec.c hash.c idfile.c idread.c idwrite.c fnprint.c 	scanne
 
 idudir = $(prefix)/share
 idu_DATA = id-lang.map
+EXTRA_DIST = $(idu_DATA)
 
 noinst_HEADERS = dynvec.h hash.h idfile.h scanners.h tokflags.h xnls.h
 
