@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4a from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -46,9 +46,10 @@ AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_STRIP_FLAG =
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -248,8 +249,8 @@ dist-info: $(INFO_DEPS)
 
 mostlyclean-aminfo:
 	-rm -f id-utils.aux id-utils.cp id-utils.cps id-utils.dvi id-utils.fn \
-	  id-utils.fns id-utils.ky id-utils.kys id-utils.ps \
-	  id-utils.log id-utils.pg id-utils.toc id-utils.tp \
+	  id-utils.fns id-utils.pgs id-utils.ky id-utils.kys \
+	  id-utils.ps id-utils.log id-utils.pg id-utils.toc id-utils.tp \
 	  id-utils.tps id-utils.vr id-utils.vrs id-utils.op id-utils.tr \
 	  id-utils.cv id-utils.cn
 
@@ -281,7 +282,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
@@ -311,7 +312,7 @@ uninstall: uninstall-am
 all-am: Makefile $(INFO_DEPS)
 all-redirect: all-am
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
 installdirs:
 	$(mkinstalldirs)  $(DESTDIR)$(infodir)
 

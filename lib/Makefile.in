@@ -96,12 +96,12 @@ lispdir = @lispdir@
 
 noinst_LIBRARIES = libsys.a
 
-EXTRA_DIST = alloca.c basename.c dirname.c error.c fnmatch.c memcpy.c 	memset.c obstack.c regex.c rx.c strcasecmp.c strcspn.c strdup.c 	strndup.c strpbrk.c strspn.c strstr.c strtok.c
+EXTRA_DIST = alloca.c basename.c dirname.c error.c fnmatch.c memcpy.c 	memset.c obstack.c regex.c strcasecmp.c strcspn.c strdup.c 	strndup.c strpbrk.c strspn.c strstr.c strtok.c
 
 
 libsys_a_SOURCES = xgetcwd.c xmalloc.c getopt.c getopt1.c
 
-noinst_HEADERS = ansidecl.h error.h fnmatch.h getopt.h obstack.h 	pathmax.h regex.h rx.h xalloca.h xdirent.h xfnmatch.h 	xmalloc.h xobstack.h xstddef.h xstdlib.h xstring.h xsysstat.h 	xunistd.h
+noinst_HEADERS = ansidecl.h error.h fnmatch.h getopt.h obstack.h 	pathmax.h regex.h xalloca.h xdirent.h xfnmatch.h 	xmalloc.h xobstack.h xstddef.h xstdlib.h xstring.h xsysstat.h 	xunistd.h
 
 
 INCLUDES = -I. -I$(srcdir) 	   -I../intl -I$(top_srcdir)/intl 	   -I.. -I$(top_srcdir)
@@ -125,8 +125,8 @@ HEADERS =  $(noinst_HEADERS)
 
 DIST_COMMON =  Makefile.am Makefile.in alloca.c ansi2knr.1 ansi2knr.c \
 basename.c dirname.c error.c fnmatch.c memcpy.c memset.c obstack.c \
-obstack.h regex.c regex.h rx.c rx.h strcspn.c strdup.c strndup.c \
-strpbrk.c strspn.c strstr.c strtok.c
+obstack.h regex.c strcspn.c strdup.c strndup.c strpbrk.c strspn.c \
+strstr.c strtok.c
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
