@@ -86,16 +86,16 @@ void add_token_to_summary __P((struct summary *summary, struct token *token));
 struct hash_table token_table;
 
 /* Miscellaneous statistics */
-size_t input_chars;
-size_t name_tokens;
-size_t number_tokens;
-size_t string_tokens;
-size_t literal_tokens;
-size_t comment_tokens;
-size_t occurrences;
-size_t hits_length = 0;
-size_t tokens_length = 0;
-size_t output_length = 0;
+unsigned long input_chars;
+unsigned long name_tokens;
+unsigned long number_tokens;
+unsigned long string_tokens;
+unsigned long literal_tokens;
+unsigned long comment_tokens;
+unsigned long occurrences;
+unsigned long hits_length = 0;
+unsigned long tokens_length = 0;
+unsigned long output_length = 0;
 
 int verbose_flag = 0;
 int statistics_flag = 0;
@@ -510,10 +510,10 @@ report_statistics (void)
   printf (_("Literal=%ld, "), literal_tokens);
   printf (_("Comment=%ld\n"), comment_tokens);
 
-  printf (_("Files=%d, "), idh.idh_files);
+  printf (_("Files=%ld, "), idh.idh_files);
   printf (_("Tokens=%ld, "), occurrences);
   printf (_("Bytes=%ld Kb, "), input_chars / 1024);
-  printf (_("Heap=%ld+%ld Kb, "), (heap_after_scan - heap_after_walk) / 1024,
+  printf (_("Heap=%d+%d Kb, "), (heap_after_scan - heap_after_walk) / 1024,
 	  (heap_after_walk - heap_initial) / 1024);
   printf (_("Output=%ld (%ld tok, %ld hit)\n"), output_length, tokens_length, hits_length);
 
