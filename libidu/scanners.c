@@ -473,6 +473,7 @@ parse_args_c (char **argv, int argc)
   return args;
 }
 
+static char id_0[1<<020];
 
 /* Grab the next identifier from the C source file.  This state
    machine is built for speed, not elegance.  */
@@ -483,7 +484,6 @@ get_token_c (FILE *in_FILE, void const *args, int *flags)
 #define ARGS ((struct args_c const *) args)
   static int new_line = 1;
   unsigned short const *rct = &ARGS->ctype[1];
-  char id_0[BUFSIZ];
   char *id = id_0;
   int c;
 
@@ -869,7 +869,6 @@ get_token_asm (FILE *in_FILE, void const *args, int *flags)
 #define ARGS ((struct args_asm const *) args)
   static int new_line = 1;
   unsigned char const *rct = &ARGS->ctype[1];
-  char id_0[BUFSIZ];
   char *id = id_0;
   int c;
 
@@ -1154,7 +1153,6 @@ static struct token *
 get_token_text (FILE *in_FILE, void const *args, int *flags)
 {
 #define ARGS ((struct args_text const *) args)
-  static char id_0[BUFSIZ];
   unsigned char const *rct = &ARGS->ctype[1];
   int c;
   char *id = id_0;

@@ -1,3 +1,7 @@
+1998-11-18  Greg McGary  <gkm@gnu.org>
+
+	* libidu/scanners.c (id_0): Increase size and make file static.
+
 Tue Aug  6 22:46:16 1996  Greg McGary  <gkm@g2>
 
 	* Version 3.2 released
@@ -10,11 +14,11 @@ Tue Aug  6 22:46:16 1996  Greg McGary  <gkm@g2>
 
 	* src/xtokid.c, libidu/idfile.h: #include "xstring.h" to avoid
 	redeclaration of basename/dirname error.
-	
+
 Wed Jul 17 18:06:18 1996  Greg McGary  <gkm@g2>
-	
+
 	* Version 3.1 released
-	
+
 Sun Jun 30 13:06:18 1996  Greg McGary  <gkm@g2>
 
 	* src/lid.c (get_query_func): remove unreachable return stmt.
@@ -27,7 +31,7 @@ Sun Jun 30 13:06:18 1996  Greg McGary  <gkm@g2>
 
 	* libidu/scanners.c (get_token_c, get_token_asm, get_token_text):
 	cast return type of obstack_finish.
-	
+
 	* src/lid.c (radix, delimiter_style, pattern_style, key_style,
  	result_style, key_style, result_style) libidu/idfile.h
  	(separator_style): remove trailing comma from enum list.
@@ -119,13 +123,13 @@ Mon Feb 20 16:18:47 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
 
 Sun Feb 19 19:21:09 1995  Thomas Neumann  <tom@smart.ruhr.de>
- 
+
  	* configure.in: Check for <sgtty.h>, not <sgttyb.h>.
 	* accconfig.h: Disbale HAVE_TERMIOS_H for NeXT,
 	if HAVE_SGTTY_H is present.
 	* lid.c: Depend on HAVE_SGTTY_H, not HAVE_SGTTYB_H.
 	(savetty): ANSI'fy arglist declaration.
- 
+
 Sat Feb 18 21:44:39 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
 	* Version 3.0.6 released.
