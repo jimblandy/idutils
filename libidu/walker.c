@@ -725,10 +725,10 @@ classify_link (struct file_link *flink, struct stat *stp)
       flags |= FL_SYM_LINK;
     }
 #endif
-  if (stp->st_size == 0)
-    return 0;
-  else if (S_ISDIR (stp->st_mode))
+  if (S_ISDIR (stp->st_mode))
     flags |= FL_TYPE_DIR;
+  else if (stp->st_size == 0)
+    return 0;
   else if (S_ISREG (stp->st_mode))
     flags |= FL_TYPE_FILE;
   else
