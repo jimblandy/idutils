@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4a from Makefile.am
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -93,6 +93,8 @@ VERSION = @VERSION@
 l = @l@
 lispdir = @lispdir@
 
+AUTOMAKE_OPTIONS = gnits 1.2h
+
 SUBDIRS = lib libidu intl src lisp m4 po doc testsuite
 
 # Remove this file here (it is created via configure), not from within intl.
@@ -124,8 +126,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(ACLOCAL_M4):  configure.in  m4/gettext.m4 m4/lcmessage.m4 \
-		m4/progtest.m4
+$(ACLOCAL_M4):  configure.in 
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
 config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)

@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4a from Makefile.am
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -97,7 +97,7 @@ info_TEXINFOS = id-utils.texi
 
 EXTRA_DIST = texinfo.tex
 
-DISTCLEANFILES = id-utils.cm id-utils.fl
+DISTCLEANFILES = id-utils.fl
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
