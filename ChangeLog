@@ -1,3 +1,18 @@
+1999-04-03  Greg McGary  <gkm@gnu.org>
+
+	* Version 3.2c released.
+
+	* libidu/id-file.h (walker_verbose_flag): Add extern variable decl.
+	* libidu/scanners.c (SCAN_CPP_DIRECTIVE): Add macro.
+	(get_token_c, get_token_asm): Call SCAN_CPP_DIRECTIVE.
+	* libidu/walker.c (walker_verbose_flag): Add variable defn.
+	(print_member_file): Add function.
+	(maybe_get_member_file): Call print_member_file in verbose mode.
+	* src/mkid.c: Add coments.  (ceil_log_2): Add function.
+	(main): Handle 'V' option for extra verbosity.
+	(scan_files): Use MAX (1M, n*lg(n)*64) to estimate initial size
+	of token hash table.
+
 1999-03-29  Greg McGary  <gkm@gnu.org>
 
 	* Version 3.2b released.
@@ -121,10 +136,10 @@
 1998-11-20  Greg McGary  <gkm@gnu.org>
 
 	* libidu/fnprint.c (print_filenames): Move ALLOCA outside loop.
-	libidu/walker.c (get_lang_args): Ditto.
-	src/fnid.c (main): Ditto.
-	src/lid.c (report_grep, search_flinkv): Ditto.
-	src/mkid.c (scan_member_file): Consolidate two ALLOCA buffers
+	* libidu/walker.c (get_lang_args): Ditto.
+	* src/fnid.c (main): Ditto.
+	* src/lid.c (report_grep, search_flinkv): Ditto.
+	* src/mkid.c (scan_member_file): Consolidate two ALLOCA buffers
 	at inner scopes to a single buffer at an outer scope.
 
 1998-11-18  Greg McGary  <gkm@gnu.org>
