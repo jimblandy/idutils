@@ -12,6 +12,10 @@
 	(main): Handle 'V' option for extra verbosity.
 	(scan_files): Use MAX (1M, n*lg(n)*64) to estimate initial size
 	of token hash table.
+	(name_tokens, number_tokens, string_tokens, literal_tokens,
+	comment_tokens, occurrences, hits_length, tokens_length, output_length):
+	Change type from size_t to unsigned long.
+	(report_statistics): Fix printf formats.
 
 1999-03-29  Greg McGary  <gkm@gnu.org>
 
