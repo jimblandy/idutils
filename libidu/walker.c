@@ -1,5 +1,5 @@
 /* walker.c -- nifty file-tree walker
-   Copyright (C) 1986, 1995, 1996, 1999 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 1999, 2000 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -34,6 +34,13 @@
 #include "scanners.h"
 #include "pathmax.h"
 #include "xalloca.h"
+
+#ifndef HAVE_DECL_STRSEP
+"this configure-time declaration test was not run"
+#endif
+#if !HAVE_DECL_STRSEP
+char *strsep ();
+#endif
 
 int walker_verbose_flag = 0;
 off_t largest_member_file = 0;
