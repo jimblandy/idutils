@@ -1,5 +1,5 @@
-/* textdomain.c -- implementation of the textdomain(3) function
-   Copyright (C) 1995, 1996 Free Software Foundation, Inc.
+/* Implementation of the textdomain(3) function
+   Copyright (C) 1995, 1996, 1997 Free Software Foundation, Inc.
    Written by Ulrich Drepper <drepper@gnu.ai.mit.edu>, 1995.
 
    This program is free software; you can redistribute it and/or modify
@@ -29,7 +29,7 @@
 #else
 # include <strings.h>
 # ifndef memcpy
-#  define memcpy(Dst, Src, Num) bcopy ((Src), (Dst), (Num))
+#  define memcpy(Dst, Src, Num) bcopy (Src, Dst, Num)
 # endif
 #endif
 

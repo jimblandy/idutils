@@ -1,5 +1,5 @@
-/* bindtextdom.c -- implementation of the bindtextdomain(3) function
-   Copyright (C) 1995, 1996 Free Software Foundation, Inc.
+/* Implementation of the bindtextdomain(3) function
+   Copyright (C) 1995, 1996, 1997 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ void free ();
 #else
 # include <strings.h>
 # ifndef memcpy
-#  define memcpy(Dst, Src, Num) bcopy ((Src), (Dst), (Num))
+#  define memcpy(Dst, Src, Num) bcopy (Src, Dst, Num)
 # endif
 #endif
 
