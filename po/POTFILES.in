@@ -1,10 +1,10 @@
+libidu/fnprint.c
 libidu/hash.c
 libidu/idfile.c
 libidu/idread.c
 libidu/idwrite.c
 libidu/scanners.c
 libidu/walker.c
-libidu/xnls.h
 lib/getopt.c
 src/fid.c
 src/fnid.c
