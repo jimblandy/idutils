@@ -1,3 +1,15 @@
+1999-01-27  Jim Meyering  <meyering@ascend.com> (with some changes from gkm)
+
+	* acconfig.h: Remove many #undefs, now that we're using autoconf-2.13's
+	3-arg form of the AC_DEFINE* macros.
+
+	* Makefile.am (SUBDIRS): Add m4.
+	(EXTRA_DIST): Add Makefile.maint GNUmakefile @README_ALPHA@.
+	(DISTCLEANFILES): Add intl/libintl.h.
+	(ACLOCAL_AMFLAGS): Define to `-I m4'
+
+	* m4/: New directory.
+
 1999-01-26  Greg McGary  <gkm@gnu.org>
 
 	* hash.h (struct hash_table) [ht_empty_slots]: Add struct member.
