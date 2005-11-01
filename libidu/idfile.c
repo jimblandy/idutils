@@ -20,24 +20,16 @@
 #include <config.h>
 #include <stdio.h>
 #include <errno.h>
-#include "xstdlib.h"
-#include "xstring.h"
-#include "xsysstat.h"
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
 #include "xnls.h"
-#include "xobstack.h"
+#include "obstack.h"
 #include "idfile.h"
 #include "error.h"
 
-#ifndef HAVE_DECL_STRSEP
-"this configure-time declaration test was not run"
-#endif
-#if !HAVE_DECL_STRSEP
-char *strsep ();
-#endif
+int io_size (FILE *, void *, unsigned int size, int);
 
-int io_size __P((FILE *, void *, unsigned int size, int));
-
-
 /****************************************************************************/
 
 /* Discover the name of the ID file.  If ARG is NULL, consult $IDPATH.

@@ -21,9 +21,9 @@
 
 #include <stdio.h>
 
-typedef unsigned long (*hash_func_t) __P((void const *key));
-typedef int (*hash_cmp_func_t) __P((void const *x, void const *y));
-typedef void (*hash_map_func_t) __P((void const *item));
+typedef unsigned long (*hash_func_t) (void const *key);
+typedef int (*hash_cmp_func_t) (void const *x, void const *y);
+typedef void (*hash_map_func_t) (void const *item);
 
 struct hash_table
 {
@@ -40,24 +40,24 @@ struct hash_table
   hash_cmp_func_t ht_compare;	/* comparison function */
 };
 
-typedef int (*qsort_cmp_t) __P((void const *, void const *));
+typedef int (*qsort_cmp_t) (void const *, void const *);
 
-void hash_init __P((struct hash_table *ht, unsigned long size,
-		    hash_func_t hash_1, hash_func_t hash_2, hash_cmp_func_t hash_cmp));
-void hash_load __P((struct hash_table *ht, void *item_table,
-		    unsigned long cardinality, unsigned long size));
-void **hash_find_slot __P((struct hash_table *ht, void const *key));
-void *hash_find_item __P((struct hash_table *ht, void const *key));
-void *hash_insert __P((struct hash_table *ht, void *item));
-void *hash_insert_at __P((struct hash_table *ht, void *item, void const *slot));
-void *hash_delete __P((struct hash_table *ht, void const *item));
-void *hash_delete_at __P((struct hash_table *ht, void const *slot));
-void hash_delete_items __P((struct hash_table *ht));
-void hash_free_items __P((struct hash_table *ht));
-void hash_free __P((struct hash_table *ht, int free_items));
-void hash_map __P((struct hash_table *ht, hash_map_func_t map));
-void hash_print_stats __P((struct hash_table *ht, FILE *out_FILE));
-void **hash_dump __P((struct hash_table *ht, void **vector_0, qsort_cmp_t compare));
+void hash_init (struct hash_table *ht, unsigned long size,
+		hash_func_t hash_1, hash_func_t hash_2, hash_cmp_func_t hash_cmp);
+void hash_load (struct hash_table *ht, void *item_table,
+		    unsigned long cardinality, unsigned long size);
+void **hash_find_slot (struct hash_table *ht, void const *key);
+void *hash_find_item (struct hash_table *ht, void const *key);
+void *hash_insert (struct hash_table *ht, void *item);
+void *hash_insert_at (struct hash_table *ht, void *item, void const *slot);
+void *hash_delete (struct hash_table *ht, void const *item);
+void *hash_delete_at (struct hash_table *ht, void const *slot);
+void hash_delete_items (struct hash_table *ht);
+void hash_free_items (struct hash_table *ht);
+void hash_free (struct hash_table *ht, int free_items);
+void hash_map (struct hash_table *ht, hash_map_func_t map);
+void hash_print_stats (struct hash_table *ht, FILE *out_FILE);
+void **hash_dump (struct hash_table *ht, void **vector_0, qsort_cmp_t compare);
 
 extern void *hash_deleted_item;
 #define HASH_VACANT(item) ((item) == 0 || (void *) (item) == hash_deleted_item)

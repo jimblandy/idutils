@@ -27,9 +27,9 @@ struct dynvec
   int dv_fill;
 };
 
-struct dynvec *make_dynvec __P((int n));
-void dynvec_free __P((struct dynvec *dv));
-void dynvec_freeze __P((struct dynvec *dv));
-void dynvec_append __P((struct dynvec *dv, void *element));
+struct dynvec *make_dynvec (int n);
+void dynvec_free (struct dynvec *dv);
+void dynvec_freeze (struct dynvec *dv);
+void dynvec_append (struct dynvec *dv, void *element);
 
 #endif /* not _dynvec_h_ */

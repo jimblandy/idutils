@@ -18,67 +18,64 @@
 */
 
 #include <config.h>
-#include "xsysstat.h"
+#include <sys/stat.h>
 #include <stdio.h>
-#include "xstdlib.h"
-#include "xstddef.h"
-#include "xunistd.h"
-#include "xstring.h"
-#include "xfnmatch.h"
-#include "xdirent.h"
+#include <stdlib.h>
+#include <stddef.h>
+#include <unistd.h>
+#include <string.h>
+#include <fnmatch.h>
+#include <dirent.h>
+#include <errno.h>
 #include "xnls.h"
 #include "idfile.h"
 #include "error.h"
-#include "xmalloc.h"
+#include "xalloc.h"
 #include "dynvec.h"
 #include "scanners.h"
 #include "pathmax.h"
-#include "xalloca.h"
-
-#ifndef HAVE_DECL_STRSEP
-"this configure-time declaration test was not run"
-#endif
-#if !HAVE_DECL_STRSEP
-char *strsep ();
-#endif
+#include "xalloc.h"
+#include "iduglobal.h"
 
 int walker_verbose_flag = 0;
 off_t largest_member_file = 0;
 
-int walk_dir __P((struct file_link *dir_link));
-struct member_file *get_member_file __P((struct file_link *flink));
-struct lang_args *get_lang_args __P((struct file_link const *flink));
-void print_member_file __P((struct member_file *member));
-int walk_sub_dirs __P((struct dynvec *sub_dirs_vec));
-void reparent_children __P((struct file_link *dlink, struct file_link *slink));
-int classify_link __P((struct file_link *flink, struct stat *stp));
-struct file_link *get_link_from_dirent __P((struct dirent *dirent, struct file_link *parent));
-struct file_link *make_link_from_dirent __P((struct dirent *dirent, struct file_link *parent));
-struct file_link *get_link_from_string __P((char const *name, struct file_link *parent));
-struct file_link *make_link_from_string __P((char const *name, struct file_link *parent));
-int lang_wanted __P((char const *lang_name));
-char **append_strings_to_vector __P((char **vector_0, char *string, char const *delimiter_class));
-int vector_length __P((char **vector));
-int string_in_vector __P((char const *string, char **vector));
-static int same_as_dot __P((char const *cwd));
-struct file_link const **fill_link_vector __P((struct file_link const **vec_buf, struct file_link const *flink));
-struct file_link const **fill_link_vector_1 __P((struct file_link const **vec_buf, struct file_link const *flink));
-char *fill_dot_dots __P((char *buf, int levels));
-static char *absolute_file_name_1 __P((char *buffer, struct file_link const *flink));
-unsigned long member_file_hash_1 __P((void const *key));
-unsigned long member_file_hash_2 __P((void const *key));
-int member_file_hash_compare __P((void const *x, void const *y));
-unsigned long file_link_hash_1 __P((void const *key));
-unsigned long file_link_hash_2 __P((void const *key));
-int file_link_hash_compare __P((void const *x, void const *y));
-unsigned long dev_ino_hash_1 __P((void const *key));
-unsigned long dev_ino_hash_2 __P((void const *key));
-int dev_ino_hash_compare __P((void const *x, void const *y));
-int symlink_ancestry __P((struct file_link *flink));
+int walk_dir (struct file_link *dir_link);
+struct member_file *get_member_file (struct file_link *flink);
+struct lang_args *get_lang_args (struct file_link const *flink);
+void print_member_file (struct member_file *member);
+int walk_sub_dirs (struct dynvec *sub_dirs_vec);
+void reparent_children (struct file_link *dlink, struct file_link *slink);
+int classify_link (struct file_link *flink, struct stat *stp);
+struct file_link *get_link_from_dirent (struct dirent *dirent, struct file_link *parent);
+struct file_link *make_link_from_dirent (struct dirent *dirent, struct file_link *parent);
+struct file_link *get_link_from_string (char const *name, struct file_link *parent);
+struct file_link *make_link_from_string (char const *name, struct file_link *parent);
+int lang_wanted (char const *lang_name);
+char **append_strings_to_vector (char **vector_0, char *string, char const *delimiter_class);
+int vector_length (char **vector);
+int string_in_vector (char const *string, char **vector);
+static int same_as_dot (char const *cwd);
+struct file_link const **fill_link_vector (struct file_link const **vec_buf, struct file_link const *flink);
+struct file_link const **fill_link_vector_1 (struct file_link const **vec_buf, struct file_link const *flink);
+char *fill_dot_dots (char *buf, int levels);
+static char *absolute_file_name_1 (char *buffer, struct file_link const *flink);
+unsigned long member_file_hash_1 (void const *key);
+unsigned long member_file_hash_2 (void const *key);
+int member_file_hash_compare (void const *x, void const *y);
+unsigned long file_link_hash_1 (void const *key);
+unsigned long file_link_hash_2 (void const *key);
+int file_link_hash_compare (void const *x, void const *y);
+unsigned long dev_ino_hash_1 (void const *key);
+unsigned long dev_ino_hash_2 (void const *key);
+int dev_ino_hash_compare (void const *x, void const *y);
+int symlink_ancestry (struct file_link *flink);
 
 #if HAVE_LINK
-struct file_link *find_alias_link __P((struct file_link *flink, struct stat *stp));
-struct member_file *maybe_get_member_file __P((struct file_link *flink, struct stat *stp));
+
+struct file_link *find_alias_link (struct file_link *flink, struct stat *stp);
+struct member_file *maybe_get_member_file (struct file_link *flink, struct stat *stp);
+
 #endif
 
 #define IS_DOT(s) ((s)[0] == '.' && (s)[1] == '\0')
@@ -90,7 +87,7 @@ static struct file_link *current_dir_link = 0;
 
 static char const white_space[] = " \t\r\n\v\f";
 
-char* xgetcwd __P((void));
+char* xgetcwd (void);
 
 
 /****************************************************************************/
@@ -109,7 +106,7 @@ walk_dir (struct file_link *dir_link)
   dirp = opendir (".");
   if (dirp == 0)
     {
-      char *file_name = ALLOCA (char, PATH_MAX);
+      char *file_name = alloca (PATH_MAX);
       absolute_file_name (file_name, dir_link);
       error (0, errno, _("can't read directory `%s' (`.' from `%s')"), file_name, xgetcwd ());
       return 0;
@@ -176,7 +173,7 @@ walk_flink (struct file_link *flink, struct dynvec *sub_dirs_vec)
   if ((old_flags & FL_TYPE_MASK)
       && (old_flags & FL_TYPE_MASK) != (new_flags & FL_TYPE_MASK))
     {
-      char *file_name = ALLOCA (char, PATH_MAX);
+      char *file_name = alloca (PATH_MAX);
       absolute_file_name (file_name, flink);
       error (0, 0, _("notice: `%s' was a %s, but is now a %s!"), file_name,
 	     (FL_IS_FILE (old_flags) ? _("file") : _("directory")),
@@ -299,8 +296,8 @@ maybe_get_member_file (struct file_link *flink, struct stat *stp)
       int alias_ancestry = symlink_ancestry (alias_link);
       if (member->mf_lang_args != alias_member->mf_lang_args)
 	{
-	  char *file_name = ALLOCA (char, PATH_MAX);
-	  char *alias_file_name = ALLOCA (char, PATH_MAX);
+	  char *file_name = alloca (PATH_MAX);
+	  char *alias_file_name = alloca (PATH_MAX);
 	  absolute_file_name (file_name, flink);
 	  absolute_file_name (alias_file_name, alias_link);
 	  error (0, 0, _("warning: `%s' and `%s' are the same file, but yield different scans!"),
@@ -395,7 +392,7 @@ get_member_file (struct file_link *flink)
 #if 0
       if (member->mf_lang_args != args)
 	{
-	  char *file_name = ALLOCA (char, PATH_MAX);
+	  char *file_name = alloca (PATH_MAX);
 	  absolute_file_name (file_name, flink);
 	  error (0, 0, _("notice: scan parameters changed for `%s'"), file_name);
 	  member->mf_old_index = -1;
@@ -428,7 +425,7 @@ struct lang_args *
 get_lang_args (struct file_link const *flink)
 {
   struct lang_args *args = lang_args_list;
-  char *file_name = ALLOCA (char, PATH_MAX);
+  char *file_name = alloca (PATH_MAX);
 
   while (args)
     {
@@ -452,7 +449,7 @@ get_lang_args (struct file_link const *flink)
 void
 print_member_file (struct member_file *member)
 {
-  char *file_name = ALLOCA (char, PATH_MAX);
+  char *file_name = alloca (PATH_MAX);
   absolute_file_name (file_name, member->mf_link);
   printf ("%ld: %s: %s\n", idh.idh_member_file_table.ht_fill - 1,
 	  member->mf_lang_args->la_language->lg_name, file_name);
@@ -498,17 +495,16 @@ append_strings_to_vector (char **vector_0, char *string, char const *delimiter_c
   if (vector_0)
     {
       int length = vector_length (vector_0);
-      vector_0 = REALLOC (vector_0, char *,
-			  length + 2 + strlen (string) / 2);
+      vector_0 = xrealloc (vector_0, sizeof(char *) * (length + 2 + strlen (string) / 2));
       vector = &vector_0[length];
     }
   else
-    vector = vector_0 = MALLOC (char *, 2 + strlen (string) / 2);
+    vector = vector_0 = xmalloc (sizeof(char *) * (2 + strlen (string) / 2));
 
   do
     *vector = strsep (&string, delimiter_class);
   while (*vector++);
-  return REALLOC (vector_0, char *, vector - vector_0);
+  return xrealloc (vector_0, sizeof(char *) * (vector - vector_0));
 }
 
 int
@@ -646,7 +642,7 @@ same_as_dot (char const *cwd)
 int
 chdir_to_link (struct file_link *dir_link)
 {
-  char *to_dir_name = ALLOCA (char, PATH_MAX);
+  char *to_dir_name = alloca (PATH_MAX);
 
   if (current_dir_link == dir_link)
     return 1;
@@ -661,7 +657,7 @@ chdir_to_link (struct file_link *dir_link)
 	error (0, errno, _("can't chdir to `%s'"), to_dir_name);
       else
 	{
-	  char *from_dir_name = ALLOCA (char, PATH_MAX);
+	  char *from_dir_name = alloca (PATH_MAX);
 	  absolute_file_name (from_dir_name, current_dir_link);
 	  error (0, errno, _("can't chdir to `%s' from `%s'"), to_dir_name, from_dir_name);
 	}
@@ -677,7 +673,7 @@ chdir_to_link (struct file_link *dir_link)
 char **
 vectorize_string (char *string, char const *delimiter_class)
 {
-  char **vector_0 = MALLOC (char *, 2 + strlen (string) / 2);
+  char **vector_0 = xmalloc (sizeof(char *) * (2 + strlen (string) / 2));
   char **vector = vector_0;
 
   *vector++ = strsep (&string, delimiter_class);
@@ -690,7 +686,7 @@ vectorize_string (char *string, char const *delimiter_class)
 	*vector = strsep (&string, delimiter_class);
       while (*vector++);
     }
-  return REALLOC (vector_0, char *, vector - vector_0);
+  return xrealloc (vector_0, sizeof(char *) * (vector - vector_0));
 }
 
 void
@@ -846,8 +842,8 @@ fill_link_vector_1 (struct file_link const **vec_buf, struct file_link const *fl
 char *
 maybe_relative_file_name (char *buf_0, struct file_link const *to_link, struct file_link const *from_link)
 {
-  struct file_link const **to_link_vec_0 = ALLOCA (struct file_link const *, PATH_MAX/2);
-  struct file_link const **from_link_vec_0 = ALLOCA (struct file_link const *, PATH_MAX/2);
+  struct file_link const **to_link_vec_0 = alloca (sizeof (struct file_link const *) * (PATH_MAX/2));
+  struct file_link const **from_link_vec_0 = alloca (sizeof (struct file_link const *) * (PATH_MAX/2));
   struct file_link const **to_link_vec = to_link_vec_0;
   struct file_link const **from_link_vec = from_link_vec_0;
   struct file_link const **from_link_end;
@@ -860,7 +856,7 @@ maybe_relative_file_name (char *buf_0, struct file_link const *to_link, struct f
     from_link = current_dir_link;
 
   if (alloc_me)
-    buf_0 = MALLOC (char, PATH_MAX);
+    buf_0 = xmalloc (PATH_MAX);
 
   /* Optimize common cases.  */
   if (to_link == from_link)
@@ -919,7 +915,7 @@ maybe_relative_file_name (char *buf_0, struct file_link const *to_link, struct f
     }
 out:
   if (alloc_me)
-    buf_0 = REALLOC (buf_0, char, 1 + strlen (buf_0));
+    buf_0 = xrealloc (buf_0, (1 + strlen (buf_0)));
   return buf_0;
 }
 
@@ -948,7 +944,7 @@ absolute_file_name (char *buf_0, struct file_link const *flink)
   int alloc_me = (buf_0 == 0);
 
   if (alloc_me)
-    buf_0 = MALLOC (char, PATH_MAX);
+    buf_0 = xmalloc (PATH_MAX);
   end = absolute_file_name_1 (buf_0, flink);
   /* Clip the trailing slash.  */
 #if HAVE_LINK
@@ -960,7 +956,7 @@ absolute_file_name (char *buf_0, struct file_link const *flink)
 #endif
   *end++ = '\0';
   if (alloc_me)
-    buf_0 = REALLOC (buf_0, char, end - buf_0);
+    buf_0 = xrealloc (buf_0, (size_t)(end - buf_0));
   return buf_0;
 }
 

@@ -19,15 +19,19 @@
 
 #include <config.h>
 #include <stdio.h>
+#include <stddef.h>
+#include <errno.h>
+#include <stdlib.h>
+
 #include "idfile.h"
-#include "xstddef.h"
 #include "hash.h"
 #include "error.h"
-#include "xobstack.h"
-#include "xmalloc.h"
+#include "obstack.h"
+#include "xalloc.h"
 #include "xnls.h"
+#include "iduglobal.h"
 
-int fgets0 __P((char *buf0, int size, FILE *in_FILE));
+int fgets0 (char *buf0, int size, FILE *in_FILE);
 
 
 /****************************************************************************/
@@ -78,9 +82,9 @@ maybe_read_id_file (char const *id_file_name, struct idhead *idhp)
 struct file_link **
 deserialize_file_links (struct idhead *idhp)
 {
-  struct file_link **flinks_0 = MALLOC (struct file_link *, idhp->idh_file_links);
+  struct file_link **flinks_0 = xmalloc (sizeof(struct file_link *) * idhp->idh_file_links);
   struct file_link **flinks = flinks_0;
-  struct file_link **members_0 = MALLOC (struct file_link *, idhp->idh_files + 1);
+  struct file_link **members_0 = xmalloc (sizeof(struct file_link *) * idhp->idh_files + 1);
   struct file_link **members = members_0;
   struct file_link *flink;
   struct file_link **slot;

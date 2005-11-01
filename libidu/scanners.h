@@ -19,7 +19,7 @@
 #ifndef _scanners_h_
 #define _scanners_h_
 
-#include "xobstack.h"
+#include "obstack.h"
 
 extern int log_8_member_files;	/* log base 8 of the # of files.
 				   e.g., log_8 (32768) == 5 */
@@ -35,9 +35,9 @@ struct token
 #define TOKEN_NAME(TOKEN) ((TOKEN)->tok_hits_name + log_8_member_files)
 #define OFFSETOF_TOKEN_NAME (offsetof (struct token, tok_hits_name) + log_8_member_files)
 
-typedef struct token *(*get_token_func_t) __P((FILE *in_FILE, void const *args, int *flags));
-typedef void *(*parse_args_func_t) __P((char **argv, int argc));
-typedef void (*help_me_func_t) __P((void));
+typedef struct token *(*get_token_func_t) (FILE *in_FILE, void const *args, int *flags);
+typedef void *(*parse_args_func_t) (char **argv, int argc);
+typedef void (*help_me_func_t) (void);
 
 struct language
 {
@@ -59,12 +59,12 @@ struct lang_args
   struct lang_args *la_next;
 };
 
-extern void language_help_me __P((void));
-extern void language_getopt __P((void));
-extern void language_save_arg __P((char *arg));
-extern struct language *get_language __P((char const *lang_name));
-extern void parse_language_map __P((char const *file_name));
-extern void set_default_language __P((char const *lang_name));
+extern void language_help_me (void);
+extern void language_getopt (void);
+extern void language_save_arg (char *arg);
+extern struct language *get_language (char const *lang_name);
+extern void parse_language_map (char const *file_name);
+extern void set_default_language (char const *lang_name);
 
 extern struct lang_args *lang_args_default;
 extern struct lang_args *lang_args_list;

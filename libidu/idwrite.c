@@ -18,14 +18,15 @@
 */
 
 #include <config.h>
+#include <stdlib.h>
 #include "idfile.h"
 #include "hash.h"
-#include "xobstack.h"
-#include "xmalloc.h"
+#include "obstack.h"
+#include "xalloc.h"
 #include "xnls.h"
 #include "error.h"
 
-int file_link_qsort_compare __P((void const *x, void const *y));
+int file_link_qsort_compare (void const *x, void const *y);
 
 
 /****************************************************************************/
@@ -45,7 +46,7 @@ serialize_file_links (struct idhead *idhp)
   flinks_0 = (struct file_link **) hash_dump (&idhp->idh_file_link_table,
 					      0, file_link_qsort_compare);
   end = &flinks_0[idhp->idh_file_link_table.ht_fill];
-  parents = parents_0 = MALLOC (struct file_link *, idhp->idh_file_link_table.ht_fill);
+  parents = parents_0 = xmalloc (sizeof(struct file_link *) * idhp->idh_file_link_table.ht_fill);
   for (flinks = flinks_0; flinks < end; flinks++)
     {
       struct file_link *flink = *flinks;

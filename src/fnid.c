@@ -19,18 +19,22 @@
 #include <config.h>
 #include <stdio.h>
 #include <getopt.h>
-#include "xfnmatch.h"
-#include "xstring.h"
-#include "xmalloc.h"
+#include <fnmatch.h>
+#include <string.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <errno.h>
+#include "xalloc.h"
 #include "xnls.h"
 #include "idfile.h"
 #include "pathmax.h"
 #include "error.h"
-#include "xalloca.h"
+#include "alloca.h"
+#include "iduglobal.h"
 
-void scan_files __P((struct idhead *idhp));
-void scan_member_file __P((struct member_file const *member));
-void usage __P((void));
+void scan_files (struct idhead *idhp);
+void scan_member_file (struct member_file const *member);
+void usage (void);
 
 char const *program_name;
 int show_version = 0;
@@ -84,12 +88,14 @@ main (int argc, char **argv)
   program_name = argv[0];
   idh.idh_file_name = 0;
 
+#if ENABLE_NLS
   /* Set locale according to user's wishes.  */
   setlocale (LC_ALL, "");
 
   /* Tell program which translations to use and where to find.  */
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
+#endif
 
   for (;;)
     {
@@ -154,12 +160,12 @@ main (int argc, char **argv)
   {
     struct file_link **members = read_id_file (idh.idh_file_name, &idh);
     struct file_link **members_N = &members[idh.idh_files];
-    struct file_link **flinkv_0 = MALLOC (struct file_link *, idh.idh_files + 1);
+    struct file_link **flinkv_0 = xmalloc (sizeof(struct file_link *) * (idh.idh_files + 1));
     struct file_link **flinkv = flinkv_0;
-    char **patv_0 = MALLOC (char *, argc * 2);
+    char **patv_0 = xmalloc (sizeof(char *) * (argc * 2));
     char **patv_N;
     char **patv = patv_0;
-    char *file_name = ALLOCA (char, PATH_MAX);
+    char *file_name = alloca (PATH_MAX);
 
     for ( ; argc; argc--, argv++)
       {
@@ -167,7 +173,7 @@ main (int argc, char **argv)
 	*patv++ = arg;
 	if (*arg != '*' && *arg != '/')
 	  {
-	    char *pat = MALLOC (char, strlen (arg) + 2);
+	    char *pat = xmalloc (strlen (arg) + 2);
 	    sprintf (pat, "*/%s", arg);
 	    *patv++ = pat;
 	  }

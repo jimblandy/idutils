@@ -1,21 +1,7 @@
-## Process this file with automake to produce Makefile.in -*-Makefile-*-
+## Process this file with automake to produce Makefile.in
 
-##m4-files-begin
-EXTRA_DIST = README Makefile.am.in \
-gettext.m4 \
-lcmessage.m4 \
-malloc.m4 \
-progtest.m4 \
-realloc.m4
-##m4-files-end
+ACLOCAL_AMFLAGS = -I m4
+SUBDIRS = m4 intl lib libidu src lisp doc testsuite po
+EXTRA_DIST = README-alpha config.rpath mkinstalldirs autogen.sh
 
-Makefile.am: Makefile.am.in
-	rm -f $@ $@t
-	sed -n '1,/^##m4-files-begin/p' $< > $@t
-	( (echo EXTRA_DIST = README Makefile.am.in | tr '\012' @); \
-	  (echo *.m4|tr ' ' @) ) \
-	  |sed 's/@$$/%/;s/@/ \\@/g' |tr @% '\012\012' \
-	  >> $@t
-	sed -n '/^##m4-files-end/,$$p' $< >> $@t
-	chmod a-w $@t
-	mv $@t $@
+

@@ -18,14 +18,15 @@
 */
 
 #include <config.h>
+#include <stdlib.h>
 #include "dynvec.h"
-#include "xmalloc.h"
+#include "xalloc.h"
 
 struct dynvec *
 make_dynvec (int n)
 {
-  struct dynvec *dv = MALLOC (struct dynvec, 1);
-  dv->dv_vec = MALLOC (void *, n);
+  struct dynvec *dv = xmalloc (sizeof(struct dynvec) * 1);
+  dv->dv_vec = xmalloc (sizeof(void *) * n);
   dv->dv_capacity = n;
   dv->dv_fill = 0;
   return dv;
@@ -44,7 +45,7 @@ dynvec_freeze (struct dynvec *dv)
   if (dv->dv_fill == dv->dv_capacity)
     return;
   dv->dv_capacity = dv->dv_fill;
-  dv->dv_vec = REALLOC (dv->dv_vec, void *, dv->dv_capacity);
+  dv->dv_vec = xrealloc (dv->dv_vec, sizeof(void *) * dv->dv_capacity);
 }
 
 void
@@ -53,7 +54,7 @@ dynvec_append (struct dynvec *dv, void *element)
   if (dv->dv_fill == dv->dv_capacity)
     {
       dv->dv_capacity *= 2;
-      dv->dv_vec = REALLOC (dv->dv_vec, void *, dv->dv_capacity);
+      dv->dv_vec = xrealloc (dv->dv_vec, sizeof(void *) * dv->dv_capacity);
     }
   dv->dv_vec[dv->dv_fill++] = element;
 }

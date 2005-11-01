@@ -19,20 +19,23 @@
 #include <config.h>
 #include <stdio.h>
 #include <getopt.h>
-#include "xstring.h"
-#include "xunistd.h"
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
 #include "xnls.h"
 #include "idfile.h"
 #include "error.h"
 #include "pathmax.h"
-#include "xmalloc.h"
-#include "xalloca.h"
+#include "xalloc.h"
+#include "alloca.h"
+#include "iduglobal.h"
 
-int get_file_index __P((char *file_name));
-int is_hit __P((unsigned char const *hits, int file_number));
-int is_hit_1 __P((unsigned char const **hits, int level, int file_number));
-void skip_hits __P((unsigned char const **hits, int level));
-void usage __P((void));
+int get_file_index (char *file_name);
+int is_hit (unsigned char const *hits, int file_number);
+int is_hit_1 (unsigned char const **hits, int level, int file_number);
+void skip_hits (unsigned char const **hits, int level);
+void usage (void);
 
 struct idhead idh;
 int tree8_levels;
@@ -97,13 +100,16 @@ main (int argc, char **argv)
 
   program_name = argv[0];
   idh.idh_file_name = 0;
+  
 
+#if ENABLE_NLS
   /* Set locale according to user's wishes.  */
   setlocale (LC_ALL, "");
 
   /* Tell program which translations to use and where to find.  */
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
+#endif
 
   for (;;)
     {
@@ -203,7 +209,7 @@ get_file_index (char *file_name)
   struct file_link **members;
   struct file_link **end = &members_0[idh.idh_files];
   struct file_link *fn_flink = 0;
-  char *file_name_buf = ALLOCA (char, PATH_MAX);
+  char *file_name_buf = alloca (PATH_MAX);
   int has_slash = (strchr (file_name, '/') != 0);
   int file_name_length = strlen (file_name);
   int idx = -1;

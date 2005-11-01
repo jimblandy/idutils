@@ -25,8 +25,8 @@
 # include <sys/types.h>
 #endif
 #include <stdio.h>
-#include "xstring.h"
-#include "xobstack.h"
+#include <string.h>
+#include "obstack.h"
 #include "hash.h"
 #include "dynvec.h"
 #include "tokflags.h"
@@ -146,9 +146,9 @@ extern struct hash_table dev_ino_table;
 /* token flags (struct token is defined in scanners.h) */
 
 #define token_string(buf) (buf)
-extern unsigned int token_flags __P((char const *buf));
-extern unsigned short token_count __P((char const *buf));
-extern unsigned char const *token_hits_addr __P((char const *buf));
+extern unsigned int token_flags (char const *buf);
+extern unsigned short token_count (char const *buf);
+extern unsigned char const *token_hits_addr (char const *buf);
 
 #define MAYBE_RETURN_PREFIX_MATCH(arg, str, val) do { \
     char const *_s_ = (str); \
@@ -169,52 +169,52 @@ enum separator_style
 #define DEFAULT_SEPARATOR_STYLE ss_braces
 #endif
 
-typedef int (*io_func_t) __P((FILE *, void *, unsigned int, int));
+typedef int (*io_func_t) (FILE *, void *, unsigned int, int);
 
-extern struct file_link **read_id_file __P((char const *id_file_name, struct idhead *idhp));
-extern struct file_link **maybe_read_id_file __P((char const *id_file_name, struct idhead *idhp));
-extern int read_idhead __P((struct idhead *idhp));
-extern int write_idhead __P((struct idhead *idhp));
-extern int sizeof_idhead __P((void));
-struct file_link *init_walker __P((struct idhead *idhp));
-extern void init_idh_obstacks __P((struct idhead *idhp));
-extern void init_idh_tables __P((struct idhead *idhp));
+extern struct file_link **read_id_file (char const *id_file_name, struct idhead *idhp);
+extern struct file_link **maybe_read_id_file (char const *id_file_name, struct idhead *idhp);
+extern int read_idhead (struct idhead *idhp);
+extern int write_idhead (struct idhead *idhp);
+extern int sizeof_idhead (void);
+struct file_link *init_walker (struct idhead *idhp);
+extern void init_idh_obstacks (struct idhead *idhp);
+extern void init_idh_tables (struct idhead *idhp);
 
-extern int io_write __P((FILE *output_FILE, void *addr, unsigned int size, int io_type));
-extern int io_read __P((FILE *input_FILE, void *addr, unsigned int size, int io_type));
-extern int io_idhead __P((FILE *fp, io_func_t iof, struct idhead *idhp));
+extern int io_write (FILE *output_FILE, void *addr, unsigned int size, int io_type);
+extern int io_read (FILE *input_FILE, void *addr, unsigned int size, int io_type);
+extern int io_idhead (FILE *fp, io_func_t iof, struct idhead *idhp);
 
-extern struct file_link *get_current_dir_link __P((void));
-extern struct file_link **deserialize_file_links __P((struct idhead *idhp));
-extern void serialize_file_links __P((struct idhead *idhp));
+extern struct file_link *get_current_dir_link (void);
+extern struct file_link **deserialize_file_links (struct idhead *idhp);
+extern void serialize_file_links (struct idhead *idhp);
 
-extern void mark_member_file_links __P((struct idhead *idhp));
-extern int member_file_qsort_compare __P((void const *x, void const *y));
-extern struct file_link *parse_file_name __P((char *file_name,
-					      struct file_link *relative_dir_link));
-extern void print_filenames __P((struct file_link **flinkv,
-				 enum separator_style separator_style));
-extern enum separator_style parse_separator_style __P((char const *arg));
+extern void mark_member_file_links (struct idhead *idhp);
+extern int member_file_qsort_compare (void const *x, void const *y);
+extern struct file_link *parse_file_name (char *file_name, struct file_link *relative_dir_link);
+extern void print_filenames (struct file_link **flinkv, enum separator_style separator_style);
+extern enum separator_style parse_separator_style (char const *arg);
 
-extern void walk_flink __P((struct file_link *flink, struct dynvec *sub_dirs_vec));
-extern int chdir_to_link __P((struct file_link* dir_link));
-void prune_file_names __P((char *str, struct file_link *from_link));
-char **vectorize_string __P((char *string, char const *delimiter_class));
-void include_languages __P((char *lang_names));
-void exclude_languages __P((char *lang_names));
+extern void walk_flink (struct file_link *flink, struct dynvec *sub_dirs_vec);
+extern int chdir_to_link (struct file_link* dir_link);
+void prune_file_names (char *str, struct file_link *from_link);
+char **vectorize_string (char *string, char const *delimiter_class);
+void include_languages (char *lang_names);
+void exclude_languages (char *lang_names);
 
-extern char *absolute_file_name __P((char *buffer, struct file_link const *flink));
-extern char *maybe_relative_file_name __P((char *buffer, struct file_link const *to_link,
-					   struct file_link const *from_link));
-extern char const *locate_id_file_name __P((char const *arg));
+extern char *absolute_file_name (char *buffer, struct file_link const *flink);
+extern char *maybe_relative_file_name (char *buffer, struct file_link const *to_link, struct file_link const *from_link);
+extern char const *locate_id_file_name (char const *arg);
 
-extern int tree8_count_levels __P((unsigned int cardinality));
-extern int gets_past_00 __P((char *tok, FILE *input_FILE));
-extern int skip_past_00 __P((FILE *input_FILE));
+extern int tree8_count_levels (unsigned int cardinality);
+extern int gets_past_00 (char *tok, FILE *input_FILE);
+extern int skip_past_00 (FILE *input_FILE);
 
-extern int links_depth __P((struct file_link const *flink));
+extern int links_depth (struct file_link const *flink);
+
 #if HAVE_LINK
-extern struct member_file *find_member_file __P((struct file_link const *flink));
+
+extern struct member_file *find_member_file (struct file_link const *flink);
+
 #endif
 
 extern struct idhead idh;

@@ -1,3 +1,21 @@
+2005-05-31  Claudio Fontana  <sick_soul@users.sourceforge.net>
+        * configure.in: moved to configure.ac
+	* configure.ac (new file): rewritten using gnulib and new macros
+	* Makefile.am: all makefiles revisited
+	
+	* lib/: removed everything and replaced with gnulib imports
+	* m4/: removed everything and replaced with gnulib imports
+
+	* i18n support updated to gettext 0.14.1
+	* po/fr.po: fixed broken headers. FRENCH TRANSLATOR MARKED UNKNOWN.
+	* intl/: updated - Did some nasty things to make libintl work in
+	  most circumstances
+	* libidu/iduglobal.h (new file): common definitions moved here
+	* *.c, *.h: updated to use gnulib functions, removed redundant
+	  definitions and checks
+	* *.c, *.h: reverted __P() macro introduction, and assume prototypes.
+	  Times are mature for that, and I follow gnulib in this.
+
 2000-06-06  Jim Meyering  <meyering@lucent.com>
 
 	* po/POTFILES.in: Add libidu/fnprint.c and remove libidu/xnls.h.

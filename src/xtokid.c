@@ -19,16 +19,20 @@
 #include <config.h>
 #include <stdio.h>
 #include <getopt.h>
-#include "xstring.h"
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
+#include "xalloc.h"
 #include "xnls.h"
 #include "scanners.h"
 #include "idfile.h"
 #include "pathmax.h"
 #include "error.h"
+#include "iduglobal.h"
 
-void scan_files __P((struct idhead *idhp));
-void scan_member_file __P((struct member_file const *member));
-void usage __P((void));
+void scan_files (struct idhead *idhp);
+void scan_member_file (struct member_file const *member);
+void usage (void);
 
 char const *program_name;
 char *lang_map_file_name = 0;
@@ -87,12 +91,14 @@ main (int argc, char **argv)
 {
   program_name = argv[0];
 
+#if ENABLE_NLS
   /* Set locale according to user's wishes.  */
   setlocale (LC_ALL, "");
 
   /* Tell program which translations to use and where to find.  */
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
+#endif
 
   for (;;)
     {
@@ -184,7 +190,7 @@ scan_files (struct idhead *idhp)
 
   if (largest_member_file > MAX_LARGEST_MEMBER_FILE)
     largest_member_file = MAX_LARGEST_MEMBER_FILE;
-  scanner_buffer = MALLOC (unsigned char, largest_member_file + 1);
+  scanner_buffer = xmalloc (largest_member_file + 1);
 
   for (members = members_0; members < end; members++)
     scan_member_file (*members);

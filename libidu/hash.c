@@ -19,14 +19,14 @@
 
 #include <config.h>
 #include <stdio.h>
-#include "xstdlib.h"
+#include <stdlib.h>
 #include "hash.h"
 #include "xnls.h"
-#include "xmalloc.h"
+#include "xalloc.h"
 #include "error.h"
 
-static void hash_rehash __P((struct hash_table* ht));
-static unsigned long round_up_2 __P((unsigned long rough));
+static void hash_rehash (struct hash_table* ht);
+static unsigned long round_up_2 (unsigned long rough);
 
 /* Implement double hashing with open addressing.  The table size is
    always a power of two.  The secondary (`increment') hash function
@@ -46,7 +46,7 @@ hash_init (struct hash_table* ht, unsigned long size,
 {
   ht->ht_size = round_up_2 (size);
   ht->ht_empty_slots = ht->ht_size;
-  ht->ht_vec = (void**) CALLOC (struct token *, ht->ht_size);
+  ht->ht_vec = (void**) xcalloc (ht->ht_size, sizeof(struct token *));
   if (ht->ht_vec == 0)
     error (1, 0, _("can't allocate %ld bytes for hash table: memory exhausted"),
 	   ht->ht_size * sizeof(struct token *));
@@ -244,7 +244,7 @@ hash_rehash (struct hash_table* ht)
       ht->ht_capacity = ht->ht_size - (ht->ht_size >> 4);
     }
   ht->ht_rehashes++;
-  ht->ht_vec = (void **) CALLOC (struct token *, ht->ht_size);
+  ht->ht_vec = (void **) xcalloc (ht->ht_size, sizeof(struct token *));
 
   for (ovp = old_vec; ovp < &old_vec[old_ht_size]; ovp++)
     {
@@ -281,7 +281,7 @@ hash_dump (struct hash_table *ht, void **vector_0, qsort_cmp_t compare)
   void **end = &ht->ht_vec[ht->ht_size];
 
   if (vector_0 == 0)
-    vector_0 = MALLOC (void *, ht->ht_fill + 1);
+    vector_0 = xmalloc (sizeof (void *) * (ht->ht_fill + 1));
   vector = vector_0;
 
   for (slot = ht->ht_vec; slot < end; slot++)

@@ -19,29 +19,29 @@
 #include <config.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "xstdlib.h"
+#include <stdlib.h>
 #include <signal.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <assert.h>
-#include <getopt.h>
-#if HAVE_LIMITS_H
-# include <limits.h>
-#endif
-#include <regex.h>
-#include "xstring.h"
-#include "xunistd.h"
+#include "getopt.h"
+#include <limits.h>
+#include <string.h>
+#include <unistd.h>
+#include <termios.h>
+#include "regex.h"
 #include "xnls.h"
-#include "xmalloc.h"
+#include "xalloc.h"
 #include "idfile.h"
-#include "xstring.h"
 #include "error.h"
 #include "pathmax.h"
-#include "xalloca.h"
+#include "alloca.h"
+#include "iduglobal.h"
 
-typedef void (*report_func_t) __P((char const *name, struct file_link **flinkv));
-typedef int (*query_func_t) __P((char const *arg, report_func_t));
+
+typedef void (*report_func_t) (char const *name, struct file_link **flinkv);
+typedef int (*query_func_t) (char const *arg, report_func_t);
 
 enum delimiter_style
 {
@@ -84,52 +84,56 @@ enum radix
   radix_all = radix_dec | radix_oct | radix_hex
 };
 
-void usage __P((void));
-static void help_me __P((void));
-void lower_caseify __P((char *str));
-enum key_style parse_key_style __P((char const *arg));
-enum result_style parse_result_style __P((char const *arg));
-query_func_t get_query_func __P((char *pattern));
-report_func_t get_report_func __P((void));
-void report_filenames __P((char const *name, struct file_link **flinkv));
-void report_grep __P((char const *name, struct file_link **flinkv));
-void report_edit __P((char const *name, struct file_link **flinkv));
-void report_nothing __P((char const *name, struct file_link **flinkv));
-int vector_cardinality __P((void *vector));
-int search_flinkv __P((struct file_link **flinkv));
-int query_literal_word __P((char const *pattern, report_func_t report_func));
-int query_literal_prefix __P((char const *pattern, report_func_t report_func));
-int query_regexp __P((char const *pattern_0, report_func_t report_func));
-char const *add_regexp_word_delimiters __P((char const *pattern_0));
-int query_number __P((char const *pattern, report_func_t report_func));
-int query_ambiguous_prefix __P((unsigned int, report_func_t report_func));
-int query_literal_substring __P((char const *pattern, report_func_t report_func));
-void parse_frequency_arg __P((char const *arg));
-int desired_frequency __P((char const *tok));
-char *strcasestr __P((char const *s1, char const *s2));
-char const *file_regexp __P((char const *name_0, char const *left_delimit, char const *right_delimit));
-off_t query_binary_search __P((char const *token));
-int is_regexp __P((char *name));
-int has_left_delimiter __P((char const *pattern));
-int has_right_delimiter __P((char const *pattern));
-int file_name_wildcard __P((char const *re, char const *fn));
-int word_match __P((char const *name_0, char const *line));
-int get_radix __P((char const *str));
-int is_number __P((char const *str));
-int stoi __P((char const *str));
-int otoi __P((char const *str));
-int dtoi __P((char const *str));
-int xtoi __P((char const *str));
-unsigned char *tree8_to_bits __P((unsigned char *bits_vec, unsigned char const *hits_tree8));
-void tree8_to_bits_1 __P((unsigned char **bits_vec, unsigned char const **hits_tree8, int level));
-struct file_link **tree8_to_flinkv __P((unsigned char const *hits_tree8));
-struct file_link **bits_to_flinkv __P((unsigned char const *bits_vec));
+void usage (void);
+static void help_me (void);
+void lower_caseify (char *str);
+enum key_style parse_key_style (char const *arg);
+enum result_style parse_result_style (char const *arg);
+query_func_t get_query_func (char *pattern);
+report_func_t get_report_func (void);
+void report_filenames (char const *name, struct file_link **flinkv);
+void report_grep (char const *name, struct file_link **flinkv);
+void report_edit (char const *name, struct file_link **flinkv);
+void report_nothing (char const *name, struct file_link **flinkv);
+int vector_cardinality (void *vector);
+int search_flinkv (struct file_link **flinkv);
+int query_literal_word (char const *pattern, report_func_t report_func);
+int query_literal_prefix (char const *pattern, report_func_t report_func);
+int query_regexp (char const *pattern_0, report_func_t report_func);
+char const *add_regexp_word_delimiters (char const *pattern_0);
+int query_number (char const *pattern, report_func_t report_func);
+int query_ambiguous_prefix (unsigned int, report_func_t report_func);
+int query_literal_substring (char const *pattern, report_func_t report_func);
+void parse_frequency_arg (char const *arg);
+int desired_frequency (char const *tok);
+char *strcasestr (char const *s1, char const *s2);
+char const *file_regexp (char const *name_0, char const *left_delimit, char const *right_delimit);
+off_t query_binary_search (char const *token);
+int is_regexp (char *name);
+int has_left_delimiter (char const *pattern);
+int has_right_delimiter (char const *pattern);
+int file_name_wildcard (char const *re, char const *fn);
+int word_match (char const *name_0, char const *line);
+int get_radix (char const *str);
+int is_number (char const *str);
+int stoi (char const *str);
+int otoi (char const *str);
+int dtoi (char const *str);
+int xtoi (char const *str);
+unsigned char *tree8_to_bits (unsigned char *bits_vec, unsigned char const *hits_tree8);
+void tree8_to_bits_1 (unsigned char **bits_vec, unsigned char const **hits_tree8, int level);
+struct file_link **tree8_to_flinkv (unsigned char const *hits_tree8);
+struct file_link **bits_to_flinkv (unsigned char const *bits_vec);
 
 #if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTY_H
-void savetty __P((void));
-void restoretty __P((void));
-void linetty __P((void));
-void chartty __P((void));
+#endif
+
+void savetty (void);
+void restoretty (void);
+void linetty (void);
+void chartty (void);
+
+#if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTY_H
 #endif
 
 #define	TOLOWER(c)	(isupper (c) ? tolower (c) : (c))
@@ -288,12 +292,14 @@ main (int argc, char **argv)
   program_name = argv[0];
   idh.idh_file_name = 0;
 
+#if ENABLE_NLS
   /* Set locale according to user's wishes.  */
   setlocale (LC_ALL, "");
 
   /* Tell program which translations to use and where to find.  */
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
+#endif
 
   for (;;)
     {
@@ -417,9 +423,9 @@ main (int argc, char **argv)
   bits_vec_size = (idh.idh_files + 7) / 4; /* more than enough */
   tree8_levels = tree8_count_levels (idh.idh_files);
 
-  hits_buf_1 = MALLOC (char, idh.idh_buf_size);
-  hits_buf_2 = MALLOC (char, idh.idh_buf_size);
-  bits_vec = MALLOC (unsigned char, bits_vec_size);
+  hits_buf_1 = xmalloc (idh.idh_buf_size);
+  hits_buf_2 = xmalloc (idh.idh_buf_size);
+  bits_vec = xmalloc (bits_vec_size);
 
   report_function = get_report_func ();
   if (ambiguous_prefix_length)
@@ -533,7 +539,7 @@ report_grep (char const *name, struct file_link **flinkv)
   char line[1<<020];
   char const *pattern = 0;
   regex_t compiled;
-  char *file_name = ALLOCA (char, PATH_MAX);
+  char *file_name = alloca (PATH_MAX);
 
   if (key_style == ks_pattern)
     {
@@ -703,7 +709,7 @@ editit:
 
     case 0:
       {
-	char **argv_0 = MALLOC (char *, 3 + vector_cardinality (flinkv));
+	char **argv_0 = xmalloc (sizeof(char *) * (3 + vector_cardinality (flinkv)));
 	char **argv = argv_0 + 2;
 	while (*flinkv)
 	  *argv++ = maybe_relative_file_name (0, *flinkv++, cw_dlink);
@@ -721,8 +727,8 @@ editit:
 
     default:
       {
-	void (*oldint) __P((int)) = signal (SIGINT, SIG_IGN);
-	void (*oldquit) __P((int)) = signal (SIGQUIT, SIG_IGN);
+	void (*oldint) (int) = signal (SIGINT, SIG_IGN);
+	void (*oldquit) (int) = signal (SIGQUIT, SIG_IGN);
 
 	while (wait (0) == -1 && errno == EINTR)
 	  ;
@@ -757,7 +763,7 @@ search_flinkv (struct file_link **flinkv)
 {
   char pattern[BUFSIZ];
   unsigned int count;
-  char *file_name = ALLOCA (char, PATH_MAX);
+  char *file_name = alloca (PATH_MAX);
   char *eol;
 
   if (fgets (pattern, sizeof (pattern), stdin) == 0)
@@ -885,7 +891,7 @@ add_regexp_word_delimiters (char const *pattern_0)
     return pattern_0;
   else
     {
-      char *pattern = MALLOC (char, length + 4);
+      char *pattern = xmalloc (length + 4);
       if (has_left)
 	strcpy (pattern, pattern_0);
       else
@@ -1006,7 +1012,7 @@ query_literal_substring (char const *arg, report_func_t report_func)
 {
   int count;
   int arg_length = 0;
-  char *(*strstr_func) __P((char const *, char const *));
+  char *(*strstr_func) (char const *, char const *);
 
   fseek (idh.idh_FILE, idh.idh_tokens_offset, SEEK_SET);
 
@@ -1484,7 +1490,7 @@ bits_to_flinkv (unsigned char const *bv)
   struct file_link **end = &members_0[idh.idh_files];
 
   if (flinkv_0 == 0)
-    flinkv_0 = MALLOC (struct file_link *, idh.idh_files + reserved_flinkv_slots + 2);
+    flinkv_0 = xmalloc (sizeof(struct file_link *) * (idh.idh_files + reserved_flinkv_slots + 2));
   flinkv = &flinkv_0[reserved_flinkv_slots];
 
   for (;;)

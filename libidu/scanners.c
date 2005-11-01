@@ -19,29 +19,20 @@
 #include <config.h>
 #include <stdio.h>
 #include <ctype.h>
-#if HAVE_FCNTL_H
-# include <fcntl.h>
-#endif
+#include <fcntl.h>
 #include <getopt.h>
-#include "xstdlib.h"
-#include "xstddef.h"
-#include "xunistd.h"
-#include "xsysstat.h"
-#include "xstring.h"
-#include "xmalloc.h"
+#include <stdlib.h>
+#include <stddef.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <errno.h>
+#include "xalloc.h"
 #include "xnls.h"
 #include "error.h"
 #include "scanners.h"
 #include "tokflags.h"
-
-#ifndef HAVE_DECL_STRSEP
-"this configure-time declaration test was not run"
-#endif
-#if !HAVE_DECL_STRSEP
-char *strsep ();
-#endif
-
-#define DEBUG(args) /* printf args */
+#include "iduglobal.h"
 
 struct obstack lang_args_obstack;
 struct lang_args *lang_args_default = 0;
@@ -49,26 +40,26 @@ struct lang_args *lang_args_list = 0;
 struct obstack tokens_obstack;
 int log_8_member_files = 0;
 
-extern void usage __P((void));
+extern void usage (void);
 extern char *program_name;
 
 /****************************************************************************/
 
-struct lang_args **parse_language_map_file __P((char const *file_name, struct lang_args **next_ptr));
-char *read_language_map_file __P((char const *file_name));
-void tokenize_args_string __P((char *args_string, int *argcp, char ***argvp));
+struct lang_args **parse_language_map_file (char const *file_name, struct lang_args **next_ptr);
+char *read_language_map_file (char const *file_name);
+void tokenize_args_string (char *args_string, int *argcp, char ***argvp);
 
-static struct token *get_token_c __P((FILE *in_FILE, void const *args, int *flags));
-static void *parse_args_c __P((char **argv, int argc));
-static void help_me_c __P((void));
+static struct token *get_token_c (FILE *in_FILE, void const *args, int *flags);
+static void *parse_args_c (char **argv, int argc);
+static void help_me_c (void);
 
-static struct token *get_token_asm __P((FILE *in_FILE, void const *args, int *flags));
-static void *parse_args_asm __P((char **argv, int argc));
-static void help_me_asm __P((void));
+static struct token *get_token_asm (FILE *in_FILE, void const *args, int *flags);
+static void *parse_args_asm (char **argv, int argc);
+static void help_me_asm (void);
 
-static struct token *get_token_text __P((FILE *in_FILE, void const *args, int *flags));
-static void *parse_args_text __P((char **argv, int argc));
-static void help_me_text __P((void));
+static struct token *get_token_text (FILE *in_FILE, void const *args, int *flags);
+static void *parse_args_text (char **argv, int argc);
+static void help_me_text (void);
 
 struct language languages_0[] =
 {
@@ -197,7 +188,7 @@ parse_language_map_file (char const *file_name, struct lang_args **next_ptr)
 	  continue;
 	}
 
-      new_args = OBSTACK_ALLOC (&lang_args_obstack, struct lang_args, 1);
+      new_args = obstack_alloc (&lang_args_obstack, sizeof(struct lang_args) * 1);
       if (new_args == 0)
 	error (1, 0, _("can't allocate language args: memory exhausted"));
       new_args->la_pattern = obstack_copy0 (&lang_args_obstack, lmp, pattern_size);
@@ -266,7 +257,7 @@ read_language_map_file (char const *file_name)
   if (fstat (map_fd, &st) < 0)
     error (1, errno, _("can't get size of map file `%s'"), file_name);
 
-  lang_map_buffer = MALLOC (char, st.st_size + 2);
+  lang_map_buffer = xmalloc (sizeof(char) * (st.st_size + 2));
   if (lang_map_buffer == 0)
     error (1, 0, _("can't allocate language args: memory exhausted"));
   lang_map_buffer[st.st_size] = '\n';
@@ -289,7 +280,7 @@ void
 tokenize_args_string (char *args_string, int *argcp, char ***argvp)
 {
   static char horizontal_space[] = " \t";
-  char **argv_0 = MALLOC (char *, strlen (args_string) / 2);
+  char **argv_0 = xmalloc (sizeof(char *) * strlen (args_string) / 2);
   char **argv = argv_0;
   char *arg;
 
@@ -301,7 +292,7 @@ tokenize_args_string (char *args_string, int *argcp, char ***argvp)
       arg = strsep (&args_string, horizontal_space);
     }
   *argcp = argv - argv_0;
-  *argvp = REALLOC (argv_0, char *, *argcp);
+  *argvp = xrealloc (argv_0, sizeof(char *) * (*argcp));
 }
 
 static void
@@ -445,7 +436,7 @@ parse_args_c (char **argv, int argc)
     {
       tmp_string = strdup (*argv);
       tokenize_args_string (tmp_string, &argc, &argv);
-      args = MALLOC (struct args_c, 1);
+      args = xmalloc (sizeof(struct args_c) * 1);
       args->strip_underscore = 0;
       args->ctype = ctype_c;
     }
@@ -836,7 +827,7 @@ parse_args_asm (char **argv, int argc)
     {
       tmp_string = strdup (*argv);
       tokenize_args_string (tmp_string, &argc, &argv);
-      args = MALLOC (struct args_asm, 1);
+      args = xmalloc (sizeof(struct args_asm) * 1);
       args->strip_underscore = 0;
       args->ctype = ctype_asm;
       args->handle_cpp = 1;
@@ -1104,7 +1095,7 @@ parse_args_text (char **argv, int argc)
     {
       tmp_string = strdup (*argv);
       tokenize_args_string (tmp_string, &argc, &argv);
-      args = MALLOC (struct args_text, 1);
+      args = xmalloc (sizeof(struct args_text) * 1);
       args->ctype = ctype_text;
     }
 

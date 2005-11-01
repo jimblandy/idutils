@@ -17,26 +17,27 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
 
 #include <config.h>
-#include "xstdlib.h"
+#include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
 #include <errno.h>
 #include <getopt.h>
-#include "xsysstat.h"
-#include "xstddef.h"
-#include "xunistd.h"
+#include <sys/stat.h>
+#include <stddef.h>
+#include <unistd.h>
 #include "xnls.h"
 #include "pathmax.h"
-#include "xstring.h"
+#include <string.h>
 #include "idfile.h"
-#include "xmalloc.h"
+#include "xalloc.h"
 #include "hash.h"
 #include "scanners.h"
 #include "error.h"
-#include "xalloca.h"
-#if HAVE_LIMITS_H
-# include <limits.h>
-#endif
+#include "alloca.h"
+#include <limits.h>
+#include "iduglobal.h"
+
+char* dirname(char* path);
 
 struct summary
 {
@@ -55,33 +56,33 @@ struct summary
   int sum_level;
 };
 
-void usage __P((void));
-static void help_me __P((void));
-int main __P((int argc, char **argv));
-int ceil_log_8 __P((unsigned long n));
-int ceil_log_2 __P((unsigned long n));
-void assert_writeable __P((char const *file_name));
-void scan_files __P((struct idhead *idhp));
-void scan_member_file __P((struct member_file const *member));
-void scan_member_file_1 __P((get_token_func_t get_token, void const *args, FILE *source_FILE));
-void report_statistics __P((void));
-void write_id_file __P((struct idhead *idhp));
-unsigned long token_hash_1 __P((void const *key));
-unsigned long token_hash_2 __P((void const *key));
-int token_hash_cmp __P((void const *x, void const *y));
-int token_qsort_cmp __P((void const *x, void const *y));
-void bump_current_hits_signature __P((void));
-void init_hits_signature __P((int i));
-void free_summary_tokens __P((void));
-void summarize __P((void));
-void init_summary __P((void));
-struct summary *make_sibling_summary __P((struct summary *summary));
-int count_vec_size __P((struct summary *summary, unsigned char const *tail_hits));
-int count_buf_size __P((struct summary *summary, unsigned char const *tail_hits));
-void assert_hits __P((struct summary* summary));
-void write_hits __P((FILE *fp, struct summary *summary, unsigned char const *tail_hits));
-void sign_token __P((struct token *token));
-void add_token_to_summary __P((struct summary *summary, struct token *token));
+void usage (void);
+static void help_me (void);
+int main (int argc, char **argv);
+int ceil_log_8 (unsigned long n);
+int ceil_log_2 (unsigned long n);
+void assert_writeable (char const *file_name);
+void scan_files (struct idhead *idhp);
+void scan_member_file (struct member_file const *member);
+void scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_FILE);
+void report_statistics (void);
+void write_id_file (struct idhead *idhp);
+unsigned long token_hash_1 (void const *key);
+unsigned long token_hash_2 (void const *key);
+int token_hash_cmp (void const *x, void const *y);
+int token_qsort_cmp (void const *x, void const *y);
+void bump_current_hits_signature (void);
+void init_hits_signature (int i);
+void free_summary_tokens (void);
+void summarize (void);
+void init_summary (void);
+struct summary *make_sibling_summary (struct summary *summary);
+int count_vec_size (struct summary *summary, unsigned char const *tail_hits);
+int count_buf_size (struct summary *summary, unsigned char const *tail_hits);
+void assert_hits (struct summary* summary);
+void write_hits (FILE *fp, struct summary *summary, unsigned char const *tail_hits);
+void sign_token (struct token *token);
+void add_token_to_summary (struct summary *summary, struct token *token);
 
 struct hash_table token_table;
 
@@ -185,12 +186,14 @@ main (int argc, char **argv)
   heap_initial = (char const *) sbrk (0);
   idh.idh_file_name = DEFAULT_ID_FILE_NAME;
 
+#if ENABLE_NLS
   /* Set locale according to user's wishes.  */
   setlocale (LC_ALL, "");
 
   /* Tell program which translations to use and where to find.  */
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
+#endif
 
   for (;;)
     {
@@ -285,7 +288,7 @@ main (int argc, char **argv)
 
   mark_member_file_links (&idh);
   log_8_member_files = ceil_log_8 (idh.idh_member_file_table.ht_fill);
-  current_hits_signature = MALLOC (char, log_8_member_files);
+  current_hits_signature = xmalloc (log_8_member_files);
 
   /* If scannable files were given, then scan them.  */
   if (idh.idh_member_file_table.ht_fill)
@@ -350,7 +353,7 @@ assert_writeable (char const *file_name)
     {
       if (errno == ENOENT)
 	{
-	  char const *dir_name = dirname (file_name);
+	  char const *dir_name = dirname ((char*)file_name);
 	  if (!dir_name || !*dir_name)
 	    dir_name = ".";
 	  if (access (dir_name, 06) < 0)
@@ -392,7 +395,7 @@ scan_files (struct idhead *idhp)
 
   if (largest_member_file > MAX_LARGEST_MEMBER_FILE)
     largest_member_file = MAX_LARGEST_MEMBER_FILE;
-  scanner_buffer = MALLOC (unsigned char, largest_member_file + 1);
+  scanner_buffer = xmalloc (largest_member_file + 1);
 
   for (;;)
     {
@@ -425,7 +428,7 @@ scan_member_file (struct member_file const *member)
   source_FILE = fopen (flink->fl_name, "r");
   if (source_FILE)
     {
-      char *file_name = ALLOCA (char, PATH_MAX);
+      char *file_name = alloca (PATH_MAX);
       if (statistics_flag)
 	{
 	  if (fstat (fileno (source_FILE), &st) < 0)
@@ -549,7 +552,7 @@ write_id_file (struct idhead *idhp)
   if (verbose_flag)
     printf (_("Sorting tokens...\n"));
   assert (summary_root->sum_hits_count == token_table.ht_fill);
-  tokens = REALLOC (summary_root->sum_tokens, struct token *, token_table.ht_fill);
+  tokens = xrealloc (summary_root->sum_tokens, sizeof(struct token *) * token_table.ht_fill);
   qsort (tokens, token_table.ht_fill, sizeof (struct token *), token_qsort_cmp);
 
   if (verbose_flag)
@@ -705,7 +708,7 @@ summarize (void)
   do
     {
       unsigned long count = summary->sum_hits_count;
-      unsigned char *hits = MALLOC (unsigned char, count + 1);
+      unsigned char *hits = xmalloc (count + 1);
       unsigned int level = summary->sum_level;
       struct token **tokens = summary->sum_tokens;
       unsigned long init_size = INIT_TOKENS_SIZE (summary->sum_level);
@@ -739,9 +742,9 @@ void
 init_summary (void)
 {
   unsigned long size = INIT_TOKENS_SIZE (0);
-  summary_root = summary_leaf = CALLOC (struct summary, 1);
+  summary_root = summary_leaf = xcalloc (1, sizeof(struct summary));
   summary_root->sum_tokens_size = size;
-  summary_root->sum_tokens = MALLOC (struct token *, size);
+  summary_root->sum_tokens = xmalloc (sizeof(struct token *) * size);
 }
 
 struct summary *
@@ -753,7 +756,7 @@ make_sibling_summary (struct summary *summary)
   if (parent == NULL)
     {
       levels++;
-      summary_root = summary->sum_parent = parent = CALLOC (struct summary, 1);
+      summary_root = summary->sum_parent = parent = xcalloc (1, sizeof(struct summary));
       parent->sum_level = levels;
       parent->sum_kids[0] = summary;
       parent->sum_hits_count = summary->sum_hits_count;
@@ -767,19 +770,19 @@ make_sibling_summary (struct summary *summary)
       else
 	{
 	  parent->sum_tokens_size = size;
-	  parent->sum_tokens = REALLOC (summary->sum_tokens, struct token *, size);
+	  parent->sum_tokens = xrealloc (summary->sum_tokens, sizeof(struct token *) * size);
 	}
       summary->sum_tokens = 0;
     }
   if (parent->sum_free_index == 8)
     parent = make_sibling_summary (parent);
-  summary = CALLOC (struct summary, 1);
+  summary = xcalloc (1, sizeof(struct summary));
   summary->sum_level = parent->sum_level - 1;
   parent->sum_kids[parent->sum_free_index++] = summary;
   summary->sum_parent = parent;
   size = INIT_TOKENS_SIZE (summary->sum_level);
   summary->sum_tokens_size = size;
-  summary->sum_tokens = MALLOC (struct token *, size);
+  summary->sum_tokens = xmalloc (sizeof(struct token *) * size);
   return summary;
 }
 
@@ -900,7 +903,7 @@ add_token_to_summary (struct summary *summary, struct token *token)
   if (summary->sum_hits_count >= size)
     {
       size *= 2;
-      summary->sum_tokens = REALLOC (summary->sum_tokens, struct token *, size);
+      summary->sum_tokens = xrealloc (summary->sum_tokens, sizeof(struct token *) * size);
       summary->sum_tokens_size = size;
     }
   summary->sum_tokens[summary->sum_hits_count++] = token;

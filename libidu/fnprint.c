@@ -18,20 +18,21 @@
 
 #include <config.h>
 #include <stdio.h>
-#include "xstdlib.h"
-#include "xalloca.h"
-#include "xunistd.h"
-#include "idfile.h"
-#include "xstring.h"
-#include "xnls.h"
+#include <stdlib.h>
+#include <alloca.h>
+#include <unistd.h>
+#include <string.h>
 #include "pathmax.h"
+#include "idfile.h"
+#include "xnls.h"
 #include "error.h"
+#include "iduglobal.h"
 
-char const *root_name __P((char const *path));
-char const *suff_name __P((char const *path));
-int common_prefix_suffix __P((struct file_link const *flink_1, struct file_link const *flink_2));
+char const *root_name (char const *path);
+char const *suff_name (char const *path);
+int common_prefix_suffix (struct file_link const *flink_1, struct file_link const *flink_2);
 
-extern void usage __P((void));
+extern void usage (void);
 extern struct file_link *cw_dlink;
 
 /* Return the file name with the suffix stripped off.  */
@@ -80,7 +81,7 @@ print_filenames (struct file_link **flinkv, enum separator_style separator_style
   struct file_link const *arg;
   struct file_link const *dlink;
   int brace_is_open = 0;
-  char *file_name = ALLOCA (char, PATH_MAX);
+  char *file_name = alloca (sizeof(char) * PATH_MAX);
 
   while (*flinkv)
     {
