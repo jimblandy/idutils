@@ -52,6 +52,7 @@ void tokenize_args_string (char *args_string, int *argcp, char ***argvp);
 static struct token *get_token_c (FILE *in_FILE, void const *args, int *flags);
 static void *parse_args_c (char **argv, int argc);
 static void help_me_c (void);
+static void help_me_cpp (void);
 
 static struct token *get_token_asm (FILE *in_FILE, void const *args, int *flags);
 static void *parse_args_asm (char **argv, int argc);
@@ -64,7 +65,7 @@ static void help_me_text (void);
 struct language languages_0[] =
 {
   { "C", parse_args_c, get_token_c, help_me_c },
-  { "C++", parse_args_c, get_token_c, help_me_c },
+  { "C++", parse_args_c, get_token_c, help_me_cpp },
   { "asm", parse_args_asm, get_token_asm, help_me_asm },
   { "text", parse_args_text, get_token_text, help_me_text },
 };
@@ -415,6 +416,17 @@ help_me_c (void)
 {
   printf (_("\
 C language:\n\
+  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the result\n\
+  -i,--ignore=CHARS      Allow CHARS in single-token strings, toss the result\n\
+  -u,--strip-underscore  Strip a leading underscore from single-token strings\n\
+"));
+}
+
+static void
+help_me_cpp (void)
+{
+  printf (_("\
+C++ language:\n\
   -k,--keep=CHARS        Allow CHARS in single-token strings, keep the result\n\
   -i,--ignore=CHARS      Allow CHARS in single-token strings, toss the result\n\
   -u,--strip-underscore  Strip a leading underscore from single-token strings\n\
@@ -795,7 +807,7 @@ static struct option const long_options_asm[] =
   { "keep", required_argument, 0, 'k' },
   { "ignore", required_argument, 0, 'i' },
   { "strip-underscore", no_argument, 0, 'u' },
-  { "no-cpp", no_argument, 0, 'p' },
+  { "no-cpp", no_argument, 0, 'n' },
   { 0 }
 };
 
@@ -1106,7 +1118,7 @@ parse_args_text (char **argv, int argc)
 			      long_options_text, (int *) 0);
       if (optc < 0)
 	break;
-      if ((optc == 'k' || optc == 'i') && args->ctype == ctype_text)
+      if ((optc == 'x' || optc == 'i') && args->ctype == ctype_text)
 	args->ctype = CLONE (ctype_text, unsigned char, cardinalityof (ctype_text));
       switch (optc)
 	{
