@@ -1,3 +1,7 @@
+2005-11-01
+	* libidu/scanners.c: applied (with changes) savannah patch 2702:
+	  Fix language options handling bugs, and removed redundant C options help.
+
 2005-05-31  Claudio Fontana  <sick_soul@users.sourceforge.net>
         * configure.in: moved to configure.ac
 	* configure.ac (new file): rewritten using gnulib and new macros
