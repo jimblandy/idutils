@@ -1,0 +1,4 @@
+@set UPDATED 3 December 2001
+@set UPDATED-MONTH December 2001
+@set EDITION 4.0
+@set VERSION 4.0

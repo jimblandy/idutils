@@ -6,6 +6,7 @@ AC_INIT([id-utils], [4.0], [bug-id-utils@gnu.org])
 AC_GNU_SOURCE
 
 AM_INIT_AUTOMAKE
+AM_MAINTAINER_MODE
 
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
