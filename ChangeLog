@@ -1,6 +1,23 @@
-2005-11-01
+2005-12-11  Claudio Fontana  <claudio@gnu.org>
+	* libidu/scanners.c: Fixed signed/unsigned char* assignments by
+	  making both 'scanner_buffer' and 'id' unsigned char*.
+	  characters from scanner_buffer are first assigned to an int prior
+	  to checking with the class-macros;
+
+	* src/mkid.c, configure.ac, libidu/iduglobal.h:
+	  print an off_t value more portably by checking size of off_t
+	  against size of int and size of long.
+	  The remaining case is handled with c99 long long format.
+
+	* intl/*, po/*: updated to latest version
+	
+2005-12-10  Claudio Fontana  <claudio@gnu.org>
+	* applied savannah patch 2775: include scanner for the perl language
+
+2005-11-01  Claudio Fontana  <claudio@gnu.org>
 	* libidu/scanners.c: applied (with changes) savannah patch 2702:
-	  Fix language options handling bugs, and removed redundant C options help.
+	  Fix language options handling bugs, and removed redundant C options
+	  help.
 
 2005-05-31  Claudio Fontana  <sick_soul@users.sourceforge.net>
         * configure.in: moved to configure.ac

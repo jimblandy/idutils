@@ -104,7 +104,7 @@ int statistics_flag = 0;
 int file_name_count = 0;	/* # of files in database */
 int levels = 0;			/* ceil(log(8)) of file_name_count */
 
-char *current_hits_signature;
+unsigned char *current_hits_signature;
 #define INIT_TOKENS_SIZE(level) (1 << ((level) + 13))
 struct summary *summary_root;
 struct summary *summary_leaf;
@@ -386,7 +386,7 @@ scan_files (struct idhead *idhp)
 
   hash_init (&token_table, n, token_hash_1, token_hash_2, token_hash_cmp);
   if (verbose_flag)
-    printf ("files=%ld, largest=%lu, slots=%ld\n",
+    printf ("files=%ld, largest=" OFF_FMT ", slots=%lu\n",
 	    idhp->idh_member_file_table.ht_fill,
 	    largest_member_file, token_table.ht_size);
   init_hits_signature (0);
@@ -581,6 +581,7 @@ write_id_file (struct idhead *idhp)
   for (i = 0; i < token_table.ht_fill; i++, tokens++)
     {
       struct token *token = *tokens;
+
       occurrences += token->tok_count;
       if (token->tok_flags & TOK_NUMBER)
 	number_tokens++;

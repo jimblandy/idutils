@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.2\n"
 "Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
-"POT-Creation-Date: 2005-10-06 13:04+0200\n"
+"POT-Creation-Date: 2005-12-11 04:49+0100\n"
 "PO-Revision-Date: 1998-09-30 13:31+02:00\n"
 "Last-Translator: Ivo Timmermans <zarq@iname.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -73,45 +73,45 @@ msgstr "onbekend I/O type: %d"
 msgid "unsupported size in io_write (): %d"
 msgstr "niet-ondersteunde afmeting in io_write(): %d"
 
-#: libidu/scanners.c:93
+#: libidu/scanners.c:100
 #, c-format
 msgid "unrecognized language: `%s'"
 msgstr "niet herkende taal: `%s'"
 
-#: libidu/scanners.c:139
+#: libidu/scanners.c:146
 msgid "can't allocate language args obstack: memory exhausted"
 msgstr "kan geen objectstapel voor taalargumenten vrijmaken: geheugen vol"
 
-#: libidu/scanners.c:193 libidu/scanners.c:262
+#: libidu/scanners.c:200 libidu/scanners.c:269
 msgid "can't allocate language args: memory exhausted"
 msgstr "kan geen geheugen vrijmaken voor taalargumenten: geheugen vol"
 
-#: libidu/scanners.c:201
+#: libidu/scanners.c:208
 #, c-format
 msgid "language name expected following `%s' in file `%s'"
 msgstr "taalnaam verwacht na `%s' in bestand `%s'"
 
-#: libidu/scanners.c:256
+#: libidu/scanners.c:263
 #, c-format
 msgid "can't open language map file `%s'"
 msgstr "kan taalbestand `%s' niet openen"
 
-#: libidu/scanners.c:258
+#: libidu/scanners.c:265
 #, c-format
 msgid "can't get size of map file `%s'"
 msgstr "kan grootte van mapbestand `%s' niet krijgen"
 
-#: libidu/scanners.c:268
+#: libidu/scanners.c:275
 #, c-format
 msgid "can't read language map file `%s'"
 msgstr "kan taalbestand `%s' niet lezen"
 
-#: libidu/scanners.c:271
+#: libidu/scanners.c:278
 #, c-format
 msgid "can't read entire language map file `%s'"
 msgstr "kan niet het hele taalbestand `%s' lezen"
 
-#: libidu/scanners.c:416
+#: libidu/scanners.c:423
 #, c-format
 msgid ""
 "C language:\n"
@@ -130,17 +130,38 @@ msgstr ""
 "  -u,--strip-underscore Haal een voorgaand laag liggend streepje (`_')\n"
 "                        weg van reeksen van een eenheid\n"
 
-#: libidu/scanners.c:699 libidu/scanners.c:970 libidu/scanners.c:1173
+#: libidu/scanners.c:434
+#, fuzzy, c-format
+msgid ""
+"C++ language:\n"
+"  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the "
+"result\n"
+"  -i,--ignore=CHARS      Allow CHARS in single-token strings, toss the "
+"result\n"
+"  -u,--strip-underscore  Strip a leading underscore from single-token "
+"strings\n"
+msgstr ""
+"C taal:\n"
+"  -k,--keep=TEKENS      Sta TEKENS toe in reeksen van een eenheid, behoud\n"
+"                        resultaat\n"
+"  -i,--ignore=TEKENS    Sta TEKENS toe in reeksen van een eenheid, gooi\n"
+"                        resultaat weg\n"
+"  -u,--strip-underscore Haal een voorgaand laag liggend streepje (`_')\n"
+"                        weg van reeksen van een eenheid\n"
+
+#: libidu/scanners.c:717 libidu/scanners.c:988 libidu/scanners.c:1191
+#: libidu/scanners.c:1455
 #, c-format
 msgid "junk: `%c'"
 msgstr "onzin: `%c'"
 
-#: libidu/scanners.c:701 libidu/scanners.c:972 libidu/scanners.c:1175
+#: libidu/scanners.c:719 libidu/scanners.c:990 libidu/scanners.c:1193
+#: libidu/scanners.c:1457
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "onzin: `\\%03o'"
 
-#: libidu/scanners.c:805
+#: libidu/scanners.c:823
 #, c-format
 msgid ""
 "Assembly language:\n"
@@ -159,7 +180,7 @@ msgstr ""
 "eenheden\n"
 "  -n,--no-cpp            Behandel geen C pre-processor aanwijzingen\n"
 
-#: libidu/scanners.c:1076
+#: libidu/scanners.c:1094
 #, c-format
 msgid ""
 "Text language:\n"
@@ -167,6 +188,22 @@ msgid ""
 "constituents\n"
 "  -x,--exclude=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
 "delimiters\n"
+msgstr ""
+"Tekst taal:\n"
+"  -i,--include=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als onderdeel "
+"van een eenheid\n"
+"  -x,--exclude=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als "
+"eenheidscheiding\n"
+
+#: libidu/scanners.c:1299
+#, fuzzy, c-format
+msgid ""
+"Perl language:\n"
+"  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
+"constituents\n"
+"  -x,--exclude=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
+"delimiters\n"
+"  -d,--dtags  Include documentation tags\n"
 msgstr ""
 "Tekst taal:\n"
 "  -i,--include=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als onderdeel "
@@ -637,12 +674,12 @@ msgstr "`%s' schrijven...\n"
 msgid "can't create `%s'"
 msgstr "kan `%s' niet aanmaken"
 
-#: src/mkid.c:629
+#: src/mkid.c:630
 #, c-format
 msgid "error closing `%s'"
 msgstr ""
 
-#: src/mkid.c:717
+#: src/mkid.c:718
 #, c-format
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "niveau %d: %ld/%ld = %.0f%%\n"

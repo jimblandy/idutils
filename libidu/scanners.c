@@ -62,12 +62,18 @@ static struct token *get_token_text (FILE *in_FILE, void const *args, int *flags
 static void *parse_args_text (char **argv, int argc);
 static void help_me_text (void);
 
+static struct token *get_token_perl (FILE *in_FILE, void const *args, int *flags);
+static void *parse_args_perl (char **argv, int argc);
+static void help_me_perl (void);
+
+
 struct language languages_0[] =
 {
   { "C", parse_args_c, get_token_c, help_me_c },
   { "C++", parse_args_c, get_token_c, help_me_cpp },
   { "asm", parse_args_asm, get_token_asm, help_me_asm },
   { "text", parse_args_text, get_token_text, help_me_text },
+  { "perl", parse_args_perl, get_token_perl, help_me_perl }
 };
 struct language const *languages_N = &languages_0[cardinalityof (languages_0)];
 
@@ -587,7 +593,7 @@ get_token_c (FILE *in_FILE, void const *args, int *flags)
   static int new_line = 1;
   unsigned short const *rct = &ARGS->ctype[1];
   unsigned char *id = scanner_buffer;
-  int c;
+  int c; int d;
 
   obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
 
@@ -620,7 +626,7 @@ next:
 	}
       *--id = '\0';
       id = scanner_buffer;
-      while (ISSTRKEEP (*id))
+      while (ISSTRKEEP (d = *id))
 	id++;
       if (*id || id == scanner_buffer)
 	{
@@ -899,7 +905,7 @@ get_token_asm (FILE *in_FILE, void const *args, int *flags)
   static int new_line = 1;
   unsigned char const *rct = &ARGS->ctype[1];
   unsigned char *id = scanner_buffer;
-  int c;
+  int c, d;
 
   obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
 
@@ -987,7 +993,7 @@ next:
 
   *id = '\0';
   for (id = scanner_buffer; *id; id++)
-    if (ISIGNORE (*id))
+    if (ISIGNORE (d = *id))
       goto next;
   ungetc (c, in_FILE);
   *flags |= TOK_LITERAL;
@@ -1205,3 +1211,298 @@ top:
 #undef ISEOF
 #undef ISBORING
 #undef ISIDSQUEEZE
+
+/*************** Perl *******************************************************/
+
+#define I1	0x01		/* 1st char of an identifier [a-zA-Z_] */
+#define NM	0x02		/* digit [0-9a-fA-FxX] */
+#define SQ	0x04		/* squeeze these out (.,',-) */
+#define CM	0x08		/* Comment Character '#' */
+#define EQ	0x10		/* Start of Documentation Character '=' */
+#define Q1	0x20		/* Start of Single Quote ''' */
+#define Q2	0x40		/* Start of Double Quote '"' */
+#define EF	0x80		/* EOF */
+#define NL	0x100		/* '\n' character */
+#define ES	0x200		/* Escape '\\' character */
+
+/* Text character classes */
+#define ISID1ST(c)	((rct)[c] & (I1))
+#define ISIDREST(c)	((rct)[c] & (I1|NM|SQ|Q1))
+#define ISNUMBER(c)	((rct)[c] & (NM))
+#define ISIDSQUEEZE(c)	((rct)[c] & (SQ))
+#define ISCOMMENT(c)	((rct)[c] & (CM))
+#define ISEQUALS(c)	((rct)[c] & (EQ))
+#define ISQUOTE1(c)	((rct)[c] & (Q1))
+#define ISQUOTE2(c)	((rct)[c] & (Q2))
+#define ISNEWLINE(c)	((rct)[c] & (NL))
+#define ISEOF(c)	((rct)[c] & (EF))
+#define ISBORING(c)	(!((rct)[c] & (I1|NL|NM|CM|EQ|Q1|Q2|ES|EF)))
+
+static unsigned short ctype_perl[257] =
+{
+  EF,
+/*      0       1       2       3       4       5       6       7   */
+/*    -----   -----   -----   -----   -----   -----   -----   ----- */
+/*000*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*010*/ 0,	0,	NL,	0,	0,	0,	0,	0,
+/*020*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*030*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*040*/ 0,	0,	Q2,	CM,	0,	0,	0,	Q1,
+/*050*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*060*/ NM,	NM,	NM,	NM,	NM,	NM,	NM,	NM,
+/*070*/ NM,	NM,	0,	0,	0,	EQ,	0,	0,
+/*100*/ 0,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1,
+/*110*/ I1,	I1,	I1,	I1,	I1|NM,	I1,	I1,	I1,
+/*120*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*130*/ I1|NM,	I1,	I1,	0,	ES,	0,	0,	I1,
+/*140*/ 0,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1,
+/*150*/ I1,	I1,	I1,	I1,	I1|NM,	I1,	I1,	I1,
+/*160*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*170*/ I1|NM,	I1,	I1,	0,	0,	0,	0,	0,
+/*200*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*210*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*220*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*230*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*240*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*250*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*260*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*270*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*300*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*310*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*320*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	0,
+/*330*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*340*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*350*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*360*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	0,
+/*370*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+};
+
+struct args_perl
+{
+  int exclude_dtags;
+  unsigned short *ctype;
+};
+
+static struct args_perl args_perl = { 1, ctype_perl };
+
+static struct option const long_options_perl[] =
+{
+  { "include", required_argument, 0, 'i' },
+  { "exclude", required_argument, 0, 'x' },
+  { "dtags", no_argument, 0, 'd' },
+  { 0 }
+};
+
+static void
+help_me_perl (void)
+{
+  printf (_("\
+Perl language:\n\
+  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token constituents\n\
+  -x,--exclude=CHAR-CLASS  Treat characters of CHAR-CLASS as token delimiters\n\
+  -d,--dtags  Include documentation tags\n\
+"));
+}
+
+static void *
+parse_args_perl (char **argv, int argc)
+{
+  char *tmp_string = 0;
+  struct args_perl *args;
+
+  if (argv == 0 || *argv == 0)
+    return &args_perl;
+
+  if (argc)
+    args = &args_perl;
+  else
+    {
+      tmp_string = strdup (*argv);
+      tokenize_args_string (tmp_string, &argc, &argv);
+      args = xmalloc (sizeof(struct args_perl));
+      args->exclude_dtags = 1;
+      args->ctype = ctype_perl;
+    }
+
+  optind = 0;
+  for (;;)
+    {
+      int optc = getopt_long (argc, argv, "i:x:d",
+			      long_options_perl, (int *) 0);
+      if (optc < 0)
+	break;
+      if ((optc == 'x' || optc == 'i') && args->ctype == ctype_perl)
+	args->ctype = CLONE (ctype_perl, unsigned short, cardinalityof (ctype_perl));
+      switch (optc)
+	{
+	case 'd':
+	  args->exclude_dtags = 0;
+	  break;
+
+	case 'i':
+	  set_ushort_ctype (args->ctype, optarg, I1);
+	  break;
+
+	case 'x':
+	  clear_ushort_ctype (args->ctype, optarg, I1);
+	  break;
+
+	default:
+	  usage ();
+	}
+    }
+  if (tmp_string)
+    {
+      free (argv);
+      free (tmp_string);
+    }
+  return args;
+}
+
+/* Grab the next identifier the text source file.  This state machine
+   is built for speed, not elegance.  */
+
+static struct token *
+get_token_perl (FILE *in_FILE, void const *args, int *flags)
+{
+#define ARGS ((struct args_perl const *) args)
+  static int new_line = 1;
+  /*  static char id_0[BUFSIZ]; */
+  unsigned short const *rct = &ARGS->ctype[1];
+  int c, state = 0, skip_doc = 0;
+  /* int comment = 0, d_quote = 0, s_quote = 0, equals = 0; */
+  unsigned char *id = scanner_buffer;
+
+  obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
+
+top: 
+  c = getc (in_FILE);
+  while (ISBORING (c))
+    c = getc (in_FILE);
+
+  switch (c)
+    {
+      case '\n':
+        state &= ~CM;		/* comment = 0; */
+        new_line = 1;
+        goto top;
+        break;
+
+      case '\\':
+        c = getc (in_FILE); /* Skip next character */
+        new_line = 0;
+        goto top;
+        break;
+
+      case '#':
+        state |= CM;		/* comment = 1; */
+        break;
+
+      case '\'':
+	if (!skip_doc)
+           state ^= Q1;		/* s_quote = ((s_quote) ? 0 : 1); */
+        break;
+
+      case '\"':
+	if (!skip_doc)
+          state ^= Q2;		/* d_quote = ((d_quote == 1) ? 0 : 1); */
+        break;
+
+      case '=':
+        if (new_line && ARGS->exclude_dtags)
+          {
+            skip_doc = 1;
+            state &= ~EQ;		/* documenation = 0; */
+          }
+        break;
+
+      default: 
+        if (ISEOF (c))
+          {
+            new_line = 1;
+            obstack_free (&tokens_obstack, obstack_finish (&tokens_obstack));
+            return 0;
+          }
+      break;
+    }
+
+  new_line = 0;
+  if (ISCOMMENT(c) || ISQUOTE1(c) || ISQUOTE2(c) ||
+                ISNEWLINE(c) || ISEQUALS(c) || state)
+     goto top;
+
+  id = scanner_buffer;
+  *id++ = c;
+  if (ISID1ST (c))
+    {
+      *flags = TOK_NAME;
+      while (ISIDREST (c = getc (in_FILE)))
+        if (!ISIDSQUEEZE (c))
+          *id++ = c;
+    }
+  else if (ISNUMBER (c))
+    {
+      *flags = TOK_NUMBER;
+      while (ISNUMBER (c = getc (in_FILE)))
+        *id++ = c;
+
+      ungetc (c, in_FILE);
+      goto top;			/* skip all numbers */
+    }
+  else
+    {
+      if (isprint (c))
+        fprintf (stderr, _("junk: `%c'"), c);
+      else
+        fprintf (stderr, _("junk: `\\%03o'"), c);
+      goto top;
+    }
+
+  ungetc (c, in_FILE);
+
+  *id = '\0';
+  if (skip_doc)
+    {
+      if (strequ (scanner_buffer, "cut"))
+        {
+          skip_doc = 0;
+        }
+      else 
+        {
+          state |= EQ;		/* documenation = 1; */
+	}
+      goto top;
+    }
+
+  if (strequ (scanner_buffer, "_"))
+    {
+      goto top;
+    }
+
+  *flags |= TOK_LITERAL;
+  obstack_grow0 (&tokens_obstack, scanner_buffer, id - scanner_buffer);
+  return (struct token *) obstack_finish (&tokens_obstack);
+#undef ARGS
+}
+
+#undef I1
+#undef NM
+#undef SQ
+#undef CM
+#undef EQ
+#undef Q1
+#undef Q2
+#undef EF
+#undef NL
+#undef ES
+#undef ISID1ST
+#undef ISIDREST
+#undef ISNUMBER
+#undef ISIDSQUEEZE
+#undef ISCOMMENT
+#undef ISEQUALS
+#undef ISQUOTE1
+#undef ISQUOTE2
+#undef ISNEWLINE
+#undef ISEOF
+#undef ISBORING

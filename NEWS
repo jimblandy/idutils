@@ -2,7 +2,10 @@ id-utils NEWS - User visible changes.
 
 Version 4.0 - Nov 1, 2005, by Claudio Fontana
 
-* Modernize build system
+* Modernize build system (autotools, gnulib, intl, large file support)
+* Cleaned up some code
+* Fixed some portability problems (some might remain)
+* Integrated perl support
 
 Version 3.2d - April 6, 1999, by Greg McGary
 

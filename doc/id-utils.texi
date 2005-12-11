@@ -427,6 +427,7 @@ scanners, and examine their language-specific options by invoking
 * C/C++ scanner::               For the C and C++ programming language.
 * Assembler scanner::           For assembly language.
 * Text scanner::                For documents or other non-source code.
+* Perl scanner::                For Perl language (experimental).
 * Defining scanners::           Defining new scanners in the source code.
 @end menu
 
@@ -702,6 +703,59 @@ Include characters belonging to @var{character-class} in tokens.
 
 Exclude characters belonging to @var{character-class} from tokens, i.e., treat
 them as token delimiters.
+
+@end table
+
+@c ************* gkm *********************************************************
+@node Perl scanner
+@subsection Perl Scanner
+
+@cindex perl scanner
+(EXPERIMENTAL)
+
+The perl scanner is intended for perl-language documents. Tokens are all 
+words, Perl Keywords are included. Comments & string declarations are
+ignored, as well as the documentation.  It is customizable to the extent
+that character classes can be designated as token constituents or as
+token delimiters.  The default token constituents are the alpha-numerics;
+all other characters are considered token delimiters.
+
+@table @samp
+
+@item -i @var{character-class}
+@itemx --include=@var{character-class}
+@opindex -i
+@opindex --include
+@opindex -l perl:-i
+@opindex -l perl:--include
+@opindex --lang-option=perl:-i
+@opindex --lang-option=perl:--include
+
+Include characters belonging to @var{character-class} in tokens.
+
+@item -x @var{character-class}
+@itemx --exclude=@var{character-class}
+@opindex -x
+@opindex --exclude
+@opindex -l perl:-x
+@opindex -l perl:--exclude
+@opindex --lang-option=perl:-x
+@opindex --lang-option=perl:--exclude
+
+Exclude characters belonging to @var{character-class} from tokens, i.e., treat
+them as token delimiters.
+
+@item -d
+@itemx --dtags
+@opindex -d
+@opindex --dtags
+@opindex -l asm:-d
+@opindex -l asm:--dtags
+@opindex --lang-option=perl:-d
+@opindex --lang-option=perl:--dtags
+
+Include tokens from the documentation.  By default, the tokens in the
+documentation are ignored.
 
 @end table
 

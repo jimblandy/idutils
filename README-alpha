@@ -1,6 +1,23 @@
 id-utils README-alpha
 
-Special instructions for pre-release testers:
+id-utils-4.0 Special instructions for pre-release testers
+---------------------------------------------------------
+
+ * The code has been substantially changed.
+   Portability problems might remain.
+
+ * Please report your successes/problems along with your operating system,
+   compiler, and possibly other relevant information. 
+
+ Information that follows this small section is out of date,
+ but might contain interesting info.
+__________________________________________________________
+
+
+
+
+id-utils-3.x Special instructions for pre-release testers
+  (WARNING! Out of date, for reference only)
 
 * The code is pretty solid, but portability problems might remain.
 

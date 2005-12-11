@@ -83,6 +83,7 @@ Makefile.*		make
 *.m4			m4
 
 *.pl			perl
+*.pm			perl
 
 *.gz			FILTER gzip -d <%s
 *.Z			FILTER gzip -d <%s

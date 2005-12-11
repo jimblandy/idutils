@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.0.8\n"
 "Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
-"POT-Creation-Date: 2005-10-06 13:04+0200\n"
+"POT-Creation-Date: 2005-12-11 04:49+0100\n"
 "PO-Revision-Date: 1997-03-26 23:59 +0100\n"
 "Last-Translator: Wojciech Marek Ga³±zka <wgalazka@chem.uw.edu.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -73,45 +73,45 @@ msgstr ""
 msgid "unsupported size in io_write (): %d"
 msgstr "Nie obs³ugiwany rozmiar w io_write (): %d\n"
 
-#: libidu/scanners.c:93
+#: libidu/scanners.c:100
 #, fuzzy, c-format
 msgid "unrecognized language: `%s'"
 msgstr "Brak skanera dla jêzyka `%s'\n"
 
-#: libidu/scanners.c:139
+#: libidu/scanners.c:146
 msgid "can't allocate language args obstack: memory exhausted"
 msgstr ""
 
-#: libidu/scanners.c:193 libidu/scanners.c:262
+#: libidu/scanners.c:200 libidu/scanners.c:269
 msgid "can't allocate language args: memory exhausted"
 msgstr ""
 
-#: libidu/scanners.c:201
+#: libidu/scanners.c:208
 #, c-format
 msgid "language name expected following `%s' in file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:256
+#: libidu/scanners.c:263
 #, fuzzy, c-format
 msgid "can't open language map file `%s'"
 msgstr "Brak skanera dla jêzyka `%s'\n"
 
-#: libidu/scanners.c:258
+#: libidu/scanners.c:265
 #, c-format
 msgid "can't get size of map file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:268
+#: libidu/scanners.c:275
 #, fuzzy, c-format
 msgid "can't read language map file `%s'"
 msgstr "Brak skanera dla jêzyka `%s'\n"
 
-#: libidu/scanners.c:271
+#: libidu/scanners.c:278
 #, c-format
 msgid "can't read entire language map file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:416
+#: libidu/scanners.c:423
 #, c-format
 msgid ""
 "C language:\n"
@@ -123,17 +123,31 @@ msgid ""
 "strings\n"
 msgstr ""
 
-#: libidu/scanners.c:699 libidu/scanners.c:970 libidu/scanners.c:1173
+#: libidu/scanners.c:434
+#, c-format
+msgid ""
+"C++ language:\n"
+"  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the "
+"result\n"
+"  -i,--ignore=CHARS      Allow CHARS in single-token strings, toss the "
+"result\n"
+"  -u,--strip-underscore  Strip a leading underscore from single-token "
+"strings\n"
+msgstr ""
+
+#: libidu/scanners.c:717 libidu/scanners.c:988 libidu/scanners.c:1191
+#: libidu/scanners.c:1455
 #, c-format
 msgid "junk: `%c'"
 msgstr "¶mieæ: `%c'"
 
-#: libidu/scanners.c:701 libidu/scanners.c:972 libidu/scanners.c:1175
+#: libidu/scanners.c:719 libidu/scanners.c:990 libidu/scanners.c:1193
+#: libidu/scanners.c:1457
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "¶mieæ: `\\%03o'"
 
-#: libidu/scanners.c:805
+#: libidu/scanners.c:823
 #, c-format
 msgid ""
 "Assembly language:\n"
@@ -144,7 +158,7 @@ msgid ""
 "  -n,--no-cpp            Don't handle C pre-processor directives\n"
 msgstr ""
 
-#: libidu/scanners.c:1076
+#: libidu/scanners.c:1094
 #, c-format
 msgid ""
 "Text language:\n"
@@ -152,6 +166,17 @@ msgid ""
 "constituents\n"
 "  -x,--exclude=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
 "delimiters\n"
+msgstr ""
+
+#: libidu/scanners.c:1299
+#, c-format
+msgid ""
+"Perl language:\n"
+"  -i,--include=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
+"constituents\n"
+"  -x,--exclude=CHAR-CLASS  Treat characters of CHAR-CLASS as token "
+"delimiters\n"
+"  -d,--dtags  Include documentation tags\n"
 msgstr ""
 
 #: libidu/walker.c:111
@@ -538,12 +563,12 @@ msgstr "Zapisujê `%s'...\n"
 msgid "can't create `%s'"
 msgstr ""
 
-#: src/mkid.c:629
+#: src/mkid.c:630
 #, c-format
 msgid "error closing `%s'"
 msgstr ""
 
-#: src/mkid.c:717
+#: src/mkid.c:718
 #, fuzzy, c-format
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "poziom %d: %ld == %ld\n"
