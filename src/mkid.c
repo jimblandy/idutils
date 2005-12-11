@@ -35,6 +35,7 @@
 #include "error.h"
 #include "alloca.h"
 #include <limits.h>
+#include "inttostr.h"
 #include "iduglobal.h"
 
 char* dirname(char* path);
@@ -385,10 +386,14 @@ scan_files (struct idhead *idhp)
     n = 1024*1024;
 
   hash_init (&token_table, n, token_hash_1, token_hash_2, token_hash_cmp);
-  if (verbose_flag)
-    printf ("files=%ld, largest=" OFF_FMT ", slots=%lu\n",
+  if (verbose_flag) {
+    char offstr[INT_BUFSIZE_BOUND(off_t)];
+    offtostr(largest_member_file, offstr);
+
+    printf ("files=%ld, largest=%s, slots=%lu\n",
 	    idhp->idh_member_file_table.ht_fill,
-	    largest_member_file, token_table.ht_size);
+	    offstr, token_table.ht_size);
+  }
   init_hits_signature (0);
   init_summary ();
   obstack_init (&tokens_obstack);

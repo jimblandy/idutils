@@ -13,7 +13,7 @@
 # In projects using CVS, this file can be treated like other built files.
 
 
-# This macro should be invoked from /home/claudio/src/idutils/idutils//configure.ac, in the section
+# This macro should be invoked from ./configure.ac, in the section
 # "Checks for programs", right after AC_PROG_CC, and certainly before
 # any checks for libraries, header files, types and library functions.
 AC_DEFUN([gl_EARLY],
@@ -22,7 +22,7 @@ AC_DEFUN([gl_EARLY],
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
 ])
 
-# This macro should be invoked from /home/claudio/src/idutils/idutils//configure.ac, in the section
+# This macro should be invoked from ./configure.ac, in the section
 # "Check for header files, types and library functions".
 AC_DEFUN([gl_INIT],
 [
@@ -39,6 +39,7 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_GETCWD
   gl_GETOPT
   dnl you must add AM_GNU_GETTEXT([external]) or similar to configure.ac.
+  gl_INTTOSTR
   gl_FUNC_LSTAT
   AC_FUNC_MALLOC
   gl_MBCHAR
@@ -93,6 +94,10 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/getopt_.h
   lib/getopt_int.h
   lib/gettext.h
+  lib/imaxtostr.c
+  lib/intprops.h
+  lib/inttostr.c
+  lib/inttostr.h
   lib/lstat.c
   lib/lstat.h
   lib/malloc.c
@@ -106,6 +111,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/memset.c
   lib/obstack.c
   lib/obstack.h
+  lib/offtostr.c
   lib/pathmax.h
   lib/quotearg.c
   lib/quotearg.h
@@ -132,6 +138,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strsep.h
   lib/strstr.c
   lib/strstr.h
+  lib/umaxtostr.c
   lib/xalloc-die.c
   lib/xalloc.h
   lib/xgetcwd.c
@@ -157,6 +164,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/iconv.m4
   m4/intdiv0.m4
   m4/intmax.m4
+  m4/intmax_t.m4
+  m4/inttostr.m4
   m4/inttypes-pri.m4
   m4/inttypes.m4
   m4/inttypes_h.m4

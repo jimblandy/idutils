@@ -46,9 +46,6 @@ AC_C_INLINE
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_CHECK_TYPES(ptrdiff_t)
-AC_CHECK_SIZEOF(off_t)
-AC_CHECK_SIZEOF(int)
-AC_CHECK_SIZEOF(long)
 
 AC_CONFIG_FILES([
                  intl/Makefile

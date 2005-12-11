@@ -5,9 +5,7 @@
 	  to checking with the class-macros;
 
 	* src/mkid.c, configure.ac, libidu/iduglobal.h:
-	  print an off_t value more portably by checking size of off_t
-	  against size of int and size of long.
-	  The remaining case is handled with c99 long long format.
+	  print an off_t value portably by using offtostr (gnulib)
 
 	* intl/*, po/*: updated to latest version
 	

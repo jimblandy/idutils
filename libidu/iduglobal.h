@@ -68,14 +68,4 @@
 #define DOT_DOT_SLASH "..\\"
 #endif
 
-/* vvv fix me: does not solve off_t printing problem, only a workaround vvv */
-
-#if SIZEOF_OFF_T == SIZEOF_INT
-# define OFF_FMT "%d"
-#elif SIZEOF_OFF_T == SIZEOF_LONG
-# define OFF_FMT "%ld"
-#else
-# define OFF_FMT "%lld"
-#endif
-
 #endif /* _iduglobal_h */
