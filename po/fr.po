@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
 "Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
-"POT-Creation-Date: 2005-12-11 04:49+0100\n"
+"POT-Creation-Date: 2005-12-15 16:37+0100\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Unknown <unknown@unknown.fr>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -54,7 +54,7 @@ msgstr ""
 msgid "can't determine the io_size of a string!"
 msgstr ""
 
-#: libidu/idread.c:49 src/mkid.c:454 src/xtokid.c:227
+#: libidu/idread.c:49 src/mkid.c:474 src/xtokid.c:227
 #, c-format
 msgid "can't open `%s'"
 msgstr ""
@@ -298,7 +298,7 @@ msgstr ""
 msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr ""
 
-#: src/fid.c:73 src/fnid.c:53 src/lid.c:237 src/mkid.c:123 src/xtokid.c:47
+#: src/fid.c:73 src/fnid.c:53 src/lid.c:237 src/mkid.c:124 src/xtokid.c:47
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr ""
@@ -452,12 +452,12 @@ msgstr ""
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 
-#: src/mkid.c:148 src/xtokid.c:68
+#: src/mkid.c:149 src/xtokid.c:68
 #, c-format
 msgid "Usage: %s [OPTION]... [FILE]...\n"
 msgstr ""
 
-#: src/mkid.c:152
+#: src/mkid.c:153
 #, c-format
 msgid ""
 "Build an identifier database.\n"
@@ -484,102 +484,102 @@ msgid ""
 "The following arguments apply to the language-specific scanners:\n"
 msgstr ""
 
-#: src/mkid.c:360
+#: src/mkid.c:376
 #, c-format
 msgid "can't create `%s' in `%s'"
 msgstr ""
 
-#: src/mkid.c:364
+#: src/mkid.c:380
 #, c-format
 msgid "can't modify `%s'"
 msgstr ""
 
-#: src/mkid.c:437
+#: src/mkid.c:457
 #, c-format
 msgid "can't stat `%s'"
 msgstr ""
 
-#: src/mkid.c:506
+#: src/mkid.c:526
 #, fuzzy, c-format
 msgid "  new = %d/%d"
 msgstr ", nouveau=%d/%d"
 
-#: src/mkid.c:515
+#: src/mkid.c:535
 #, c-format
 msgid "Name=%ld, "
 msgstr "Nom=%ld, "
 
-#: src/mkid.c:516
+#: src/mkid.c:536
 #, c-format
 msgid "Number=%ld, "
 msgstr "Numro=%ld, "
 
-#: src/mkid.c:517
+#: src/mkid.c:537
 #, c-format
 msgid "String=%ld, "
 msgstr "Chane=%ld, "
 
-#: src/mkid.c:518
+#: src/mkid.c:538
 #, c-format
 msgid "Literal=%ld, "
 msgstr "Litral=%ld, "
 
-#: src/mkid.c:519
+#: src/mkid.c:539
 #, c-format
 msgid "Comment=%ld\n"
 msgstr "Commentaire=%ld\n"
 
-#: src/mkid.c:521
+#: src/mkid.c:541
 #, fuzzy, c-format
 msgid "Files=%ld, "
 msgstr "Fichiers=%d, "
 
-#: src/mkid.c:522
+#: src/mkid.c:542
 #, c-format
 msgid "Tokens=%ld, "
 msgstr "Units lexicales=%ld, "
 
-#: src/mkid.c:523
+#: src/mkid.c:543
 #, c-format
 msgid "Bytes=%ld Kb, "
 msgstr "Octets=%ld Kb, "
 
-#: src/mkid.c:524
+#: src/mkid.c:544
 #, fuzzy, c-format
 msgid "Heap=%d+%d Kb, "
 msgstr "tas=%ld Kb, "
 
-#: src/mkid.c:526
+#: src/mkid.c:546
 #, c-format
 msgid "Output=%ld (%ld tok, %ld hit)\n"
 msgstr "Sortie=%ld (%ld units lexicales, %ld Touches)\n"
 
-#: src/mkid.c:529
+#: src/mkid.c:549
 #, fuzzy, c-format
 msgid ", Freq=%ld/%ld=%.2f\n"
 msgstr "Freq=%ld/%ld=%.2f\n"
 
-#: src/mkid.c:553
+#: src/mkid.c:573
 #, c-format
 msgid "Sorting tokens...\n"
 msgstr "Tri units lexicales...\n"
 
-#: src/mkid.c:559
+#: src/mkid.c:579
 #, c-format
 msgid "Writing `%s'...\n"
 msgstr "criture `%s'...\n"
 
-#: src/mkid.c:562
+#: src/mkid.c:582
 #, c-format
 msgid "can't create `%s'"
 msgstr ""
 
-#: src/mkid.c:630
+#: src/mkid.c:650
 #, c-format
 msgid "error closing `%s'"
 msgstr ""
 
-#: src/mkid.c:718
+#: src/mkid.c:738
 #, fuzzy, c-format
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "niveau %d: %ld == %ld\n"

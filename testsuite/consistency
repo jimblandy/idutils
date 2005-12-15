@@ -55,6 +55,15 @@ else
     errors=t
 fi
 
+cmd="$bindir/mkid $m_flag"
+echo $cmd
+if eval $cmd; then
+    echo "Good.  No crash when dealing with single file"
+else
+    1>&2 echo "Oops!  mkid failed."
+    errors=t
+fi
+
 case x$errors in
 xt) echo "Some checks failed."
     exit 1;;

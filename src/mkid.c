@@ -289,6 +289,21 @@ main (int argc, char **argv)
 
   mark_member_file_links (&idh);
   log_8_member_files = ceil_log_8 (idh.idh_member_file_table.ht_fill);
+
+  /* hack start: when scanning a single file, log_8_member_files results 0.
+     Adjust to 1 in this case, or xmalloc will be called for 0 bytes,
+     and later the struct token will have no 'hits' field.
+     This would cause a crash
+     (see testsuite/consistency, testsuite/single_file_token_bug.c)
+
+     <claudio@gnu.org 2005>
+  */
+
+  if (log_8_member_files == 0)
+    log_8_member_files = 1;
+
+  /* hack end */
+
   current_hits_signature = xmalloc (log_8_member_files);
 
   /* If scannable files were given, then scan them.  */
@@ -327,7 +342,7 @@ ceil_log_8 (unsigned long n)
   return log_8;
 }
 
-/* Return the integer ceiling of the base-8 logarithm of N.  */
+/* Return the integer ceiling of the base-2 logarithm of N.  */
 
 int
 ceil_log_2 (unsigned long n)

@@ -1,3 +1,12 @@
+2005-12-15  Claudio Fontana  <claudio@gnu.org>
+	* src/mkid.c: tweak alloc-ed size of token signature to a minimum
+	  of 1 byte. Fixes assertion failure filed as savannah support request
+	  sr #104712.
+
+	* testsuite/consistency: added test case for this bug
+	* testsuite/single_file_token_bug.c [new file]: needed for new test
+	* testsuite/Makefile.am: add new file to distribution
+
 2005-12-11  Claudio Fontana  <claudio@gnu.org>
 	* libidu/scanners.c: Fixed signed/unsigned char* assignments by
 	  making both 'scanner_buffer' and 'id' unsigned char*.

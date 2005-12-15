@@ -2,7 +2,7 @@
 
 TESTS = consistency
 
-EXTRA_DIST = $(TESTS)
+EXTRA_DIST = $(TESTS) single_file_token_bug.c
 
 DISTCLEANFILES = ID
 
