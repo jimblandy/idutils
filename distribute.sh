@@ -10,7 +10,7 @@ gpg --clearsign --yes $SRC_NAME.tar.gz.directive
 
 #upload results to ftp.
 cmdftp ftp-upload.gnu.org<<EOF
-cd /incoming/alpha
+cd /incoming/ftp
 u $SRC_NAME.tar.gz .
 u $SRC_NAME.tar.gz.sig .
 u $SRC_NAME.tar.gz.directive.asc .
