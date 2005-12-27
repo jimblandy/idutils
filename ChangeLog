@@ -2,6 +2,7 @@
 
 	* configure.ac: fixed unwanted change in bugs mailing list address
 	* configure.ac: moved development to version 4.1
+	* m4/extra_dist.sh: added script to autogenerate extra dist Makefile.am
 		
 	* lib/dirname.c, lib/dirname.h [new files]: added dirname module
 	* lib/basename.c [new file]: likewise
