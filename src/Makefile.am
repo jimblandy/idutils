@@ -9,5 +9,5 @@ AM_CPPFLAGS = -I$(top_srcdir)/libidu \
               -DLOCALEDIR=\"$(datadir)/locale\" \
               -DLANGUAGE_MAP_FILE=\"$(datadir)/id-lang.map\"
 
-LDADD = ../libidu/libidu.a $(LIBINTL) ../lib/libgnu.a 
+LDADD = ../libidu/libidu.a ../lib/libgnu.a $(LIBINTL) ../lib/libgnu.a 
 

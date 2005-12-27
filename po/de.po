@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
 "Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
-"POT-Creation-Date: 2005-12-27 04:46+0100\n"
+"POT-Creation-Date: 2005-12-27 07:15+0100\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Karl Eichwalder <ke@ke.Central.DE>\n"
 "Language-Team: German <de@li.org>\n"
@@ -14,36 +14,36 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: libidu/fnprint.c:135
+#: libidu/fnprint.c:136
 #, c-format
 msgid "invalid `--separator' style: `%s'"
 msgstr ""
 
-#: libidu/hash.c:51
+#: libidu/hash.c:52
 #, c-format
 msgid "can't allocate %ld bytes for hash table: memory exhausted"
 msgstr ""
 
-#: libidu/hash.c:264
+#: libidu/hash.c:265
 #, fuzzy, c-format
 msgid "Load=%ld/%ld=%.0f%%, "
 msgstr "\"Load\"=%ld/%ld=%.2f, "
 
-#: libidu/hash.c:266
+#: libidu/hash.c:267
 #, c-format
 msgid "Rehash=%d, "
 msgstr "\"Rehash\"=%d, "
 
-#: libidu/hash.c:267
+#: libidu/hash.c:268
 #, c-format
 msgid "Collisions=%ld/%ld=%.0f%%"
 msgstr ""
 
-#: libidu/idfile.c:105
+#: libidu/idfile.c:106
 msgid "can't determine the io_size of a string!"
 msgstr ""
 
-#: libidu/idread.c:49 src/mkid.c:476 src/xtokid.c:227
+#: libidu/idread.c:49 src/mkid.c:476 src/xtokid.c:228
 #, c-format
 msgid "can't open `%s'"
 msgstr ""
@@ -63,55 +63,55 @@ msgstr ""
 msgid "unsupported size in io_read (): %d"
 msgstr "Nicht unterstützte Größe (`size') in \"io_read ()\": %d"
 
-#: libidu/idread.c:198 libidu/idwrite.c:168
+#: libidu/idread.c:198 libidu/idwrite.c:169
 #, c-format
 msgid "unknown I/O type: %d"
 msgstr ""
 
-#: libidu/idwrite.c:157
+#: libidu/idwrite.c:158
 #, fuzzy, c-format
 msgid "unsupported size in io_write (): %d"
 msgstr "Nicht unterstützte Größe (`size') in \"io_write ()\": %d"
 
-#: libidu/scanners.c:101
+#: libidu/scanners.c:102
 #, fuzzy, c-format
 msgid "unrecognized language: `%s'"
 msgstr "Kein Scanner für die Sprache '%s'"
 
-#: libidu/scanners.c:147
+#: libidu/scanners.c:148
 msgid "can't allocate language args obstack: memory exhausted"
 msgstr ""
 
-#: libidu/scanners.c:201 libidu/scanners.c:270
+#: libidu/scanners.c:202 libidu/scanners.c:271
 msgid "can't allocate language args: memory exhausted"
 msgstr ""
 
-#: libidu/scanners.c:209
+#: libidu/scanners.c:210
 #, c-format
 msgid "language name expected following `%s' in file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:264
+#: libidu/scanners.c:265
 #, fuzzy, c-format
 msgid "can't open language map file `%s'"
 msgstr "Kein Scanner für die Sprache '%s'"
 
-#: libidu/scanners.c:266
+#: libidu/scanners.c:267
 #, c-format
 msgid "can't get size of map file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:276
+#: libidu/scanners.c:277
 #, fuzzy, c-format
 msgid "can't read language map file `%s'"
 msgstr "Kein Scanner für die Sprache '%s'"
 
-#: libidu/scanners.c:279
+#: libidu/scanners.c:280
 #, c-format
 msgid "can't read entire language map file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:424
+#: libidu/scanners.c:425
 #, c-format
 msgid ""
 "C language:\n"
@@ -123,7 +123,7 @@ msgid ""
 "strings\n"
 msgstr ""
 
-#: libidu/scanners.c:435
+#: libidu/scanners.c:436
 #, c-format
 msgid ""
 "C++ language:\n"
@@ -135,19 +135,19 @@ msgid ""
 "strings\n"
 msgstr ""
 
-#: libidu/scanners.c:718 libidu/scanners.c:989 libidu/scanners.c:1192
-#: libidu/scanners.c:1456
+#: libidu/scanners.c:719 libidu/scanners.c:990 libidu/scanners.c:1193
+#: libidu/scanners.c:1457
 #, c-format
 msgid "junk: `%c'"
 msgstr "\"junk\": '%c'"
 
-#: libidu/scanners.c:720 libidu/scanners.c:991 libidu/scanners.c:1194
-#: libidu/scanners.c:1458
+#: libidu/scanners.c:721 libidu/scanners.c:992 libidu/scanners.c:1195
+#: libidu/scanners.c:1459
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "\"junk\": '\\%03o'"
 
-#: libidu/scanners.c:824
+#: libidu/scanners.c:825
 #, c-format
 msgid ""
 "Assembly language:\n"
@@ -158,7 +158,7 @@ msgid ""
 "  -n,--no-cpp            Don't handle C pre-processor directives\n"
 msgstr ""
 
-#: libidu/scanners.c:1095
+#: libidu/scanners.c:1096
 #, c-format
 msgid ""
 "Text language:\n"
@@ -168,7 +168,7 @@ msgid ""
 "delimiters\n"
 msgstr ""
 
-#: libidu/scanners.c:1300
+#: libidu/scanners.c:1301
 #, c-format
 msgid ""
 "Perl language:\n"
@@ -287,17 +287,17 @@ msgstr ""
 msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr ""
 
-#: src/fid.c:73 src/fnid.c:53 src/lid.c:238 src/mkid.c:126 src/xtokid.c:47
+#: src/fid.c:74 src/fnid.c:54 src/lid.c:238 src/mkid.c:126 src/xtokid.c:48
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr ""
 
-#: src/fid.c:81
+#: src/fid.c:82
 #, c-format
 msgid "Usage: %s [OPTION] FILENAME [FILENAME2]\n"
 msgstr ""
 
-#: src/fid.c:84
+#: src/fid.c:85
 #, c-format
 msgid ""
 "List identifiers that occur in FILENAME, or if FILENAME2 is\n"
@@ -308,34 +308,34 @@ msgid ""
 "      --version    output version information and exit\n"
 msgstr ""
 
-#: src/fid.c:147
+#: src/fid.c:148
 msgid "no file name arguments"
 msgstr ""
 
-#: src/fid.c:152
+#: src/fid.c:153
 msgid "too many file name arguments"
 msgstr ""
 
-#: src/fid.c:159 src/fnid.c:154 src/lid.c:414
+#: src/fid.c:160 src/fnid.c:155 src/lid.c:414
 msgid "can't locate `ID'"
 msgstr ""
 
-#: src/fid.c:241
+#: src/fid.c:242
 #, c-format
 msgid "`%s' is ambiguous"
 msgstr ""
 
-#: src/fid.c:247
+#: src/fid.c:248
 #, fuzzy, c-format
 msgid "`%s' not found"
 msgstr "%s: nicht gefunden"
 
-#: src/fnid.c:70
+#: src/fnid.c:71
 #, c-format
 msgid "Usage: %s [OPTION]... [PATTERN]...\n"
 msgstr ""
 
-#: src/fnid.c:74
+#: src/fnid.c:75
 #, c-format
 msgid ""
 "Print constituent file names that match PATTERN,\n"
@@ -443,7 +443,7 @@ msgstr ""
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 
-#: src/mkid.c:151 src/xtokid.c:68
+#: src/mkid.c:151 src/xtokid.c:69
 #, c-format
 msgid "Usage: %s [OPTION]... [FILE]...\n"
 msgstr ""
@@ -577,7 +577,7 @@ msgstr ""
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "level %d: %ld == %ld\n"
 
-#: src/xtokid.c:72
+#: src/xtokid.c:73
 #, c-format
 msgid ""
 "Print all tokens found in a source file.\n"
