@@ -1,6 +1,6 @@
 id-utils README-alpha
 
-id-utils-4.0 Special instructions for pre-release testers
+id-utils-4.1 Special instructions for pre-release testers
 ---------------------------------------------------------
 
  * The code has been substantially changed.
@@ -9,11 +9,23 @@ id-utils-4.0 Special instructions for pre-release testers
  * Please report your successes/problems along with your operating system,
    compiler, and possibly other relevant information. 
 
+ x86, GNU/Linux Slackware 10.1: success
+ x86, FreeBSD 4.8: success
+ x86, NetBSD 1.6.1: success
+ x86, OpenBSD 3.4: success
+ x86, Sun Solaris 9: success
+
+ Sparc-R220, Sun Solaris 9: success
+
+ (add your information here!)
+
+
+
+
+
  Information that follows this small section is out of date,
  but might contain interesting info.
 __________________________________________________________
-
-
 
 
 id-utils-3.x Special instructions for pre-release testers
