@@ -23,10 +23,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <alloca.h>
 #include <error.h>
 #include <pathmax.h>
 #include <xalloc.h>
-#include <alloca.h>
 
 #include "xnls.h"
 #include "idfile.h"

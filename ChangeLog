@@ -19,6 +19,9 @@
 	* src/mkid.c: add include directive for dirname.h
 	* src/lid.c: likewise
 
+	* src/*.c, libidu/*.c: enforce <> for system includes or their gnulib
+	  replacements, and "" for program specific headers
+
 2005-12-15  Claudio Fontana  <claudio@gnu.org>
 	* src/mkid.c: tweak alloc-ed size of token signature to a minimum
 	  of 1 byte. Fixes assertion failure filed as savannah support request
