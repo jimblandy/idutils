@@ -29,6 +29,7 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_ALLOCA
   gl_FUNC_ATEXIT
   gl_CLOSEOUT
+  gl_DIRNAME
   gl_ERROR
   gl_EXCLUDE
   gl_EXITFAIL
@@ -75,8 +76,11 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/alloca.c
   lib/alloca_.h
   lib/atexit.c
+  lib/basename.c
   lib/closeout.c
   lib/closeout.h
+  lib/dirname.c
+  lib/dirname.h
   lib/error.c
   lib/error.h
   lib/exclude.c
@@ -129,6 +133,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strcspn.c
   lib/strdup.c
   lib/strdup.h
+  lib/stripslash.c
   lib/strncasecmp.c
   lib/strnlen1.c
   lib/strnlen1.h
@@ -149,6 +154,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/closeout.m4
   m4/codeset.m4
   m4/d-ino.m4
+  m4/dirname.m4
+  m4/dos.m4
   m4/error.m4
   m4/exclude.m4
   m4/exitfail.m4

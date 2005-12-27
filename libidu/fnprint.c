@@ -22,10 +22,11 @@
 #include <alloca.h>
 #include <unistd.h>
 #include <string.h>
-#include "pathmax.h"
+#include <pathmax.h>
+#include <error.h>
+
 #include "idfile.h"
 #include "xnls.h"
-#include "error.h"
 #include "iduglobal.h"
 
 char const *root_name (char const *path);

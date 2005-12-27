@@ -23,12 +23,13 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <error.h>
+#include <pathmax.h>
+#include <xalloc.h>
+#include <alloca.h>
+
 #include "xnls.h"
 #include "idfile.h"
-#include "error.h"
-#include "pathmax.h"
-#include "xalloc.h"
-#include "alloca.h"
 #include "iduglobal.h"
 
 int get_file_index (char *file_name);

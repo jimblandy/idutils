@@ -19,12 +19,13 @@
 
 #include <config.h>
 #include <stdlib.h>
+#include <obstack.h>
+#include <xalloc.h>
+#include <error.h>
+
 #include "idfile.h"
 #include "hash.h"
-#include "obstack.h"
-#include "xalloc.h"
 #include "xnls.h"
-#include "error.h"
 
 int file_link_qsort_compare (void const *x, void const *y);
 

@@ -20,10 +20,11 @@
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <xalloc.h>
+#include <error.h>
+
 #include "hash.h"
 #include "xnls.h"
-#include "xalloc.h"
-#include "error.h"
 
 static void hash_rehash (struct hash_table* ht);
 static unsigned long round_up_2 (unsigned long rough);

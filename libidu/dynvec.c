@@ -19,8 +19,8 @@
 
 #include <config.h>
 #include <stdlib.h>
+#include <xalloc.h>
 #include "dynvec.h"
-#include "xalloc.h"
 
 struct dynvec *
 make_dynvec (int n)

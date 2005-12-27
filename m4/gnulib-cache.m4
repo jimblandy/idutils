@@ -14,10 +14,10 @@
 
 
 # Specification in the form of a command-line invocation:
-#   gnulib-tool --import --dir=. --lib=libgnu --source-base=lib --m4-base=m4 --aux-dir=. --macro-prefix=gl alloca alloca-opt atexit closeout error exclude exit exitfail extensions fnmatch fnmatch-gnu fpending getcwd getopt gettext gettext-h havelib inttostr lstat malloc mbchar mbuiter memchr memcpy mempcpy memset obstack pathmax quotearg realloc regex restrict stat-macros stdbool strcase strcspn strdup strnlen1 strpbrk strsep strstr xalloc xalloc-die xgetcwd
+#   gnulib-tool --import --dir=. --lib=libgnu --source-base=lib --m4-base=m4 --aux-dir=. --macro-prefix=gl alloca alloca-opt atexit closeout dirname error exclude exit exitfail extensions fnmatch fnmatch-gnu fpending getcwd getopt gettext gettext-h havelib inttostr lstat malloc mbchar mbuiter memchr memcpy mempcpy memset obstack pathmax quotearg realloc regex restrict stat-macros stdbool strcase strcspn strdup strnlen1 strpbrk strsep strstr xalloc xalloc-die xgetcwd
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
-gl_MODULES([alloca alloca-opt atexit closeout error exclude exit exitfail extensions fnmatch fnmatch-gnu fpending getcwd getopt gettext gettext-h havelib inttostr lstat malloc mbchar mbuiter memchr memcpy mempcpy memset obstack pathmax quotearg realloc regex restrict stat-macros stdbool strcase strcspn strdup strnlen1 strpbrk strsep strstr xalloc xalloc-die xgetcwd])
+gl_MODULES([alloca alloca-opt atexit closeout dirname error exclude exit exitfail extensions fnmatch fnmatch-gnu fpending getcwd getopt gettext gettext-h havelib inttostr lstat malloc mbchar mbuiter memchr memcpy mempcpy memset obstack pathmax quotearg realloc regex restrict stat-macros stdbool strcase strcspn strdup strnlen1 strpbrk strsep strstr xalloc xalloc-die xgetcwd])
 gl_AVOID([])
 gl_SOURCE_BASE([lib])
 gl_M4_BASE([m4])

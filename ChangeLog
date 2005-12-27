@@ -1,3 +1,24 @@
+2005-12-27  Claudio Fontana  <claudio@gnu.org>
+
+	* configure.ac: fixed unwanted change in bugs mailing list address
+	* configure.ac: moved development to version 4.1
+		
+	* lib/dirname.c, lib/dirname.h [new files]: added dirname module
+	* lib/basename.c [new file]: likewise
+	* lib/stripslash.c [new file]: likewise
+	* lib/Makefile.am: likewise (gnulib-generated)
+	* m4/dirname.m4, m4/dos.m4 [new files]: likewise
+	
+	* libidu/idfile.c: add missing include directive for strsep.h
+	* libidu/scanners.c: likewise
+	* libidu/walker.c: likewise
+
+	* libidu/scanners.c: add missing include for alloca.h
+	* libidu/walker.c: likewise
+	
+	* src/mkid.c: add include directive for dirname.h
+	* src/lid.c: likewise
+
 2005-12-15  Claudio Fontana  <claudio@gnu.org>
 	* src/mkid.c: tweak alloc-ed size of token signature to a minimum
 	  of 1 byte. Fixes assertion failure filed as savannah support request

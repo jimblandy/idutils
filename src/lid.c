@@ -25,20 +25,21 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <assert.h>
-#include "getopt.h"
+#include <getopt.h>
 #include <limits.h>
 #include <string.h>
+#include <dirname.h>
 #include <unistd.h>
 #include <termios.h>
-#include "regex.h"
-#include "xnls.h"
-#include "xalloc.h"
-#include "idfile.h"
-#include "error.h"
-#include "pathmax.h"
-#include "alloca.h"
-#include "iduglobal.h"
+#include <alloca.h>
+#include <regex.h>
+#include <xalloc.h>
+#include <pathmax.h>
+#include <error.h>
 
+#include "xnls.h"
+#include "idfile.h"
+#include "iduglobal.h"
 
 typedef void (*report_func_t) (char const *name, struct file_link **flinkv);
 typedef int (*query_func_t) (char const *arg, report_func_t);

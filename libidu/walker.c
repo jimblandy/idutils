@@ -24,17 +24,19 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <string.h>
+#include <strsep.h>
 #include <fnmatch.h>
 #include <dirent.h>
 #include <errno.h>
+#include <alloca.h>
+#include <xalloc.h>
+#include <error.h>
+#include <pathmax.h>
+
 #include "xnls.h"
 #include "idfile.h"
-#include "error.h"
-#include "xalloc.h"
 #include "dynvec.h"
 #include "scanners.h"
-#include "pathmax.h"
-#include "xalloc.h"
 #include "iduglobal.h"
 
 int walker_verbose_flag = 0;

@@ -16,6 +16,22 @@
    language is requested. */
 #undef ENABLE_NLS
 
+/* Define on systems for which file names may have a so-called `drive letter'
+   prefix, define this to compute the length of that prefix, including the
+   colon. */
+#undef FILE_SYSTEM_ACCEPTS_DRIVE_LETTER_PREFIX
+
+/* Define if the backslash character may also serve as a file name component
+   separator. */
+#undef FILE_SYSTEM_BACKSLASH_IS_FILE_NAME_SEPARATOR
+
+#if FILE_SYSTEM_ACCEPTS_DRIVE_LETTER_PREFIX
+# define FILE_SYSTEM_PREFIX_LEN(Filename) \
+  ((Filename)[0] && (Filename)[1] == ':' ? 2 : 0)
+#else
+# define FILE_SYSTEM_PREFIX_LEN(Filename) 0
+#endif
+
 /* Define to 1 if you have `alloca' after including <alloca.h>, a header that
    may be supplied by this distribution. */
 #undef HAVE_ALLOCA
@@ -379,6 +395,12 @@
 
 /* Define if integer division by zero raises signal SIGFPE. */
 #undef INTDIV0_RAISES_SIGFPE
+
+#if FILE_SYSTEM_BACKSLASH_IS_FILE_NAME_SEPARATOR
+# define ISSLASH(C) ((C) == '/' || (C) == '\\')
+#else
+# define ISSLASH(C) ((C) == '/')
+#endif
 
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */

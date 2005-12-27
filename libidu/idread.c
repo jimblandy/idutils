@@ -22,12 +22,12 @@
 #include <stddef.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <obstack.h>
+#include <xalloc.h>
+#include <error.h>
 
 #include "idfile.h"
 #include "hash.h"
-#include "error.h"
-#include "obstack.h"
-#include "xalloc.h"
 #include "xnls.h"
 #include "iduglobal.h"
 

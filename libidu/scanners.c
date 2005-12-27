@@ -26,10 +26,12 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <strsep.h>
 #include <errno.h>
-#include "xalloc.h"
+#include <xalloc.h>
+#include <error.h>
+
 #include "xnls.h"
-#include "error.h"
 #include "scanners.h"
 #include "tokflags.h"
 #include "iduglobal.h"

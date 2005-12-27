@@ -24,12 +24,13 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <errno.h>
-#include "xalloc.h"
+#include <alloca.h>
+#include <xalloc.h>
+#include <pathmax.h>
+#include <error.h>
+
 #include "xnls.h"
 #include "idfile.h"
-#include "pathmax.h"
-#include "error.h"
-#include "alloca.h"
 #include "iduglobal.h"
 
 void scan_files (struct idhead *idhp);

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.2\n"
 "Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
-"POT-Creation-Date: 2005-12-15 16:37+0100\n"
+"POT-Creation-Date: 2005-12-27 04:46+0100\n"
 "PO-Revision-Date: 1998-09-30 13:31+02:00\n"
 "Last-Translator: Ivo Timmermans <zarq@iname.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -39,11 +39,11 @@ msgstr "herverfrommeling=%d, "
 msgid "Collisions=%ld/%ld=%.0f%%"
 msgstr "Botsingen=%ld/%ld=%.0f%%"
 
-#: libidu/idfile.c:104
+#: libidu/idfile.c:105
 msgid "can't determine the io_size of a string!"
 msgstr "kan de io_size van een letterreeks niet vaststellen!"
 
-#: libidu/idread.c:49 src/mkid.c:474 src/xtokid.c:227
+#: libidu/idread.c:49 src/mkid.c:476 src/xtokid.c:227
 #, c-format
 msgid "can't open `%s'"
 msgstr "kan `%s' niet openen"
@@ -73,45 +73,45 @@ msgstr "onbekend I/O type: %d"
 msgid "unsupported size in io_write (): %d"
 msgstr "niet-ondersteunde afmeting in io_write(): %d"
 
-#: libidu/scanners.c:100
+#: libidu/scanners.c:101
 #, c-format
 msgid "unrecognized language: `%s'"
 msgstr "niet herkende taal: `%s'"
 
-#: libidu/scanners.c:146
+#: libidu/scanners.c:147
 msgid "can't allocate language args obstack: memory exhausted"
 msgstr "kan geen objectstapel voor taalargumenten vrijmaken: geheugen vol"
 
-#: libidu/scanners.c:200 libidu/scanners.c:269
+#: libidu/scanners.c:201 libidu/scanners.c:270
 msgid "can't allocate language args: memory exhausted"
 msgstr "kan geen geheugen vrijmaken voor taalargumenten: geheugen vol"
 
-#: libidu/scanners.c:208
+#: libidu/scanners.c:209
 #, c-format
 msgid "language name expected following `%s' in file `%s'"
 msgstr "taalnaam verwacht na `%s' in bestand `%s'"
 
-#: libidu/scanners.c:263
+#: libidu/scanners.c:264
 #, c-format
 msgid "can't open language map file `%s'"
 msgstr "kan taalbestand `%s' niet openen"
 
-#: libidu/scanners.c:265
+#: libidu/scanners.c:266
 #, c-format
 msgid "can't get size of map file `%s'"
 msgstr "kan grootte van mapbestand `%s' niet krijgen"
 
-#: libidu/scanners.c:275
+#: libidu/scanners.c:276
 #, c-format
 msgid "can't read language map file `%s'"
 msgstr "kan taalbestand `%s' niet lezen"
 
-#: libidu/scanners.c:278
+#: libidu/scanners.c:279
 #, c-format
 msgid "can't read entire language map file `%s'"
 msgstr "kan niet het hele taalbestand `%s' lezen"
 
-#: libidu/scanners.c:423
+#: libidu/scanners.c:424
 #, c-format
 msgid ""
 "C language:\n"
@@ -130,7 +130,7 @@ msgstr ""
 "  -u,--strip-underscore Haal een voorgaand laag liggend streepje (`_')\n"
 "                        weg van reeksen van een eenheid\n"
 
-#: libidu/scanners.c:434
+#: libidu/scanners.c:435
 #, fuzzy, c-format
 msgid ""
 "C++ language:\n"
@@ -149,19 +149,19 @@ msgstr ""
 "  -u,--strip-underscore Haal een voorgaand laag liggend streepje (`_')\n"
 "                        weg van reeksen van een eenheid\n"
 
-#: libidu/scanners.c:717 libidu/scanners.c:988 libidu/scanners.c:1191
-#: libidu/scanners.c:1455
+#: libidu/scanners.c:718 libidu/scanners.c:989 libidu/scanners.c:1192
+#: libidu/scanners.c:1456
 #, c-format
 msgid "junk: `%c'"
 msgstr "onzin: `%c'"
 
-#: libidu/scanners.c:719 libidu/scanners.c:990 libidu/scanners.c:1193
-#: libidu/scanners.c:1457
+#: libidu/scanners.c:720 libidu/scanners.c:991 libidu/scanners.c:1194
+#: libidu/scanners.c:1458
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "onzin: `\\%03o'"
 
-#: libidu/scanners.c:823
+#: libidu/scanners.c:824
 #, c-format
 msgid ""
 "Assembly language:\n"
@@ -180,7 +180,7 @@ msgstr ""
 "eenheden\n"
 "  -n,--no-cpp            Behandel geen C pre-processor aanwijzingen\n"
 
-#: libidu/scanners.c:1094
+#: libidu/scanners.c:1095
 #, c-format
 msgid ""
 "Text language:\n"
@@ -195,7 +195,7 @@ msgstr ""
 "  -x,--exclude=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als "
 "eenheidscheiding\n"
 
-#: libidu/scanners.c:1299
+#: libidu/scanners.c:1300
 #, fuzzy, c-format
 msgid ""
 "Perl language:\n"
@@ -211,56 +211,56 @@ msgstr ""
 "  -x,--exclude=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als "
 "eenheidscheiding\n"
 
-#: libidu/walker.c:111
+#: libidu/walker.c:113
 #, c-format
 msgid "can't read directory `%s' (`.' from `%s')"
 msgstr "kan map `%s' niet lezen (`.' van `%s')"
 
-#: libidu/walker.c:178
+#: libidu/walker.c:180
 #, c-format
 msgid "notice: `%s' was a %s, but is now a %s!"
 msgstr "opmerking: `%s' was een %s, maar is nu een %s!"
 
-#: libidu/walker.c:179 libidu/walker.c:180
+#: libidu/walker.c:181 libidu/walker.c:182
 msgid "file"
 msgstr "bestand"
 
-#: libidu/walker.c:179 libidu/walker.c:180
+#: libidu/walker.c:181 libidu/walker.c:182
 msgid "directory"
 msgstr "map"
 
-#: libidu/walker.c:303
+#: libidu/walker.c:305
 #, c-format
 msgid "warning: `%s' and `%s' are the same file, but yield different scans!"
 msgstr ""
 "waarschuwing: `%s' en `%s' zijn het zelfde bestand, maar leveren "
 "verschillende resultaten op!"
 
-#: libidu/walker.c:397
+#: libidu/walker.c:399
 #, c-format
 msgid "notice: scan parameters changed for `%s'"
 msgstr "opmerking: leesparameters veranderd voor `%s'"
 
-#: libidu/walker.c:600
+#: libidu/walker.c:602
 msgid "can't get working directory"
 msgstr "kan huidige map niet verkrijgen"
 
-#: libidu/walker.c:657
+#: libidu/walker.c:659
 #, c-format
 msgid "can't chdir to `%s'"
 msgstr "kan niet naar map `%s' gaan"
 
-#: libidu/walker.c:662
+#: libidu/walker.c:664
 #, c-format
 msgid "can't chdir to `%s' from `%s'"
 msgstr "kan niet van map `%s' naar `%s' gaan"
 
-#: libidu/walker.c:723
+#: libidu/walker.c:725
 #, c-format
 msgid "can't lstat `%s' from `%s'"
 msgstr "kan de status van de link `%s' niet opvragen vanuit `%s'"
 
-#: libidu/walker.c:731
+#: libidu/walker.c:733
 #, c-format
 msgid "can't stat `%s' from `%s'"
 msgstr "kan de status van `%s' niet opvragen vanuit `%s'"
@@ -320,7 +320,7 @@ msgstr "%s: optie `%s' is dubbelzinnig\n"
 msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr "%s: optie `--%s' staat geen argumenten toe\n"
 
-#: src/fid.c:73 src/fnid.c:53 src/lid.c:237 src/mkid.c:124 src/xtokid.c:47
+#: src/fid.c:73 src/fnid.c:53 src/lid.c:238 src/mkid.c:126 src/xtokid.c:47
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr "Probeer `%s --help' voor meer informatie.\n"
@@ -356,7 +356,7 @@ msgstr "geen bestandsnaam argumenten"
 msgid "too many file name arguments"
 msgstr "te veel bestandsnaam argumenten"
 
-#: src/fid.c:159 src/fnid.c:154 src/lid.c:413
+#: src/fid.c:159 src/fnid.c:154 src/lid.c:414
 msgid "can't locate `ID'"
 msgstr "kan `ID' niet vinden"
 
@@ -393,12 +393,12 @@ msgstr ""
 "      --help             geef deze hulp en beëindig\n"
 "      --version          geef versie informatie en beëindig\n"
 
-#: src/lid.c:245
+#: src/lid.c:246
 #, c-format
 msgid "Usage: %s [OPTION]... PATTERN...\n"
 msgstr "Aanroep: %s [OPTIE]... PATROON...\n"
 
-#: src/lid.c:249
+#: src/lid.c:250
 #, c-format
 msgid ""
 "Query ID database and report results.\n"
@@ -483,59 +483,59 @@ msgstr ""
 "      --help            display this help and exit\n"
 "      --version         output version information and exit\n"
 
-#: src/lid.c:285
+#: src/lid.c:286
 msgid "braces"
 msgstr "accolades"
 
-#: src/lid.c:285
+#: src/lid.c:286
 msgid "space"
 msgstr "spatie"
 
-#: src/lid.c:353
+#: src/lid.c:354
 msgid "notice: use of `-e' is deprecated, use `-r' instead"
 msgstr ""
 "opmerking: gebruik van `-e' is verouderd, gebruik `-r' in plaats daarvan"
 
-#: src/lid.c:434
+#: src/lid.c:435
 #, c-format
 msgid "All identifiers are non-ambiguous within the first %d characters\n"
 msgstr ""
 "Alle namen van variabelen zijn niet dubbelzinnig in de eerste %d tekens\n"
 
-#: src/lid.c:469
+#: src/lid.c:470
 #, c-format
 msgid "invalid `--key' style: `%s'"
 msgstr "ongeldige `--key' stijl: `%s'"
 
-#: src/lid.c:481
+#: src/lid.c:482
 #, c-format
 msgid "invalid `--result' style: `%s'"
 msgstr "ongeldige `--result' stijl: `%s'"
 
-#: src/lid.c:638
+#: src/lid.c:639
 #, c-format
 msgid "edit? [y1-9^S/nq] "
 msgstr "bewerken? [j1-9^S/nq]"
 
-#: src/lid.c:707
+#: src/lid.c:708
 msgid "can't fork"
 msgstr "kan geen nieuw proces beginnen"
 
-#: src/lid.c:725
+#: src/lid.c:726
 #, c-format
 msgid "can't exec `%s'"
 msgstr "kan `%s' niet uitvoeren"
 
-#: src/lid.c:866
+#: src/lid.c:867
 msgid "can't match regular-expression: memory exhausted"
 msgstr "kan reguliere expressie niet vergelijken: geheugen vol"
 
-#: src/mkid.c:149 src/xtokid.c:68
+#: src/mkid.c:151 src/xtokid.c:68
 #, c-format
 msgid "Usage: %s [OPTION]... [FILE]...\n"
 msgstr "Aanroep: %s [OPTIE]... [BESTAND]...\n"
 
-#: src/mkid.c:153
+#: src/mkid.c:155
 #, c-format
 msgid ""
 "Build an identifier database.\n"
@@ -584,102 +584,102 @@ msgstr ""
 "\n"
 "The following arguments apply to the language-specific scanners:\n"
 
-#: src/mkid.c:376
+#: src/mkid.c:378
 #, c-format
 msgid "can't create `%s' in `%s'"
 msgstr "kan `%s' niet aanmaken in `%s'"
 
-#: src/mkid.c:380
+#: src/mkid.c:382
 #, c-format
 msgid "can't modify `%s'"
 msgstr "kan `%s' niet veranderen"
 
-#: src/mkid.c:457
+#: src/mkid.c:459
 #, c-format
 msgid "can't stat `%s'"
 msgstr "kan de status van `%s' niet opvragen"
 
-#: src/mkid.c:526
+#: src/mkid.c:528
 #, c-format
 msgid "  new = %d/%d"
 msgstr "  nieuw = %d/%d"
 
-#: src/mkid.c:535
+#: src/mkid.c:537
 #, c-format
 msgid "Name=%ld, "
 msgstr "Naam=%ld, "
 
-#: src/mkid.c:536
+#: src/mkid.c:538
 #, c-format
 msgid "Number=%ld, "
 msgstr "Nummer = %ld, "
 
-#: src/mkid.c:537
+#: src/mkid.c:539
 #, c-format
 msgid "String=%ld, "
 msgstr "Letterreeks=%ld, "
 
-#: src/mkid.c:538
+#: src/mkid.c:540
 #, c-format
 msgid "Literal=%ld, "
 msgstr "Letterlijk=%ld, "
 
-#: src/mkid.c:539
+#: src/mkid.c:541
 #, c-format
 msgid "Comment=%ld\n"
 msgstr "Commentaar=%ld\n"
 
-#: src/mkid.c:541
+#: src/mkid.c:543
 #, fuzzy, c-format
 msgid "Files=%ld, "
 msgstr "Bestanden=%d, "
 
-#: src/mkid.c:542
+#: src/mkid.c:544
 #, c-format
 msgid "Tokens=%ld, "
 msgstr "Eenheden=%ld, "
 
-#: src/mkid.c:543
+#: src/mkid.c:545
 #, c-format
 msgid "Bytes=%ld Kb, "
 msgstr "Bytes=%ld Kb, "
 
-#: src/mkid.c:544
+#: src/mkid.c:546
 #, fuzzy, c-format
 msgid "Heap=%d+%d Kb, "
 msgstr "Data=%ld+%ld Kb, "
 
-#: src/mkid.c:546
+#: src/mkid.c:548
 #, c-format
 msgid "Output=%ld (%ld tok, %ld hit)\n"
 msgstr "Uitvoer=%ld (%ld eenheden, %ld gevonden)\n"
 
-#: src/mkid.c:549
+#: src/mkid.c:551
 #, c-format
 msgid ", Freq=%ld/%ld=%.2f\n"
 msgstr ", Freq=%ld/%ld=%.2f\n"
 
-#: src/mkid.c:573
+#: src/mkid.c:575
 #, c-format
 msgid "Sorting tokens...\n"
 msgstr "Eenheden sorteren...\n"
 
-#: src/mkid.c:579
+#: src/mkid.c:581
 #, c-format
 msgid "Writing `%s'...\n"
 msgstr "`%s' schrijven...\n"
 
-#: src/mkid.c:582
+#: src/mkid.c:584
 #, c-format
 msgid "can't create `%s'"
 msgstr "kan `%s' niet aanmaken"
 
-#: src/mkid.c:650
+#: src/mkid.c:652
 #, c-format
 msgid "error closing `%s'"
 msgstr ""
 
-#: src/mkid.c:738
+#: src/mkid.c:740
 #, c-format
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "niveau %d: %ld/%ld = %.0f%%\n"

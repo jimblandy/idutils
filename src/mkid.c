@@ -25,17 +25,19 @@
 #include <sys/stat.h>
 #include <stddef.h>
 #include <unistd.h>
-#include "xnls.h"
-#include "pathmax.h"
+#include <pathmax.h>
 #include <string.h>
+#include <dirname.h>
+#include <alloca.h>
+#include <limits.h>
+#include <inttostr.h>
+#include <xalloc.h>
+#include <error.h>
+
+#include "xnls.h"
 #include "idfile.h"
-#include "xalloc.h"
 #include "hash.h"
 #include "scanners.h"
-#include "error.h"
-#include "alloca.h"
-#include <limits.h>
-#include "inttostr.h"
 #include "iduglobal.h"
 
 char* dirname(char* path);

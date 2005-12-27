@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.0.8\n"
 "Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
-"POT-Creation-Date: 2005-12-15 16:37+0100\n"
+"POT-Creation-Date: 2005-12-27 04:46+0100\n"
 "PO-Revision-Date: 1997-03-26 23:59 +0100\n"
 "Last-Translator: Wojciech Marek Ga³±zka <wgalazka@chem.uw.edu.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -39,11 +39,11 @@ msgstr "Ponownie mieszanie=%d, "
 msgid "Collisions=%ld/%ld=%.0f%%"
 msgstr "Próby=%ld/%ld=%.2f, "
 
-#: libidu/idfile.c:104
+#: libidu/idfile.c:105
 msgid "can't determine the io_size of a string!"
 msgstr ""
 
-#: libidu/idread.c:49 src/mkid.c:474 src/xtokid.c:227
+#: libidu/idread.c:49 src/mkid.c:476 src/xtokid.c:227
 #, c-format
 msgid "can't open `%s'"
 msgstr ""
@@ -73,45 +73,45 @@ msgstr ""
 msgid "unsupported size in io_write (): %d"
 msgstr "Nie obs³ugiwany rozmiar w io_write (): %d\n"
 
-#: libidu/scanners.c:100
+#: libidu/scanners.c:101
 #, fuzzy, c-format
 msgid "unrecognized language: `%s'"
 msgstr "Brak skanera dla jêzyka `%s'\n"
 
-#: libidu/scanners.c:146
+#: libidu/scanners.c:147
 msgid "can't allocate language args obstack: memory exhausted"
 msgstr ""
 
-#: libidu/scanners.c:200 libidu/scanners.c:269
+#: libidu/scanners.c:201 libidu/scanners.c:270
 msgid "can't allocate language args: memory exhausted"
 msgstr ""
 
-#: libidu/scanners.c:208
+#: libidu/scanners.c:209
 #, c-format
 msgid "language name expected following `%s' in file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:263
+#: libidu/scanners.c:264
 #, fuzzy, c-format
 msgid "can't open language map file `%s'"
 msgstr "Brak skanera dla jêzyka `%s'\n"
 
-#: libidu/scanners.c:265
+#: libidu/scanners.c:266
 #, c-format
 msgid "can't get size of map file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:275
+#: libidu/scanners.c:276
 #, fuzzy, c-format
 msgid "can't read language map file `%s'"
 msgstr "Brak skanera dla jêzyka `%s'\n"
 
-#: libidu/scanners.c:278
+#: libidu/scanners.c:279
 #, c-format
 msgid "can't read entire language map file `%s'"
 msgstr ""
 
-#: libidu/scanners.c:423
+#: libidu/scanners.c:424
 #, c-format
 msgid ""
 "C language:\n"
@@ -123,7 +123,7 @@ msgid ""
 "strings\n"
 msgstr ""
 
-#: libidu/scanners.c:434
+#: libidu/scanners.c:435
 #, c-format
 msgid ""
 "C++ language:\n"
@@ -135,19 +135,19 @@ msgid ""
 "strings\n"
 msgstr ""
 
-#: libidu/scanners.c:717 libidu/scanners.c:988 libidu/scanners.c:1191
-#: libidu/scanners.c:1455
+#: libidu/scanners.c:718 libidu/scanners.c:989 libidu/scanners.c:1192
+#: libidu/scanners.c:1456
 #, c-format
 msgid "junk: `%c'"
 msgstr "¶mieæ: `%c'"
 
-#: libidu/scanners.c:719 libidu/scanners.c:990 libidu/scanners.c:1193
-#: libidu/scanners.c:1457
+#: libidu/scanners.c:720 libidu/scanners.c:991 libidu/scanners.c:1194
+#: libidu/scanners.c:1458
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "¶mieæ: `\\%03o'"
 
-#: libidu/scanners.c:823
+#: libidu/scanners.c:824
 #, c-format
 msgid ""
 "Assembly language:\n"
@@ -158,7 +158,7 @@ msgid ""
 "  -n,--no-cpp            Don't handle C pre-processor directives\n"
 msgstr ""
 
-#: libidu/scanners.c:1094
+#: libidu/scanners.c:1095
 #, c-format
 msgid ""
 "Text language:\n"
@@ -168,7 +168,7 @@ msgid ""
 "delimiters\n"
 msgstr ""
 
-#: libidu/scanners.c:1299
+#: libidu/scanners.c:1300
 #, c-format
 msgid ""
 "Perl language:\n"
@@ -179,55 +179,55 @@ msgid ""
 "  -d,--dtags  Include documentation tags\n"
 msgstr ""
 
-#: libidu/walker.c:111
+#: libidu/walker.c:113
 #, c-format
 msgid "can't read directory `%s' (`.' from `%s')"
 msgstr ""
 
-#: libidu/walker.c:178
+#: libidu/walker.c:180
 #, c-format
 msgid "notice: `%s' was a %s, but is now a %s!"
 msgstr ""
 
-#: libidu/walker.c:179 libidu/walker.c:180
+#: libidu/walker.c:181 libidu/walker.c:182
 msgid "file"
 msgstr ""
 
-#: libidu/walker.c:179 libidu/walker.c:180
+#: libidu/walker.c:181 libidu/walker.c:182
 msgid "directory"
 msgstr ""
 
-#: libidu/walker.c:303
+#: libidu/walker.c:305
 #, c-format
 msgid "warning: `%s' and `%s' are the same file, but yield different scans!"
 msgstr ""
 
-#: libidu/walker.c:397
+#: libidu/walker.c:399
 #, c-format
 msgid "notice: scan parameters changed for `%s'"
 msgstr ""
 
-#: libidu/walker.c:600
+#: libidu/walker.c:602
 #, fuzzy
 msgid "can't get working directory"
 msgstr "%s: nie mogê pobraæ nazwy bie¿±cego katalogu.\n"
 
-#: libidu/walker.c:657
+#: libidu/walker.c:659
 #, c-format
 msgid "can't chdir to `%s'"
 msgstr ""
 
-#: libidu/walker.c:662
+#: libidu/walker.c:664
 #, c-format
 msgid "can't chdir to `%s' from `%s'"
 msgstr ""
 
-#: libidu/walker.c:723
+#: libidu/walker.c:725
 #, c-format
 msgid "can't lstat `%s' from `%s'"
 msgstr ""
 
-#: libidu/walker.c:731
+#: libidu/walker.c:733
 #, c-format
 msgid "can't stat `%s' from `%s'"
 msgstr ""
@@ -287,7 +287,7 @@ msgstr ""
 msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr ""
 
-#: src/fid.c:73 src/fnid.c:53 src/lid.c:237 src/mkid.c:124 src/xtokid.c:47
+#: src/fid.c:73 src/fnid.c:53 src/lid.c:238 src/mkid.c:126 src/xtokid.c:47
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr ""
@@ -316,7 +316,7 @@ msgstr ""
 msgid "too many file name arguments"
 msgstr ""
 
-#: src/fid.c:159 src/fnid.c:154 src/lid.c:413
+#: src/fid.c:159 src/fnid.c:154 src/lid.c:414
 msgid "can't locate `ID'"
 msgstr ""
 
@@ -346,12 +346,12 @@ msgid ""
 "      --version          output version information and exit\n"
 msgstr ""
 
-#: src/lid.c:245
+#: src/lid.c:246
 #, c-format
 msgid "Usage: %s [OPTION]... PATTERN...\n"
 msgstr ""
 
-#: src/lid.c:249
+#: src/lid.c:250
 #, c-format
 msgid ""
 "Query ID database and report results.\n"
@@ -396,57 +396,57 @@ msgid ""
 "      --version         output version information and exit\n"
 msgstr ""
 
-#: src/lid.c:285
+#: src/lid.c:286
 msgid "braces"
 msgstr ""
 
-#: src/lid.c:285
+#: src/lid.c:286
 msgid "space"
 msgstr ""
 
-#: src/lid.c:353
+#: src/lid.c:354
 msgid "notice: use of `-e' is deprecated, use `-r' instead"
 msgstr ""
 
-#: src/lid.c:434
+#: src/lid.c:435
 #, fuzzy, c-format
 msgid "All identifiers are non-ambiguous within the first %d characters\n"
 msgstr "Identyfikatory s± jednoznaczne w zakresie pierwszych %d znaków\n"
 
-#: src/lid.c:469
+#: src/lid.c:470
 #, c-format
 msgid "invalid `--key' style: `%s'"
 msgstr ""
 
-#: src/lid.c:481
+#: src/lid.c:482
 #, c-format
 msgid "invalid `--result' style: `%s'"
 msgstr ""
 
-#: src/lid.c:638
+#: src/lid.c:639
 #, fuzzy, c-format
 msgid "edit? [y1-9^S/nq] "
 msgstr "Edytowaæ? [y1-9^S/nq] "
 
-#: src/lid.c:707
+#: src/lid.c:708
 msgid "can't fork"
 msgstr ""
 
-#: src/lid.c:725
+#: src/lid.c:726
 #, c-format
 msgid "can't exec `%s'"
 msgstr ""
 
-#: src/lid.c:866
+#: src/lid.c:867
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 
-#: src/mkid.c:149 src/xtokid.c:68
+#: src/mkid.c:151 src/xtokid.c:68
 #, c-format
 msgid "Usage: %s [OPTION]... [FILE]...\n"
 msgstr ""
 
-#: src/mkid.c:153
+#: src/mkid.c:155
 #, c-format
 msgid ""
 "Build an identifier database.\n"
@@ -473,102 +473,102 @@ msgid ""
 "The following arguments apply to the language-specific scanners:\n"
 msgstr ""
 
-#: src/mkid.c:376
+#: src/mkid.c:378
 #, c-format
 msgid "can't create `%s' in `%s'"
 msgstr ""
 
-#: src/mkid.c:380
+#: src/mkid.c:382
 #, c-format
 msgid "can't modify `%s'"
 msgstr ""
 
-#: src/mkid.c:457
+#: src/mkid.c:459
 #, c-format
 msgid "can't stat `%s'"
 msgstr ""
 
-#: src/mkid.c:526
+#: src/mkid.c:528
 #, fuzzy, c-format
 msgid "  new = %d/%d"
 msgstr ", nowy=%d/%d"
 
-#: src/mkid.c:535
+#: src/mkid.c:537
 #, c-format
 msgid "Name=%ld, "
 msgstr "Nazwa=%ld, "
 
-#: src/mkid.c:536
+#: src/mkid.c:538
 #, c-format
 msgid "Number=%ld, "
 msgstr "Numer=%ld, "
 
-#: src/mkid.c:537
+#: src/mkid.c:539
 #, c-format
 msgid "String=%ld, "
 msgstr "£añcuch=%ld, "
 
-#: src/mkid.c:538
+#: src/mkid.c:540
 #, c-format
 msgid "Literal=%ld, "
 msgstr "Litera³=%ld, "
 
-#: src/mkid.c:539
+#: src/mkid.c:541
 #, c-format
 msgid "Comment=%ld\n"
 msgstr "Komentarz=%ld\n"
 
-#: src/mkid.c:541
+#: src/mkid.c:543
 #, fuzzy, c-format
 msgid "Files=%ld, "
 msgstr "Pliki=%d, "
 
-#: src/mkid.c:542
+#: src/mkid.c:544
 #, c-format
 msgid "Tokens=%ld, "
 msgstr "Znaczniki=%ld, "
 
-#: src/mkid.c:543
+#: src/mkid.c:545
 #, c-format
 msgid "Bytes=%ld Kb, "
 msgstr "Bajty=%ld Kb, "
 
-#: src/mkid.c:544
+#: src/mkid.c:546
 #, fuzzy, c-format
 msgid "Heap=%d+%d Kb, "
 msgstr "Sterta=%ld Kb, "
 
-#: src/mkid.c:546
+#: src/mkid.c:548
 #, c-format
 msgid "Output=%ld (%ld tok, %ld hit)\n"
 msgstr "Wynik=%ld (%ld tok, %ld hit)\n"
 
-#: src/mkid.c:549
+#: src/mkid.c:551
 #, fuzzy, c-format
 msgid ", Freq=%ld/%ld=%.2f\n"
 msgstr "Czêsto¶æ=%ld/%ld=%.2f\n"
 
-#: src/mkid.c:573
+#: src/mkid.c:575
 #, c-format
 msgid "Sorting tokens...\n"
 msgstr "Sortowanie znaczników...\n"
 
-#: src/mkid.c:579
+#: src/mkid.c:581
 #, c-format
 msgid "Writing `%s'...\n"
 msgstr "Zapisujê `%s'...\n"
 
-#: src/mkid.c:582
+#: src/mkid.c:584
 #, c-format
 msgid "can't create `%s'"
 msgstr ""
 
-#: src/mkid.c:650
+#: src/mkid.c:652
 #, c-format
 msgid "error closing `%s'"
 msgstr ""
 
-#: src/mkid.c:738
+#: src/mkid.c:740
 #, fuzzy, c-format
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "poziom %d: %ld == %ld\n"

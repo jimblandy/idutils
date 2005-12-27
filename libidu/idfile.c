@@ -22,11 +22,13 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strsep.h>
 #include <sys/stat.h>
+#include <obstack.h>
+#include <error.h>
+
 #include "xnls.h"
-#include "obstack.h"
 #include "idfile.h"
-#include "error.h"
 
 int io_size (FILE *, void *, unsigned int size, int);
 
