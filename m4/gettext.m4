@@ -234,9 +234,11 @@ return * gettext ("")]ifelse([$2], [need-ngettext], [ + * ngettext ("", "", 0)],
         dnl Mark actions used to generate GNU NLS library.
         BUILD_INCLUDED_LIBINTL=yes
         USE_INCLUDED_LIBINTL=yes
-        LIBINTL="ifelse([$3],[],\${top_builddir}/intl,[$3])/libintl.[]gt_libtool_suffix_prefix[]a $LIBICONV"
-        LTLIBINTL="ifelse([$3],[],\${top_builddir}/intl,[$3])/libintl.[]gt_libtool_suffix_prefix[]a $LTLIBICONV"
+        INTLDIR="ifelse([$3],[],\${top_builddir}/intl,[$3])"
+        LIBINTL="${INTLDIR}/libintl.[]gt_libtool_suffix_prefix[]a $LIBICONV"
+        LTLIBINTL="${INTLDIR}/libintl.[]gt_libtool_suffix_prefix[]a $LTLIBICONV"
         LIBS=`echo " $LIBS " | sed -e 's/ -lintl / /' -e 's/^ //' -e 's/ $//'`
+	CPPFLAGS="$CPPFLAGS -I${INTLDIR}"
       fi
 
       CATOBJEXT=

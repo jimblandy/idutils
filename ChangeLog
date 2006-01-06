@@ -1,8 +1,40 @@
-2005-12-27  Claudio Fontana  <claudio@gnu.org>
+2006-01-06  Claudio Fontana  <claudio@gnu.org>
 
+	* configure.ac: reverted change to "conditionally add -I ../intl to the
+	  CFLAGS to let all subdirs find the included libintl.h"
+	* m4/gettext.m4: offer a more general solution to the above problem,
+	  by automatically adding the internal intl directory to the CPPFLAGS
+	  when used.
+	* lib/regex_internal.h: apply workaround for buggy pgcc preprocessor
+	  handling large unsigned 64 bit values as signed, and thus breaking
+	  compilation.
+
+	* distribute.sh: changed id-utils to idutils
+	* distribute-alpha.sh: likewise
+	* BLURB: likewise
+	* README-alpha: likewise
+	
+	* configure.ac: changed bug report address to bug-idutils@gnu.org
+	
+	* doc/id-utils.texi: renamed to doc/idutils.texi, and fixed content
+	  accordingly
+	* doc/Makefile.am: reflect filename change
+	
+	* lisp/id-utils.el: renamed to lisp/idutils.el, and fixed content
+	  accordingly
+	* lisp/Makefile.am: reflect filename change
+
+	* po/*.po: replaced bug-id-utils@gnu.org with bug-idutils@gnu.org
+
+
+2005-12-27  Claudio Fontana  <claudio@gnu.org>
+	
 	* README-alpha: added information about successful builds
 	* configure.ac: fixed unwanted change in bugs mailing list address
 	* configure.ac: moved development to version 4.1
+	* configure.ac: conditionally add -I ../intl to the CFLAGS,
+	  to let all subdirs find the included libintl.h
+
 	* m4/extra_dist.sh: added script to autogenerate extra dist Makefile.am
 	* src/Makefile.am: pass libgnu to the linker before and after libintl
 	  to solve mutual dependencies problems caused by gnulib modules
@@ -26,6 +58,7 @@
 
 	* src/*.c, libidu/*.c: enforce <> for system includes or their gnulib
 	  replacements, and "" for program specific headers
+
 
 2005-12-15  Claudio Fontana  <claudio@gnu.org>
 	* src/mkid.c: tweak alloc-ed size of token signature to a minimum

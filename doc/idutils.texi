@@ -1,6 +1,6 @@
 \input texinfo
 @comment %**start of header
-@setfilename id-utils.info
+@setfilename idutils.info
 @settitle ID database utilities
 @comment %**end of header
 
@@ -21,18 +21,18 @@
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* ID database: (id-utils).              Identifier database utilities.
-* mkid: (id-utils)mkid invocation.      Creating an ID database.
-* lid: (id-utils)lid invocation.        Matching words and patterns.
-* fid: (id-utils)fid invocation.        Listing a file's tokens.
-* fnid: (id-utils)fnid invocation.      Looking up file names.
-* xtokid: (id-utils)xtokid invocation.  Testing mkid scanners.
+* ID database: (idutils).              Identifier database utilities.
+* mkid: (idutils)mkid invocation.      Creating an ID database.
+* lid: (idutils)lid invocation.        Matching words and patterns.
+* fid: (idutils)fid invocation.        Listing a file's tokens.
+* fnid: (idutils)fnid invocation.      Looking up file names.
+* xtokid: (idutils)xtokid invocation.  Testing mkid scanners.
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
 
 @ifinfo
-This file documents the @file{id-utils} database utilities.
+This file documents the @file{idutils} database utilities.
 
 Copyright (C) 1996, 1999, 2000 Free Software Foundation, Inc.
 
@@ -1055,12 +1055,12 @@ as a case-insensitive literal substring.
 @section GNU Emacs query interface
 
 @cindex Emacs interface to @code{gid}
-@flindex id-utils.el @r{interface to Emacs}
+@flindex idutils.el @r{interface to Emacs}
 
 @vindex load-path
-The @code{id-utils} source distribution comes with a file @file{id-utils.el},
+The @code{idutils} source distribution comes with a file @file{idutils.el},
 which defines a GNU Emacs interface to @code{gid}.  To install it, put
-@file{id-utils.el} somewhere that Emacs will find it (i.e., in your
+@file{idutils.el} somewhere that Emacs will find it (i.e., in your
 @code{load-path}) and put
 
 @example
@@ -1089,7 +1089,7 @@ GNU Emacs Manual}).
 
 @samp{lid -R edit} is an editing interface for the ID utilities that is
 most commonly used with @file{vi}.  Emacs users should use the interface
-defined in @code{id-utils.el} (@pxref{Emacs gid interface}).  The ID
+defined in @code{idutils.el} (@pxref{Emacs gid interface}).  The ID
 utilities include an alias called @file{eid}, and for the sake of
 brevity, we'll use this alias for the remainder of this section.
 @file{eid} performs a @file{lid}-style, then asks if you wish to edit
@@ -1250,7 +1250,7 @@ utility''.
 Greg McGary conceived of the ideas behind the ID utilities when he
 began working on the Unix kernel in 1984.  He needed a navigation tool
 to help him find his way around the expansive, unfamiliar landscape.
-The first @code{id-utils}-like tools were shell scripts, and produced an
+The first @code{idutils}-like tools were shell scripts, and produced an
 ASCII database that looks much like the output of @samp{lid ".*"}.  It
 took over an hour on a @sc{vax 11/750} to build a database for a
 @sc{4.1bsd} derived kernel.  The first version of @file{lid} used the
@@ -1293,10 +1293,13 @@ file-tree walker, so that directory names can be passed on the command
 line instead of the names of every individual file.  Greg reorganized
 and rewrote most of the Texinfo manual to reflect these changes.
 
+In 2006, package name had a minor change from @code{id-utils} to
+@code{idutils}, to be more consistent with the other GNU package names.
+
 @pindex cscope
 @pindex grep
 @cindex future
-Future releases of @code{id-utils} might include:
+Future releases of @code{idutils} might include:
 
 @table @bullet
 

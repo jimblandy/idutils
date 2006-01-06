@@ -1,4 +1,9 @@
-id-utils NEWS - User visible changes.
+idutils NEWS - User visible changes.
+
+Version 4.1 - ???, by Claudio Fontana
+
+* fixed many portability issues
+* renamed all istances of id-utils with idutils
 
 Version 4.0 - Nov 1, 2005, by Claudio Fontana
 

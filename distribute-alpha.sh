@@ -1,6 +1,6 @@
 #! /bin/sh
 
-SRC_NAME=idutils-4.0
+SRC_NAME=idutils-4.0rc1
 
 gpg -b --yes $SRC_NAME.tar.gz
 
@@ -10,7 +10,7 @@ gpg --clearsign --yes $SRC_NAME.tar.gz.directive
 
 #upload results to ftp.
 cmdftp ftp-upload.gnu.org<<EOF
-cd /incoming/ftp
+cd /incoming/alpha
 u $SRC_NAME.tar.gz .
 u $SRC_NAME.tar.gz.sig .
 u $SRC_NAME.tar.gz.directive.asc .

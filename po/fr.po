@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
-"Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
+"Report-Msgid-Bugs-To: bug-idutils@gnu.org\n"
 "POT-Creation-Date: 2005-12-27 07:15+0100\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Unknown <unknown@unknown.fr>\n"

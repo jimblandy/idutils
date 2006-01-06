@@ -152,6 +152,12 @@ libgnu_a_SOURCES += strstr.h
 
 ## end   gnulib module strstr
 
+## begin gnulib module verify
+
+libgnu_a_SOURCES += verify.h
+
+## end   gnulib module verify
+
 ## begin gnulib module xalloc-die
 
 libgnu_a_SOURCES += xalloc-die.c

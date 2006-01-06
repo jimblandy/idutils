@@ -84,13 +84,13 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 SOURCES =
 DIST_SOURCES =
-INFO_DEPS = $(srcdir)/id-utils.info
+INFO_DEPS = $(srcdir)/idutils.info
 am__TEXINFO_TEX_DIR = $(srcdir)
-DVIS = id-utils.dvi
-PDFS = id-utils.pdf
-PSS = id-utils.ps
-HTMLS = id-utils.html
-TEXINFOS = id-utils.texi
+DVIS = idutils.dvi
+PDFS = idutils.pdf
+PSS = idutils.ps
+HTMLS = idutils.html
+TEXINFOS = idutils.texi
 TEXI2DVI = texi2dvi
 TEXI2PDF = $(TEXI2DVI) --pdf --batch
 MAKEINFOHTML = $(MAKEINFO) --html
@@ -131,6 +131,8 @@ GENCAT = @GENCAT@
 GETOPT_H = @GETOPT_H@
 GLIBC2 = @GLIBC2@
 GLIBC21 = @GLIBC21@
+GL_COND_LIBTOOL_FALSE = @GL_COND_LIBTOOL_FALSE@
+GL_COND_LIBTOOL_TRUE = @GL_COND_LIBTOOL_TRUE@
 GMSGFMT = @GMSGFMT@
 HAVE_ASPRINTF = @HAVE_ASPRINTF@
 HAVE_POSIX_PRINTF = @HAVE_POSIX_PRINTF@
@@ -220,9 +222,9 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-info_TEXINFOS = id-utils.texi
+info_TEXINFOS = idutils.texi
 EXTRA_DIST = texinfo.tex
-DISTCLEANFILES = id-utils.fl
+DISTCLEANFILES = idutils.fl
 all: all-am
 
 .SUFFIXES:
@@ -300,14 +302,14 @@ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	    rm -rf $(@:.html=); else rm -Rf $(@:.html=.htp) $@; fi; \
 	  exit 1; \
 	fi
-$(srcdir)/id-utils.info: id-utils.texi $(srcdir)/version.texi
-id-utils.dvi: id-utils.texi $(srcdir)/version.texi
-id-utils.pdf: id-utils.texi $(srcdir)/version.texi
-id-utils.html: id-utils.texi $(srcdir)/version.texi
+$(srcdir)/idutils.info: idutils.texi $(srcdir)/version.texi
+idutils.dvi: idutils.texi $(srcdir)/version.texi
+idutils.pdf: idutils.texi $(srcdir)/version.texi
+idutils.html: idutils.texi $(srcdir)/version.texi
 $(srcdir)/version.texi: @MAINTAINER_MODE_TRUE@ $(srcdir)/stamp-vti
-$(srcdir)/stamp-vti: id-utils.texi $(top_srcdir)/configure
-	@(dir=.; test -f ./id-utils.texi || dir=$(srcdir); \
-	set `$(SHELL) $(srcdir)/mdate-sh $$dir/id-utils.texi`; \
+$(srcdir)/stamp-vti: idutils.texi $(top_srcdir)/configure
+	@(dir=.; test -f ./idutils.texi || dir=$(srcdir); \
+	set `$(SHELL) $(srcdir)/mdate-sh $$dir/idutils.texi`; \
 	echo "@set UPDATED $$1 $$2 $$3"; \
 	echo "@set UPDATED-MONTH $$2 $$3"; \
 	echo "@set EDITION $(VERSION)"; \
@@ -364,11 +366,10 @@ dist-info: $(INFO_DEPS)
 	done
 
 mostlyclean-aminfo:
-	-rm -rf id-utils.aux id-utils.cp id-utils.cps id-utils.fl id-utils.fn \
-	  id-utils.ky id-utils.log id-utils.op id-utils.pg \
-	  id-utils.tmp id-utils.toc id-utils.tp id-utils.tps \
-	  id-utils.vr id-utils.dvi id-utils.pdf id-utils.ps \
-	  id-utils.html
+	-rm -rf idutils.aux idutils.cp idutils.cps idutils.fl idutils.fn idutils.ky \
+	  idutils.log idutils.op idutils.pg idutils.tmp idutils.toc \
+	  idutils.tp idutils.tps idutils.vr idutils.dvi idutils.pdf \
+	  idutils.ps idutils.html
 
 maintainer-clean-aminfo:
 	@list='$(INFO_DEPS)'; for i in $$list; do \

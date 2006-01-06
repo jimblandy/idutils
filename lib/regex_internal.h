@@ -182,6 +182,11 @@ typedef unsigned long int bitset_word;
 # if BITSET_WORD_BITS <= SBC_MAX
 #  error "Invalid SBC_MAX"
 # endif
+#elif BITSET_WORD_MAX == (0xffffffff + 2) * 0xffffffff
+/* Work around a bug in PGC GNU/Linux x86-64 5.2-1 and 6.0-8 (and
+   probably other versions), where the preprocessor mishandles large
+   unsigned values and thinks they are signed.  */
+# define BITSET_WORD_BITS 64
 #else
 # error "Add case for new bitset_word size"
 #endif

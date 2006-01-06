@@ -163,6 +163,8 @@ GENCAT = @GENCAT@
 GETOPT_H = @GETOPT_H@
 GLIBC2 = @GLIBC2@
 GLIBC21 = @GLIBC21@
+GL_COND_LIBTOOL_FALSE = @GL_COND_LIBTOOL_FALSE@
+GL_COND_LIBTOOL_TRUE = @GL_COND_LIBTOOL_TRUE@
 GMSGFMT = @GMSGFMT@
 HAVE_ASPRINTF = @HAVE_ASPRINTF@
 HAVE_POSIX_PRINTF = @HAVE_POSIX_PRINTF@
@@ -255,7 +257,6 @@ target_alias = @target_alias@
 dist_bin_SCRIPTS = eid aid gid defid
 AM_CPPFLAGS = -I$(top_srcdir)/libidu \
               -I$(top_srcdir)/lib \
-              -I$(top_srcdir)/intl \
               -DDATADIR=\"$(datadir)\" \
               -DLOCALEDIR=\"$(datadir)/locale\" \
               -DLANGUAGE_MAP_FILE=\"$(datadir)/id-lang.map\"

@@ -1,15 +1,15 @@
-;;; id-utils.el -- emacs interface to `lid -R grep', a.k.a. `gid'
-;;; Copyright (C) 1995, 1996 Free Software Foundation, Inc.
+;;; idutils.el -- emacs interface to `lid -R grep', a.k.a. `gid'
+;;; Copyright (C) 1995, 1996, 2006 Free Software Foundation, Inc.
 ;;; Greg McGary <gkm@gnu.ai.mit.edu>.
 
-;; This file is part of GNU id-utils.
+;; This file is part of GNU idutils.
 
-;; GNU id-utils is free software; you can redistribute it and/or modify
+;; GNU idutils is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
-;; GNU id-utils is distributed in the hope that it will be useful,
+;; GNU idutils is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
@@ -20,19 +20,19 @@
 ;; MA 02111-1307, USA.
 
 ;;; This package provides the tools meant to help editing PO files,
-;;; as documented in the GNU id-utils user's manual.  See this manual
+;;; as documented in the GNU idutils user's manual.  See this manual
 ;;; for user documentation, which is not repeated here.
 
 ;;; To install, merely put this file somewhere GNU Emacs will find it,
 ;;; then add the following lines to your .emacs file:
 ;;;
-;;;   (autoload 'gid "id-utils")
+;;;   (autoload 'gid "idutils")
 ;;;
 ;;; You may also adjust some customizations variables, below, by defining
 ;;; them in your .emacs file.
 
 (require 'compile)
-(provide 'id-utils)
+(provide 'idutils)
 
 (defvar gid-command "gid" "The command run by the gid function.")
 

@@ -26,6 +26,7 @@ AC_DEFUN([gl_EARLY],
 # "Check for header files, types and library functions".
 AC_DEFUN([gl_INIT],
 [
+AM_CONDITIONAL([GL_COND_LIBTOOL], [false])
   gl_FUNC_ALLOCA
   gl_FUNC_ATEXIT
   gl_CLOSEOUT
@@ -144,6 +145,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strstr.c
   lib/strstr.h
   lib/umaxtostr.c
+  lib/verify.h
   lib/xalloc-die.c
   lib/xalloc.h
   lib/xgetcwd.c

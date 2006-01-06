@@ -93,7 +93,7 @@ am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(lispdir)"
 dist_lispLISP_INSTALL = $(INSTALL_DATA)
 LISP = $(dist_lisp_LISP)
-am__ELFILES = id-utils.el
+am__ELFILES = idutils.el
 am__ELCFILES = $(am__ELFILES:.el=.elc)
 ELCFILES = $(LISP:.el=.elc)
 elisp_comp = $(top_srcdir)/elisp-comp
@@ -131,6 +131,8 @@ GENCAT = @GENCAT@
 GETOPT_H = @GETOPT_H@
 GLIBC2 = @GLIBC2@
 GLIBC21 = @GLIBC21@
+GL_COND_LIBTOOL_FALSE = @GL_COND_LIBTOOL_FALSE@
+GL_COND_LIBTOOL_TRUE = @GL_COND_LIBTOOL_TRUE@
 GMSGFMT = @GMSGFMT@
 HAVE_ASPRINTF = @HAVE_ASPRINTF@
 HAVE_POSIX_PRINTF = @HAVE_POSIX_PRINTF@
@@ -220,7 +222,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-dist_lisp_LISP = id-utils.el
+dist_lisp_LISP = idutils.el
 all: all-am
 
 .SUFFIXES:

@@ -158,6 +158,8 @@ GENCAT = @GENCAT@
 GETOPT_H = @GETOPT_H@
 GLIBC2 = @GLIBC2@
 GLIBC21 = @GLIBC21@
+GL_COND_LIBTOOL_FALSE = @GL_COND_LIBTOOL_FALSE@
+GL_COND_LIBTOOL_TRUE = @GL_COND_LIBTOOL_TRUE@
 GMSGFMT = @GMSGFMT@
 HAVE_ASPRINTF = @HAVE_ASPRINTF@
 HAVE_POSIX_PRINTF = @HAVE_POSIX_PRINTF@
@@ -251,7 +253,7 @@ AUTOMAKE_OPTIONS = 1.5 gnits no-dependencies
 noinst_LIBRARIES = libgnu.a
 libgnu_a_SOURCES = basename.c stripslash.c exit.h gettext.h mbchar.h \
 	mbuiter.h strcase.h strnlen1.h strnlen1.c strpbrk.h strsep.h \
-	strstr.h xalloc-die.c
+	strstr.h verify.h xalloc-die.c
 libgnu_a_LIBADD = @LIBOBJS@ @ALLOCA@
 EXTRA_DIST = alloca_.h fnmatch_.h fnmatch_loop.c getopt_.h \
 	getopt_int.h inttostr.c stdbool_.h

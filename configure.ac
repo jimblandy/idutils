@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([id-utils], [4.1rc1], [bug-gnu-utils@gnu.org])
+AC_INIT([idutils], [4.1rc3], [bug-idutils@gnu.org])
 AC_GNU_SOURCE
 
 AM_INIT_AUTOMAKE
