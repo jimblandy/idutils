@@ -238,7 +238,7 @@ return * gettext ("")]ifelse([$2], [need-ngettext], [ + * ngettext ("", "", 0)],
         LIBINTL="${INTLDIR}/libintl.[]gt_libtool_suffix_prefix[]a $LIBICONV"
         LTLIBINTL="${INTLDIR}/libintl.[]gt_libtool_suffix_prefix[]a $LTLIBICONV"
         LIBS=`echo " $LIBS " | sed -e 's/ -lintl / /' -e 's/^ //' -e 's/ $//'`
-	CPPFLAGS="$CPPFLAGS -I${INTLDIR}"
+        CPPFLAGS="$CPPFLAGS -I${INTLDIR}"
       fi
 
       CATOBJEXT=

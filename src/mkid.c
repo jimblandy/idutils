@@ -405,11 +405,11 @@ scan_files (struct idhead *idhp)
   hash_init (&token_table, n, token_hash_1, token_hash_2, token_hash_cmp);
   if (verbose_flag) {
     char offstr[INT_BUFSIZE_BOUND(off_t)];
-    offtostr(largest_member_file, offstr);
 
     printf ("files=%ld, largest=%s, slots=%lu\n",
 	    idhp->idh_member_file_table.ht_fill,
-	    offstr, token_table.ht_size);
+	    offtostr(largest_member_file, offstr),
+	    token_table.ht_size);
   }
   init_hits_signature (0);
   init_summary ();
