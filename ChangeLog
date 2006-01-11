@@ -18,9 +18,9 @@
 	* m4/gettext.m4: offer a more general solution to the above problem,
 	  by automatically adding the internal intl directory to the CPPFLAGS
 	  when used.
-	* lib/regex_internal.h: apply workaround from Paul Eggert for buggy
-	  pgcc preprocessor handling large unsigned 64 bit values as signed,
-	  and thus breaking compilation.
+	* lib/regex_internal.h: apply workaround for buggy pgcc preprocessor
+	  handling large unsigned 64 bit values as signed, and thus breaking
+	  compilation. Fix by Paul Eggert <eggert@gnu.org>
 
 	* distribute.sh: changed id-utils to idutils
 	* distribute-alpha.sh: likewise
