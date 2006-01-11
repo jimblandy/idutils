@@ -2,10 +2,12 @@
 
 	* lib/fnmatch.c, lib/fnmatch_loop.c: included workaround for a
 	  possible gcc bug in handling multibyte char sequences.
-	  Fix by Paul Eggert <eggert@gnu.org>
+	  Fix by Paul Eggert <eggert@gnu.org>, problems reported by
+	  Nelson H. F. Beebe <beebe@math.utah.edu>
 
 	* src/mkid.c, src/lid.c: replace dirname() and basename() usage
-	  with dir_name() and base_name()
+	  with dir_name() and base_name() to fix a portability problem
+	  spotted by Nelson H. F. Beebe <beebe@math.utah.edu>
 	
 2006-01-08  Claudio Fontana  <claudio@gnu.org>
 
@@ -20,7 +22,8 @@
 	  when used.
 	* lib/regex_internal.h: apply workaround for buggy pgcc preprocessor
 	  handling large unsigned 64 bit values as signed, and thus breaking
-	  compilation. Fix by Paul Eggert <eggert@gnu.org>
+	  compilation. Fix by Paul Eggert <eggert@gnu.org>, catch by
+	  Nelson H. F. Beebe <beebe@math.utah.edu>
 
 	* distribute.sh: changed id-utils to idutils
 	* distribute-alpha.sh: likewise
