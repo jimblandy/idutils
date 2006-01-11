@@ -1,3 +1,12 @@
+2006-01-11  Claudio Fontana  <claudio@gnu.org>
+
+	* lib/fnmatch.c, lib/fnmatch_loop.c: included workaround for a
+	  possible gcc bug in handling multibyte char sequences.
+	  Fix by Paul Eggert <eggert@gnu.org>
+
+	* src/mkid.c, src/lid.c: replace dirname() and basename() usage
+	  with dir_name() and base_name()
+	
 2006-01-08  Claudio Fontana  <claudio@gnu.org>
 
 	* src/mkid.c: fixed bad offtostr usage (now uses return value)
@@ -9,9 +18,9 @@
 	* m4/gettext.m4: offer a more general solution to the above problem,
 	  by automatically adding the internal intl directory to the CPPFLAGS
 	  when used.
-	* lib/regex_internal.h: apply workaround for buggy pgcc preprocessor
-	  handling large unsigned 64 bit values as signed, and thus breaking
-	  compilation.
+	* lib/regex_internal.h: apply workaround from Paul Eggert for buggy
+	  pgcc preprocessor handling large unsigned 64 bit values as signed,
+	  and thus breaking compilation.
 
 	* distribute.sh: changed id-utils to idutils
 	* distribute-alpha.sh: likewise

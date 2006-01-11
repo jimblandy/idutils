@@ -180,7 +180,7 @@ static int posixly_correct;
 # define FCT	internal_fnmatch
 # define EXT	ext_match
 # define END	end_pattern
-# define L(CS)	CS
+# define L_(CS)	CS
 # ifdef _LIBC
 #  define BTOWC(C)	__btowc (C)
 # else
@@ -210,7 +210,7 @@ static int posixly_correct;
 #  define FCT	internal_fnwmatch
 #  define EXT	ext_wmatch
 #  define END	end_wpattern
-#  define L(CS)	L##CS
+#  define L_(CS)	L##CS
 #  define BTOWC(C)	(C)
 #  ifdef _LIBC
 #   define STRLEN(S) __wcslen (S)

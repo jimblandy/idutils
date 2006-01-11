@@ -616,7 +616,7 @@ report_edit (char const *name, struct file_link **flinkv)
 
   if (eid_arg == 0)
     {
-      int using_vi = strequ ("vi", basename (editor));
+      int using_vi = strequ ("vi", base_name (editor));
 
       eid_arg = getenv ("EIDARG");
       if (eid_arg == 0)
