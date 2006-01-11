@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.2\n"
-"Report-Msgid-Bugs-To: bug-idutils@gnu.org\n"
-"POT-Creation-Date: 2005-12-27 07:15+0100\n"
+"Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
+"POT-Creation-Date: 2006-01-10 08:31+0100\n"
 "PO-Revision-Date: 1998-09-30 13:31+02:00\n"
 "Last-Translator: Ivo Timmermans <zarq@iname.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -43,7 +43,7 @@ msgstr "Botsingen=%ld/%ld=%.0f%%"
 msgid "can't determine the io_size of a string!"
 msgstr "kan de io_size van een letterreeks niet vaststellen!"
 
-#: libidu/idread.c:49 src/mkid.c:476 src/xtokid.c:228
+#: libidu/idread.c:49 src/mkid.c:475 src/xtokid.c:228
 #, c-format
 msgid "can't open `%s'"
 msgstr "kan `%s' niet openen"
@@ -584,102 +584,102 @@ msgstr ""
 "\n"
 "The following arguments apply to the language-specific scanners:\n"
 
-#: src/mkid.c:378
+#: src/mkid.c:376
 #, c-format
 msgid "can't create `%s' in `%s'"
 msgstr "kan `%s' niet aanmaken in `%s'"
 
-#: src/mkid.c:382
+#: src/mkid.c:381
 #, c-format
 msgid "can't modify `%s'"
 msgstr "kan `%s' niet veranderen"
 
-#: src/mkid.c:459
+#: src/mkid.c:458
 #, c-format
 msgid "can't stat `%s'"
 msgstr "kan de status van `%s' niet opvragen"
 
-#: src/mkid.c:528
+#: src/mkid.c:527
 #, c-format
 msgid "  new = %d/%d"
 msgstr "  nieuw = %d/%d"
 
-#: src/mkid.c:537
+#: src/mkid.c:536
 #, c-format
 msgid "Name=%ld, "
 msgstr "Naam=%ld, "
 
-#: src/mkid.c:538
+#: src/mkid.c:537
 #, c-format
 msgid "Number=%ld, "
 msgstr "Nummer = %ld, "
 
-#: src/mkid.c:539
+#: src/mkid.c:538
 #, c-format
 msgid "String=%ld, "
 msgstr "Letterreeks=%ld, "
 
-#: src/mkid.c:540
+#: src/mkid.c:539
 #, c-format
 msgid "Literal=%ld, "
 msgstr "Letterlijk=%ld, "
 
-#: src/mkid.c:541
+#: src/mkid.c:540
 #, c-format
 msgid "Comment=%ld\n"
 msgstr "Commentaar=%ld\n"
 
-#: src/mkid.c:543
+#: src/mkid.c:542
 #, fuzzy, c-format
 msgid "Files=%ld, "
 msgstr "Bestanden=%d, "
 
-#: src/mkid.c:544
+#: src/mkid.c:543
 #, c-format
 msgid "Tokens=%ld, "
 msgstr "Eenheden=%ld, "
 
-#: src/mkid.c:545
+#: src/mkid.c:544
 #, c-format
 msgid "Bytes=%ld Kb, "
 msgstr "Bytes=%ld Kb, "
 
-#: src/mkid.c:546
+#: src/mkid.c:545
 #, fuzzy, c-format
 msgid "Heap=%d+%d Kb, "
 msgstr "Data=%ld+%ld Kb, "
 
-#: src/mkid.c:548
+#: src/mkid.c:547
 #, c-format
 msgid "Output=%ld (%ld tok, %ld hit)\n"
 msgstr "Uitvoer=%ld (%ld eenheden, %ld gevonden)\n"
 
-#: src/mkid.c:551
+#: src/mkid.c:550
 #, c-format
 msgid ", Freq=%ld/%ld=%.2f\n"
 msgstr ", Freq=%ld/%ld=%.2f\n"
 
-#: src/mkid.c:575
+#: src/mkid.c:574
 #, c-format
 msgid "Sorting tokens...\n"
 msgstr "Eenheden sorteren...\n"
 
-#: src/mkid.c:581
+#: src/mkid.c:580
 #, c-format
 msgid "Writing `%s'...\n"
 msgstr "`%s' schrijven...\n"
 
-#: src/mkid.c:584
+#: src/mkid.c:583
 #, c-format
 msgid "can't create `%s'"
 msgstr "kan `%s' niet aanmaken"
 
-#: src/mkid.c:652
+#: src/mkid.c:651
 #, c-format
 msgid "error closing `%s'"
 msgstr ""
 
-#: src/mkid.c:740
+#: src/mkid.c:739
 #, c-format
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "niveau %d: %ld/%ld = %.0f%%\n"

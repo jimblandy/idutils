@@ -365,21 +365,20 @@ ceil_log_2 (unsigned long n)
    with a diagnostic if this is not so.  */
 
 void
-assert_writeable (char const *file_name)
+assert_writeable (char const *filename)
 {
-  if (access (file_name, 06) < 0)
+  if (access (filename, 06) < 0)
     {
       if (errno == ENOENT)
 	{
-	  char const *dir_name = dirname ((char*)file_name);
-	  if (!dir_name || !*dir_name)
-	    dir_name = ".";
-	  if (access (dir_name, 06) < 0)
+	  char const *dirname = dir_name ((char*)filename);
+	  if (access (dirname, 06) < 0)
 	    error (1, errno, _("can't create `%s' in `%s'"),
-		   basename (file_name), dir_name);
+		   base_name (filename), dirname);
+	  free(dirname);
 	}
       else
-	error (1, errno, _("can't modify `%s'"), file_name);
+	error (1, errno, _("can't modify `%s'"), filename);
     }
 }
 
