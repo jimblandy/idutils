@@ -1,6 +1,6 @@
 #! /bin/sh
 
-SRC_NAME=idutils-4.0
+SRC_NAME=$1
 
 gpg -b --yes $SRC_NAME.tar.gz
 
