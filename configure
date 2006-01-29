@@ -313,7 +313,7 @@ ac_includes_default="\
 
 gl_func_list=
 gl_header_list=
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CPP EGREP LN_S RANLIB ac_ct_RANLIB LIBOBJS ALLOCA MKINSTALLDIRS USE_NLS MSGFMT GMSGFMT XGETTEXT MSGMERGE build build_cpu build_vendor build_os host host_cpu host_vendor host_os GLIBC2 GLIBC21 INTL_MACOSX_LIBS HAVE_POSIX_PRINTF HAVE_ASPRINTF HAVE_SNPRINTF HAVE_WPRINTF LIBICONV LTLIBICONV INTLBISON BUILD_INCLUDED_LIBINTL USE_INCLUDED_LIBINTL CATOBJEXT DATADIRNAME INSTOBJEXT GENCAT INTLOBJS INTL_LIBTOOL_SUFFIX_PREFIX INTLLIBS LIBINTL LTLIBINTL POSUB EMACS EMACSLOADPATH lispdir GL_COND_LIBTOOL_TRUE GL_COND_LIBTOOL_FALSE ALLOCA_H FNMATCH_H GETOPT_H STDBOOL_H HAVE__BOOL LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE RANLIB ac_ct_RANLIB CPP EGREP LN_S LIBOBJS ALLOCA MKINSTALLDIRS USE_NLS MSGFMT GMSGFMT XGETTEXT MSGMERGE build build_cpu build_vendor build_os host host_cpu host_vendor host_os GLIBC2 GLIBC21 INTL_MACOSX_LIBS HAVE_POSIX_PRINTF HAVE_ASPRINTF HAVE_SNPRINTF HAVE_WPRINTF LIBICONV LTLIBICONV INTLBISON BUILD_INCLUDED_LIBINTL USE_INCLUDED_LIBINTL CATOBJEXT DATADIRNAME INSTOBJEXT GENCAT INTLOBJS INTL_LIBTOOL_SUFFIX_PREFIX INTLLIBS LIBINTL LTLIBINTL POSUB EMACS EMACSLOADPATH lispdir GL_COND_LIBTOOL_TRUE GL_COND_LIBTOOL_FALSE ALLOCA_H FNMATCH_H GETOPT_H STDBOOL_H HAVE__BOOL LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -2937,6 +2937,86 @@ else
 fi
 
 
+if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.
+set dummy ${ac_tool_prefix}ranlib; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_RANLIB+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$RANLIB"; then
+  ac_cv_prog_RANLIB="$RANLIB" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_RANLIB="${ac_tool_prefix}ranlib"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+fi
+fi
+RANLIB=$ac_cv_prog_RANLIB
+if test -n "$RANLIB"; then
+  echo "$as_me:$LINENO: result: $RANLIB" >&5
+echo "${ECHO_T}$RANLIB" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+fi
+if test -z "$ac_cv_prog_RANLIB"; then
+  ac_ct_RANLIB=$RANLIB
+  # Extract the first word of "ranlib", so it can be a program name with args.
+set dummy ranlib; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_ac_ct_RANLIB+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$ac_ct_RANLIB"; then
+  ac_cv_prog_ac_ct_RANLIB="$ac_ct_RANLIB" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_ac_ct_RANLIB="ranlib"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_prog_ac_ct_RANLIB" && ac_cv_prog_ac_ct_RANLIB=":"
+fi
+fi
+ac_ct_RANLIB=$ac_cv_prog_ac_ct_RANLIB
+if test -n "$ac_ct_RANLIB"; then
+  echo "$as_me:$LINENO: result: $ac_ct_RANLIB" >&5
+echo "${ECHO_T}$ac_ct_RANLIB" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  RANLIB=$ac_ct_RANLIB
+else
+  RANLIB="$ac_cv_prog_RANLIB"
+fi
+
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -3634,6 +3714,7 @@ _ACEOF
   cat >>confdefs.h <<\_ACEOF
 #define _POSIX_PTHREAD_SEMANTICS 1
 _ACEOF
+
 
 
 
@@ -10922,7 +11003,7 @@ echo "${ECHO_T}$gt_cv_func_gnugettext1_libintl" >&6
         LIBINTL="${INTLDIR}/libintl.a $LIBICONV"
         LTLIBINTL="${INTLDIR}/libintl.a $LTLIBICONV"
         LIBS=`echo " $LIBS " | sed -e 's/ -lintl / /' -e 's/^ //' -e 's/ $//'`
-	CPPFLAGS="$CPPFLAGS -I${INTLDIR}"
+        CPPFLAGS="$CPPFLAGS -I${INTLDIR}"
       fi
 
       CATOBJEXT=
@@ -12813,6 +12894,80 @@ echo "${ECHO_T}$gl_cv_func_gnu_getopt" >&6
   fi
 
 
+      echo "$as_me:$LINENO: checking whether getenv is declared" >&5
+echo $ECHO_N "checking whether getenv is declared... $ECHO_C" >&6
+if test "${ac_cv_have_decl_getenv+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+#ifndef getenv
+  char *p = (char *) getenv;
+#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_have_decl_getenv=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_have_decl_getenv=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_have_decl_getenv" >&5
+echo "${ECHO_T}$ac_cv_have_decl_getenv" >&6
+if test $ac_cv_have_decl_getenv = yes; then
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GETENV 1
+_ACEOF
+
+
+else
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GETENV 0
+_ACEOF
+
+
+fi
+
+
+
+
 
 
   if test $gl_cv_header_inttypes_h = no && test $gl_cv_header_stdint_h = no; then
@@ -13733,14 +13888,41 @@ cat >>conftest.$ac_ext <<_ACEOF
 	  _Bool n[m];
 	  char o[sizeof n == m * sizeof n[0] ? 1 : -1];
 	  char p[-1 - (_Bool) 0 < 0 && -1 - (bool) 0 < 0 ? 1 : -1];
+	  #if defined __xlc__ || defined __GNUC__
+	   /* Catch a bug in IBM AIX xlc compiler version 6.0.0.0
+	      reported by James Lemley on 2005-10-05; see
+	      http://lists.gnu.org/archive/html/bug-coreutils/2005-10/msg00086.html
+	      This test is not quite right, since xlc is allowed to
+	      reject this program, as the initializer for xlcbug is
+	      not one of the forms that C requires support for.
+	      However, doing the test right would require a run-time
+	      test, and that would make cross-compilation harder.
+	      Let us hope that IBM fixes the xlc bug, and also adds
+	      support for this kind of constant expression.  In the
+	      meantime, this test will reject xlc, which is OK, since
+	      our stdbool.h substitute should suffice.  We also test
+	      this with GCC, where it should work, to detect more
+	      quickly whether someone messes up the test in the
+	      future.  */
+	   char digs[] = "0123456789";
+	   int xlcbug = 1 / (&(digs + 5)[-2 + (bool) 1] == &digs[4] ? 1 : -1);
+	  #endif
+	  /* Catch a bug in an HP-UX C compiler.  See
+	     http://gcc.gnu.org/ml/gcc-patches/2003-12/msg02303.html
+	     http://lists.gnu.org/archive/html/bug-coreutils/2005-11/msg00161.html
+	   */
+	  _Bool q = true;
+	  _Bool *pq = &q;
 
 int
 main ()
 {
 
+	  *pq |= q;
+	  *pq |= ! q;
 	  /* Refer to every declared value, to avoid compiler optimizations.  */
 	  return (!a + !b + !c + !d + !e + !f + !g + !h + !i + !!j + !k + !!l
-		  + !m + !n + !o + !p);
+		  + !m + !n + !o + !p + !q + !pq);
 
   ;
   return 0;
@@ -14931,6 +15113,7 @@ done
 
 
   fp_headers='
+#     include <stdio.h>
 #     if HAVE_STDIO_EXT_H
 #      include <stdio_ext.h>
 #     endif
@@ -15378,9 +15561,18 @@ _ACEOF
 
 
 
+
+
   :
 
+
+
+
+
+
+
 fi
+
 
 
 
@@ -18983,11 +19175,11 @@ s,@AMDEPBACKSLASH@,$AMDEPBACKSLASH,;t t
 s,@CCDEPMODE@,$CCDEPMODE,;t t
 s,@am__fastdepCC_TRUE@,$am__fastdepCC_TRUE,;t t
 s,@am__fastdepCC_FALSE@,$am__fastdepCC_FALSE,;t t
+s,@RANLIB@,$RANLIB,;t t
+s,@ac_ct_RANLIB@,$ac_ct_RANLIB,;t t
 s,@CPP@,$CPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@LN_S@,$LN_S,;t t
-s,@RANLIB@,$RANLIB,;t t
-s,@ac_ct_RANLIB@,$ac_ct_RANLIB,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@ALLOCA@,$ALLOCA,;t t
 s,@MKINSTALLDIRS@,$MKINSTALLDIRS,;t t

@@ -18,6 +18,7 @@
 # any checks for libraries, header files, types and library functions.
 AC_DEFUN([gl_EARLY],
 [
+  AC_REQUIRE([AC_PROG_RANLIB])
   AC_REQUIRE([AC_GNU_SOURCE])
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
 ])
@@ -26,7 +27,7 @@ AC_DEFUN([gl_EARLY],
 # "Check for header files, types and library functions".
 AC_DEFUN([gl_INIT],
 [
-AM_CONDITIONAL([GL_COND_LIBTOOL], [false])
+  AM_CONDITIONAL([GL_COND_LIBTOOL], [false])
   gl_FUNC_ALLOCA
   gl_FUNC_ATEXIT
   gl_CLOSEOUT
@@ -41,6 +42,7 @@ AM_CONDITIONAL([GL_COND_LIBTOOL], [false])
   gl_FUNC_GETCWD
   gl_GETOPT
   dnl you must add AM_GNU_GETTEXT([external]) or similar to configure.ac.
+  AM_GNU_GETTEXT_VERSION([0.14.5])
   gl_INTTOSTR
   gl_FUNC_LSTAT
   AC_FUNC_MALLOC
