@@ -257,6 +257,7 @@ libgnu_a_SOURCES = basename.c stripslash.c exit.h gettext.h mbchar.h \
 	mbuiter.h strcase.h strnlen1.h strnlen1.c strpbrk.h strsep.h \
 	strstr.h verify.h xalloc-die.c
 libgnu_a_LIBADD = @LIBOBJS@ @ALLOCA@
+AM_CPPFLAGS = -I$(top_builddir)/intl
 noinst_HEADERS = 
 EXTRA_DIST = alloca_.h fnmatch_.h fnmatch_loop.c getopt_.h \
 	getopt_int.h inttostr.c stdbool_.h

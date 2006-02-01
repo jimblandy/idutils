@@ -15,6 +15,7 @@ libidu_a_SOURCES = dynvec.c dynvec.h \
                    xnls.h
 
 AM_CPPFLAGS = -I$(top_srcdir)/lib \
+              -I$(top_builddir)/intl \
               -DDATADIR=\"$(datadir)\" \
               -DLOCALEDIR=\"$(datadir)/locale\" \
               -DLANGUAGE_MAP_FILE=\"$(datadir)/id-lang.map\"

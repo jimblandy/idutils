@@ -16,6 +16,7 @@ noinst_LIBRARIES = libgnu.a
 
 libgnu_a_SOURCES =
 libgnu_a_LIBADD = @LIBOBJS@
+AM_CPPFLAGS =
 noinst_HEADERS =
 EXTRA_DIST =
 BUILT_SOURCES =
@@ -84,6 +85,12 @@ getopt.h: getopt_.h
 MOSTLYCLEANFILES += getopt.h getopt.h-t
 
 ## end   gnulib module getopt
+
+## begin gnulib module gettext
+
+AM_CPPFLAGS += -I$(top_builddir)/intl
+
+## end   gnulib module gettext
 
 ## begin gnulib module gettext-h
 
