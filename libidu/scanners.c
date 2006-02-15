@@ -55,6 +55,7 @@ static struct token *get_token_c (FILE *in_FILE, void const *args, int *flags);
 static void *parse_args_c (char **argv, int argc);
 static void help_me_c (void);
 static void help_me_cpp (void);
+static void help_me_java (void);
 
 static struct token *get_token_asm (FILE *in_FILE, void const *args, int *flags);
 static void *parse_args_asm (char **argv, int argc);
@@ -68,14 +69,19 @@ static struct token *get_token_perl (FILE *in_FILE, void const *args, int *flags
 static void *parse_args_perl (char **argv, int argc);
 static void help_me_perl (void);
 
+static struct token *get_token_lisp (FILE *in_FILE, void const *args, int *flags);
+static void *parse_args_lisp (char **argv, int argc);
+static void help_me_lisp (void);
 
 struct language languages_0[] =
 {
   { "C", parse_args_c, get_token_c, help_me_c },
   { "C++", parse_args_c, get_token_c, help_me_cpp },
+  { "Java", parse_args_c, get_token_c, help_me_java },
   { "asm", parse_args_asm, get_token_asm, help_me_asm },
   { "text", parse_args_text, get_token_text, help_me_text },
-  { "perl", parse_args_perl, get_token_perl, help_me_perl }
+  { "perl", parse_args_perl, get_token_perl, help_me_perl },
+  { "lisp", parse_args_lisp, get_token_lisp, help_me_lisp }
 };
 struct language const *languages_N = &languages_0[cardinalityof (languages_0)];
 
@@ -327,8 +333,11 @@ clear_ushort_ctype (unsigned short *ctype, char const *chars, int type)
 static void
 set_uchar_ctype (unsigned char *ctype, char const *chars, int type)
 {
-  unsigned char *rct = &ctype[1];
-  unsigned char const *uc = (unsigned char const *) chars;
+  unsigned char *rct; 
+  unsigned char const *uc; 
+
+  rct = &ctype[1];
+  uc = (unsigned char const *) chars;
 
   while (*uc)
     rct[*uc++] |= type;
@@ -337,18 +346,21 @@ set_uchar_ctype (unsigned char *ctype, char const *chars, int type)
 static void
 clear_uchar_ctype (unsigned char *ctype, char const *chars, int type)
 {
-  unsigned char *rct = &ctype[1];
-  unsigned char const *uc = (unsigned char const *) chars;
+  unsigned char *rct;
+  unsigned char const *uc;
+
+  rct = &ctype[1];
+  uc = (unsigned char const *) chars;
 
   while (*uc)
     rct[*uc++] &= ~type;
 }
 
-/*************** C & C++ ****************************************************/
+/*************** C, C++ & Java ***********************************************/
 
 #define I1	0x0001		/* 1st char of an identifier [a-zA-Z_] */
 #define DG	0x0002		/* decimal digit [0-9] */
-#define NM	0x0004		/* extra chars in a hex or long number [a-fA-FxXlL] */
+#define NM	0x0004		/* extra chars in a hex or long number [a-fA-FxXlLuU.] */
 #define C1	0x0008		/* C comment introduction char: / */
 #define C2	0x0010		/* C comment termination  char: * */
 #define Q1	0x0020		/* single quote: ' */
@@ -389,16 +401,16 @@ static unsigned short ctype_c[257] =
 /*020*/ 0,	0,	0,	0,	0,	0,	0,	0,
 /*030*/ 0,	0,	0,	0,	0,	0,	0,	0,
 /*040*/ 0,	0,	Q2,	0,	0,	0,	0,	Q1,
-/*050*/ 0,	0,	C2,	0,	0,	0,	0,	C1,
+/*050*/ 0,	0,	C2,	0,	0,	0,	NM,	C1,
 /*060*/ DG,	DG,	DG,	DG,	DG,	DG,	DG,	DG,
 /*070*/ DG,	DG,	0,	0,	0,	0,	0,	0,
 /*100*/ 0,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1,
 /*110*/ I1,	I1,	I1,	I1,	I1|NM,	I1,	I1,	I1,
-/*120*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*120*/ I1,	I1,	I1,	I1,	I1,	I1|NM,	I1,	I1,
 /*130*/ I1|NM,	I1,	I1,	0,	ES,	0,	0,	I1,
 /*140*/ 0,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1|NM,	I1,
 /*150*/ I1,	I1,	I1,	I1,	I1|NM,	I1,	I1,	I1,
-/*160*/ I1,	I1,	I1,	I1,	I1,	I1,	I1,	I1,
+/*160*/ I1,	I1,	I1,	I1,	I1,	I1|NM,	I1,	I1,
 /*170*/ I1|NM,	I1,	I1,	0,	0,	0,	0,	0,
   /* FIXME: latin-1 */
 };
@@ -435,6 +447,17 @@ help_me_cpp (void)
 {
   printf (_("\
 C++ language:\n\
+  -k,--keep=CHARS        Allow CHARS in single-token strings, keep the result\n\
+  -i,--ignore=CHARS      Allow CHARS in single-token strings, toss the result\n\
+  -u,--strip-underscore  Strip a leading underscore from single-token strings\n\
+"));
+}
+
+static void
+help_me_java (void)
+{
+  printf (_("\
+Java language:\n\
   -k,--keep=CHARS        Allow CHARS in single-token strings, keep the result\n\
   -i,--ignore=CHARS      Allow CHARS in single-token strings, toss the result\n\
   -u,--strip-underscore  Strip a leading underscore from single-token strings\n\
@@ -1508,3 +1531,253 @@ top:
 #undef ISNEWLINE
 #undef ISEOF
 #undef ISBORING
+
+/*************** Lisp *******************************************************/
+
+#define DG    0x01		/* [0-9] */
+#define LT    0x02		/* [a-zA-Z] */
+#define I1    0x04		/* LT | [!$%&*:/<=>?^_~] */
+#define Id    0x08		/* LT | I1 | DG | [-+.@] */
+#define RA    0x10		/* [bodxieBODXIE] */
+#define NM    0x20		/* [-@#.0-9a-fA-FesfdlESFDL] */
+#define EF    0x40		/* (eof) */
+
+#define is_DIGIT(c)	((rct)[c] & DG)
+#define is_LETTER(c)	((rct)[c] & LT)
+#define is_IDENT1(c)	((rct)[c] & (LT | I1))
+#define is_IDENT(c)	((rct)[c] & (LT | I1 | DG | Id))
+#define is_RADIX(c)	((rct)[c] & RA)
+#define is_NUMBER(c)	((rct)[c] & (DG | RA | NM))
+
+static unsigned char ctype_lisp[257] =
+{
+  EF,
+/*      0       1       2       3       4       5       6       7   */
+/*    -----   -----   -----   -----   -----   -----   -----   ----- */
+/*000*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*010*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*020*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*030*/ 0,	0,	0,	0,	0,	0,	0,	0,
+/*040*/ 0,	I1,	0,	NM,	I1,	I1,	I1,	0,
+/*050*/ 0,	0,	I1,	Id,	0,	Id|NM,	Id|NM,	I1,
+/*060*/ DG,	DG,	DG,	DG,	DG,	DG,	DG,	DG,
+/*070*/ DG,	DG,	I1,	0,	I1,	I1,	I1,	I1,
+/*100*/ Id|NM,	LT|NM,	LT|RA,	LT|NM,	LT|RA,	LT|RA,	LT|NM,	LT,
+/*110*/ LT,	LT|RA,	LT,	LT,	LT|NM,	LT,	LT,	LT|RA,
+/*120*/ LT,	LT,	LT,	LT|NM,	LT,	LT,	LT,	LT,
+/*130*/ LT|RA,	LT,	LT,	0,	0,	0,	I1,	I1,
+/*140*/ 0,	LT|NM,	LT|RA,	LT|NM,	LT|RA,	LT|RA,	LT|NM,	LT,
+/*150*/ LT,	LT|RA,	LT,	LT,	LT|NM,	LT,	LT,	LT|RA,
+/*160*/ LT,	LT,	LT,	LT|NM,	LT,	LT,	LT,	LT,
+/*170*/ LT|RA,	LT,	LT,	0,	0,	0,	I1,	0
+  /* FIXME: latin-1 */
+};
+
+static void
+help_me_lisp (void)
+{
+  printf (_("\
+Lisp language:\n\
+"));
+}
+
+static void *
+parse_args_lisp (char **argv, int argc)
+{
+  return NULL;
+}
+
+/* Grab the next identifier from the lisp source file. This
+   state machine is built for speed, not elegance.  */
+
+static struct token *
+get_token_lisp (FILE *in_FILE, void const *args, int *flags)
+{
+  unsigned char const *rct = &ctype_lisp[1];
+  unsigned char *id = scanner_buffer;
+  int c;
+
+  obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
+  
+ top:
+  c = getc (in_FILE);
+ recheck:
+  switch (c)
+    {
+    case EOF:
+      obstack_free (&tokens_obstack, obstack_finish (&tokens_obstack));
+      return 0;
+      
+    case '(': case ')':
+    case '\'': case '`':		/* quote, quasiquote */
+      goto top;
+      
+    case ',':				/* unquote */
+      c = getc (in_FILE);
+      if (c == '@')			/* unquote-splicing */
+	goto top;
+      goto recheck;
+      
+    case ';':				/* comment */
+      do {
+	c = getc (in_FILE);
+      } while ( (c != EOF) && (c != '\n'));
+      goto top;
+      
+    case '"':				/* string with or without ansi-C escapes */
+    string:
+      do {
+	c = getc (in_FILE);
+	if (c == '\\')
+	  {
+	    c = getc (in_FILE);
+	    continue;
+	  }
+      } while ( (c != EOF) && (c != '"'));
+      goto top;
+      
+    case '.':
+    case '+': case '-':
+      id = scanner_buffer;
+      *id++ = c;
+      c = getc (in_FILE);
+      if (is_DIGIT (c) ||
+	  (scanner_buffer[0] != '.' && (c == '.' || c == 'i' || c == 'I')))
+	goto number;
+      if (c != EOF)
+	ungetc (c, in_FILE);
+      goto ident;
+      
+    case '#':
+      id = scanner_buffer;
+      *id++ = c;
+      
+      c = getc (in_FILE);
+      if (c == EOF)
+	goto top;
+      else if (is_RADIX (c))
+	goto number;
+      else if (c == '\\')	/* #\... literal Character */
+	{
+	  *id++ = c;
+	  c = getc (in_FILE);
+	  *id++ = c;
+	  if (is_LETTER (c))
+	    {
+	      while (is_LETTER (c = getc (in_FILE)))
+		*id++ = c;
+	      if (c != EOF)
+		ungetc (c, in_FILE);
+	    }
+	  *flags = TOK_LITERAL;
+	  obstack_grow0 (&tokens_obstack, scanner_buffer, id - scanner_buffer);
+	  return (struct token *) obstack_finish (&tokens_obstack);
+	}
+      else if (c == '(')	/* # (...) vector vi%) */
+	goto top;
+      else if (c == '"')	/* #"..." Bigloo: string with ansi-C escape */
+	goto string;
+      else if (c == '!')	/* #!... Kawa key/eof/null/... */
+	{
+	  while (is_LETTER (c = getc (in_FILE)))
+	    *id++ = c;
+	  if (c != EOF)
+	    ungetc (c, in_FILE);
+	  *flags = TOK_LITERAL;
+	  obstack_grow0 (&tokens_obstack, scanner_buffer, id - scanner_buffer);
+	  return (struct token *) obstack_finish (&tokens_obstack);
+	}
+      else if (c == '|')	/* #|...|# Guile/Kawa multi-lines comment */
+	{
+	  do {
+	    c = getc (in_FILE);
+	    if (c == '|')
+	      {
+		while ( (c = getc (in_FILE)) == '|')
+		  ;
+		if (c == '#')
+		  break;
+	      }
+	  } while (c != EOF);
+	  goto top;
+	}
+      else if (c == '@')	/* #@LENGTH ...^_ EMACS byte-code comment */
+	{
+	  do {
+	    c = getc (in_FILE);
+	  } while ( (c != EOF) && (c != '\037'));
+	  goto top;
+	}
+      else if (c == '[')	/* #[ ... ] EMACS byte-code object */
+	goto top;
+      /* Ignore invalide #-construct */
+      goto top;
+      
+    case '[': case ']':		/* EMACS vector aka # (...) in Scheme */
+      /* EMACS vector object vs Kawa ident */
+      /* rational: Kawa ident could not start with [ nor with ] */
+      goto top;
+      
+    default:
+      if (is_IDENT1 (c))
+	{
+	  id = scanner_buffer;
+	  *id++ = c;
+	ident:
+	  /* Emacs end-of-vector vs Kawa ident: allow [] as a part of an ident. */
+	  for (;;)
+	    {
+	      while (is_IDENT (c = getc (in_FILE)))
+		*id++ = c;
+	      if (c == '[')
+		{
+		  c = getc (in_FILE);
+		  if (c == ']')
+		    {
+		      *id++ = '[';
+		      *id++ = ']';
+		      continue;
+		    }
+		  if (c != EOF)
+		    ungetc (c, in_FILE);
+		  ungetc ('[', in_FILE);
+		}
+	      break;
+	    }
+	  if (c != EOF)
+	    ungetc (c, in_FILE);
+	  *flags = TOK_NAME | TOK_LITERAL;
+	  obstack_grow0 (&tokens_obstack, scanner_buffer, id - scanner_buffer);
+	  return (struct token *) obstack_finish (&tokens_obstack);
+	}
+      else if (is_DIGIT (c))
+	{
+	  id = scanner_buffer;
+	number:
+	  *id++ = c;
+	  while (is_NUMBER (c = getc (in_FILE)))
+	    *id++ = c;
+	  if (c != EOF)
+	    ungetc (c, in_FILE);
+	  *flags = TOK_NUMBER | TOK_LITERAL;
+	  obstack_grow0 (&tokens_obstack, scanner_buffer, id - scanner_buffer);
+	  return (struct token *) obstack_finish (&tokens_obstack);
+	}
+    }
+  goto top;
+  
+}
+#undef DG
+#undef LT
+#undef I1
+#undef Id
+
+#undef RA
+#undef NM
+
+#undef is_DIGIT
+#undef is_LETTER
+#undef is_IDENT1
+#undef is_IDENT
+#undef is_RADIX
+#undef is_NUMBER

@@ -52,6 +52,8 @@
 *.cpp			C++
 *.cxx			C++
 
+*.java			Java
+
 ChangeLog*		Cdoc
 
 *.[sS]			asm --comment=;
@@ -71,7 +73,10 @@ ChangeLog*		Cdoc
 # portable object (i18n)
 *.po			po
 
-*.el			elisp
+*.el			lisp
+*.elc			lisp
+*.lisp			lisp
+*.scm			lisp
 
 *.am			make
 Makefile		make
