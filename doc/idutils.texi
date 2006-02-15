@@ -157,7 +157,7 @@ as a case-insensitive literal substring.
 @end table
 
 @cindex bugs, reporting
-Please report bugs to @samp{bug-gnu-utils@@gnu.ai.mit.edu}.  Remember to
+Please report bugs to @samp{bug-idutils@@gnu.org}.  Remember to
 include the version number, machine architecture, input files, and any
 other information needed to reproduce the bug: your input, what you
 expected, what you got, and why it is wrong.  Diffs are welcome, but
@@ -424,10 +424,11 @@ scanners, and examine their language-specific options by invoking
 
 @menu
 * Language map::                Mapping file names to source languages.
-* C/C++ scanner::               For the C and C++ programming language.
+* C/C++/Java scanner::          For the C, C++ and Java programming languages.
 * Assembler scanner::           For assembly language.
 * Text scanner::                For documents or other non-source code.
 * Perl scanner::                For Perl language (experimental).
+* Lisp scanner::                For the Lisp language (experimental).
 * Defining scanners::           Defining new scanners in the source code.
 @end menu
 
@@ -515,8 +516,8 @@ with the ID utilities:
 @end example
 
 @c ************* gkm *********************************************************
-@node C/C++ scanner
-@subsection C/C++ Language Scanner
+@node C/C++/Java scanner
+@subsection C/C++/Java Language Scanner
 
 @cindex C scanner, predefined
 
@@ -720,6 +721,10 @@ that character classes can be designated as token constituents or as
 token delimiters.  The default token constituents are the alpha-numerics;
 all other characters are considered token delimiters.
 
+Perl support has been originally written by Madhu Gogulapati.
+This scanner is considered experimental; please report any problems you
+should encounter to @samp{bug-idutils@@gnu.org} .
+
 @table @samp
 
 @item -i @var{character-class}
@@ -758,6 +763,21 @@ Include tokens from the documentation.  By default, the tokens in the
 documentation are ignored.
 
 @end table
+
+@c ************* gkm *********************************************************
+@node Lisp scanner
+@subsection Lisp Scanner
+
+@cindex lisp scanner
+(EXPERIMENTAL)
+
+The lisp scanner has been originally written by Edouard G. Parmelan,
+and after many years it was posthumously integrated with the main idutils
+code. It is intended for Lisp and Emacs Lisp files (.lisp, .el, .elc, .scm).
+No options are currently available for this scanner.
+
+This scanner is considered experimental; please report any problems you
+should encounter to @samp{bug-idutils@@gnu.org} .
 
 @c ************* gkm *********************************************************
 @node Defining scanners
@@ -1293,8 +1313,10 @@ file-tree walker, so that directory names can be passed on the command
 line instead of the names of every individual file.  Greg reorganized
 and rewrote most of the Texinfo manual to reflect these changes.
 
-In 2006, package name had a minor change from @code{id-utils} to
-@code{idutils}, to be more consistent with the other GNU package names.
+In 2006, Claudio Fontana modernized the build system and the code itself,
+and analyzed and integrated various pending patches. Package name had a
+minor change from @code{id-utils} to @code{idutils}, to be more consistent
+with the other GNU package names.
 
 @pindex cscope
 @pindex grep
