@@ -1,3 +1,7 @@
+2006-02-15  Jim Meyering  <jim@meyering.net>
+
+	* lib/verify.h: New file, from gnulib.
+
 2006-01-11  Claudio Fontana  <claudio@gnu.org>
 
 	* lib/fnmatch.c, lib/fnmatch_loop.c: included workaround for a
@@ -8,11 +12,11 @@
 	* src/mkid.c, src/lid.c: replace dirname() and basename() usage
 	  with dir_name() and base_name() to fix a portability problem
 	  spotted by Nelson H. F. Beebe <beebe@math.utah.edu>
-	
+
 2006-01-08  Claudio Fontana  <claudio@gnu.org>
 
 	* src/mkid.c: fixed bad offtostr usage (now uses return value)
-	
+
 2006-01-06  Claudio Fontana  <claudio@gnu.org>
 
 	* configure.ac: reverted change to "conditionally add -I ../intl to the
@@ -29,13 +33,13 @@
 	* distribute-alpha.sh: likewise
 	* BLURB: likewise
 	* README-alpha: likewise
-	
+
 	* configure.ac: changed bug report address to bug-idutils@gnu.org
-	
+
 	* doc/id-utils.texi: renamed to doc/idutils.texi, and fixed content
 	  accordingly
 	* doc/Makefile.am: reflect filename change
-	
+
 	* lisp/id-utils.el: renamed to lisp/idutils.el, and fixed content
 	  accordingly
 	* lisp/Makefile.am: reflect filename change
@@ -44,7 +48,7 @@
 
 
 2005-12-27  Claudio Fontana  <claudio@gnu.org>
-	
+
 	* README-alpha: added information about successful builds
 	* configure.ac: fixed unwanted change in bugs mailing list address
 	* configure.ac: moved development to version 4.1
@@ -55,20 +59,20 @@
 	* src/Makefile.am: pass libgnu to the linker before and after libintl
 	  to solve mutual dependencies problems caused by gnulib modules
 	  getopt and regex, which include libintl.h
-			
+
 	* lib/dirname.c, lib/dirname.h [new files]: added dirname module
 	* lib/basename.c [new file]: likewise
 	* lib/stripslash.c [new file]: likewise
 	* lib/Makefile.am: likewise (gnulib-generated)
 	* m4/dirname.m4, m4/dos.m4 [new files]: likewise
-	
+
 	* libidu/idfile.c: add missing include directive for strsep.h
 	* libidu/scanners.c: likewise
 	* libidu/walker.c: likewise
 
 	* libidu/scanners.c: add missing include for alloca.h
 	* libidu/walker.c: likewise
-	
+
 	* src/mkid.c: add include directive for dirname.h
 	* src/lid.c: likewise
 
@@ -95,7 +99,7 @@
 	  print an off_t value portably by using offtostr (gnulib)
 
 	* intl/*, po/*: updated to latest version
-	
+
 2005-12-10  Claudio Fontana  <claudio@gnu.org>
 	* applied savannah patch 2775: include scanner for the perl language
 
@@ -108,7 +112,7 @@
         * configure.in: moved to configure.ac
 	* configure.ac (new file): rewritten using gnulib and new macros
 	* Makefile.am: all makefiles revisited
-	
+
 	* lib/: removed everything and replaced with gnulib imports
 	* m4/: removed everything and replaced with gnulib imports
 
