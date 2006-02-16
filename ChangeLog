@@ -2,6 +2,11 @@
 
 	* lib/verify.h: New file, from gnulib.
 
+2006-02-15  Claudio Fontana  <claudio@gnu.org>
+
+	* libidu/scanners.c: integrated a lisp+java support patch,
+	  based on the original work by Edouard G. Parmelan
+	
 2006-01-11  Claudio Fontana  <claudio@gnu.org>
 
 	* lib/fnmatch.c, lib/fnmatch_loop.c: included workaround for a
