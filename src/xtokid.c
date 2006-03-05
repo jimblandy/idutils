@@ -84,6 +84,7 @@ Print all tokens found in a source file.\n\
 The following arguments apply to the language-specific scanners:\n\
 "));
   language_help_me ();
+  printf (_("\nReport bugs to " PACKAGE_BUGREPORT "\n\n"));
   exit (0);
 }
 

@@ -175,6 +175,7 @@ Note that the `--include' and `--exclude' options are mutually-exclusive.\n\
 The following arguments apply to the language-specific scanners:\n\
 "));
   language_help_me ();
+  printf (_("\nReport bugs to " PACKAGE_BUGREPORT "\n\n"));
   exit (0);
 }
 

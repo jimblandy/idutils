@@ -80,6 +80,7 @@ using shell-style wildcards.\n\
       --help             display this help and exit\n\
       --version          output version information and exit\n\
 "));
+  printf (_("\nReport bugs to " PACKAGE_BUGREPORT "\n\n"));
   exit (0);
 }
 

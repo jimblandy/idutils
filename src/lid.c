@@ -284,6 +284,7 @@ matched identifier followed by the list of file names in which it occurs.\n\
       --version         output version information and exit\n\
 "),
 	  (separator_style == ss_braces ? _("braces") : _("space")));
+  printf (_("\nReport bugs to " PACKAGE_BUGREPORT "\n\n"));
   exit (0);
 }
 
@@ -1369,9 +1370,12 @@ is_number (char const *str)
       str += 2;
       str += strspn (str, "0123456789aAbBcCdDeEfF");
     }
-  else
-    str += strspn (str, "0123456789");
-  str += strspn (str, "uUlL");
+  else {
+    size_t offn;
+    str += (offn = strspn (str, "0123456789"));
+    if (offn)
+      str += strspn (str, "uUlL");
+  }
   return (*str == '\0');
 }
 

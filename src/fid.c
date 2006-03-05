@@ -90,6 +90,7 @@ also given list the identifiers that occur in both files.\n\
       --help       display this help and exit\n\
       --version    output version information and exit\n\
 "));
+  printf (_("\nReport bugs to " PACKAGE_BUGREPORT "\n\n"));
   exit (0);
 }
 

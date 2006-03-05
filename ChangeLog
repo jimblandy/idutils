@@ -1,3 +1,15 @@
+2006-03-05  Claudio Fontana  <claudio@gnu.org>
+
+	* src/lid.c::isnumber(): fixed bug in pattern recognition.
+	  A single 'l' or 'u' does not make a pattern a number.
+	  It must come after ciphers.
+
+	* src/lid.c::help_me(): add bug report string
+	* src/mkid.c: likewise
+	* src/xtokid.c: likewise
+	* src/fid.c: likewise
+	* src/fnid.c: likewise
+
 2006-02-15  Jim Meyering  <jim@meyering.net>
 
 	* lib/verify.h: New file, from gnulib.
