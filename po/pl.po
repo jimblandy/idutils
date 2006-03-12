@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.0.8\n"
 "Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
-"POT-Creation-Date: 2006-02-15 07:30+0100\n"
+"POT-Creation-Date: 2006-03-12 01:30+0100\n"
 "PO-Revision-Date: 1997-03-26 23:59 +0100\n"
 "Last-Translator: Wojciech Marek Ga³±zka <wgalazka@chem.uw.edu.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -43,7 +43,7 @@ msgstr "Próby=%ld/%ld=%.2f, "
 msgid "can't determine the io_size of a string!"
 msgstr ""
 
-#: libidu/idread.c:49 src/mkid.c:475 src/xtokid.c:228
+#: libidu/idread.c:49 src/mkid.c:476 src/xtokid.c:229
 #, c-format
 msgid "can't open `%s'"
 msgstr ""
@@ -325,24 +325,38 @@ msgid ""
 "      --version    output version information and exit\n"
 msgstr ""
 
-#: src/fid.c:148
+#: src/fid.c:93 src/fnid.c:83 src/lid.c:287 src/mkid.c:178 src/xtokid.c:87
+#, c-format
+msgid ""
+"\n"
+"Report bugs to "
+msgstr ""
+
+#: src/fid.c:93 src/fnid.c:83 src/lid.c:287 src/mkid.c:178 src/xtokid.c:87
+#, c-format
+msgid ""
+"\n"
+"\n"
+msgstr ""
+
+#: src/fid.c:149
 msgid "no file name arguments"
 msgstr ""
 
-#: src/fid.c:153
+#: src/fid.c:154
 msgid "too many file name arguments"
 msgstr ""
 
-#: src/fid.c:160 src/fnid.c:155 src/lid.c:414
+#: src/fid.c:161 src/fnid.c:156 src/lid.c:415
 msgid "can't locate `ID'"
 msgstr ""
 
-#: src/fid.c:242
+#: src/fid.c:243
 #, c-format
 msgid "`%s' is ambiguous"
 msgstr ""
 
-#: src/fid.c:248
+#: src/fid.c:249
 #, fuzzy, c-format
 msgid "`%s' not found"
 msgstr "%s: nie odnaleziony\n"
@@ -421,40 +435,40 @@ msgstr ""
 msgid "space"
 msgstr ""
 
-#: src/lid.c:354
+#: src/lid.c:355
 msgid "notice: use of `-e' is deprecated, use `-r' instead"
 msgstr ""
 
-#: src/lid.c:435
+#: src/lid.c:436
 #, fuzzy, c-format
 msgid "All identifiers are non-ambiguous within the first %d characters\n"
 msgstr "Identyfikatory s± jednoznaczne w zakresie pierwszych %d znaków\n"
 
-#: src/lid.c:470
+#: src/lid.c:471
 #, c-format
 msgid "invalid `--key' style: `%s'"
 msgstr ""
 
-#: src/lid.c:482
+#: src/lid.c:483
 #, c-format
 msgid "invalid `--result' style: `%s'"
 msgstr ""
 
-#: src/lid.c:639
+#: src/lid.c:640
 #, fuzzy, c-format
 msgid "edit? [y1-9^S/nq] "
 msgstr "Edytowaæ? [y1-9^S/nq] "
 
-#: src/lid.c:708
+#: src/lid.c:709
 msgid "can't fork"
 msgstr ""
 
-#: src/lid.c:726
+#: src/lid.c:727
 #, c-format
 msgid "can't exec `%s'"
 msgstr ""
 
-#: src/lid.c:867
+#: src/lid.c:868
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 
@@ -490,102 +504,102 @@ msgid ""
 "The following arguments apply to the language-specific scanners:\n"
 msgstr ""
 
-#: src/mkid.c:376
+#: src/mkid.c:377
 #, c-format
 msgid "can't create `%s' in `%s'"
 msgstr ""
 
-#: src/mkid.c:381
+#: src/mkid.c:382
 #, c-format
 msgid "can't modify `%s'"
 msgstr ""
 
-#: src/mkid.c:458
+#: src/mkid.c:459
 #, c-format
 msgid "can't stat `%s'"
 msgstr ""
 
-#: src/mkid.c:527
+#: src/mkid.c:528
 #, fuzzy, c-format
 msgid "  new = %d/%d"
 msgstr ", nowy=%d/%d"
 
-#: src/mkid.c:536
+#: src/mkid.c:537
 #, c-format
 msgid "Name=%ld, "
 msgstr "Nazwa=%ld, "
 
-#: src/mkid.c:537
+#: src/mkid.c:538
 #, c-format
 msgid "Number=%ld, "
 msgstr "Numer=%ld, "
 
-#: src/mkid.c:538
+#: src/mkid.c:539
 #, c-format
 msgid "String=%ld, "
 msgstr "£añcuch=%ld, "
 
-#: src/mkid.c:539
+#: src/mkid.c:540
 #, c-format
 msgid "Literal=%ld, "
 msgstr "Litera³=%ld, "
 
-#: src/mkid.c:540
+#: src/mkid.c:541
 #, c-format
 msgid "Comment=%ld\n"
 msgstr "Komentarz=%ld\n"
 
-#: src/mkid.c:542
+#: src/mkid.c:543
 #, fuzzy, c-format
 msgid "Files=%ld, "
 msgstr "Pliki=%d, "
 
-#: src/mkid.c:543
+#: src/mkid.c:544
 #, c-format
 msgid "Tokens=%ld, "
 msgstr "Znaczniki=%ld, "
 
-#: src/mkid.c:544
+#: src/mkid.c:545
 #, c-format
 msgid "Bytes=%ld Kb, "
 msgstr "Bajty=%ld Kb, "
 
-#: src/mkid.c:545
+#: src/mkid.c:546
 #, fuzzy, c-format
 msgid "Heap=%d+%d Kb, "
 msgstr "Sterta=%ld Kb, "
 
-#: src/mkid.c:547
+#: src/mkid.c:548
 #, c-format
 msgid "Output=%ld (%ld tok, %ld hit)\n"
 msgstr "Wynik=%ld (%ld tok, %ld hit)\n"
 
-#: src/mkid.c:550
+#: src/mkid.c:551
 #, fuzzy, c-format
 msgid ", Freq=%ld/%ld=%.2f\n"
 msgstr "Czêsto¶æ=%ld/%ld=%.2f\n"
 
-#: src/mkid.c:574
+#: src/mkid.c:575
 #, c-format
 msgid "Sorting tokens...\n"
 msgstr "Sortowanie znaczników...\n"
 
-#: src/mkid.c:580
+#: src/mkid.c:581
 #, c-format
 msgid "Writing `%s'...\n"
 msgstr "Zapisujê `%s'...\n"
 
-#: src/mkid.c:583
+#: src/mkid.c:584
 #, c-format
 msgid "can't create `%s'"
 msgstr ""
 
-#: src/mkid.c:651
+#: src/mkid.c:652
 #, c-format
 msgid "error closing `%s'"
 msgstr ""
 
-#: src/mkid.c:739
+#: src/mkid.c:740
 #, fuzzy, c-format
 msgid "level %d: %ld/%ld = %.0f%%\n"
 msgstr "poziom %d: %ld == %ld\n"

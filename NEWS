@@ -1,9 +1,10 @@
 idutils NEWS - User visible changes.
 
-Version 4.1 - ???, by Claudio Fontana
+Version 4.1 - March 12, 2006, by Claudio Fontana
 
+* new project name: idutils (change from id-utils)
 * fixed many portability issues
-* renamed all istances of id-utils with idutils
+* support for java and lisp
 
 Version 4.0 - Nov 1, 2005, by Claudio Fontana
 
