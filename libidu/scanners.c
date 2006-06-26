@@ -1443,7 +1443,7 @@ top:
         if (new_line && ARGS->exclude_dtags)
           {
             skip_doc = 1;
-            state &= ~EQ;		/* documenation = 0; */
+            state &= ~EQ;		/* documentation = 0; */
           }
         break;
 
