@@ -185,7 +185,13 @@ walk_flink (struct file_link *flink, struct dynvec *sub_dirs_vec)
   flink->fl_flags = (old_flags & ~(FL_TYPE_MASK|FL_SYM_LINK)) | new_flags;
   if (FL_IS_DIR (new_flags))
     {
-      struct file_link *alias_link = find_alias_link (flink, &st);
+
+      struct file_link *alias_link;
+#if HAVE_LINK
+      alias_link = find_alias_link (flink, &st);
+#else
+      alias_link = 0;
+#endif /* HAVE_LINK */
 
       if (alias_link)
 	{
