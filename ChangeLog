@@ -1,3 +1,12 @@
+2006-06-26  Claudio Fontana  <claudio@gnu.org>
+
+	* libidu/walker.c (walk_flink): add missing #ifdef HAVE_LINK before
+	  calling hard-link specific code (patch #5165).
+
+	* libidu/scanners.c (get_token_perl): fix problem in perl support
+	  with comments and quotation.
+	  Patch appended to patch #2775 by Madhu Gogulapati.
+
 2006-03-05  Claudio Fontana  <claudio@gnu.org>
 
 	* src/lid.c::isnumber(): fixed bug in pattern recognition.
