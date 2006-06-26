@@ -1252,7 +1252,7 @@ top:
 
 /* Text character classes */
 #define ISID1ST(c)	((rct)[c] & (I1))
-#define ISIDREST(c)	((rct)[c] & (I1|NM|SQ|Q1))
+#define ISIDREST(c)	((rct)[c] & (I1|NM|SQ))
 #define ISNUMBER(c)	((rct)[c] & (NM))
 #define ISIDSQUEEZE(c)	((rct)[c] & (SQ))
 #define ISCOMMENT(c)	((rct)[c] & (CM))
@@ -1420,17 +1420,23 @@ top:
         break;
 
       case '#':
-        state |= CM;		/* comment = 1; */
+	/* Skip the # if it is inside single quotes or double quotes */
+	if (!(state & Q1) && !(state & Q2))
+	  state |= CM;		/* comment = 1 */
         break;
 
       case '\'':
+	/* Skip the single quote if it is inside a comment or double quotes */
 	if (!skip_doc)
-           state ^= Q1;		/* s_quote = ((s_quote) ? 0 : 1); */
+	  if (!(state & CM) && !(state & Q2))
+	    state ^= Q1;	/* s_quote = ((s_quote) ? 0 : 1); */
         break;
 
       case '\"':
+	/* Skip the double quote if it is inside a comment or single quotes */
 	if (!skip_doc)
-          state ^= Q2;		/* d_quote = ((d_quote == 1) ? 0 : 1); */
+	  if (!(state & CM) && !(state & Q1))
+	    state ^= Q2;     /* d_quote = ((d_quote == 1) ? 0 : 1); */
         break;
 
       case '=':
@@ -1488,13 +1494,15 @@ top:
   *id = '\0';
   if (skip_doc)
     {
+      /* perl documentation 'perlpod' processing is done here */
+
       if (strequ (scanner_buffer, "cut"))
         {
           skip_doc = 0;
         }
       else 
         {
-          state |= EQ;		/* documenation = 1; */
+          state |= EQ;		/* documentation = 1; */
 	}
       goto top;
     }
