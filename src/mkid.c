@@ -372,7 +372,7 @@ assert_writeable (char const *filename)
     {
       if (errno == ENOENT)
 	{
-	  char const *dirname = dir_name ((char*)filename);
+	  char *dirname = dir_name (filename);
 	  if (access (dirname, 06) < 0)
 	    error (1, errno, _("can't create `%s' in `%s'"),
 		   base_name (filename), dirname);
