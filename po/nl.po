@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: id-utils 3.2\n"
-"Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
-"POT-Creation-Date: 2006-03-12 01:30+0100\n"
+"Report-Msgid-Bugs-To: bug-idutils@gnu.org\n"
+"POT-Creation-Date: 2006-07-22 00:45+0200\n"
 "PO-Revision-Date: 1998-09-30 13:31+02:00\n"
 "Last-Translator: Ivo Timmermans <zarq@iname.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -169,13 +169,13 @@ msgstr ""
 "                        weg van reeksen van een eenheid\n"
 
 #: libidu/scanners.c:742 libidu/scanners.c:1013 libidu/scanners.c:1216
-#: libidu/scanners.c:1480
+#: libidu/scanners.c:1486
 #, c-format
 msgid "junk: `%c'"
 msgstr "onzin: `%c'"
 
 #: libidu/scanners.c:744 libidu/scanners.c:1015 libidu/scanners.c:1218
-#: libidu/scanners.c:1482
+#: libidu/scanners.c:1488
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "onzin: `\\%03o'"
@@ -230,7 +230,7 @@ msgstr ""
 "  -x,--exclude=TEKEN-KLASSE  Behandel tekens van TEKEN-KLASSE als "
 "eenheidscheiding\n"
 
-#: libidu/scanners.c:1579
+#: libidu/scanners.c:1587
 #, c-format
 msgid "Lisp language:\n"
 msgstr ""
@@ -253,38 +253,38 @@ msgstr "bestand"
 msgid "directory"
 msgstr "map"
 
-#: libidu/walker.c:305
+#: libidu/walker.c:311
 #, c-format
 msgid "warning: `%s' and `%s' are the same file, but yield different scans!"
 msgstr ""
 "waarschuwing: `%s' en `%s' zijn het zelfde bestand, maar leveren "
 "verschillende resultaten op!"
 
-#: libidu/walker.c:399
+#: libidu/walker.c:405
 #, c-format
 msgid "notice: scan parameters changed for `%s'"
 msgstr "opmerking: leesparameters veranderd voor `%s'"
 
-#: libidu/walker.c:602
+#: libidu/walker.c:608
 msgid "can't get working directory"
 msgstr "kan huidige map niet verkrijgen"
 
-#: libidu/walker.c:659
+#: libidu/walker.c:665
 #, c-format
 msgid "can't chdir to `%s'"
 msgstr "kan niet naar map `%s' gaan"
 
-#: libidu/walker.c:664
+#: libidu/walker.c:670
 #, c-format
 msgid "can't chdir to `%s' from `%s'"
 msgstr "kan niet van map `%s' naar `%s' gaan"
 
-#: libidu/walker.c:725
+#: libidu/walker.c:731
 #, c-format
 msgid "can't lstat `%s' from `%s'"
 msgstr "kan de status van de link `%s' niet opvragen vanuit `%s'"
 
-#: libidu/walker.c:733
+#: libidu/walker.c:739
 #, c-format
 msgid "can't stat `%s' from `%s'"
 msgstr "kan de status van `%s' niet opvragen vanuit `%s'"
@@ -550,21 +550,21 @@ msgstr "ongeldige `--key' stijl: `%s'"
 msgid "invalid `--result' style: `%s'"
 msgstr "ongeldige `--result' stijl: `%s'"
 
-#: src/lid.c:640
+#: src/lid.c:671
 #, c-format
 msgid "edit? [y1-9^S/nq] "
 msgstr "bewerken? [j1-9^S/nq]"
 
-#: src/lid.c:709
+#: src/lid.c:740
 msgid "can't fork"
 msgstr "kan geen nieuw proces beginnen"
 
-#: src/lid.c:727
+#: src/lid.c:762
 #, c-format
 msgid "can't exec `%s'"
 msgstr "kan `%s' niet uitvoeren"
 
-#: src/lid.c:868
+#: src/lid.c:903
 msgid "can't match regular-expression: memory exhausted"
 msgstr "kan reguliere expressie niet vergelijken: geheugen vol"
 

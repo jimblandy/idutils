@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
-"Report-Msgid-Bugs-To: bug-id-utils@gnu.org\n"
-"POT-Creation-Date: 2006-03-12 01:30+0100\n"
+"Report-Msgid-Bugs-To: bug-idutils@gnu.org\n"
+"POT-Creation-Date: 2006-07-22 00:45+0200\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Unknown <unknown@unknown.fr>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -159,13 +159,13 @@ msgid ""
 msgstr ""
 
 #: libidu/scanners.c:742 libidu/scanners.c:1013 libidu/scanners.c:1216
-#: libidu/scanners.c:1480
+#: libidu/scanners.c:1486
 #, c-format
 msgid "junk: `%c'"
 msgstr "dchet: `%c'"
 
 #: libidu/scanners.c:744 libidu/scanners.c:1015 libidu/scanners.c:1218
-#: libidu/scanners.c:1482
+#: libidu/scanners.c:1488
 #, c-format
 msgid "junk: `\\%03o'"
 msgstr "dchet: `\\%03o'"
@@ -202,7 +202,7 @@ msgid ""
 "  -d,--dtags  Include documentation tags\n"
 msgstr ""
 
-#: libidu/scanners.c:1579
+#: libidu/scanners.c:1587
 #, c-format
 msgid "Lisp language:\n"
 msgstr ""
@@ -225,37 +225,37 @@ msgstr ""
 msgid "directory"
 msgstr ""
 
-#: libidu/walker.c:305
+#: libidu/walker.c:311
 #, c-format
 msgid "warning: `%s' and `%s' are the same file, but yield different scans!"
 msgstr ""
 
-#: libidu/walker.c:399
+#: libidu/walker.c:405
 #, c-format
 msgid "notice: scan parameters changed for `%s'"
 msgstr ""
 
-#: libidu/walker.c:602
+#: libidu/walker.c:608
 #, fuzzy
 msgid "can't get working directory"
 msgstr "%s: Impossible d'obtenir le rpertoire courant."
 
-#: libidu/walker.c:659
+#: libidu/walker.c:665
 #, c-format
 msgid "can't chdir to `%s'"
 msgstr ""
 
-#: libidu/walker.c:664
+#: libidu/walker.c:670
 #, c-format
 msgid "can't chdir to `%s' from `%s'"
 msgstr ""
 
-#: libidu/walker.c:725
+#: libidu/walker.c:731
 #, c-format
 msgid "can't lstat `%s' from `%s'"
 msgstr ""
 
-#: libidu/walker.c:733
+#: libidu/walker.c:739
 #, c-format
 msgid "can't stat `%s' from `%s'"
 msgstr ""
@@ -465,21 +465,21 @@ msgstr ""
 msgid "invalid `--result' style: `%s'"
 msgstr ""
 
-#: src/lid.c:640
+#: src/lid.c:671
 #, fuzzy, c-format
 msgid "edit? [y1-9^S/nq] "
 msgstr "diter? [y1-9^S/nq] "
 
-#: src/lid.c:709
+#: src/lid.c:740
 msgid "can't fork"
 msgstr ""
 
-#: src/lid.c:727
+#: src/lid.c:762
 #, c-format
 msgid "can't exec `%s'"
 msgstr ""
 
-#: src/lid.c:868
+#: src/lid.c:903
 msgid "can't match regular-expression: memory exhausted"
 msgstr ""
 

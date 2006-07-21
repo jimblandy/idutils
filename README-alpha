@@ -1,8 +1,5 @@
 idutils README-alpha
 
-idutils-4.1 Special instructions for pre-release testers
----------------------------------------------------------
-
  * The code has been substantially changed.
    Portability problems might remain.
 

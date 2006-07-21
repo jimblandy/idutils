@@ -591,10 +591,43 @@ report_grep (char const *name, struct file_link **flinkv)
     }
 }
 
+static char **
+get_editor_argv(char *fullstring, int* argc)
+{
+  int i;
+  char *mark;
+  char **argv;
+
+  static int already_called;
+  assert(already_called == 0);	/* call only once, otherwise leaks */
+
+  *argc = 1;
+  mark = fullstring;
+
+  while (mark = strchr(mark, ' ')) {
+    (*argc)++;
+    mark += strspn(mark, " ");
+  }
+
+  argv = xmalloc(sizeof(char *) * (*argc + 1));
+  fullstring = strdup(fullstring);
+  argv[0] = strtok(fullstring, " ");
+
+  for (i = 1; i < (*argc + 1); i++) {
+    argv[i] = strtok(NULL, " ");
+  }
+
+  already_called = 1;
+  return argv;
+}
+
 void
 report_edit (char const *name, struct file_link **flinkv)
 {
-  static char const *editor;
+  static char *editor;		/* editor program name from env   */
+  static char **editor_argv;	/* editor base arguments from env */
+  static int editor_argc;
+
   static char const *eid_arg;
   static char const *eid_right_del;
   static char const *eid_left_del;
@@ -604,23 +637,21 @@ report_edit (char const *name, struct file_link **flinkv)
   int c;
   int skip;
 
-  if (editor == 0)
-    {
-      editor = getenv ("VISUAL");
-      if (editor == 0)
-	{
-	  editor = getenv ("EDITOR");
-	  if (editor == 0)
-	    editor = "vi";
-	}
-    }
+  if (!editor)
+    if (!(editor = getenv ("VISUAL")))
+      if (!(editor = getenv ("EDITOR")))
+	editor = "vi";
 
-  if (eid_arg == 0)
+  if (!editor_argv)
+    editor_argv = get_editor_argv(editor, &editor_argc);
+
+  if (!eid_arg)
     {
-      int using_vi = strequ ("vi", base_name (editor));
+      int using_vi;
+      using_vi = strequ ("vi", base_name (editor)) || strequ ("vim", base_name (editor));
 
       eid_arg = getenv ("EIDARG");
-      if (eid_arg == 0)
+      if (!eid_arg)
 	eid_arg = (using_vi ? "+1;/%s/" : "");
 
       eid_left_del = getenv ("EIDLDEL");
@@ -711,20 +742,24 @@ editit:
 
     case 0:
       {
-	char **argv_0 = xmalloc (sizeof(char *) * (3 + vector_cardinality (flinkv)));
-	char **argv = argv_0 + 2;
+	int i;
+	char **argv = xmalloc (sizeof(char *) *
+			       (editor_argc + 2 + vector_cardinality (flinkv)));
+	
+	for (i = 0; i < editor_argc; i++)
+	  argv[i] = editor_argv[i];
+
+	if (*eid_arg) {
+	  sprintf (ed_arg_buffer, eid_arg, pattern);
+	  argv[i++] = ed_arg_buffer;
+	}
+
 	while (*flinkv)
-	  *argv++ = maybe_relative_file_name (0, *flinkv++, cw_dlink);
-	*argv = 0;
-	argv = argv_0 + 1;
-	if (eid_arg)
-	  {
-	    sprintf (ed_arg_buffer, eid_arg, pattern);
-	    *argv-- = ed_arg_buffer;
-	  }
-	*(char const **) argv = editor;
-	execvp (editor, argv);
-	error (0, errno, _("can't exec `%s'"), editor);
+	  argv[i++] = maybe_relative_file_name (0, *flinkv++, cw_dlink);
+
+	argv[i] = 0;
+	execvp (editor_argv[0], argv);
+	error (0, errno, _("can't exec `%s'"), editor_argv[0]);
       }
 
     default:

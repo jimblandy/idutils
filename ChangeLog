@@ -1,3 +1,13 @@
+2006-07-22  Claudio Fontana  <claudio@gnu.org>
+
+	removed generated files from CVS
+
+	* src/lid.c (get_editor_argv): new function that
+	  tokenizes EDITOR environment variable.
+
+	* src/lid.c (report_edit): use get_editor_argv;
+	  some cleanup; set using_vi for vim too.
+
 2006-07-06  Claudio Fontana  <claudio@gnu.org>
 
 	* src/Makefile.in: regenerated.
