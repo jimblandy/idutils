@@ -1,5 +1,9 @@
 2006-07-22  Claudio Fontana  <claudio@gnu.org>
 
+	upgraded gnulib.
+
+2006-07-22  Claudio Fontana  <claudio@gnu.org>
+
 	removed generated files from CVS
 
 	* src/lid.c (get_editor_argv): new function that

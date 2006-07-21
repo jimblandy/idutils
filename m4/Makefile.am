@@ -6,12 +6,14 @@ EXTRA_DIST = \
         d-ino.m4 \
         dirname.m4 \
         dos.m4 \
+        double-slash-root.m4 \
         error.m4 \
         exclude.m4 \
         exitfail.m4 \
         extensions.m4 \
         fnmatch.m4 \
         fpending.m4 \
+        getcwd-abort-bug.m4 \
         getcwd-path-max.m4 \
         getcwd.m4 \
         getopt.m4 \
@@ -57,6 +59,7 @@ EXTRA_DIST = \
         restrict.m4 \
         signed.m4 \
         size_max.m4 \
+        ssize_t.m4 \
         stat-macros.m4 \
         stdbool.m4 \
         stdint_h.m4 \
@@ -64,14 +67,19 @@ EXTRA_DIST = \
         strcspn.m4 \
         strdup.m4 \
         strerror_r.m4 \
+        strndup.m4 \
+        strnlen.m4 \
         strpbrk.m4 \
         strsep.m4 \
         strstr.m4 \
         uintmax_t.m4 \
         ulonglong.m4 \
+        unistd_h.m4 \
         wchar_t.m4 \
+        wcwidth.m4 \
         wint_t.m4 \
         xalloc.m4 \
         xgetcwd.m4 \
         xsize.m4 \
+        xstrndup.m4 \
         extra_dist.sh

@@ -1,4 +1,5 @@
-# Copyright (C) 2004 Free Software Foundation, Inc.
+# Copyright (C) 2004-2006 Free Software Foundation, Inc.
+#
 # This file is free software, distributed under the terms of the GNU
 # General Public License.  As a special exception to the GNU General
 # Public License, this file may be distributed as part of a program
@@ -58,16 +59,22 @@ AC_DEFUN([gl_INIT],
   AC_FUNC_REALLOC
   gl_REGEX
   gl_C_RESTRICT
+  gt_TYPE_SSIZE_T
   gl_STAT_MACROS
   AM_STDBOOL_H
   gl_STRCASE
   gl_FUNC_STRCSPN
   gl_FUNC_STRDUP
+  gl_FUNC_STRNDUP
+  gl_FUNC_STRNLEN
   gl_FUNC_STRPBRK
   gl_FUNC_STRSEP
   gl_FUNC_STRSTR
+  gl_HEADER_UNISTD
+  gl_FUNC_WCWIDTH
   gl_XALLOC
   gl_XGETCWD
+  gl_XSTRNDUP
 ])
 
 # This macro records the list of files which have been installed by
@@ -138,6 +145,10 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strdup.h
   lib/stripslash.c
   lib/strncasecmp.c
+  lib/strndup.c
+  lib/strndup.h
+  lib/strnlen.c
+  lib/strnlen.h
   lib/strnlen1.c
   lib/strnlen1.h
   lib/strpbrk.c
@@ -148,11 +159,14 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strstr.h
   lib/umaxtostr.c
   lib/verify.h
+  lib/wcwidth.h
   lib/xalloc-die.c
   lib/xalloc.h
   lib/xgetcwd.c
   lib/xgetcwd.h
   lib/xmalloc.c
+  lib/xstrndup.c
+  lib/xstrndup.h
   m4/alloca.m4
   m4/atexit.m4
   m4/closeout.m4
@@ -160,12 +174,14 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/d-ino.m4
   m4/dirname.m4
   m4/dos.m4
+  m4/double-slash-root.m4
   m4/error.m4
   m4/exclude.m4
   m4/exitfail.m4
   m4/extensions.m4
   m4/fnmatch.m4
   m4/fpending.m4
+  m4/getcwd-abort-bug.m4
   m4/getcwd-path-max.m4
   m4/getcwd.m4
   m4/getopt.m4
@@ -208,6 +224,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/restrict.m4
   m4/signed.m4
   m4/size_max.m4
+  m4/ssize_t.m4
   m4/stat-macros.m4
   m4/stdbool.m4
   m4/stdint_h.m4
@@ -215,14 +232,19 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strcspn.m4
   m4/strdup.m4
   m4/strerror_r.m4
+  m4/strndup.m4
+  m4/strnlen.m4
   m4/strpbrk.m4
   m4/strsep.m4
   m4/strstr.m4
   m4/uintmax_t.m4
   m4/ulonglong.m4
+  m4/unistd_h.m4
   m4/wchar_t.m4
+  m4/wcwidth.m4
   m4/wint_t.m4
   m4/xalloc.m4
   m4/xgetcwd.m4
   m4/xsize.m4
+  m4/xstrndup.m4
 ])

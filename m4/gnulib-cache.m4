@@ -1,4 +1,5 @@
-# Copyright (C) 2004 Free Software Foundation, Inc.
+# Copyright (C) 2004-2006 Free Software Foundation, Inc.
+#
 # This file is free software, distributed under the terms of the GNU
 # General Public License.  As a special exception to the GNU General
 # Public License, this file may be distributed as part of a program
@@ -14,13 +15,15 @@
 
 
 # Specification in the form of a command-line invocation:
-#   gnulib-tool --import --dir=. --lib=libgnu --source-base=lib --m4-base=m4 --aux-dir=. --macro-prefix=gl alloca alloca-opt atexit closeout dirname error exclude exit exitfail extensions fnmatch fnmatch-gnu fpending getcwd getopt gettext gettext-h havelib inttostr lstat malloc mbchar mbuiter memchr memcpy mempcpy memset obstack pathmax quotearg realloc regex restrict stat-macros stdbool strcase strcspn strdup strnlen1 strpbrk strsep strstr xalloc xalloc-die xgetcwd
+#   gnulib-tool --import --dir=. --lib=libgnu --source-base=lib --m4-base=m4 --doc-base=doc --aux-dir=. --macro-prefix=gl --assume-autoconf=2.59 alloca alloca-opt atexit closeout dirname error exclude exit exitfail extensions fnmatch fnmatch-gnu fpending getcwd getopt gettext gettext-h havelib inttostr lstat malloc mbchar mbuiter memchr memcpy mempcpy memset obstack pathmax quotearg realloc regex restrict stat-macros stdbool strcase strcspn strdup strnlen1 strpbrk strsep strstr xalloc xalloc-die xgetcwd
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_MODULES([alloca alloca-opt atexit closeout dirname error exclude exit exitfail extensions fnmatch fnmatch-gnu fpending getcwd getopt gettext gettext-h havelib inttostr lstat malloc mbchar mbuiter memchr memcpy mempcpy memset obstack pathmax quotearg realloc regex restrict stat-macros stdbool strcase strcspn strdup strnlen1 strpbrk strsep strstr xalloc xalloc-die xgetcwd])
 gl_AVOID([])
 gl_SOURCE_BASE([lib])
 gl_M4_BASE([m4])
+gl_DOC_BASE([doc])
 gl_TESTS_BASE([tests])
 gl_LIB([libgnu])
 gl_MACRO_PREFIX([gl])
+gl_AUTOCONF_MINVERSION([2.59])
