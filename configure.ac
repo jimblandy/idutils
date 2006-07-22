@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([idutils], [4.1], [bug-idutils@gnu.org])
+AC_INIT([idutils], [4.2], [bug-idutils@gnu.org])
 AC_GNU_SOURCE
 
 AM_INIT_AUTOMAKE
@@ -32,7 +32,7 @@ AM_GNU_GETTEXT
 # if HAVE_LINK, then in the code we look for file aliases
 # if HAVE_SBRK, then we can generate statistics on memory usage
 
-AC_CHECK_FUNCS([link sbrk])
+AC_CHECK_FUNCS([link sbrk lstat])
 
 AM_PATH_LISPDIR
 

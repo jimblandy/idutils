@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <unistd.h>
-#include <sys/stat.h>
+#include "lstat.h"
 #include <string.h>
 #include <strsep.h>
 #include <errno.h>

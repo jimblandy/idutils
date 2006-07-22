@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <getopt.h>
-#include <sys/stat.h>
+#include "lstat.h"
 #include <stddef.h>
 #include <unistd.h>
 #include <pathmax.h>

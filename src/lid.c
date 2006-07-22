@@ -604,7 +604,7 @@ get_editor_argv(char *fullstring, int* argc)
   *argc = 1;
   mark = fullstring;
 
-  while (mark = strchr(mark, ' ')) {
+  while ((mark = strchr(mark, ' '))) {
     (*argc)++;
     mark += strspn(mark, " ");
   }

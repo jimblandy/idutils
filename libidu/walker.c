@@ -18,7 +18,7 @@
 */
 
 #include <config.h>
-#include <sys/stat.h>
+#include "lstat.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -72,6 +72,14 @@ unsigned long dev_ino_hash_1 (void const *key);
 unsigned long dev_ino_hash_2 (void const *key);
 int dev_ino_hash_compare (void const *x, void const *y);
 int symlink_ancestry (struct file_link *flink);
+
+#ifndef HAVE_LSTAT
+#undef lstat
+int lstat(const char *filename, struct stat *sbuf)
+{
+  return stat(filename, sbuf);
+}
+#endif
 
 #if HAVE_LINK
 

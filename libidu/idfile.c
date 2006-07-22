@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strsep.h>
-#include <sys/stat.h>
+#include "lstat.h"
 #include <obstack.h>
 #include <error.h>
 
