@@ -79,7 +79,7 @@ int lstat(const char *filename, struct stat *sbuf)
 {
   return stat(filename, sbuf);
 }
-#endif
+#endif /* !HAVE_LSTAT */
 
 #if HAVE_LINK
 

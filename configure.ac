@@ -42,6 +42,8 @@ gl_INIT
 
 # Checks for header files.
 
+AC_CHECK_HEADERS([termios.h sys/ioctl.h termio.h sgtty.h])
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_C_INLINE

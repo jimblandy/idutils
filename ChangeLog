@@ -1,5 +1,6 @@
 2006-07-22  Claudio Fontana  <claudio@gnu.org>
 
+	* configure.ac: add header checks for terminal-related stuff.
 	* configure.ac: add check for lstat, bumped to 4.2
 
 	* libidu/idfile.c: replace include sys/stat.h with lstat.h.

@@ -189,7 +189,7 @@ static void *get_process_heap(void)
   return sbrk(0);
 #else
   return 0;
-#endif
+#endif /* HAVE_SBRK */
 }
 
 int
