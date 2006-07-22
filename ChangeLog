@@ -57,6 +57,10 @@
 	  with comments and quotation.
 	  Patch appended to patch #2775 by Madhu Gogulapati.
 
+2006-03-12  Claudio Fontana  <claudio@gnu.org>
+
+	version 4.1 released.
+	
 2006-03-05  Claudio Fontana  <claudio@gnu.org>
 
 	* src/lid.c::isnumber(): fixed bug in pattern recognition.
@@ -155,7 +159,10 @@
 	* src/*.c, libidu/*.c: enforce <> for system includes or their gnulib
 	  replacements, and "" for program specific headers
 
+2005-12-24  Claudio Fontana  <claudio@gnu.org>
 
+	version 4.0 released.
+	
 2005-12-15  Claudio Fontana  <claudio@gnu.org>
 	* src/mkid.c: tweak alloc-ed size of token signature to a minimum
 	  of 1 byte. Fixes assertion failure filed as savannah support request
