@@ -27,10 +27,12 @@ AC_FUNC_ALLOCA
 
 AM_GNU_GETTEXT
 
-# Use HAVE_LINK as discriminator between Unix systems and others
-AC_CHECK_FUNCS(link,
-  [AC_MSG_NOTICE([assuming Unix conventions])],
-  [AC_MSG_NOTICE([assuming non-Unix])])
+# check functions
+
+# if HAVE_LINK, then in the code we look for file aliases
+# if HAVE_SBRK, then we can generate statistics on memory usage
+
+AC_CHECK_FUNCS([link sbrk])
 
 AM_PATH_LISPDIR
 

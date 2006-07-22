@@ -1,5 +1,15 @@
 2006-07-22  Claudio Fontana  <claudio@gnu.org>
 
+	* configure.ac: add check for sbrk
+	* src/mkid.c (get_process_heap): new function.
+	  Calls sbrk() if available, or NULL if unsupported.
+
+	* src/mkid.c (report_statistics): (nochange)
+	  the reported heap usage is 0+0 if sbrk is
+	  not available.
+	
+2006-07-22  Claudio Fontana  <claudio@gnu.org>
+
 	upgraded gnulib.
 
 2006-07-22  Claudio Fontana  <claudio@gnu.org>

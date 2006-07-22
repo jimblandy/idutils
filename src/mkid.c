@@ -179,15 +179,24 @@ The following arguments apply to the language-specific scanners:\n\
   exit (0);
 }
 
-char const *heap_initial;
-char const *heap_after_walk;
-char const *heap_after_scan;
+void *heap_initial;
+void *heap_after_walk;
+void *heap_after_scan;
+
+static void *get_process_heap(void)
+{
+#if HAVE_SBRK
+  return sbrk(0);
+#else
+  return 0;
+#endif
+}
 
 int
 main (int argc, char **argv)
 {
   program_name = argv[0];
-  heap_initial = (char const *) sbrk (0);
+  heap_initial = get_process_heap();
   idh.idh_file_name = DEFAULT_ID_FILE_NAME;
 
 #if ENABLE_NLS
@@ -288,7 +297,7 @@ main (int argc, char **argv)
       if (flink)
 	walk_flink (flink, 0);
     }
-  heap_after_walk = (char const *) sbrk (0);
+  heap_after_walk = get_process_heap();
 
   mark_member_file_links (&idh);
   log_8_member_files = ceil_log_8 (idh.idh_member_file_table.ht_fill);
@@ -313,7 +322,7 @@ main (int argc, char **argv)
   if (idh.idh_member_file_table.ht_fill)
     {
       scan_files (&idh);
-      heap_after_scan = sbrk (0);
+      heap_after_scan = get_process_heap();
 
       free_summary_tokens ();
       free (token_table.ht_vec);
