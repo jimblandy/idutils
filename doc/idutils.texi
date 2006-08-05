@@ -62,7 +62,6 @@ license to the document, as described in section 6 of the license.
 @author Tom Horsley
 @end titlepage
 
-@ifinfo
 @c ************* gkm *********************************************************
 @node Top
 @top ID utilities
@@ -81,7 +80,6 @@ This manual documents version @value{VERSION} of the ID utilities.
 * Past and Future::             History and future directions.
 * Index::                       General index.
 @end menu
-@end ifinfo
 
 @c ************* gkm *********************************************************
 @node Introduction
