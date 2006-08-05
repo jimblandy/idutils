@@ -1,3 +1,7 @@
+2006-08-05  Claudio Fontana  <claudio@gnu.org>
+
+	version 4.2 released.
+	
 2006-07-22  Claudio Fontana  <claudio@gnu.org>
 
 	* configure.ac: add header checks for terminal-related stuff.
