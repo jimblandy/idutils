@@ -419,7 +419,7 @@ scanners, and examine their language-specific options by invoking
 
 @menu
 * Language map::                Mapping file names to source languages.
-* C/C++/Java scanner::          For the C, C++ and Java programming languages.
+* C/Cpp/Java scanner::          For the C, C++ and Java programming languages.
 * Assembler scanner::           For assembly language.
 * Text scanner::                For documents or other non-source code.
 * Perl scanner::                For Perl language (experimental).
@@ -511,8 +511,8 @@ with the ID utilities:
 @end example
 
 @c ************* gkm *********************************************************
-@node C/C++/Java scanner
-@subsection C/C++/Java Language Scanner
+@node C/Cpp/Java scanner
+@subsection C/Cpp/Java Language Scanner
 
 @cindex C scanner, predefined
 
