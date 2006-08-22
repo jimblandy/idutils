@@ -18,6 +18,7 @@
 @syncodeindex pg cp
 @syncodeindex vr cp
 
+@ifinfo
 @format
 START-INFO-DIR-ENTRY
 * ID database: (idutils).              Identifier database utilities.
@@ -28,6 +29,7 @@ START-INFO-DIR-ENTRY
 * xtokid: (idutils)xtokid invocation.  Testing mkid scanners.
 END-INFO-DIR-ENTRY
 @end format
+@end ifinfo
 
 @copying
 This file documents the @file{idutils} database utilities.
@@ -1079,7 +1081,7 @@ which defines a GNU Emacs interface to @code{gid}.  To install it, put
 @code{load-path}) and put
 
 @example
-(autoload 'gid "gid" nil t)
+(autoload 'gid "idutils" nil t)
 @end example
 
 @noindent in one of Emacs' initialization files, e.g., @file{~/.emacs}.
