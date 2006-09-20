@@ -1,6 +1,7 @@
 #! /bin/sh
 
-# distribute-gnu.sh - upload file for distribution to gnu ftp site and mirrors.
+# distribute-gnu.sh version 0.2
+# upload file for distribution to gnu ftp site and mirrors.
 # Copyright (C) 2006 Free Software Foundation, Inc.
 # Written by Claudio Fontana <claudio@gnu.org>, 2006.
 #
@@ -23,8 +24,10 @@
 # gpg
 # ftp
 #
+# Ensure that you have them reachable through PATH before running this script.
+#
 # This script also assumes that you already generated/registered your key
-# for the ftp uploads (see link below).
+# for the ftp uploads.
 #
 # For more information about the procedure see the
 # "Information for maintainers of GNU software"
@@ -32,7 +35,7 @@
 # http://www.gnu.org/prep/maintain/
 
 as_me=`basename ${0}`
-PACKAGE_VERSION=distribute-gnu-0.0
+PACKAGE_VERSION=distribute-gnu-0.1
 
 if test $# -lt 1 ; then
    echo "$as_me: insufficient arguments. Try --help" >&2
@@ -56,6 +59,7 @@ do
 	case $ARG in
 	    -h | --help)
 		echo "Usage: $as_me [OPTIONS] DIRECTORY FILENAME"
+		echo "Example: $as_me gnupod gnupod-0.28.tar.gz"
 		echo " "
 		echo "OPTIONS:"
 		echo "-h, --help                 this help"
@@ -147,7 +151,7 @@ if test "x$DIRECTORY" = "x" ; then
 fi
 
 if test "x$PACKAGE" = "x" ; then
-    echo "$as_me: missing required PACKAGE argument." >&2
+    echo "$as_me: missing required FILENAME argument." >&2
     exit 2
 fi
 
