@@ -1632,14 +1632,14 @@ get_token_lisp (FILE *in_FILE, void const *args, int *flags)
       } while ( (c != EOF) && (c != '\n'));
       goto top;
       
-    case '"':				/* string with or without ansi-C escapes */
+    case '"':				/* string with/without ansi-C escapes*/
     string:
       do {
 	c = getc (in_FILE);
 	if (c == '\\')
 	  {
 	    c = getc (in_FILE);
-	    continue;
+	    goto string;
 	  }
       } while ( (c != EOF) && (c != '"'));
       goto top;
