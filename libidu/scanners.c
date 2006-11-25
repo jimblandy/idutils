@@ -1643,7 +1643,19 @@ get_token_lisp (FILE *in_FILE, void const *args, int *flags)
 	  }
       } while ( (c != EOF) && (c != '"'));
       goto top;
-      
+
+    case '?':			/* character constant */
+    cconstant:
+      do {
+	c = getc(in_FILE);
+	if (c == '\\')
+	  {
+	    c = getc(in_FILE);
+	    goto cconstant;
+	  }
+      } while (c != EOF && is_IDENT(c));
+    goto top;
+
     case '.':
     case '+': case '-':
       id = scanner_buffer;
