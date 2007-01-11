@@ -1,4 +1,18 @@
-idutils TODO - Future directions
+idutils TODO - from Claudio Fontana
+
+* New experimental scanners (java, lisp, perl, [python])
+  - build missing testcases
+  - generally, make more robust
+  - fix and integrate Python-support patch #5358
+  - fix bug #18372 and generally make Lisp scanner less prone to cause crashes
+  - Perl scanner: do not index language keywords and such (also Python)
+
+* Other tasks
+  - investigate possible problems with signed/unsigned comparisons
+    and data types (task #4909)
+  - xemacs support (task #5702)
+  
+idutils TODO - Future directions from previous maintainers
 
 * General
   - Add comments to all substantive functions
