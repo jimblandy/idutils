@@ -1,6 +1,11 @@
 ## Process this file with automake to create Makefile.in
 
-TESTS = consistency
+TESTS = \
+  consistency \
+  infloop-kawa-el
+
+TESTS_ENVIRONMENT = \
+  PATH="$(abs_builddir)/../src$(PATH_SEPARATOR)$$PATH"
 
 EXTRA_DIST = $(TESTS) single_file_token_bug.c
 

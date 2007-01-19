@@ -1,3 +1,14 @@
+2007-01-19  Jim Meyering  <jim@meyering.net>
+
+	Temporary fix simply to avoid the infloop.
+	* libidu/scanners.c (get_token_lisp): Disable the code that
+	treats '[]' as part of a kawa identifier.  It could call ungetc
+	two or three times in a row.  One is the maximum.
+	* testsuite/infloop-kawa-el: New file.  Test for the above.
+	* testsuite/Makefile.am (TESTS): Add infloop-kawa-el.
+	(TESTS_ENVIRONMENT): Prepend build directory to PATH so that
+	invoking e.g., "mkid" runs the just-built version of the tool.
+
 2006-11-25  Claudio Fontana  <claudio@gnu.org>
 
 	* libidu/scanners.c (get_token_lisp): provide rough support for
