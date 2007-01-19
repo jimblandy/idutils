@@ -18,7 +18,7 @@
 
 	* libidu/scanners.c (get_token_lisp): (tiny) fix bug in double
 	  quoted string parsing (fix provided by Walter Sosa).
-	
+
 2006-08-22  Claudio Fontana  <claudio@gnu.org>
 
 	* doc/idutils.texi: fix wrong example .emacs entry, where
@@ -27,7 +27,7 @@
 2006-08-05  Claudio Fontana  <claudio@gnu.org>
 
 	version 4.2 released.
-	
+
 2006-07-22  Claudio Fontana  <claudio@gnu.org>
 
 	* configure.ac: add header checks for terminal-related stuff.
@@ -44,7 +44,7 @@
 2006-07-22  Claudio Fontana  <claudio@gnu.org>
 
 	* configure.ac: add check for sbrk
-	
+
 	* src/mkid.c (get_process_heap): new function.
 	  Calls sbrk() if available, or NULL if unsupported.
 
@@ -69,7 +69,7 @@
 2006-07-06  Claudio Fontana  <claudio@gnu.org>
 
 	* src/Makefile.in: regenerated.
-	* src/mkid.c: remove useless (and wrong) const. 
+	* src/mkid.c: remove useless (and wrong) const.
 
 2006-06-26  Claudio Fontana  <claudio@gnu.org>
 
@@ -83,7 +83,7 @@
 2006-03-12  Claudio Fontana  <claudio@gnu.org>
 
 	version 4.1 released.
-	
+
 2006-03-05  Claudio Fontana  <claudio@gnu.org>
 
 	* src/lid.c::isnumber(): fixed bug in pattern recognition.
@@ -104,7 +104,7 @@
 
 	* libidu/scanners.c: integrated a lisp+java support patch,
 	  based on the original work by Edouard G. Parmelan
-	
+
 2006-01-11  Claudio Fontana  <claudio@gnu.org>
 
 	* lib/fnmatch.c, lib/fnmatch_loop.c: included workaround for a
@@ -185,7 +185,7 @@
 2005-12-24  Claudio Fontana  <claudio@gnu.org>
 
 	version 4.0 released.
-	
+
 2005-12-15  Claudio Fontana  <claudio@gnu.org>
 	* src/mkid.c: tweak alloc-ed size of token signature to a minimum
 	  of 1 byte. Fixes assertion failure filed as savannah support request
