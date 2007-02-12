@@ -1,4 +1,4 @@
-/* Copyright (C) 1991,1992,1993,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006
+/* Copyright (C) 1991,1992,1993,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007
 	Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
@@ -15,7 +15,7 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  */
 
-#ifdef HAVE_CONFIG_H
+#ifndef _LIBC
 # include <config.h>
 #endif
 
@@ -40,15 +40,14 @@
 #include <string.h>
 
 #define WIDE_CHAR_SUPPORT \
-  (HAVE_WCTYPE_H && HAVE_WCHAR_H && HAVE_BTOWC \
+  (HAVE_WCTYPE_H && HAVE_BTOWC && HAVE_ISWCTYPE \
    && HAVE_WMEMCHR && (HAVE_WMEMCPY || HAVE_WMEMPCPY))
 
 /* For platform which support the ISO C amendement 1 functionality we
    support user defined character classes.  */
 #if defined _LIBC || WIDE_CHAR_SUPPORT
-/* Solaris 2.5 has a bug: <wchar.h> must be included before <wctype.h>.  */
-# include <wchar.h>
 # include <wctype.h>
+# include <wchar.h>
 #endif
 
 /* We need some of the locale data (the collation sequence information)

@@ -50,8 +50,6 @@ MOSTLYCLEANFILES += alloca.h alloca.h-t
 
 ## begin gnulib module dirname
 
-libgnu_a_SOURCES += basename.c stripslash.c
-
 ## end   gnulib module dirname
 
 ## begin gnulib module exit

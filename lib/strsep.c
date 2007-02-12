@@ -1,4 +1,4 @@
-/* Copyright (C) 2004 Free Software Foundation, Inc.
+/* Copyright (C) 2004, 2007 Free Software Foundation, Inc.
 
    Written by Yoann Vandoorselaere <yoann@prelude-ids.org>.
 
@@ -21,11 +21,7 @@
 #endif
 
 /* Specification.  */
-#include "strsep.h"
-
 #include <string.h>
-
-#include "strpbrk.h"
 
 char *
 strsep (char **stringp, const char *delim)
@@ -33,19 +29,26 @@ strsep (char **stringp, const char *delim)
   char *start = *stringp;
   char *ptr;
 
-  if (!start)
+  if (start == NULL)
     return NULL;
 
-  if (!*delim)
-    ptr = start + strlen (start);
-  else
+  /* Optimize the case of no delimiters.  */
+  if (delim[0] == '\0')
     {
-      ptr = strpbrk (start, delim);
-      if (!ptr)
-	{
-	  *stringp = NULL;
-	  return start;
-	}
+      *stringp = NULL;
+      return start;
+    }
+
+  /* Optimize the case of one delimiter.  */
+  if (delim[1] == '\0')
+    ptr = strchr (start, delim[0]);
+  else
+    /* The general case.  */
+    ptr = strpbrk (start, delim);
+  if (ptr == NULL)
+    {
+      *stringp = NULL;
+      return start;
     }
 
   *ptr = '\0';

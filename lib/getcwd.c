@@ -1,4 +1,4 @@
-/* Copyright (C) 1991,92,93,94,95,96,97,98,99,2004,2005,2006 Free Software
+/* Copyright (C) 1991,92,93,94,95,96,97,98,99,2004,2005,2006,2007 Free Software
    Foundation, Inc.
    This file is part of the GNU C Library.
 
@@ -16,11 +16,8 @@
    with this program; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #if !_LIBC
+# include <config.h>
 # include "getcwd.h"
 #endif
 
@@ -52,8 +49,6 @@
 # ifndef mempcpy
 #  define mempcpy __mempcpy
 # endif
-#else
-# include "mempcpy.h"
 #endif
 
 #include <limits.h>
@@ -100,6 +95,11 @@
 # define __opendir opendir
 # define __readdir readdir
 #endif
+
+/* The results of opendir() in this file are not used with dirfd and fchdir,
+   therefore save some unnecessary recursion in fchdir.c.  */
+#undef opendir
+#undef closedir
 
 /* Get the name of the current working directory, and put it in SIZE
    bytes of BUF.  Returns NULL if the directory couldn't be determined or
@@ -140,13 +140,18 @@ __getcwd (char *buf, size_t size)
   size_t allocated = size;
   size_t used;
 
-#if HAVE_PARTLY_WORKING_GETCWD && !defined AT_FDCWD
+#if HAVE_PARTLY_WORKING_GETCWD
   /* The system getcwd works, except it sometimes fails when it
      shouldn't, setting errno to ERANGE, ENAMETOOLONG, or ENOENT.  If
      AT_FDCWD is not defined, the algorithm below is O(N**2) and this
      is much slower than the system getcwd (at least on GNU/Linux).
      So trust the system getcwd's results unless they look
-     suspicious.  */
+     suspicious.
+
+     Use the system getcwd even if we have openat support, since the
+     system getcwd works even when a parent is unreadable, while the
+     openat-based approach does not.  */
+
 # undef getcwd
   dir = getcwd (buf, size);
   if (dir || (errno != ERANGE && !is_ENAMETOOLONG (errno) && errno != ENOENT))

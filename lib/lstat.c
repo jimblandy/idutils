@@ -19,9 +19,7 @@
 
 /* written by Jim Meyering */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
+#include <config.h>
 
 /* The specification of these functions is in sys_stat.h.  But we cannot
    include this include file here, because on some systems, a
@@ -32,8 +30,6 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <errno.h>
-
-#include "stat-macros.h"
 
 /* lstat works differently on Linux and Solaris systems.  POSIX (see
    `pathname resolution' in the glossary) requires that programs like
