@@ -40,8 +40,17 @@
 #if defined _LIBC
 # include <bits/libc-lock.h>
 #else
+# if defined __libc_lock_init
+#  undef __libc_lock_init
+# endif
 # define __libc_lock_init(NAME) do { } while (0)
+# if defined __libc_lock_lock
+#  undef __libc_lock_lock
+# endif
 # define __libc_lock_lock(NAME) do { } while (0)
+# if defined __libc_lock_unlock
+#  undef __libc_lock_unlock
+# endif
 # define __libc_lock_unlock(NAME) do { } while (0)
 #endif
 

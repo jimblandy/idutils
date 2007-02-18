@@ -1,6 +1,13 @@
+2007-02-19  Pedro J. Ruiz Lopez  <holzplatten@es.gnu.org>
+
+	* Upgraded gnulib.
+	* Upgraded gettext.
+
+	* lib/regex_internal.h: fix warnings about redefined cpp macros.
+
 2007-01-19  Jim Meyering  <jim@meyering.net>
 
-	Temporary fix simply to avoid the infloop.
+	temporary fix simply to avoid the infloop.
 	* libidu/scanners.c (get_token_lisp): Disable the code that
 	treats '[]' as part of a kawa identifier.  It could call ungetc
 	two or three times in a row.  One is the maximum.
