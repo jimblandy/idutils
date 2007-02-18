@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU mkid 3.0.8\n"
 "Report-Msgid-Bugs-To: bug-idutils@gnu.org\n"
-"POT-Creation-Date: 2006-07-22 04:46+0200\n"
+"POT-Creation-Date: 2007-02-18 19:20+0100\n"
 "PO-Revision-Date: 1996-03-23 22:34 MET\n"
 "Last-Translator: Karl Eichwalder <ke@ke.Central.DE>\n"
 "Language-Team: German <de@li.org>\n"
@@ -330,13 +330,6 @@ msgstr ""
 msgid ""
 "\n"
 "Report bugs to "
-msgstr ""
-
-#: src/fid.c:93 src/fnid.c:83 src/lid.c:287 src/mkid.c:178 src/xtokid.c:87
-#, c-format
-msgid ""
-"\n"
-"\n"
 msgstr ""
 
 #: src/fid.c:149
