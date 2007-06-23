@@ -1,5 +1,5 @@
 ;;; idutils.el -- emacs interface to `lid -R grep', a.k.a. `gid'
-;;; Copyright (C) 1995, 1996, 2006 Free Software Foundation, Inc.
+;;; Copyright (C) 1995, 1996, 2006, 2007 Free Software Foundation, Inc.
 ;;; Greg McGary <gkm@gnu.ai.mit.edu>.
 
 ;; This file is part of GNU idutils.
@@ -32,9 +32,20 @@
 ;;; them in your .emacs file.
 
 (require 'compile)
-(provide 'idutils)
+(require 'thingatpt)
 
 (defvar gid-command "gid" "The command run by the gid function.")
+
+(defvar gid-mode-font-lock-keywords
+  '(("^\\(Compilation\\|Gid\\) started.*"
+     (0 '(face nil message nil help-echo nil mouse-face nil) t))))
+
+(defvar gid-use-search-in-buffer-name t
+  "If non-nil, use the search string in the gid buffer's name.")
+
+(define-compilation-mode gid-mode "Gid"
+  "Specialization of compilation-mode for use with gid."
+  nil)
 
 (defun gid (args)
   "Run gid, with user-specified ARGS, and collect output in a buffer.
@@ -42,22 +53,16 @@ While gid runs asynchronously, you can use the \\[next-error] command to
 find the text that gid hits refer to. The command actually run is
 defined by the gid-command variable."
   (interactive (list (read-input
-     (concat "Run " gid-command " (with args): ") (word-around-point))))
+     (concat "Run " gid-command " (with args): ") (thing-at-point 'symbol))))
   (let (compile-command
 	(compilation-error-regexp-alist grep-regexp-alist)
-	(compilation-buffer-name-function '(lambda (mode)
-					     (concat "*" gid-command " " args "*"))))
-    ;; For portability to v19, use compile rather than compile-internal.
-    (compile (concat gid-command " " args))))
+	(compilation-directory default-directory)
+	(gid-full-buffer-name (concat "*gid-" args "*")))
+    (save-some-buffers (not compilation-ask-about-save) nil)
+    (compilation-start (concat gid-command " " args) 'gid-mode
+		       (when gid-use-search-in-buffer-name
+			 (function (lambda (ignore)
+				     gid-full-buffer-name)))
+		       (regexp-quote args))))
 
-(defun word-around-point ()
-  "Return the word around the point as a string."
-  (save-excursion
-    (if (not (eobp))
-	(forward-char 1))
-    (forward-word -1)
-    (forward-word 1)
-    (forward-sexp -1)
-    (buffer-substring (point) (progn
-				(forward-sexp 1)
-				(point)))))
+(provide 'idutils)
