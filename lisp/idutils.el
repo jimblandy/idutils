@@ -37,7 +37,7 @@
 (defvar gid-command "gid" "The command run by the gid function.")
 
 (defvar gid-mode-font-lock-keywords
-  '(("^\\(Compilation\\|Gid\\) started.*"
+  '(("^\\(Compilation\\|Gid\\) \\(started\\|finished\\).*"
      (0 '(face nil message nil help-echo nil mouse-face nil) t))))
 
 (defvar gid-use-search-in-buffer-name t
