@@ -1,7 +1,7 @@
 2007-06-26  Tom Tromey  <tromey@redhat.com>
 
-	* lisp/idutils.el (gid-mode-font-lock-keywords): Also match
-	"finished".
+	Don't treat the last line in the gid buffer as a match.
+	* lisp/idutils.el (gid-mode-font-lock-keywords): Also match "finished".
 
 2007-06-19  Tom Tromey  <tromey@redhat.com>
 
