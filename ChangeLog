@@ -1,3 +1,8 @@
+2007-07-11  Jim Meyering  <jim@meyering.net>
+
+	Ensure that idutils.el's "Version:" comment stays up to date.
+	* Makefile.am (distcheck-hook): New rule.
+
 2007-07-10  Tom Tromey  <tromey@redhat.com>
 
 	Adjust idutils.el comments to work with package.el.
