@@ -1,6 +1,8 @@
-;;; idutils.el -- emacs interface to `lid -R grep', a.k.a. `gid'
+;;; idutils.el --- emacs interface to `lid -R grep', a.k.a. `gid'
 ;;; Copyright (C) 1995, 1996, 2006, 2007 Free Software Foundation, Inc.
 ;;; Greg McGary <gkm@gnu.ai.mit.edu>.
+
+;; Version: 4.2
 
 ;; This file is part of GNU idutils.
 
@@ -47,6 +49,7 @@
   "Specialization of compilation-mode for use with gid."
   nil)
 
+;;;###autoload
 (defun gid (args)
   "Run gid, with user-specified ARGS, and collect output in a buffer.
 While gid runs asynchronously, you can use the \\[next-error] command to
@@ -66,3 +69,5 @@ defined by the gid-command variable."
 		       (regexp-quote args))))
 
 (provide 'idutils)
+
+;;; idutils.el ends here

@@ -1,3 +1,9 @@
+2007-07-10  Tom Tromey  <tromey@redhat.com>
+
+	Adjust idutils.el comments to work with package.el.
+	* lisp/idutils.el: Fix comments.
+	(gid): Add autoload comment.
+
 2007-06-26  Tom Tromey  <tromey@redhat.com>
 
 	Don't treat the last line in the gid buffer as a match.
