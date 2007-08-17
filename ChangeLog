@@ -1,3 +1,9 @@
+2007-08-18  Pedro J. Ruiz Lopez  <holzplatten@es.gnu.org>
+
+	* License upgrade to "GPL-3 or later".
+
+	* po/pl.po: new version of this file.
+
 2007-07-11  Jim Meyering  <jim@meyering.net>
 
 	Ensure that idutils.el's "Version:" comment stays up to date.
