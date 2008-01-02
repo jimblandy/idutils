@@ -1,6 +1,8 @@
 ;;; idutils.el --- emacs interface to `lid -R grep', a.k.a. `gid'
-;;; Copyright (C) 1995, 1996, 2006, 2007 Free Software Foundation, Inc.
+;;; Copyright (C) 1995, 1996, 2006-2008 Free Software Foundation, Inc.
 ;;; Greg McGary <gkm@gnu.ai.mit.edu>.
+
+;; Version: 4.2.90
 
 ;; This file is part of GNU idutils.
 
