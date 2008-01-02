@@ -333,7 +333,7 @@ main (int argc, char **argv)
 	report_statistics ();
     }
   else
-    error (0, 0, "nothing to do");
+    error (0, 0, _("nothing to do"));
 
   exit (0);
 }

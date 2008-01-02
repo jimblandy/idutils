@@ -570,7 +570,7 @@ report_grep (char const *name, struct file_link **flinkv)
       source_FILE = fopen (file_name, "r");
       if (source_FILE == 0)
 	{
-	  error (0, errno, "can't open `%s'", file_name);
+	  error (0, errno, _("can't open `%s'"), file_name);
 	  continue;
 	}
 
@@ -581,7 +581,8 @@ report_grep (char const *name, struct file_link **flinkv)
 	    {
 	      int regexec_errno = regexec (&compiled, line, 0, 0, 0);
 	      if (regexec_errno == REG_ESPACE)
-		error (1, 0, "can't match regular-expression: memory exhausted");
+		error (1, 0,
+		       _("can't match regular-expression: memory exhausted"));
 	      else if (regexec_errno)
 		continue;
 	    }

@@ -491,7 +491,7 @@ void
 include_languages (char *lang_names)
 {
   if (langs_excluded)
-    error (1, 0, "can't mix --include and --exclude options");
+    error (1, 0, _("can't mix --include and --exclude options"));
   langs_included = append_strings_to_vector (langs_included, lang_names, white_space);
 }
 
@@ -499,7 +499,7 @@ void
 exclude_languages (char *lang_names)
 {
   if (langs_excluded)
-    error (1, 0, "can't mix --include and --exclude options");
+    error (1, 0, _("can't mix --include and --exclude options"));
   langs_excluded = append_strings_to_vector (langs_excluded, lang_names, white_space);
 }
 
