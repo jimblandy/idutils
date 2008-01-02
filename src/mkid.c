@@ -580,8 +580,10 @@ write_id_file (struct idhead *idhp)
 
   if (verbose_flag)
     printf (_("Sorting tokens...\n"));
+
   assert (summary_root->sum_hits_count == token_table.ht_fill);
-  tokens = xrealloc (summary_root->sum_tokens, sizeof(struct token *) * token_table.ht_fill);
+  tokens = xnrealloc (summary_root->sum_tokens,
+		      token_table.ht_fill, sizeof *tokens);
   qsort (tokens, token_table.ht_fill, sizeof (struct token *), token_qsort_cmp);
 
   if (verbose_flag)
@@ -781,12 +783,13 @@ struct summary *
 make_sibling_summary (struct summary *summary)
 {
   struct summary *parent = summary->sum_parent;
-  unsigned long size;
+  size_t size;
 
   if (parent == NULL)
     {
       levels++;
-      summary_root = summary->sum_parent = parent = xcalloc (1, sizeof(struct summary));
+      summary_root = summary->sum_parent = parent
+	= xcalloc (1, sizeof(struct summary));
       parent->sum_level = levels;
       parent->sum_kids[0] = summary;
       parent->sum_hits_count = summary->sum_hits_count;
@@ -800,7 +803,8 @@ make_sibling_summary (struct summary *summary)
       else
 	{
 	  parent->sum_tokens_size = size;
-	  parent->sum_tokens = xrealloc (summary->sum_tokens, sizeof(struct token *) * size);
+	  parent->sum_tokens = xnrealloc (summary->sum_tokens, size,
+					  sizeof *summary->sum_tokens);
 	}
       summary->sum_tokens = 0;
     }
@@ -928,12 +932,12 @@ sign_token (struct token *token)
 void
 add_token_to_summary (struct summary *summary, struct token *token)
 {
-  unsigned long size = summary->sum_tokens_size;
+  size_t size = summary->sum_tokens_size;
 
   if (summary->sum_hits_count >= size)
     {
-      size *= 2;
-      summary->sum_tokens = xrealloc (summary->sum_tokens, sizeof(struct token *) * size);
+      summary->sum_tokens = x2nrealloc (summary->sum_tokens, &size,
+					sizeof *summary->sum_tokens);
       summary->sum_tokens_size = size;
     }
   summary->sum_tokens[summary->sum_hits_count++] = token;
