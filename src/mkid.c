@@ -40,8 +40,6 @@
 #include "scanners.h"
 #include "iduglobal.h"
 
-char* dirname(char* path);
-
 struct summary
 {
   struct token **sum_tokens;
