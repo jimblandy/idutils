@@ -1,5 +1,5 @@
 /* idx.c -- simple interface for testing scanners scanners
-   Copyright (C) 1986, 1995, 1996, 1999, 2007 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 1999, 2007-2008 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -76,7 +76,7 @@ Print all tokens found in a source file.\n\
   -x, --exclude=LANGS     exclude languages in LANGS\n\
   -l, --lang-option=L:OPT pass OPT as a default for language L (see below)\n\
   -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source language\n\
-  -d, --default-lang=LANG make LANG the default source language\n\
+  -d, --default-lang=LANG  make LANG the default source language\n\
   -p, --prune=NAMES       exclude the named files and/or directories\n\
       --help              display this help and exit\n\
       --version           output version information and exit\n\

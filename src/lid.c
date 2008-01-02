@@ -1,5 +1,6 @@
 /* lid.c -- primary query interface for mkid database
-   Copyright (C) 1986, 1995, 1996, 1999, 2000, 2007 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995-1996, 1999-2000, 2007-2008 Free Software
+   Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -265,7 +266,7 @@ matched identifier followed by the list of file names in which it occurs.\n\
 \n\
   -k, --key=STYLE       STYLE is one of `token', `pattern' or `none'\n\
   -R, --result=STYLE    STYLE is one of `filenames', `grep', `edit' or `none'\n\
-  -S, --separator=STYLE STYLE is one of `braces', `space' or `newline' and\n\
+  -S, --separator=STYLE  STYLE is one of `braces', `space' or `newline' and\n\
                         only applies to file names when `--result=filenames'\n\
             The above STYLE options control how query results are presented.\n\
             Defaults are --key=token --result=filenames --separator=%s\n\
