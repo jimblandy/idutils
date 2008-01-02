@@ -254,7 +254,7 @@
 	  help.
 
 2005-05-31  Claudio Fontana  <sick_soul@users.sourceforge.net>
-        * configure.in: moved to configure.ac
+	* configure.in: moved to configure.ac
 	* configure.ac (new file): rewritten using gnulib and new macros
 	* Makefile.am: all makefiles revisited
 
@@ -522,10 +522,10 @@ Tue Aug  6 22:46:16 1996  Greg McGary  <gkm@g2>
 	* Version 3.2 released
 
 	* src/fid.c (get_file_index): rename shadowing local decl of
- 	file_name.
+	file_name.
 
 	* src/lid.c (report_edit): post decrement argv when splicing in
- 	ed_arg_buffer.
+	ed_arg_buffer.
 
 	* src/xtokid.c, libidu/idfile.h: #include "xstring.h" to avoid
 	redeclaration of basename/dirname error.
@@ -539,7 +539,7 @@ Sun Jun 30 13:06:18 1996  Greg McGary  <gkm@g2>
 	* src/lid.c (get_query_func): remove unreachable return stmt.
 
 	* libidu/hash.h (HASH_VACANT): cast item to (void *) for
- 	comparison.
+	comparison.
 
 	* libidu/walker.c (append_strings_to_vector): check length of
 	vector_0, not vector.
@@ -548,13 +548,13 @@ Sun Jun 30 13:06:18 1996  Greg McGary  <gkm@g2>
 	cast return type of obstack_finish.
 
 	* src/lid.c (radix, delimiter_style, pattern_style, key_style,
- 	result_style, key_style, result_style) libidu/idfile.h
- 	(separator_style): remove trailing comma from enum list.
+	result_style, key_style, result_style) libidu/idfile.h
+	(separator_style): remove trailing comma from enum list.
 
 	* src/xtokid.c: removed include of string.h.
 
 	* src/lid.c (savetty, restoretty, linetty, chartty): define stub
- 	versions if no UNIXy tty control is available.
+	versions if no UNIXy tty control is available.
 
 Wed Jun 12 22:15:12 1996  Greg McGary  <gkm@g2>
 
@@ -566,7 +566,7 @@ Mon Jun 10 15:29:19 1996  Greg McGary  <gkm@g2>
 	* src/mkid.c (main): -v implies -s; handle the case where there's
 	nothing to do.
 	* libidu/walker.c (get_lang_args): test lang_args_default before
- 	dereference.
+	dereference.
 
 Sun Jun  9 23:46:53 1996  Greg McGary  <gkm@g2>
 
@@ -639,7 +639,7 @@ Mon Feb 20 16:18:47 1995  Greg McGary  <gkm@magilla.cichlid.com>
 
 Sun Feb 19 19:21:09 1995  Thomas Neumann  <tom@smart.ruhr.de>
 
- 	* configure.in: Check for <sgtty.h>, not <sgttyb.h>.
+	* configure.in: Check for <sgtty.h>, not <sgttyb.h>.
 	* accconfig.h: Disbale HAVE_TERMIOS_H for NeXT,
 	if HAVE_SGTTY_H is present.
 	* lid.c: Depend on HAVE_SGTTY_H, not HAVE_SGTTYB_H.
