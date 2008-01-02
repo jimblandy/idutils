@@ -1,5 +1,5 @@
 /* hash.c -- hash table maintenance
-   Copyright (C) 1995, 1999, 2007 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1999, 2007-2008 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -46,7 +46,7 @@ hash_init (struct hash_table* ht, unsigned long size,
 {
   ht->ht_size = round_up_2 (size);
   ht->ht_empty_slots = ht->ht_size;
-  ht->ht_vec = (void**) xcalloc (ht->ht_size, sizeof(struct token *));
+  ht->ht_vec = xcalloc (ht->ht_size, sizeof(struct token *));
   if (ht->ht_vec == 0)
     error (1, 0, _("can't allocate %ld bytes for hash table: memory exhausted"),
 	   ht->ht_size * sizeof(struct token *));
@@ -244,7 +244,7 @@ hash_rehash (struct hash_table* ht)
       ht->ht_capacity = ht->ht_size - (ht->ht_size >> 4);
     }
   ht->ht_rehashes++;
-  ht->ht_vec = (void **) xcalloc (ht->ht_size, sizeof(struct token *));
+  ht->ht_vec = xcalloc (ht->ht_size, sizeof(struct token *));
 
   for (ovp = old_vec; ovp < &old_vec[old_ht_size]; ovp++)
     {
