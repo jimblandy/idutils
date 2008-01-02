@@ -1,5 +1,5 @@
 /* scanners.c -- file & directory name manipulations
-   Copyright (C) 1986, 1995, 1996, 1999, 2000, 2007
+   Copyright (C) 1986, 1995, 1996, 1999, 2000, 2007-2008
    Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
@@ -27,7 +27,6 @@
 #include <unistd.h>
 #include "lstat.h"
 #include <string.h>
-#include <strsep.h>
 #include <errno.h>
 #include <xalloc.h>
 #include <error.h>

@@ -1,5 +1,5 @@
 /* idfile.c -- read & write mkid database file header
-   Copyright (C) 1986, 1995, 1996, 1999, 2000, 2007
+   Copyright (C) 1986, 1995, 1996, 1999, 2000, 2007-2008
    Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
@@ -22,7 +22,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strsep.h>
 #include "lstat.h"
 #include <obstack.h>
 #include <error.h>
