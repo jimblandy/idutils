@@ -5,6 +5,7 @@ TESTS = \
   infloop-kawa-el
 
 TESTS_ENVIRONMENT = \
+  abs_top_srcdir='$(abs_top_srcdir)'		\
   PATH="$(abs_builddir)/../src$(PATH_SEPARATOR)$$PATH"
 
 EXTRA_DIST = $(TESTS) single_file_token_bug.c

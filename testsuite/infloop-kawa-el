@@ -47,7 +47,8 @@ fi
 
 fail=0
 
-mkid f.el > out || fail=1
+lang_map="$abs_top_srcdir/libidu/id-lang.map"
+mkid -m "$lang_map" f.el > out || fail=1
 aid -R none b >> out || fail=1
 
 cmp out exp || fail=1
