@@ -23,4 +23,3 @@ AM_CPPFLAGS = -I$(top_srcdir)/lib \
 idudir = $(datadir)
 idu_DATA = id-lang.map
 EXTRA_DIST = $(idu_DATA)
-

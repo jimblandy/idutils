@@ -1,8 +1,17 @@
 ## Process this file with automake to produce Makefile.in
 
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = m4 intl lib libidu src lisp doc testsuite po
-EXTRA_DIST = README-alpha config.rpath mkinstalldirs autogen.sh
+SUBDIRS = lib libidu src lisp doc testsuite po gnulib-tests
+EXTRA_DIST = \
+  .prev-version \
+  .x-sc_cast_of_argument_to_free \
+  .x-sc_require_config_h \
+  GNUmakefile \
+  Makefile.cfg \
+  Makefile.maint \
+  bootstrap \
+  bootstrap.conf \
+  build-aux/vc-list-files
 
 # When the version number is composed of only digits and "."s,
 # ensure that it matches the "Version:" comment in idutils.el.

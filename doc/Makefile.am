@@ -2,6 +2,4 @@
 
 info_TEXINFOS = idutils.texi
 
-EXTRA_DIST = texinfo.tex
-
 DISTCLEANFILES = idutils.fl

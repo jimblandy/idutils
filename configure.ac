@@ -1,31 +1,25 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.59)
-AC_INIT([idutils], [cvs], [bug-idutils@gnu.org])
-AC_GNU_SOURCE
+AC_PREREQ(2.61)
+AC_INIT([idutils], m4_esyscmd([build-aux/git-version-gen .version]),
+	[bug-idutils@gnu.org])
 
-AM_INIT_AUTOMAKE
-AM_MAINTAINER_MODE
+AC_CONFIG_AUX_DIR(build-aux)
+AM_INIT_AUTOMAKE([1.10])
 
-AC_CONFIG_SRCDIR([config.h.in])
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_SRCDIR([src/mkid.c])
+AC_CONFIG_HEADERS([lib/config.h:lib/config.hin])
 
 # Checks for programs.
-AC_PROG_CC
-gl_EARLY
-
+AC_PROG_CC_STDC
+AM_PROG_CC_C_O
 AC_PROG_LN_S
+gl_EARLY
+gl_INIT
+
 AC_PROG_INSTALL
 AC_PROG_RANLIB
-
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
-AC_FUNC_ALLOCA
-
-# gettext support
-
-AM_GNU_GETTEXT
 
 # check functions
 
@@ -35,10 +29,6 @@ AM_GNU_GETTEXT
 AC_CHECK_FUNCS([link sbrk lstat])
 
 AM_PATH_LISPDIR
-
-# gnulib
-
-gl_INIT
 
 # Checks for header files.
 
@@ -51,20 +41,18 @@ AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_CHECK_TYPES(ptrdiff_t)
 
+AM_GNU_GETTEXT([external], [need-formatstring-macros])
+AM_GNU_GETTEXT_VERSION([0.15])
+
 AC_CONFIG_FILES([
-                 intl/Makefile
                  po/Makefile.in
                  doc/Makefile
-                 m4/Makefile
                  lib/Makefile
                  libidu/Makefile
                  lisp/Makefile
                  testsuite/Makefile
+                 gnulib-tests/Makefile
                  src/Makefile
 		 Makefile
                 ])
 AC_OUTPUT
-
-
-
-
