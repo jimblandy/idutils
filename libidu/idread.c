@@ -1,5 +1,5 @@
 /* idread.c -- functions to read ID database files
-   Copyright (C) 1995, 1996, 1999, 2007 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1996, 1999, 2007-2008 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -83,7 +83,7 @@ deserialize_file_links (struct idhead *idhp)
 {
   struct file_link **flinks_0 = xmalloc (sizeof(struct file_link *) * idhp->idh_file_links);
   struct file_link **flinks = flinks_0;
-  struct file_link **members_0 = xmalloc (sizeof(struct file_link *) * idhp->idh_files + 1);
+  struct file_link **members_0 = xmalloc (sizeof(struct file_link *) * idhp->idh_file_links + 1);
   struct file_link **members = members_0;
   struct file_link *flink;
   struct file_link **slot;
