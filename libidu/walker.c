@@ -608,7 +608,7 @@ get_current_dir_link (void)
 
   cwd_0 = getenv ("PWD");
   if (cwd_0)
-    cwd_0 = strdup (cwd_0);
+    cwd_0 = xstrdup (cwd_0);
   if (!same_as_dot (cwd_0))
     cwd_0 = xcwd = xgetcwd ();
   if (cwd_0 == 0)

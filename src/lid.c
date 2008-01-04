@@ -612,7 +612,7 @@ get_editor_argv(char *fullstring, int* argc)
   }
 
   argv = xmalloc(sizeof(char *) * (*argc + 1));
-  fullstring = strdup(fullstring);
+  fullstring = xstrdup(fullstring);
   argv[0] = strtok(fullstring, " ");
 
   for (i = 1; i < (*argc + 1); i++) {

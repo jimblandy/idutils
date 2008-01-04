@@ -22,12 +22,13 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include "lstat.h"
 #include <obstack.h>
 #include <error.h>
 
-#include "xnls.h"
 #include "idfile.h"
+#include "lstat.h"
+#include "xalloc.h"
+#include "xnls.h"
 
 int io_size (FILE *, void *, unsigned int size, int);
 
@@ -53,7 +54,7 @@ locate_id_file_name (char const *arg)
       id_path = getenv ("IDPATH");
       if (id_path)
 	{
-	  id_path = strdup (id_path);
+	  id_path = xstrdup (id_path);
 	  arg = strsep (&id_path, ":");
 	  /* FIXME: handle multiple ID file names */
 	}

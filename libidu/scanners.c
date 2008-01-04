@@ -477,7 +477,7 @@ parse_args_c (char **argv, int argc)
     args = &args_c;
   else
     {
-      tmp_string = strdup (*argv);
+      tmp_string = xstrdup (*argv);
       tokenize_args_string (tmp_string, &argc, &argv);
       args = xmalloc (sizeof(struct args_c) * 1);
       args->strip_underscore = 0;
@@ -868,7 +868,7 @@ parse_args_asm (char **argv, int argc)
     args = &args_asm;
   else
     {
-      tmp_string = strdup (*argv);
+      tmp_string = xstrdup (*argv);
       tokenize_args_string (tmp_string, &argc, &argv);
       args = xmalloc (sizeof(struct args_asm) * 1);
       args->strip_underscore = 0;
@@ -1136,7 +1136,7 @@ parse_args_text (char **argv, int argc)
     args = &args_text;
   else
     {
-      tmp_string = strdup (*argv);
+      tmp_string = xstrdup (*argv);
       tokenize_args_string (tmp_string, &argc, &argv);
       args = xmalloc (sizeof(struct args_text) * 1);
       args->ctype = ctype_text;
@@ -1342,7 +1342,7 @@ parse_args_perl (char **argv, int argc)
     args = &args_perl;
   else
     {
-      tmp_string = strdup (*argv);
+      tmp_string = xstrdup (*argv);
       tokenize_args_string (tmp_string, &argc, &argv);
       args = xmalloc (sizeof(struct args_perl));
       args->exclude_dtags = 1;
