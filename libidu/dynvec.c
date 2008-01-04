@@ -24,7 +24,7 @@
 struct dynvec *
 make_dynvec (int n)
 {
-  struct dynvec *dv = xmalloc (sizeof(struct dynvec) * 1);
+  struct dynvec *dv = xmalloc (sizeof *dv);
   dv->dv_vec = xnmalloc (n, sizeof *dv->dv_vec);
   dv->dv_capacity = n;
   dv->dv_fill = 0;

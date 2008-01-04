@@ -203,7 +203,7 @@ parse_language_map_file (char const *file_name, struct lang_args **next_ptr)
 	  continue;
 	}
 
-      new_args = obstack_alloc (&lang_args_obstack, sizeof(struct lang_args) * 1);
+      new_args = obstack_alloc (&lang_args_obstack, sizeof *new_args);
       if (new_args == 0)
 	error (1, 0, _("can't allocate language args: memory exhausted"));
       new_args->la_pattern = obstack_copy0 (&lang_args_obstack, lmp, pattern_size);
@@ -479,7 +479,7 @@ parse_args_c (char **argv, int argc)
     {
       tmp_string = xstrdup (*argv);
       tokenize_args_string (tmp_string, &argc, &argv);
-      args = xmalloc (sizeof(struct args_c) * 1);
+      args = xmalloc (sizeof *args);
       args->strip_underscore = 0;
       args->ctype = ctype_c;
     }
@@ -870,7 +870,7 @@ parse_args_asm (char **argv, int argc)
     {
       tmp_string = xstrdup (*argv);
       tokenize_args_string (tmp_string, &argc, &argv);
-      args = xmalloc (sizeof(struct args_asm) * 1);
+      args = xmalloc (sizeof *args);
       args->strip_underscore = 0;
       args->ctype = ctype_asm;
       args->handle_cpp = 1;
@@ -1138,7 +1138,7 @@ parse_args_text (char **argv, int argc)
     {
       tmp_string = xstrdup (*argv);
       tokenize_args_string (tmp_string, &argc, &argv);
-      args = xmalloc (sizeof(struct args_text) * 1);
+      args = xmalloc (sizeof *args);
       args->ctype = ctype_text;
     }
 
