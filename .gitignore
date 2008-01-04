@@ -4,6 +4,7 @@
 .gdb-history
 .version
 ABOUT-NLS
+ChangeLog
 INSTALL
 Makefile
 Makefile.in

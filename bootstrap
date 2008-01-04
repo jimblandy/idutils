@@ -545,6 +545,10 @@ m=gnulib-tests/gnulib.mk
 sed 's,\.\./\.\.,..,g' $m > $m-t
 mv -f $m-t $m
 
+# Create ChangeLog
+# FIXME: generate post-2007 entries from git-log, for release.
+touch ChangeLog
+
 # Reconfigure, getting other files.
 
 for command in \
