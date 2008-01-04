@@ -1,5 +1,5 @@
 /* dynvec.c -- dynamically growable vectors
-   Copyright (C) 1995, 2007 Free Software Foundation, Inc.
+   Copyright (C) 1995, 2007-2008 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ struct dynvec *
 make_dynvec (int n)
 {
   struct dynvec *dv = xmalloc (sizeof(struct dynvec) * 1);
-  dv->dv_vec = xmalloc (sizeof(void *) * n);
+  dv->dv_vec = xnmalloc (n, sizeof *dv->dv_vec);
   dv->dv_capacity = n;
   dv->dv_fill = 0;
   return dv;
@@ -44,7 +44,7 @@ dynvec_freeze (struct dynvec *dv)
   if (dv->dv_fill == dv->dv_capacity)
     return;
   dv->dv_capacity = dv->dv_fill;
-  dv->dv_vec = xrealloc (dv->dv_vec, sizeof(void *) * dv->dv_capacity);
+  dv->dv_vec = xnrealloc (dv->dv_vec, dv->dv_capacity, sizeof *dv->dv_vec);
 }
 
 void
@@ -53,7 +53,7 @@ dynvec_append (struct dynvec *dv, void *element)
   if (dv->dv_fill == dv->dv_capacity)
     {
       dv->dv_capacity *= 2;
-      dv->dv_vec = xrealloc (dv->dv_vec, sizeof(void *) * dv->dv_capacity);
+      dv->dv_vec = xnrealloc (dv->dv_vec, dv->dv_capacity, sizeof *dv->dv_vec);
     }
   dv->dv_vec[dv->dv_fill++] = element;
 }

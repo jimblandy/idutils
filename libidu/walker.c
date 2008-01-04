@@ -510,16 +510,17 @@ append_strings_to_vector (char **vector_0, char *string, char const *delimiter_c
   if (vector_0)
     {
       int length = vector_length (vector_0);
-      vector_0 = xrealloc (vector_0, sizeof(char *) * (length + 2 + strlen (string) / 2));
+      vector_0 = xnrealloc (vector_0, length + 2 + strlen (string) / 2,
+			    sizeof *vector_0);
       vector = &vector_0[length];
     }
   else
-    vector = vector_0 = xmalloc (sizeof(char *) * (2 + strlen (string) / 2));
+    vector = vector_0 = xnmalloc (2 + strlen (string) / 2, sizeof *vector);
 
   do
     *vector = strsep (&string, delimiter_class);
   while (*vector++);
-  return xrealloc (vector_0, sizeof(char *) * (vector - vector_0));
+  return xnrealloc (vector_0, vector - vector_0, sizeof *vector_0);
 }
 
 int
@@ -701,7 +702,7 @@ vectorize_string (char *string, char const *delimiter_class)
 	*vector = strsep (&string, delimiter_class);
       while (*vector++);
     }
-  return xrealloc (vector_0, sizeof(char *) * (vector - vector_0));
+  return xnrealloc (vector_0, vector - vector_0, sizeof *vector_0);
 }
 
 void

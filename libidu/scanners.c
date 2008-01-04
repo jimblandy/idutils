@@ -307,7 +307,7 @@ tokenize_args_string (char *args_string, int *argcp, char ***argvp)
       arg = strsep (&args_string, horizontal_space);
     }
   *argcp = argv - argv_0;
-  *argvp = xrealloc (argv_0, sizeof(char *) * (*argcp));
+  *argvp = xnrealloc (argv_0, *argcp, sizeof **argvp);
 }
 
 static void
