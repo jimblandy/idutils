@@ -11,7 +11,7 @@ idutils TODO - from Claudio Fontana
   - investigate possible problems with signed/unsigned comparisons
     and data types (task #4909)
   - xemacs support (task #5702)
-  
+
 idutils TODO - Future directions from previous maintainers
 
 * General

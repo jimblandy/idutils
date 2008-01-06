@@ -711,7 +711,7 @@ them as token delimiters.
 @cindex perl scanner
 (EXPERIMENTAL)
 
-The perl scanner is intended for perl-language documents. Tokens are all 
+The perl scanner is intended for perl-language documents. Tokens are all
 words, Perl Keywords are included. Comments & string declarations are
 ignored, as well as the documentation.  It is customizable to the extent
 that character classes can be designated as token constituents or as

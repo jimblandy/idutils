@@ -747,7 +747,7 @@ editit:
 	int i;
 	char **argv = xmalloc (sizeof(char *) *
 			       (editor_argc + 2 + vector_cardinality (flinkv)));
-	
+
 	for (i = 0; i < editor_argc; i++)
 	  argv[i] = editor_argv[i];
 

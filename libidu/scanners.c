@@ -333,8 +333,8 @@ clear_ushort_ctype (unsigned short *ctype, char const *chars, int type)
 static void
 set_uchar_ctype (unsigned char *ctype, char const *chars, int type)
 {
-  unsigned char *rct; 
-  unsigned char const *uc; 
+  unsigned char *rct;
+  unsigned char const *uc;
 
   rct = &ctype[1];
   uc = (unsigned char const *) chars;
@@ -1400,7 +1400,7 @@ get_token_perl (FILE *in_FILE, void const *args, int *flags)
 
   obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
 
-top: 
+top:
   c = getc (in_FILE);
   while (ISBORING (c))
     c = getc (in_FILE);
@@ -1447,7 +1447,7 @@ top:
           }
         break;
 
-      default: 
+      default:
         if (ISEOF (c))
           {
             new_line = 1;
@@ -1500,7 +1500,7 @@ top:
         {
           skip_doc = 0;
         }
-      else 
+      else
         {
           state |= EQ;		/* documentation = 1; */
 	}
@@ -1606,7 +1606,7 @@ get_token_lisp (FILE *in_FILE, void const *args, int *flags)
   int c;
 
   obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
-  
+
  top:
   c = getc (in_FILE);
  recheck:
@@ -1615,23 +1615,23 @@ get_token_lisp (FILE *in_FILE, void const *args, int *flags)
     case EOF:
       obstack_free (&tokens_obstack, obstack_finish (&tokens_obstack));
       return 0;
-      
+
     case '(': case ')':
     case '\'': case '`':		/* quote, quasiquote */
       goto top;
-      
+
     case ',':				/* unquote */
       c = getc (in_FILE);
       if (c == '@')			/* unquote-splicing */
 	goto top;
       goto recheck;
-      
+
     case ';':				/* comment */
       do {
 	c = getc (in_FILE);
       } while ( (c != EOF) && (c != '\n'));
       goto top;
-      
+
     case '"':				/* string with/without ansi-C escapes*/
     string:
       do {
@@ -1667,11 +1667,11 @@ get_token_lisp (FILE *in_FILE, void const *args, int *flags)
       if (c != EOF)
 	ungetc (c, in_FILE);
       goto ident;
-      
+
     case '#':
       id = scanner_buffer;
       *id++ = c;
-      
+
       c = getc (in_FILE);
       if (c == EOF)
 	goto top;
@@ -1732,12 +1732,12 @@ get_token_lisp (FILE *in_FILE, void const *args, int *flags)
 	goto top;
       /* Ignore invalide #-construct */
       goto top;
-      
+
     case '[': case ']':		/* EMACS vector aka # (...) in Scheme */
       /* EMACS vector object vs Kawa ident */
       /* rational: Kawa ident could not start with [ nor with ] */
       goto top;
-      
+
     default:
       if (is_IDENT1 (c))
 	{
@@ -1785,7 +1785,7 @@ get_token_lisp (FILE *in_FILE, void const *args, int *flags)
 	}
     }
   goto top;
-  
+
 }
 #undef DG
 #undef LT

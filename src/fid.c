@@ -102,7 +102,7 @@ main (int argc, char **argv)
 
   program_name = argv[0];
   idh.idh_file_name = 0;
-  
+
 
 #if ENABLE_NLS
   /* Set locale according to user's wishes.  */
@@ -184,7 +184,7 @@ main (int argc, char **argv)
     int count = 0;
     int i;
     int separator = (isatty (STDOUT_FILENO) ? ' ' : '\n');
-    
+
     for (i = 0; i < idh.idh_tokens; i++)
       {
 	unsigned char const *hits;

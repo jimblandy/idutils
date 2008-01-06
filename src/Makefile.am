@@ -9,4 +9,4 @@ AM_CPPFLAGS = -I$(top_builddir)/intl \
               -DLOCALEDIR=\"$(datadir)/locale\" \
               -DLANGUAGE_MAP_FILE=\"$(datadir)/id-lang.map\"
 
-LDADD = ../libidu/libidu.a ../lib/libgnu.a $(LIBINTL) ../lib/libgnu.a 
+LDADD = ../libidu/libidu.a ../lib/libgnu.a $(LIBINTL) ../lib/libgnu.a
