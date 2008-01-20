@@ -550,9 +550,11 @@ report_statistics (void)
   printf (_("Files=%ld, "), idh.idh_files);
   printf (_("Tokens=%ld, "), occurrences);
   printf (_("Bytes=%ld Kb, "), input_chars / 1024);
-  printf (_("Heap=%d+%d Kb, "), (heap_after_scan - heap_after_walk) / 1024,
-	  (heap_after_walk - heap_initial) / 1024);
-  printf (_("Output=%ld (%ld tok, %ld hit)\n"), output_length, tokens_length, hits_length);
+  printf (_("Heap=%llu+%llu Kb, "),
+	  (unsigned long long) (heap_after_scan - heap_after_walk) / 1024,
+	  (unsigned long long) (heap_after_walk - heap_initial) / 1024);
+  printf (_("Output=%ld (%ld tok, %ld hit)\n"),
+	  output_length, tokens_length, hits_length);
 
   hash_print_stats (&token_table, stdout);
   printf (_(", Freq=%ld/%ld=%.2f\n"), occurrences, token_table.ht_fill,
