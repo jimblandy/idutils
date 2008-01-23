@@ -632,8 +632,7 @@ get_current_dir_link (void)
     }
   chdir_to_link (dir_link);
   free (links_0);
-  if (xcwd)
-    free (xcwd);
+  free (xcwd);
   current_dir_link = dir_link;
   return dir_link;
 }
