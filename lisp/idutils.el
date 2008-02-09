@@ -2,8 +2,6 @@
 ;;; Copyright (C) 1995, 1996, 2006-2008 Free Software Foundation, Inc.
 ;;; Greg McGary <gkm@gnu.ai.mit.edu>.
 
-;; Version: 4.2.90
-
 ;; This file is part of GNU idutils.
 
 ;; GNU idutils is free software; you can redistribute it and/or modify
