@@ -51,7 +51,7 @@
 While gid runs asynchronously, you can use the \\[next-error] command to
 find the text that gid hits refer to. The command actually run is
 defined by the gid-command variable."
-  (interactive (list (read-input
+  (interactive (list (read-string
      (concat "Run " gid-command " (with args): ") (thing-at-point 'symbol))))
   (let (compile-command
 	(compilation-error-regexp-alist grep-regexp-alist)
