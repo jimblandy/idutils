@@ -27,6 +27,9 @@ distcheck-hook:
 	fi
 
 dist-hook:
-	$(top_srcdir)/build-aux/gitlog-to-changelog --since=2008-01-01 \
-	  > $(distdir)/cl-t
-	mv $(distdir)/cl-t $(distdir)/ChangeLog
+	if test -d .git; then						\
+	  $(top_srcdir)/build-aux/gitlog-to-changelog --since=2008-01-01 \
+	    > $(distdir)/cl-t;						\
+	  rm -f $(distdir)/ChangeLog;					\
+	  mv $(distdir)/cl-t $(distdir)/ChangeLog;			\
+	fi
