@@ -19,6 +19,7 @@
 if test "$VERBOSE" = yes; then
   set -x
   mkid --version
+  aid --version
 fi
 
 pwd=`pwd`
