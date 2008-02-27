@@ -6,7 +6,6 @@ TESTS = \
 
 TESTS_ENVIRONMENT = \
   abs_top_srcdir='$(abs_top_srcdir)'		\
-  abs_top_builddir='$(abs_top_builddir)'	\
   PATH="$(abs_top_builddir)/src$(PATH_SEPARATOR)$(abs_top_srcdir)/src$(PATH_SEPARATOR)$$PATH"
 
 EXTRA_DIST = $(TESTS) single_file_token_bug.c
