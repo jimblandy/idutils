@@ -96,6 +96,11 @@ package=`sed -n "$extract_package_name" configure.ac` || exit
 gnulib_name=lib$package
 
 build_aux=build-aux
+source_base=lib
+m4_base=m4
+doc_base=doc
+tests_base=tests
+
 # Extra files from gnulib, which override files from other sources.
 gnulib_extra_files="
 	$build_aux/install-sh
@@ -120,6 +125,9 @@ XGETTEXT_OPTIONS='\\\
  --flag=N_:1:pass-c-format\\\
  --flag=error:3:c-format --flag=error_at_line:5:c-format\\\
 '
+
+# Package bug report address for gettext files
+MSGID_BUGS_ADDRESS=bug-$package@gnu.org
 
 # Files we don't want to import.
 excluded_files=
@@ -406,7 +414,7 @@ version_controlled_file() {
     grep -F "/$file/" $dir/CVS/Entries 2>/dev/null |
 	     grep '^/[^/]*/[0-9]' > /dev/null && found=yes
   elif test -d .git; then
-    git-rm -n "$dir/$file" > /dev/null 2>&1 && found=yes
+    git rm -n "$dir/$file" > /dev/null 2>&1 && found=yes
   else
     echo "$0: no version control for $dir/$file?" >&2
   fi
@@ -488,11 +496,11 @@ gnulib_tool_options="\
  --import\
  --no-changelog\
  --aux-dir $bt/$build_aux\
- --doc-base $bt/doc\
+ --doc-base $bt/$doc_base\
  --lib $gnulib_name\
- --m4-base $bt/m4/\
- --source-base $bt/lib/\
- --tests-base $bt/tests\
+ --m4-base $bt/$m4_base/\
+ --source-base $bt/$source_base/\
+ --tests-base $bt/$tests_base\
  --local-dir $local_gl_dir\
  $gnulib_tool_option_extras\
 "
@@ -538,6 +546,16 @@ if test -f $mam_template; then
   done
 fi
 
+# Remove any dangling symlink matching "*.m4" in the gnulib-populated
+# $m4_base directory, since such a file would cause aclocal to fail.
+# The following requires GNU find 4.2.3 or newer.  Considering the usual
+# portability constraints of this script, that may seem a very demanding
+# requirement, but it should be ok.  Ignore any failure, which is fine,
+# since this is only a convenience to help developers avoid the relatively
+# unusual case in which a symlinked-to .m4 file is git-removed from gnulib
+# between successive runs of this script.
+find "$m4_base" -name '*.m4' -depth -type l -xtype l -delete > /dev/null 2>&1
+
 # Horrible, kludges.
 # Change paths in gnulib-tests/gnulib.mk from "../.." to "..".
 # This must be done before running automake.
@@ -580,7 +598,7 @@ if test $with_gettext = yes; then
   rm -f po/Makevars
   sed '
     /^EXTRA_LOCALE_CATEGORIES *=/s/=.*/= '"$EXTRA_LOCALE_CATEGORIES"'/
-    /^MSGID_BUGS_ADDRESS *=/s/=.*/= bug-'"$package"'@gnu.org/
+    /^MSGID_BUGS_ADDRESS *=/s/=.*/= '"$MSGID_BUGS_ADDRESS"'/
     /^XGETTEXT_OPTIONS *=/{
       s/$/ \\/
       a\

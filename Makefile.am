@@ -13,10 +13,19 @@ EXTRA_DIST = \
   bootstrap.conf \
   build-aux/vc-list-files
 
-dist-hook:
+gen_start_date = 2008-01-01
+.PHONY: gen-ChangeLog
+gen-ChangeLog:
 	if test -d .git; then						\
-	  $(top_srcdir)/build-aux/gitlog-to-changelog --since=2008-01-01 \
-	    > $(distdir)/cl-t;						\
+	  $(top_srcdir)/build-aux/gitlog-to-changelog			\
+	    --since=$(gen_start_date) > $(distdir)/cl-t;		\
 	  rm -f $(distdir)/ChangeLog;					\
 	  mv $(distdir)/cl-t $(distdir)/ChangeLog;			\
 	fi
+
+# Arrange so that .tarball-version appears only in the distribution
+# tarball, and never in a checked-out repository.
+# The perl substitution is to change some key uses of "rm" to "/bin/rm".
+# See the rm_subst comment for details.
+dist-hook: gen-ChangeLog
+	echo $(VERSION) > $(distdir)/.tarball-version
