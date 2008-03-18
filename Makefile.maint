@@ -30,7 +30,7 @@ GZIP_ENV = '--no-name --best $(gzip_rsyncable)'
 CVS = cvs
 GIT = git
 VC = $(GIT)
-VC-tag = git-tag -s -m '$(VERSION)'
+VC-tag = git tag -s -m '$(VERSION)'
 
 CVS_LIST = build-aux/vc-list-files
 
@@ -38,7 +38,7 @@ CVS_LIST_EXCEPT = \
   $(CVS_LIST) | if test -f .x-$@; then grep -vEf .x-$@; else grep -v ChangeLog; fi
 
 ifeq ($(origin prev_version_file), undefined)
-  prev_version_file = .prev-version
+  prev_version_file = $(srcdir)/.prev-version
 endif
 
 PREV_VERSION := $(shell cat $(prev_version_file))
@@ -56,7 +56,6 @@ endif
 my_distdir = $(PACKAGE)-$(VERSION)
 
 # Old releases are stored here.
-# Used for diffs and xdeltas.
 release_archive_dir ?= ../release
 
 # Prevent programs like 'sort' from considering distinct strings to be equal.
@@ -69,20 +68,14 @@ export LC_ALL = C
 ## Sanity checks.  ##
 ## --------------- ##
 
-# FIXME: add a check to prohibit definition in src/*.c of symbols defined
-# in system.h.  E.g. today I removed from tail.c a useless definition of
-# ENOSYS.  It was useless because system.h ensures it's defined.
-
 # Collect the names of rules starting with `sc_'.
-syntax-check-rules := $(shell sed -n 's/^\(sc_[a-zA-Z0-9_-]*\):.*/\1/p' $(ME))
+syntax-check-rules := $(shell sed -n 's/^\(sc_[a-zA-Z0-9_-]*\):.*/\1/p' \
+                        $(srcdir)/$(ME))
 .PHONY: $(syntax-check-rules)
 
-# Checks that don't require cvs.
-# Run `changelog-check' last, as previous test may reveal problems requiring
-# new ChangeLog entries.
 local-checks-available = \
   po-check copyright-check m4-check author_mark_check \
-  changelog-check patch-check strftime-check $(syntax-check-rules) \
+  patch-check strftime-check $(syntax-check-rules) \
   makefile_path_separator_check \
   makefile-check check-AUTHORS
 .PHONY: $(local-checks-available)
@@ -100,6 +93,13 @@ syntax-check: $(local-check)
 #	  { echo '$(ME): FIXME' 1>&2;					\
 #	    exit 1; } || :
 # FIXME: don't allow `#include .strings\.h' anywhere
+
+sc_avoid_if_before_free:
+	@$(srcdir)/build-aux/useless-if-before-free			\
+		$(useless_free_options)					\
+	    $$($(CVS_LIST_EXCEPT)) &&					\
+	  { echo '$(ME): found useless "if" before "free" above' 1>&2;	\
+	    exit 1; } || :
 
 sc_cast_of_argument_to_free:
 	@grep -nE '\<free \(\(' $$($(CVS_LIST_EXCEPT)) &&		\
@@ -166,41 +166,36 @@ sc_require_config_h:
 	else :;								\
 	fi
 
+# To use this "command" macro, you must first define two shell variables:
+# h: the header, enclosed in <> or ""
+# re: a regular expression that matches IFF something provided by $h is used.
+define _header_without_use
+  h_esc=`echo "$$h"|sed 's/\./\\./'`;					\
+  if $(CVS_LIST_EXCEPT) | grep '\.c$$' > /dev/null; then		\
+    files=$$(grep -l '^# *include '"$$h_esc"				\
+	     $$($(CVS_LIST_EXCEPT) | grep '\.c$$')) &&			\
+    grep -LE "$$re" $$files | grep . &&					\
+      { echo "$(ME): the above files include $$h but don't use it"	\
+	1>&2; exit 1; } || :;						\
+  else :;								\
+  fi
+endef
+
 # Prohibit the inclusion of assert.h without an actual use of assert.
 sc_prohibit_assert_without_use:
-	@if $(CVS_LIST_EXCEPT) | grep '\.c$$' > /dev/null; then		\
-	  files=$$(grep -l '# *include <assert\.h>'			\
-		    $$($(CVS_LIST_EXCEPT) | grep '\.c$$')) &&		\
-	  grep -L '\<assert (' $$files					\
-	      | grep . &&						\
-	    { echo "$(ME): the above files include <assert.h> but don't use it" \
-		  1>&2; exit 1; } || :;					\
-	else :;								\
-	fi
+	@h='<assert.h>' re='\<assert \(' $(_header_without_use)
+
+# Prohibit the inclusion of getopt.h without an actual use.
+sc_prohibit_getopt_without_use:
+	@h='<getopt.h>' re='\<getopt(_long)? \(' $(_header_without_use)
 
 # Don't include quotearg.h unless you use one of its functions.
 sc_prohibit_quotearg_without_use:
-	@if $(CVS_LIST_EXCEPT) | grep '\.c$$' > /dev/null; then		\
-	  files=$$(grep -l '# *include "quotearg\.h"'			\
-		    $$($(CVS_LIST_EXCEPT) | grep '\.c$$')) &&		\
-	  grep -LE '\<quotearg(_[^ ]+)? \(' $$files			\
-	      | grep . &&						\
-	    { echo "$(ME): the above files include "quotearg.h" but don't use it" \
-		  1>&2; exit 1; } || :;					\
-	else :;								\
-	fi
+	@h='"quotearg.h"' re='\<quotearg(_[^ ]+)? \(' $(_header_without_use)
 
 # Don't include quote.h unless you use one of its functions.
 sc_prohibit_quote_without_use:
-	@if $(CVS_LIST_EXCEPT) | grep '\.c$$' > /dev/null; then		\
-	  files=$$(grep -l '# *include "quote\.h"'			\
-		    $$($(CVS_LIST_EXCEPT) | grep '\.c$$')) &&		\
-	  grep -LE '\<quote(_n)? \(' $$files			\
-	      | grep . &&						\
-	    { echo "$(ME): the above files include "quote.h" but don't use it" \
-		  1>&2; exit 1; } || :;					\
-	else :;								\
-	fi
+	@h='"quote.h"' re='\<quote(_n)? \(' $(_header_without_use)
 
 sc_obsolete_symbols:
 	@grep -nE '\<(HAVE''_FCNTL_H|O''_NDELAY)\>'			\
@@ -246,7 +241,7 @@ sc_root_tests:
 	@if test -d tests \
 	      && grep check-root tests/Makefile.am>/dev/null 2>&1; then \
 	t1=sc-root.expected; t2=sc-root.actual;				\
-	grep -nl '^PRIV_CHECK_ARG=require-root'				\
+	grep -nl '^require_root_$$'					\
 	  $$($(CVS_LIST) tests) |sed s,tests,., |sort > $$t1;		\
 	sed -n 's,	cd \([^ ]*\) .*MAKE..check TESTS=\(.*\),./\1/\2,p' \
 	  $(srcdir)/tests/Makefile.am |sort > $$t2;			\
@@ -477,16 +472,14 @@ makefile_path_separator_check:
 # Check that `make alpha' will not fail at the end of the process.
 writable-files:
 	if test -d $(release_archive_dir); then :; else			\
-	  mkdir $(release_archive_dir);					\
+	  for file in $(distdir).tar.gz					\
+	              $(release_archive_dir)/$(distdir).tar.gz; do	\
+	    test -e $$file || continue;					\
+	    test -w $$file						\
+	      || { echo ERROR: $$file is not writable; fail=1; };	\
+	  done;								\
+	  test "$$fail" && exit 1 || :
 	fi
-	for file in $(distdir).tar.gz $(xd-delta)			\
-	            $(release_archive_dir)/$(distdir).tar.gz		\
-	            $(release_archive_dir)/$(xd-delta); do		\
-	  test -e $$file || continue;					\
-	  test -w $$file						\
-	    || { echo ERROR: $$file is not writable; fail=1; };		\
-	done;								\
-	test "$$fail" && exit 1 || :
 
 v_etc_file = lib/version-etc.c
 sample-test = tests/sample-test
@@ -565,7 +558,7 @@ write_loser = printf '\#!%s\necho $$0: bad path 1>&2; exit 1\n' '$(SHELL)'
 # Note that "false" itself is a symlink to true, so it too will malfunction.
 TMPDIR ?= /tmp
 t=$(TMPDIR)/$(PACKAGE)/test
-my-distcheck: $(local-check) $(release_archive_dir)/$(prev-tgz) check
+my-distcheck: $(local-check) check
 	-rm -rf $(t)
 	mkdir -p $(t)
 	GZIP=$(GZIP_ENV) $(AMTAR) -C $(t) -zxf $(distdir).tar.gz
@@ -616,13 +609,7 @@ rel-check:
 	echo "$(md5)  -" > $$md5_tmp; \
 	md5sum -c $$md5_tmp < $$tarz
 
-prev-tgz = $(PACKAGE)-$(PREV_VERSION).tar.gz
-
-# FIXME: stop distributing xdelta files in 2008, unless someone speaks up.
-# So far, not one person has said they'd miss this.
-xd-delta = $(PACKAGE)-$(PREV_VERSION)-$(VERSION).xdelta
-
-rel-files = $(xd-delta) $(DIST_ARCHIVES)
+rel-files = $(DIST_ARCHIVES)
 
 gnulib-version = $$(cd $(gnulib_dir) && git describe)
 
@@ -658,9 +645,6 @@ emit_upload_commands:
 	@echo =====================================
 	@echo =====================================
 
-$(xd-delta): $(release_archive_dir)/$(prev-tgz) $(distdir).tar.gz
-	xdelta delta -9 $^ $@ || :
-
 .PHONY: alpha beta major
 alpha beta major: $(local-check) writable-files
 	test $@ = major						\
@@ -668,11 +652,12 @@ alpha beta major: $(local-check) writable-files
 	       || { echo "invalid version string: $(VERSION)" 1>&2; exit 1;};}\
 	  || :
 	$(MAKE) vc-dist
-	$(MAKE) news-date-check changelog-check
-	$(MAKE) $(xd-delta)
+	$(MAKE) news-date-check
 	$(MAKE) -s announcement RELEASE_TYPE=$@ > /tmp/announce-$(my_distdir)
-	ln $(rel-files) $(release_archive_dir)
-	chmod a-w $(rel-files)
+	if test -d $(release_archive_dir); then			\
+	  ln $(rel-files) $(release_archive_dir);		\
+	  chmod a-w $(rel-files);				\
+	fi
 	$(MAKE) -s emit_upload_commands RELEASE_TYPE=$@
 	echo $(VERSION) > $(prev_version_file)
 	$(VC) commit -m \
