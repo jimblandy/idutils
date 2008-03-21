@@ -7,8 +7,8 @@ EXTRA_DIST = \
   .x-sc_cast_of_argument_to_free \
   .x-sc_require_config_h \
   GNUmakefile \
-  Makefile.cfg \
-  Makefile.maint \
+  cfg.mk \
+  maint.mk \
   bootstrap \
   bootstrap.conf \
   build-aux/vc-list-files

@@ -19,7 +19,7 @@
 
 # This is reported not to work with make-3.79.1
 # ME := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
-ME := Makefile.maint
+ME := maint.mk
 
 # Do not save the original name or timestamp in the .tar.gz file.
 # Use --rsyncable if available.
@@ -27,15 +27,14 @@ gzip_rsyncable := \
   $(shell gzip --help 2>/dev/null|grep rsyncable >/dev/null && echo --rsyncable)
 GZIP_ENV = '--no-name --best $(gzip_rsyncable)'
 
-CVS = cvs
 GIT = git
 VC = $(GIT)
 VC-tag = git tag -s -m '$(VERSION)'
 
-CVS_LIST = build-aux/vc-list-files
+VC_LIST = build-aux/vc-list-files
 
-CVS_LIST_EXCEPT = \
-  $(CVS_LIST) | if test -f .x-$@; then grep -vEf .x-$@; else grep -v ChangeLog; fi
+VC_LIST_EXCEPT = \
+  $(VC_LIST) | if test -f .x-$@; then grep -vEf .x-$@; else grep -v ChangeLog; fi
 
 ifeq ($(origin prev_version_file), undefined)
   prev_version_file = $(srcdir)/.prev-version
@@ -97,27 +96,27 @@ syntax-check: $(local-check)
 sc_avoid_if_before_free:
 	@$(srcdir)/build-aux/useless-if-before-free			\
 		$(useless_free_options)					\
-	    $$($(CVS_LIST_EXCEPT)) &&					\
+	    $$($(VC_LIST_EXCEPT)) &&					\
 	  { echo '$(ME): found useless "if" before "free" above' 1>&2;	\
 	    exit 1; } || :
 
 sc_cast_of_argument_to_free:
-	@grep -nE '\<free \(\(' $$($(CVS_LIST_EXCEPT)) &&		\
+	@grep -nE '\<free \(\(' $$($(VC_LIST_EXCEPT)) &&		\
 	  { echo '$(ME): don'\''t cast free argument' 1>&2;		\
 	    exit 1; } || :
 
 sc_cast_of_x_alloc_return_value:
-	@grep -nE '\*\) *x(m|c|re)alloc\>' $$($(CVS_LIST_EXCEPT)) &&	\
+	@grep -nE '\*\) *x(m|c|re)alloc\>' $$($(VC_LIST_EXCEPT)) &&	\
 	  { echo '$(ME): don'\''t cast x*alloc return value' 1>&2;	\
 	    exit 1; } || :
 
 sc_cast_of_alloca_return_value:
-	@grep -nE '\*\) *alloca\>' $$($(CVS_LIST_EXCEPT)) &&		\
+	@grep -nE '\*\) *alloca\>' $$($(VC_LIST_EXCEPT)) &&		\
 	  { echo '$(ME): don'\''t cast alloca return value' 1>&2;	\
 	    exit 1; } || :
 
 sc_space_tab:
-	@grep -n '[ ]	' $$($(CVS_LIST_EXCEPT)) &&			\
+	@grep -n '[ ]	' $$($(VC_LIST_EXCEPT)) &&			\
 	  { echo '$(ME): found SPACE-TAB sequence; remove the SPACE'	\
 		1>&2; exit 1; } || :
 
@@ -125,14 +124,14 @@ sc_space_tab:
 # They provide no error checking mechanism.
 # Instead, use strto* functions.
 sc_prohibit_atoi_atof:
-	@grep -nE '\<([fs]?scanf|ato([filq]|ll))\>' $$($(CVS_LIST_EXCEPT)) && \
+	@grep -nE '\<([fs]?scanf|ato([filq]|ll))\>' $$($(VC_LIST_EXCEPT)) && \
 	  { echo '$(ME): do not use *scan''f, ato''f, ato''i, ato''l, ato''ll, ato''q, or ss''canf'	\
 		1>&2; exit 1; } || :
 
 # Use STREQ rather than comparing strcmp == 0, or != 0.
 sc_prohibit_strcmp:
-	@grep -nE '! *str''cmp \(|\<str''cmp \([^)]+\) *==' \
-	    $$($(CVS_LIST_EXCEPT)) && \
+	@grep -nE '! *str''cmp \(|\<str''cmp \([^)]+\) *=='		\
+	    $$($(VC_LIST_EXCEPT)) &&					\
 	  { echo '$(ME): use STREQ in place of the above uses of str''cmp' \
 		1>&2; exit 1; } || :
 
@@ -145,21 +144,21 @@ sc_error_exit_success:
 	    exit 1; } || :
 
 sc_file_system:
-	@grep -ni 'file''system' $$($(CVS_LIST_EXCEPT)) &&		\
+	@grep -ni 'file''system' $$($(VC_LIST_EXCEPT)) &&		\
 	  { echo '$(ME): found use of "file''system";'			\
 	    'rewrite to use "file system"' 1>&2;			\
 	    exit 1; } || :
 
 sc_no_have_config_h:
-	@grep -n 'HAVE''_CONFIG_H' $$($(CVS_LIST_EXCEPT)) &&		\
+	@grep -n '^# *if.*HAVE''_CONFIG_H' $$($(VC_LIST_EXCEPT)) &&	\
 	  { echo '$(ME): found use of HAVE''_CONFIG_H; remove'		\
 		1>&2; exit 1; } || :
 
 # Nearly all .c files must include <config.h>.
 sc_require_config_h:
-	@if $(CVS_LIST_EXCEPT) | grep '\.c$$' > /dev/null; then		\
+	@if $(VC_LIST_EXCEPT) | grep '\.c$$' > /dev/null; then		\
 	  grep -L '^# *include <config\.h>'				\
-		$$($(CVS_LIST_EXCEPT) | grep '\.c$$')			\
+		$$($(VC_LIST_EXCEPT) | grep '\.c$$')			\
 	      | grep . &&						\
 	  { echo '$(ME): the above files do not include <config.h>'	\
 		1>&2; exit 1; } || :;					\
@@ -171,9 +170,9 @@ sc_require_config_h:
 # re: a regular expression that matches IFF something provided by $h is used.
 define _header_without_use
   h_esc=`echo "$$h"|sed 's/\./\\./'`;					\
-  if $(CVS_LIST_EXCEPT) | grep '\.c$$' > /dev/null; then		\
+  if $(VC_LIST_EXCEPT) | grep '\.c$$' > /dev/null; then			\
     files=$$(grep -l '^# *include '"$$h_esc"				\
-	     $$($(CVS_LIST_EXCEPT) | grep '\.c$$')) &&			\
+	     $$($(VC_LIST_EXCEPT) | grep '\.c$$')) &&			\
     grep -LE "$$re" $$files | grep . &&					\
       { echo "$(ME): the above files include $$h but don't use it"	\
 	1>&2; exit 1; } || :;						\
@@ -183,23 +182,53 @@ endef
 
 # Prohibit the inclusion of assert.h without an actual use of assert.
 sc_prohibit_assert_without_use:
-	@h='<assert.h>' re='\<assert \(' $(_header_without_use)
+	@h='<assert.h>' re='\<assert *\(' $(_header_without_use)
 
 # Prohibit the inclusion of getopt.h without an actual use.
 sc_prohibit_getopt_without_use:
-	@h='<getopt.h>' re='\<getopt(_long)? \(' $(_header_without_use)
+	@h='<getopt.h>' re='\<getopt(_long)? *\(' $(_header_without_use)
 
 # Don't include quotearg.h unless you use one of its functions.
 sc_prohibit_quotearg_without_use:
-	@h='"quotearg.h"' re='\<quotearg(_[^ ]+)? \(' $(_header_without_use)
+	@h='"quotearg.h"' re='\<quotearg(_[^ ]+)? *\(' $(_header_without_use)
 
 # Don't include quote.h unless you use one of its functions.
 sc_prohibit_quote_without_use:
-	@h='"quote.h"' re='\<quote(_n)? \(' $(_header_without_use)
+	@h='"quote.h"' re='\<quote(_n)? *\(' $(_header_without_use)
+
+# Don't include this header unless you use one of its functions.
+sc_prohibit_long_options_without_use:
+	@h='"long-options.h"' re='\<parse_long_options *\(' \
+	  $(_header_without_use)
+
+# Don't include this header unless you use one of its functions.
+sc_prohibit_inttostr_without_use:
+	@h='"inttostr.h"' re='\<(off|[iu]max|uint)tostr *\(' \
+	  $(_header_without_use)
+
+# Don't include this header unless you use one of its functions.
+sc_prohibit_error_without_use:
+	@h='"error.h"' \
+	re='\<error(_at_line|_print_progname|_one_per_line|_message_count)? *\('\
+	  $(_header_without_use)
+
+sc_prohibit_safe_read_without_use:
+	@h='"safe-read.h"' re='(\<SAFE_READ_ERROR\>|\<safe_read *\()' \
+	  $(_header_without_use)
+
+sc_prohibit_argmatch_without_use:
+	@h='"argmatch.h"' \
+	re='(\<(ARRAY_CARDINALITY|X?ARGMATCH(|_TO_ARGUMENT|_VERIFY))\>|\<argmatch(_exit_fn|_(in)?valid) *\()' \
+	  $(_header_without_use)
+
+sc_prohibit_root_dev_ino_without_use:
+	@h='"root-dev-ino.h"' \
+	re='(\<ROOT_DEV_INO_(CHECK|WARN)\>|\<get_root_dev_ino *\()' \
+	  $(_header_without_use)
 
 sc_obsolete_symbols:
 	@grep -nE '\<(HAVE''_FCNTL_H|O''_NDELAY)\>'			\
-	     $$($(CVS_LIST_EXCEPT)) &&					\
+	     $$($(VC_LIST_EXCEPT)) &&					\
 	  { echo '$(ME): do not use HAVE''_FCNTL_H or O''_NDELAY'	\
 		1>&2; exit 1; } || :
 
@@ -232,9 +261,9 @@ endif
 # On 2004-04-13, they were all changed to start with gl_ instead.
 # Make sure that none are inadvertently reintroduced.
 sc_prohibit_jm_in_m4:
-	@grep -nE 'jm_[A-Z]'					\
-		$$($(CVS_LIST) m4 |grep '\.m4$$'; echo /dev/null) && \
-	    { echo '$(ME): do not use jm_ in m4 macro names'	\
+	@grep -nE 'jm_[A-Z]'						\
+		$$($(VC_LIST) m4 |grep '\.m4$$'; echo /dev/null) &&	\
+	    { echo '$(ME): do not use jm_ in m4 macro names'		\
 	      1>&2; exit 1; } || :
 
 sc_root_tests:
@@ -242,7 +271,7 @@ sc_root_tests:
 	      && grep check-root tests/Makefile.am>/dev/null 2>&1; then \
 	t1=sc-root.expected; t2=sc-root.actual;				\
 	grep -nl '^require_root_$$'					\
-	  $$($(CVS_LIST) tests) |sed s,tests,., |sort > $$t1;		\
+	  $$($(VC_LIST) tests) |sed s,tests,., |sort > $$t1;		\
 	sed -n 's,	cd \([^ ]*\) .*MAKE..check TESTS=\(.*\),./\1/\2,p' \
 	  $(srcdir)/tests/Makefile.am |sort > $$t2;			\
 	diff -u $$t1 $$t2 || diff=1;					\
@@ -281,7 +310,7 @@ headers_with_interesting_macro_defs = \
 sc_always_defined_macros: .re-defmac
 	@if test -f $(srcdir)/src/system.h; then			\
 	  trap 'rc=$$?; rm -f .re-defmac; exit $$rc' 0 1 2 3 15;	\
-	  grep -f .re-defmac $$($(CVS_LIST))				\
+	  grep -f .re-defmac $$($(VC_LIST))				\
 	    && { echo '$(ME): define the above via some gnulib .h file'	\
 		  1>&2;  exit 1; } || :;				\
 	fi
@@ -301,7 +330,7 @@ sc_system_h_headers: .re-list
 	@if test -f $(srcdir)/src/system.h; then			\
 	  trap 'rc=$$?; rm -f .re-list; exit $$rc' 0 1 2 3 15;		\
 	  grep -nE -f .re-list						\
-	      $$($(CVS_LIST) src |					\
+	      $$($(VC_LIST) src |					\
 		 grep -Ev '((copy|system)\.h|parse-gram\.c)$$')		\
 	    && { echo '$(ME): the above are already included via system.h'\
 		  1>&2;  exit 1; } || :;				\
@@ -310,12 +339,12 @@ sc_system_h_headers: .re-list
 sc_sun_os_names:
 	@grep -nEi \
 	    'solaris[^[:alnum:]]*2\.(7|8|9|[1-9][0-9])|sunos[^[:alnum:]][6-9]' \
-	    $$($(CVS_LIST_EXCEPT)) &&					\
+	    $$($(VC_LIST_EXCEPT)) &&					\
 	  { echo '$(ME): found misuse of Sun OS version numbers' 1>&2;	\
 	    exit 1; } || :
 
 sc_the_the:
-	@grep -ni '\<the ''the\>' $$($(CVS_LIST_EXCEPT)) &&		\
+	@grep -ni '\<the ''the\>' $$($(VC_LIST_EXCEPT)) &&		\
 	  { echo '$(ME): found use of "the ''the";' 1>&2;		\
 	    exit 1; } || :
 
@@ -323,7 +352,7 @@ sc_tight_scope:
 	$(MAKE) -C src $@
 
 sc_trailing_blank:
-	@grep -n '[	 ]$$' $$($(CVS_LIST_EXCEPT)) &&			\
+	@grep -n '[	 ]$$' $$($(VC_LIST_EXCEPT)) &&			\
 	  { echo '$(ME): found trailing blank(s)'			\
 		1>&2; exit 1; } || :
 
@@ -333,7 +362,7 @@ sc_trailing_blank:
 longopt_re = --[a-z][0-9A-Za-z-]*(\[?=[0-9A-Za-z-]*\]?)?
 sc_two_space_separator_in_usage:
 	@grep -nE '^   *(-[A-Za-z],)? $(longopt_re) [^ ].*\\$$'		\
-	    $$($(CVS_LIST_EXCEPT)) &&					\
+	    $$($(VC_LIST_EXCEPT)) &&					\
 	  { echo "$(ME): help2man requires at least two spaces between"; \
 	    echo "$(ME): an option and its description"; \
 		1>&2; exit 1; } || :
@@ -342,7 +371,7 @@ sc_two_space_separator_in_usage:
 # This won't find any for which error's format string is on a separate line.
 sc_unmarked_diagnostics:
 	@grep -nE							\
-	    '\<error \([^"]*"[^"]*[a-z]{3}' $$($(CVS_LIST_EXCEPT))	\
+	    '\<error \([^"]*"[^"]*[a-z]{3}' $$($(VC_LIST_EXCEPT))	\
 	  | grep -v '_''(' &&						\
 	  { echo '$(ME): found unmarked diagnostic(s)' 1>&2;		\
 	    exit 1; } || :
@@ -350,13 +379,13 @@ sc_unmarked_diagnostics:
 # Avoid useless parentheses like those in this example:
 # #if defined (SYMBOL) || defined (SYM2)
 sc_useless_cpp_parens:
-	@grep -n '^# *if .*defined *(' $$($(CVS_LIST_EXCEPT)) &&	\
+	@grep -n '^# *if .*defined *(' $$($(VC_LIST_EXCEPT)) &&		\
 	  { echo '$(ME): found useless parentheses in cpp directive'	\
 		1>&2; exit 1; } || :
 
 # Require the latest GPL.
 sc_GPL_version:
-	@grep -n 'either ''version [^3]' $$($(CVS_LIST_EXCEPT)) &&	\
+	@grep -n 'either ''version [^3]' $$($(VC_LIST_EXCEPT)) &&	\
 	  { echo '$(ME): GPL vN, N!=3' 1>&2; exit 1; } || :
 
 # Ensure that the c99-to-c89 patch applies cleanly.
@@ -399,7 +428,7 @@ check-AUTHORS:
 # to emit a definition for each substituted variable.
 makefile-check:
 	grep -nE '@[A-Z_0-9]+@' `find . -name Makefile.am` \
-	  && { echo 'Makefile.maint: use $$(...), not @...@' 1>&2; exit 1; } || :
+	  && { echo '$(ME): use $$(...), not @...@' 1>&2; exit 1; } || :
 
 news-date-check: NEWS
 	today=`date +%Y-%m-%d`;						\
@@ -422,7 +451,7 @@ changelog-check:
 
 m4-check:
 	@grep -n 'AC_DEFUN([^[]' m4/*.m4 \
-	  && { echo 'Makefile.maint: quote the first arg to AC_DEFUN' 1>&2; \
+	  && { echo '$(ME): quote the first arg to AC_DEFUN' 1>&2; \
 	       exit 1; } || :
 
 # Verify that all source files using _() are listed in po/POTFILES.in.
@@ -432,7 +461,7 @@ po-check:
 	  grep -E -v '^(#|$$)' po/POTFILES.in				\
 	    | grep -v '^src/false\.c$$' | sort > $@-1;			\
 	  files=;							\
-	  for file in $$($(CVS_LIST_EXCEPT)) lib/*.[ch]; do		\
+	  for file in $$($(VC_LIST_EXCEPT)) lib/*.[ch]; do		\
 	    case $$file in						\
 	    djgpp/* | man/*) continue;;					\
 	    */c99-to-c89.diff) continue;;				\
@@ -455,7 +484,7 @@ po-check:
 # gettext recognizes it as a string requiring translation.
 author_mark_check:
 	@grep -n '^# *define AUTHORS "[^"]* and ' src/*.c |grep -v ' N_ (' && \
-	  { echo 'Makefile.maint: enclose the above strings in N_ (...)' 1>&2; \
+	  { echo '$(ME): enclose the above strings in N_ (...)' 1>&2; \
 	    exit 1; } || :
 
 # Sometimes it is useful to change the PATH environment variable
@@ -464,7 +493,7 @@ author_mark_check:
 # It'd be better to use `find -print0 ...|xargs -0 ...', but less portable,
 # and there probably aren't many projects with so many Makefile.am files
 # that we'd have to worry about limits on command line length.
-msg = 'Makefile.maint: Do not use `:'\'' above; use @PATH_SEPARATOR@ instead'
+msg = '$(ME): Do not use `:'\'' above; use @PATH_SEPARATOR@ instead'
 makefile_path_separator_check:
 	@grep -n 'PATH=.*:' `find $(srcdir) -name Makefile.am` \
 	  && { echo $(msg) 1>&2; exit 1; } || :
