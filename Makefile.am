@@ -1,9 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = lib libidu src lisp doc testsuite po gnulib-tests
+SUBDIRS = lib libidu src lisp doc man testsuite po gnulib-tests
 EXTRA_DIST = \
   .prev-version \
+  .version \
   .x-sc_cast_of_argument_to_free \
   .x-sc_require_config_h \
   cfg.mk \
@@ -21,6 +22,10 @@ gen-ChangeLog:
 	  rm -f $(distdir)/ChangeLog;					\
 	  mv $(distdir)/cl-t $(distdir)/ChangeLog;			\
 	fi
+
+BUILT_SOURCES = .version
+.version:
+	echo $(VERSION) > $@-t && mv $@-t $@
 
 # Arrange so that .tarball-version appears only in the distribution
 # tarball, and never in a checked-out repository.

@@ -1,6 +1,6 @@
 # -*-Makefile-*-
-# This Makefile fragment is shared between the coreutils,
-# CPPI, Bison, and Autoconf.
+# This Makefile fragment tries to be general-purpose enough to be
+# used by at least coreutils, idutils, CPPI, Bison, and Autoconf.
 
 ## Copyright (C) 2001-2008 Free Software Foundation, Inc.
 ##
@@ -42,6 +42,7 @@ endif
 
 PREV_VERSION := $(shell cat $(prev_version_file))
 VERSION_REGEXP = $(subst .,\.,$(VERSION))
+PREV_VERSION_REGEXP = $(subst .,\.,$(PREV_VERSION))
 
 ifeq ($(VC),$(GIT))
 this-vc-tag = v$(VERSION)
@@ -101,7 +102,7 @@ sc_avoid_if_before_free:
 	    exit 1; } || :
 
 sc_cast_of_argument_to_free:
-	@grep -nE '\<free \(\(' $$($(VC_LIST_EXCEPT)) &&		\
+	@grep -nE '\<free *\( *\(' $$($(VC_LIST_EXCEPT)) &&		\
 	  { echo '$(ME): don'\''t cast free argument' 1>&2;		\
 	    exit 1; } || :
 
@@ -130,7 +131,7 @@ sc_prohibit_atoi_atof:
 
 # Use STREQ rather than comparing strcmp == 0, or != 0.
 sc_prohibit_strcmp:
-	@grep -nE '! *str''cmp \(|\<str''cmp \([^)]+\) *=='		\
+	@grep -nE '! *str''cmp *\(|\<str''cmp *\([^)]+\) *=='		\
 	    $$($(VC_LIST_EXCEPT)) &&					\
 	  { echo '$(ME): use STREQ in place of the above uses of str''cmp' \
 		1>&2; exit 1; } || :
@@ -149,6 +150,7 @@ sc_file_system:
 	    'rewrite to use "file system"' 1>&2;			\
 	    exit 1; } || :
 
+# Don't use cpp tests of this symbol.  All code assumes config.h is included.
 sc_no_have_config_h:
 	@grep -n '^# *if.*HAVE''_CONFIG_H' $$($(VC_LIST_EXCEPT)) &&	\
 	  { echo '$(ME): found use of HAVE''_CONFIG_H; remove'		\
@@ -266,14 +268,17 @@ sc_prohibit_jm_in_m4:
 	    { echo '$(ME): do not use jm_ in m4 macro names'		\
 	      1>&2; exit 1; } || :
 
+# Ensure that each root-requiring test is run via the "check-root" rule.
 sc_root_tests:
 	@if test -d tests \
 	      && grep check-root tests/Makefile.am>/dev/null 2>&1; then \
 	t1=sc-root.expected; t2=sc-root.actual;				\
 	grep -nl '^require_root_$$'					\
-	  $$($(VC_LIST) tests) |sed s,tests,., |sort > $$t1;		\
-	sed -n 's,	cd \([^ ]*\) .*MAKE..check TESTS=\(.*\),./\1/\2,p' \
-	  $(srcdir)/tests/Makefile.am |sort > $$t2;			\
+	  $$($(VC_LIST) tests) |sed s,tests/,, |sort > $$t1;		\
+	sed -n '/^root_tests =[	 ]*\\$$/,/[^\]$$/p'			\
+	  $(srcdir)/tests/Makefile.am					\
+	    | sed 's/^  *//;/^root_tests =/d'				\
+	    | tr -s '\012\\' '  ' | fmt -1 | sort > $$t2;		\
 	diff -u $$t1 $$t2 || diff=1;					\
 	rm -f $$t1 $$t2;						\
 	test "$$diff"							\
@@ -336,6 +341,22 @@ sc_system_h_headers: .re-list
 		  1>&2;  exit 1; } || :;				\
 	fi
 
+# Require that the final line of each test-lib.sh-using test be this one:
+# (exit $fail); exit $fail
+# Note: this test requires GNU grep's --label= option.
+sc_require_test_exit_idiom:
+	@if test -f $(srcdir)/tests/test-lib.sh; then			\
+	  die=0;							\
+	  for i in $$(grep -l -F /../test-lib.sh $$($(VC_LIST) tests)); do \
+	    tail -n1 $$i | grep '^(exit \$$fail); exit \$$fail$$' > /dev/null \
+	      && : || { die=1; echo $$i; }				\
+	  done;								\
+	  test $$die = 1 &&						\
+	    { echo 1>&2 '$(ME): the final line in each of the above is not:'; \
+	      echo 1>&2 '(exit $$fail); exit $$fail';			\
+	      exit 1; } || :;						\
+	fi
+
 sc_sun_os_names:
 	@grep -nEi \
 	    'solaris[^[:alnum:]]*2\.(7|8|9|[1-9][0-9])|sunos[^[:alnum:]][6-9]' \
@@ -387,6 +408,41 @@ sc_useless_cpp_parens:
 sc_GPL_version:
 	@grep -n 'either ''version [^3]' $$($(VC_LIST_EXCEPT)) &&	\
 	  { echo '$(ME): GPL vN, N!=3' 1>&2; exit 1; } || :
+
+exec_perl_re = \
+  exec \$$PERL -w -I\$$top_srcdir/tests -MCoreutils \
+    -M"CuTmpdir qw(\$$me)" -- - <<\\EOF
+# Ensure that each test invoking $PERL with -MCoreutils uses the same line.
+sc_perl_coreutils_test:
+	@if test -f $(srcdir)/tests/Coreutils.pm; then			\
+	  die=0;							\
+	  for i in $$(grep -l '^exec  *\$$PERL.*MCoreutils'		\
+		$$($(VC_LIST) tests)); do				\
+	    grep '$(exec_perl_re)' $$i > /dev/null			\
+	      && : || { die=1; echo $$i; }				\
+	  done;								\
+	  test $$die = 1 &&						\
+	    { echo 1>&2 '$(ME): each of the above execs PERL differently:'; \
+	      echo 1>&2 '(exit $$fail); exit $$fail';			\
+	      exit 1; } || :;						\
+	fi
+
+NEWS_hash = \
+  $$(sed -n '/^\*.* $(PREV_VERSION_REGEXP) ([0-9-]*)/,$$p' \
+     $(srcdir)/NEWS | md5sum -)
+
+# Ensure that we don't accidentally insert an entry into an old NEWS block.
+sc_immutable_NEWS:
+	@if test -f $(srcdir)/NEWS; then				\
+	  test "$(NEWS_hash)" = '$(old_NEWS_hash)' && : ||		\
+	    { echo '$(ME): you have modified old NEWS' 1>&2; exit 1; };	\
+	fi
+
+# Update the hash stored above.  Do this after each release and
+# for any corrections to old entries.
+update-NEWS-hash: NEWS
+	perl -pi -e 's/^(old_NEWS_hash = ).*/$${1}'"$(NEWS_hash)/" \
+	  $(srcdir)/cfg.mk
 
 # Ensure that the c99-to-c89 patch applies cleanly.
 patch-check:
@@ -507,7 +563,7 @@ writable-files:
 	    test -w $$file						\
 	      || { echo ERROR: $$file is not writable; fail=1; };	\
 	  done;								\
-	  test "$$fail" && exit 1 || :
+	  test "$$fail" && exit 1 || : ;				\
 	fi
 
 v_etc_file = lib/version-etc.c
@@ -592,10 +648,12 @@ my-distcheck: $(local-check) check
 	mkdir -p $(t)
 	GZIP=$(GZIP_ENV) $(AMTAR) -C $(t) -zxf $(distdir).tar.gz
 	cd $(t)/$(distdir)				\
-	  && ./configure --disable-nls			\
+	  && ./configure --disable-nls --prefix=$(t)/i	\
 	  && $(MAKE) CFLAGS='$(warn_cflags)'		\
 	      AM_MAKEFLAGS='$(null_AM_MAKEFLAGS)'	\
 	  && $(MAKE) dvi				\
+	  && $(MAKE) install				\
+	  && test -f $(mandir)/man1/mkid.1		\
 	  && mkdir $(bin)				\
 	  && ($(write_loser)) > $(bin)/loser            \
 	  && chmod a+x $(bin)/loser                     \

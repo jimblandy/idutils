@@ -38,3 +38,5 @@ local-checks-to-skip = changelog-check strftime-check patch-check \
 # The local directory containing the checked-out copy of gnulib used in
 # this release.  Used solely to get a date for the "announcement" target.
 gnulib_dir = /gnulib
+
+old_NEWS_hash = d41d8cd98f00b204e9800998ecf8427e  -

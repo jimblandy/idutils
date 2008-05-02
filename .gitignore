@@ -3,6 +3,7 @@
 *~
 .gdb-history
 .tarball-version
+.version
 ABOUT-NLS
 ChangeLog
 GNUmakefile

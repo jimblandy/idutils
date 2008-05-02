@@ -12,6 +12,7 @@ AC_CONFIG_SRCDIR([src/mkid.c])
 AC_CONFIG_HEADERS([lib/config.h:lib/config.hin])
 
 # Checks for programs.
+AM_MISSING_PROG(HELP2MAN, help2man)
 AC_PROG_CC_STDC
 AM_PROG_CC_C_O
 AC_PROG_LN_S
@@ -47,6 +48,7 @@ AM_GNU_GETTEXT_VERSION([0.15])
 AC_CONFIG_FILES([
                  po/Makefile.in
                  doc/Makefile
+                 man/Makefile
                  lib/Makefile
                  libidu/Makefile
                  lisp/Makefile
