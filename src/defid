@@ -1,5 +1,10 @@
 #! /bin/sh
 
+case $1 in
+    --h|--he|--hel|--help|--v|--ve|--ver|--vers|--versi|--versio|--version)
+	exec gid "$@";;
+esac
+
 for sym
 do
     gid $sym |egrep '(}[	 ]*|:[	 ]*#[	 ]*define[	 ]+)'$sym'|typedef\>.*[	 ]+'$sym
