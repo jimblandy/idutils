@@ -115,7 +115,6 @@ static off_t query_binary_search (char const *token);
 static int is_regexp (char *name);
 static int has_left_delimiter (char const *pattern);
 static int has_right_delimiter (char const *pattern);
-static int file_name_wildcard (char const *re, char const *fn);
 static int word_match (char const *name_0, char const *line);
 static int get_radix (char const *str);
 static int is_number (char const *str);
@@ -135,7 +134,6 @@ static struct file_link **bits_to_flinkv (unsigned char const *bits_vec);
 
 static void savetty (void);
 static void restoretty (void);
-static void linetty (void);
 static void chartty (void);
 
 #if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTY_H
@@ -1256,83 +1254,6 @@ has_right_delimiter (char const *pattern)
   return (pattern[-1] == '$' || strequ (pattern - 2, "\\>"));
 }
 
-/* file_name_wildcard implements a simple pattern matcher that
-   emulates the shell wild card capability.
-
-   * - any string of chars
-   ? - any char
-   [] - any char in set (if first char is !, any not in set)
-   \ - literal match next char */
-
-static int
-file_name_wildcard (char const *pattern, char const *fn)
-{
-  int c;
-  int i;
-  char set[256];
-  int revset;
-
-  while ((c = *pattern++) != '\0')
-    {
-      if (c == '*')
-	{
-	  if (*pattern == '\0')
-	    return 1;		/* match anything at end */
-	  while (*fn != '\0')
-	    {
-	      if (file_name_wildcard (pattern, fn))
-		return 1;
-	      ++fn;
-	    }
-	  return 0;
-	}
-      else if (c == '?')
-	{
-	  if (*fn++ == '\0')
-	    return 0;
-	}
-      else if (c == '[')
-	{
-	  c = *pattern++;
-	  memset (set, 0, 256);
-	  if (c == '!')
-	    {
-	      revset = 1;
-	      c = *pattern++;
-	    }
-	  else
-	    revset = 0;
-	  while (c != ']')
-	    {
-	      if (c == '\\')
-		c = *pattern++;
-	      set[c] = 1;
-	      if ((*pattern == '-') && (*(pattern + 1) != ']'))
-		{
-		  pattern += 1;
-		  while (++c <= *pattern)
-		    set[c] = 1;
-		  ++pattern;
-		}
-	      c = *pattern++;
-	    }
-	  if (revset)
-	    for (i = 1; i < 256; ++i)
-	      set[i] = !set[i];
-	  if (!set[(int) *fn++])
-	    return 0;
-	}
-      else
-	{
-	  if (c == '\\')
-	    c = *pattern++;
-	  if (c != *fn++)
-	    return 0;
-	}
-    }
-  return (*fn == '\0');
-}
-
 /* Does `name' occur in `line' delimited by non-alphanumerics?? */
 
 static int
@@ -1656,12 +1577,6 @@ static void
 restoretty (void)
 {
   SET_TTY_MODES (&savemode);
-}
-
-static void
-linetty (void)
-{
-  SET_TTY_MODES (&linemode);
 }
 
 static void
