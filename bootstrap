@@ -415,6 +415,8 @@ version_controlled_file() {
 	     grep '^/[^/]*/[0-9]' > /dev/null && found=yes
   elif test -d .git; then
     git rm -n "$dir/$file" > /dev/null 2>&1 && found=yes
+  elif test -d .svn; then
+    svn log -r HEAD "$dir/$file" > /dev/null 2>&1 && found=yes
   else
     echo "$0: no version control for $dir/$file?" >&2
   fi
@@ -527,41 +529,18 @@ if test $with_gettext = yes; then
   rm -fr $bt $bt2 || exit
 fi
 
-# Coreutils is unusual in that it generates some of its test-related
-# Makefile.am files.  That must be done before invoking automake.
-mam_template=tests/Makefile.am.in
-if test -f $mam_template; then
-  PERL=perl
-  for tool in cut head join pr sort tac tail test tr uniq wc; do
-    m=tests/$tool/Makefile.am
-    t=${m}t
-    rm -f $m $t
-    sed -n '1,/^##test-files-begin/p' $mam_template > $t
-    echo "x = $tool" >> $t
-    srcdir=tests/$tool
-    $PERL -I$srcdir -w -- tests/mk-script $srcdir --list >> $t
-    sed -n '/^##test-files-end/,$p' $mam_template >> $t
-    chmod -w $t
-    mv $t $m
-  done
-fi
-
-# Remove any dangling symlink matching "*.m4" in the gnulib-populated
-# $m4_base directory, since such a file would cause aclocal to fail.
+# Remove any dangling symlink matching "*.m4" or "*.[ch]" in some
+# gnulib-populated directories.  Such .m4 files would cause aclocal to fail.
 # The following requires GNU find 4.2.3 or newer.  Considering the usual
 # portability constraints of this script, that may seem a very demanding
 # requirement, but it should be ok.  Ignore any failure, which is fine,
 # since this is only a convenience to help developers avoid the relatively
 # unusual case in which a symlinked-to .m4 file is git-removed from gnulib
 # between successive runs of this script.
-find "$m4_base" -name '*.m4' -depth -type l -xtype l -delete > /dev/null 2>&1
+find "$m4_base" "$source_base" \
+  -depth \( -name '*.m4' -o -name '*.[ch]' \) \
+  -type l -xtype l -delete > /dev/null 2>&1
 
-# Horrible, kludges.
-# Change paths in gnulib-tests/gnulib.mk from "../.." to "..".
-# This must be done before running automake.
-m=gnulib-tests/gnulib.mk
-sed 's,\.\./\.\.,..,g' $m > $m-t
-mv -f $m-t $m
 
 # Reconfigure, getting other files.
 
@@ -625,6 +604,13 @@ if test $with_gettext = yes; then
   fi
 fi
 
+# Horrible, coreutils-specific kludges.
+# Change paths in gnulib-tests/gnulib.mk from "../.." to "..".
+m=gnulib-tests/gnulib.mk
+sed 's,\.\./\.\.,..,g' $m > $m-t
+mv -f $m-t $m
+
+# Make tests executable.
 chmod a+x gnulib-tests/test-*.sh
 
 echo "$0: done.  Now you can run './configure'."
