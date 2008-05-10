@@ -144,13 +144,12 @@ static void chartty (void);
 
 /* Sorry about all the globals, but it's really cleaner this way. */
 
-char anchor_dir[BUFSIZ];
-int tree8_levels;
-unsigned int bits_vec_size;
+static int tree8_levels;
+static unsigned int bits_vec_size;
 struct idhead idh;
-char *hits_buf_1;
-char *hits_buf_2;
-unsigned char *bits_vec;
+static char *hits_buf_1;
+static char *hits_buf_2;
+static unsigned char *bits_vec;
 
 /* The name this program was run with. */
 
@@ -166,52 +165,52 @@ static int show_version;
 
 /* Which radixes do we want? */
 
-int radix_flag = radix_all;
+static int radix_flag = radix_all;
 
 /* If nonzero, ignore differences in alphabetic case while matching.  */
 
-int ignore_case_flag = 0;
+static int ignore_case_flag = 0;
 
 /* How will patterns will be delimited? */
 
-enum delimiter_style delimiter_style = ds_contextual;
+static enum delimiter_style delimiter_style = ds_contextual;
 
 /* How will patterns be interpreted? */
 
-enum pattern_style pattern_style = ps_contextual;
+static enum pattern_style pattern_style = ps_contextual;
 
 /* How will keys be presented? */
 
-enum key_style key_style = ks_token;
+static enum key_style key_style = ks_token;
 
 /* How will query results be presented? */
 
-enum result_style result_style = rs_filenames;
+static enum result_style result_style = rs_filenames;
 
 /* How shall we separate file names when result_style == rs_filenames?  */
 
-enum separator_style separator_style = ss_contextual;
+static enum separator_style separator_style = ss_contextual;
 
 /* If non-zero, list identifiers that are are non-unique within this
    number of leading characters.  */
 
-unsigned int ambiguous_prefix_length = 0;
+static unsigned int ambiguous_prefix_length = 0;
 
 /* The style of report.  */
 
-report_func_t report_function;
+static report_func_t report_function;
 
 /* The style of query.  */
 
-query_func_t query_function;
+static query_func_t query_function;
 
 /* Lower and upper bounds on occurrence frequency.  */
 
-unsigned int frequency_low = 1;
-unsigned int frequency_high = USHRT_MAX;
+static unsigned int frequency_low = 1;
+static unsigned int frequency_high = USHRT_MAX;
 
 struct file_link *cw_dlink;
-struct file_link **members_0;
+static struct file_link **members_0;
 
 static struct option const long_options[] =
 {
@@ -1478,9 +1477,9 @@ tree8_to_flinkv (unsigned char const *hits_tree8)
 #if HAVE_TERMIOS_H
 
 #include <termios.h>
-struct termios linemode;
-struct termios charmode;
-struct termios savemode;
+static struct termios linemode;
+static struct termios charmode;
+static struct termios savemode;
 #define GET_TTY_MODES(modes) tcgetattr (0, (modes))
 #define SET_TTY_MODES(modes) tcsetattr(0, TCSANOW, (modes))
 
@@ -1493,9 +1492,9 @@ struct termios savemode;
 # if HAVE_TERMIO_H
 
 #  include <termio.h>
-struct termio linemode;
-struct termio charmode;
-struct termio savemode;
+static struct termio linemode;
+static struct termio charmode;
+static struct termio savemode;
 #define GET_TTY_MODES(modes) ioctl (0, TCGETA, (modes))
 #define SET_TTY_MODES(modes) ioctl (0, TCSETA, (modes))
 
@@ -1504,9 +1503,9 @@ struct termio savemode;
 #  if HAVE_SGTTY_H
 
 #   include <sgtty.h>
-struct sgttyb linemode;
-struct sgttyb charmode;
-struct sgttyb savemode;
+static struct sgttyb linemode;
+static struct sgttyb charmode;
+static struct sgttyb savemode;
 
 #   ifdef TIOCGETP
 #define GET_TTY_MODES(modes) ioctl (0, TIOCGETP, (modes))

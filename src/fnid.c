@@ -33,19 +33,17 @@
 #include "idfile.h"
 #include "iduglobal.h"
 
-void scan_member_file (struct member_file const *member);
 void usage (void);
 
 char const *program_name;
-int show_version = 0;
-int show_help = 0;
+static int show_version = 0;
+static int show_help = 0;
 struct idhead idh;
 struct file_link *cw_dlink;
-int no_id_flag = 1;
 
 /* How shall we separate file names?  */
 
-enum separator_style separator_style = ss_contextual;
+static enum separator_style separator_style = ss_contextual;
 
 void
 usage (void)

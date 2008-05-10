@@ -39,7 +39,7 @@ static void skip_hits (unsigned char const **hits, int level);
 void usage (void);
 
 struct idhead idh;
-int tree8_levels;
+static int tree8_levels;
 
 /* The name this program was run with. */
 
@@ -55,10 +55,10 @@ static int show_version;
 
 /* The file name of the ID database.  */
 
-struct file_link *cw_dlink;
-struct file_link **members_0;
-unsigned int bits_vec_size;
-char *hits_buf;
+static struct file_link *cw_dlink;
+static struct file_link **members_0;
+static unsigned int bits_vec_size;
+static char *hits_buf;
 
 static struct option const long_options[] =
 {

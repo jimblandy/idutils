@@ -36,9 +36,9 @@ static void scan_member_file (struct member_file const *member);
 void usage (void);
 
 char const *program_name;
-char *lang_map_file_name = 0;
-int show_version = 0;
-int show_help = 0;
+static char *lang_map_file_name = 0;
+static int show_version = 0;
+static int show_help = 0;
 struct idhead idh;
 struct file_link *cw_dlink;
 

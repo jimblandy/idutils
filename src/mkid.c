@@ -89,38 +89,37 @@ static void write_hits (FILE *fp, struct summary *summary,
 static void sign_token (struct token *token);
 static void add_token_to_summary (struct summary *summary, struct token *token);
 
-struct hash_table token_table;
+static struct hash_table token_table;
 
 /* Miscellaneous statistics */
-unsigned long input_chars;
-unsigned long name_tokens;
-unsigned long number_tokens;
-unsigned long string_tokens;
-unsigned long literal_tokens;
-unsigned long comment_tokens;
-unsigned long occurrences;
-unsigned long hits_length = 0;
-unsigned long tokens_length = 0;
-unsigned long output_length = 0;
+static unsigned long input_chars;
+static unsigned long name_tokens;
+static unsigned long number_tokens;
+static unsigned long string_tokens;
+static unsigned long literal_tokens;
+static unsigned long comment_tokens;
+static unsigned long occurrences;
+static unsigned long hits_length = 0;
+static unsigned long tokens_length = 0;
+static unsigned long output_length = 0;
 
-int verbose_flag = 0;
-int statistics_flag = 0;
+static int verbose_flag = 0;
+static int statistics_flag = 0;
 
-int file_name_count = 0;	/* # of files in database */
-int levels = 0;			/* ceil(log(8)) of file_name_count */
+static int levels = 0;			/* ceil(log(8)) of file_name_count */
 
-unsigned char *current_hits_signature;
+static unsigned char *current_hits_signature;
 #define INIT_TOKENS_SIZE(level) (1 << ((level) + 13))
-struct summary *summary_root;
-struct summary *summary_leaf;
+static struct summary *summary_root;
+static struct summary *summary_leaf;
 
 char const *program_name;
 
-char *lang_map_file_name = 0;
-int show_version = 0;
-int show_help = 0;
+static char *lang_map_file_name = 0;
+static int show_version = 0;
+static int show_help = 0;
 struct idhead idh;
-struct file_link *cw_dlink;
+static struct file_link *cw_dlink;
 
 void
 usage (void)
@@ -181,9 +180,9 @@ The following arguments apply to the language-specific scanners:\n\
   exit (0);
 }
 
-void *heap_initial;
-void *heap_after_walk;
-void *heap_after_scan;
+static void *heap_initial;
+static void *heap_after_walk;
+static void *heap_after_scan;
 
 static void *get_process_heap(void)
 {
