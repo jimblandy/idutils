@@ -1,5 +1,5 @@
 /* fnid.c -- report which files constitute an ID database
-   Copyright (C) 1996 Free Software Foundation, Inc.
+   Copyright (C) 1996, 2008 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,6 @@
 #include "idfile.h"
 #include "iduglobal.h"
 
-void scan_files (struct idhead *idhp);
 void scan_member_file (struct member_file const *member);
 void usage (void);
 

@@ -88,52 +88,56 @@ enum radix
 
 void usage (void);
 static void help_me (void);
-void lower_caseify (char *str);
-enum key_style parse_key_style (char const *arg);
-enum result_style parse_result_style (char const *arg);
-query_func_t get_query_func (char *pattern);
-report_func_t get_report_func (void);
-void report_filenames (char const *name, struct file_link **flinkv);
-void report_grep (char const *name, struct file_link **flinkv);
-void report_edit (char const *name, struct file_link **flinkv);
-void report_nothing (char const *name, struct file_link **flinkv);
-int vector_cardinality (void *vector);
-int search_flinkv (struct file_link **flinkv);
-int query_literal_word (char const *pattern, report_func_t report_func);
-int query_literal_prefix (char const *pattern, report_func_t report_func);
-int query_regexp (char const *pattern_0, report_func_t report_func);
-char const *add_regexp_word_delimiters (char const *pattern_0);
-int query_number (char const *pattern, report_func_t report_func);
-int query_ambiguous_prefix (unsigned int, report_func_t report_func);
-int query_literal_substring (char const *pattern, report_func_t report_func);
-void parse_frequency_arg (char const *arg);
-int desired_frequency (char const *tok);
+static void lower_caseify (char *str);
+static enum key_style parse_key_style (char const *arg);
+static enum result_style parse_result_style (char const *arg);
+static query_func_t get_query_func (char *pattern);
+static report_func_t get_report_func (void);
+static void report_filenames (char const *name, struct file_link **flinkv);
+static void report_grep (char const *name, struct file_link **flinkv);
+static void report_edit (char const *name, struct file_link **flinkv);
+static void report_nothing (char const *name, struct file_link **flinkv);
+static int vector_cardinality (void *vector);
+static int search_flinkv (struct file_link **flinkv);
+static int query_literal_word (char const *pattern, report_func_t report_func);
+static int query_literal_prefix (char const *pattern, report_func_t report_func);
+static int query_regexp (char const *pattern_0, report_func_t report_func);
+static char const *add_regexp_word_delimiters (char const *pattern_0);
+static int query_number (char const *pattern, report_func_t report_func);
+static int query_ambiguous_prefix (unsigned int, report_func_t report_func);
+static int query_literal_substring (char const *pattern,
+				    report_func_t report_func);
+static void parse_frequency_arg (char const *arg);
+static int desired_frequency (char const *tok);
 char *strcasestr (char const *s1, char const *s2);
-char const *file_regexp (char const *name_0, char const *left_delimit, char const *right_delimit);
-off_t query_binary_search (char const *token);
-int is_regexp (char *name);
-int has_left_delimiter (char const *pattern);
-int has_right_delimiter (char const *pattern);
-int file_name_wildcard (char const *re, char const *fn);
-int word_match (char const *name_0, char const *line);
-int get_radix (char const *str);
-int is_number (char const *str);
-int stoi (char const *str);
-int otoi (char const *str);
-int dtoi (char const *str);
-int xtoi (char const *str);
-unsigned char *tree8_to_bits (unsigned char *bits_vec, unsigned char const *hits_tree8);
-void tree8_to_bits_1 (unsigned char **bits_vec, unsigned char const **hits_tree8, int level);
-struct file_link **tree8_to_flinkv (unsigned char const *hits_tree8);
-struct file_link **bits_to_flinkv (unsigned char const *bits_vec);
+static char const *file_regexp (char const *name_0, char const *left_delimit,
+				char const *right_delimit);
+static off_t query_binary_search (char const *token);
+static int is_regexp (char *name);
+static int has_left_delimiter (char const *pattern);
+static int has_right_delimiter (char const *pattern);
+static int file_name_wildcard (char const *re, char const *fn);
+static int word_match (char const *name_0, char const *line);
+static int get_radix (char const *str);
+static int is_number (char const *str);
+static int stoi (char const *str);
+static int otoi (char const *str);
+static int dtoi (char const *str);
+static int xtoi (char const *str);
+static unsigned char *tree8_to_bits (unsigned char *bits_vec,
+				     unsigned char const *hits_tree8);
+static void tree8_to_bits_1 (unsigned char **bits_vec,
+			     unsigned char const **hits_tree8, int level);
+static struct file_link **tree8_to_flinkv (unsigned char const *hits_tree8);
+static struct file_link **bits_to_flinkv (unsigned char const *bits_vec);
 
 #if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTY_H
 #endif
 
-void savetty (void);
-void restoretty (void);
-void linetty (void);
-void chartty (void);
+static void savetty (void);
+static void restoretty (void);
+static void linetty (void);
+static void chartty (void);
 
 #if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTY_H
 #endif
@@ -453,7 +457,7 @@ main (int argc, char **argv)
   exit (0);
 }
 
-void
+static void
 lower_caseify (char *str)
 {
   while (*str)
@@ -463,7 +467,7 @@ lower_caseify (char *str)
     }
 }
 
-enum key_style
+static enum key_style
 parse_key_style (char const *arg)
 {
   MAYBE_RETURN_PREFIX_MATCH (arg, "none", ks_none);
@@ -474,7 +478,7 @@ parse_key_style (char const *arg)
   return ks_bogus;
 }
 
-enum result_style
+static enum result_style
 parse_result_style (char const *arg)
 {
   MAYBE_RETURN_PREFIX_MATCH (arg, "none", rs_none);
@@ -486,7 +490,7 @@ parse_result_style (char const *arg)
   return rs_bogus;
 }
 
-query_func_t
+static query_func_t
 get_query_func (char *pattern)
 {
   switch (pattern_style)
@@ -516,7 +520,7 @@ get_query_func (char *pattern)
     }
 }
 
-report_func_t
+static report_func_t
 get_report_func (void)
 {
   switch (result_style)
@@ -528,7 +532,7 @@ get_report_func (void)
     }
 }
 
-void
+static void
 report_filenames (char const *name, struct file_link **flinkv)
 {
   if (name && key_style != ks_none)
@@ -536,7 +540,7 @@ report_filenames (char const *name, struct file_link **flinkv)
   print_filenames (flinkv, separator_style);
 }
 
-void
+static void
 report_grep (char const *name, struct file_link **flinkv)
 {
   char line[1<<020];
@@ -623,7 +627,7 @@ get_editor_argv(char *fullstring, int* argc)
   return argv;
 }
 
-void
+static void
 report_edit (char const *name, struct file_link **flinkv)
 {
   static char *editor;		/* editor program name from env   */
@@ -779,14 +783,14 @@ editit:
     }
 }
 
-void
+static void
 report_nothing (char const *name, struct file_link **flinkv)
 {
   if (key_style != ks_none)
     puts (name);
 }
 
-int
+static int
 vector_cardinality (void *vector)
 {
   void **v = (void **) vector;
@@ -797,7 +801,7 @@ vector_cardinality (void *vector)
   return count;
 }
 
-int
+static int
 search_flinkv (struct file_link **flinkv)
 {
   char pattern[BUFSIZ];
@@ -820,7 +824,7 @@ search_flinkv (struct file_link **flinkv)
   return -1;
 }
 
-int
+static int
 query_literal_word (char const *arg, report_func_t report_func)
 {
   if (ignore_case_flag)
@@ -836,7 +840,7 @@ query_literal_word (char const *arg, report_func_t report_func)
   return 1;
 }
 
-int
+static int
 query_literal_prefix (char const *arg, report_func_t report_func)
 {
   int count;
@@ -871,7 +875,7 @@ query_literal_prefix (char const *arg, report_func_t report_func)
   return count;
 }
 
-int
+static int
 query_regexp (char const *pattern_0, report_func_t report_func)
 {
   int count;
@@ -920,7 +924,7 @@ query_regexp (char const *pattern_0, report_func_t report_func)
   return count;
 }
 
-char const *
+static char const *
 add_regexp_word_delimiters (char const *pattern_0)
 {
   int length = strlen (pattern_0);
@@ -945,7 +949,7 @@ add_regexp_word_delimiters (char const *pattern_0)
     }
 }
 
-int
+static int
 query_number (char const *arg, report_func_t report_func)
 {
   int count;
@@ -990,7 +994,7 @@ query_number (char const *arg, report_func_t report_func)
 /* Find identifiers that are non-unique within the first `count'
    characters.  */
 
-int
+static int
 query_ambiguous_prefix (unsigned int limit, report_func_t report_func)
 {
   char *old = hits_buf_1;
@@ -1046,7 +1050,7 @@ query_ambiguous_prefix (unsigned int limit, report_func_t report_func)
   return count;
 }
 
-int
+static int
 query_literal_substring (char const *arg, report_func_t report_func)
 {
   int count;
@@ -1086,7 +1090,7 @@ query_literal_substring (char const *arg, report_func_t report_func)
   return count;
 }
 
-void
+static void
 parse_frequency_arg (char const *arg)
 {
   if (strnequ (arg, "..", 2))
@@ -1113,7 +1117,7 @@ parse_frequency_arg (char const *arg)
     }
 }
 
-int
+static int
 desired_frequency (char const *tok)
 {
   unsigned int count = token_count (tok);
@@ -1141,7 +1145,7 @@ strcasestr (char const *s1, char const *s2)
    in the id database into one suitable for locating the identifiers
    in files.  */
 
-char const *
+static char const *
 file_regexp (char const *name_0, char const *left_delimit, char const *right_delimit)
 {
   static char pat_buf[BUFSIZ];
@@ -1171,7 +1175,7 @@ file_regexp (char const *name_0, char const *left_delimit, char const *right_del
   return pat_buf;
 }
 
-off_t
+static off_t
 query_binary_search (char const *token_0)
 {
   off_t offset = 0;
@@ -1227,7 +1231,7 @@ query_binary_search (char const *token_0)
 
 /* Are there any regexp meta-characters in name?? */
 
-int
+static int
 is_regexp (char *name)
 {
   int backslash = 0;
@@ -1258,13 +1262,13 @@ is_regexp (char *name)
   return 0;
 }
 
-int
+static int
 has_left_delimiter (char const *pattern)
 {
   return (*pattern == '^' || strnequ (pattern, "\\<", 2));
 }
 
-int
+static int
 has_right_delimiter (char const *pattern)
 {
   return (pattern[-1] == '$' || strequ (pattern - 2, "\\>"));
@@ -1278,7 +1282,7 @@ has_right_delimiter (char const *pattern)
    [] - any char in set (if first char is !, any not in set)
    \ - literal match next char */
 
-int
+static int
 file_name_wildcard (char const *pattern, char const *fn)
 {
   int c;
@@ -1349,7 +1353,7 @@ file_name_wildcard (char const *pattern, char const *fn)
 
 /* Does `name' occur in `line' delimited by non-alphanumerics?? */
 
-int
+static int
 word_match (char const *name_0, char const *line)
 {
   char const *name = name_0;
@@ -1384,7 +1388,7 @@ word_match (char const *name_0, char const *line)
    apply.  In particular, it is impossible to determine the radix of
    0, so return all possibilities.  */
 
-int
+static int
 get_radix (char const *str)
 {
   if (!isdigit (*str))
@@ -1399,7 +1403,7 @@ get_radix (char const *str)
   return (*str ? radix_oct : (radix_oct | radix_dec));
 }
 
-int
+static int
 is_number (char const *str)
 {
   if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X'))
@@ -1419,7 +1423,7 @@ is_number (char const *str)
 /* Convert an ascii string number to an integer.  Determine the radix
    before converting.  */
 
-int
+static int
 stoi (char const *str)
 {
   switch (get_radix (str))
@@ -1439,7 +1443,7 @@ stoi (char const *str)
 
 /* Convert an ascii octal number to an integer. */
 
-int
+static int
 otoi (char const *str)
 {
   int n = 0;
@@ -1456,7 +1460,7 @@ otoi (char const *str)
 
 /* Convert an ascii decimal number to an integer. */
 
-int
+static int
 dtoi (char const *str)
 {
   int n = 0;
@@ -1473,7 +1477,7 @@ dtoi (char const *str)
 
 /* Convert an ascii hex number to an integer. */
 
-int
+static int
 xtoi (char const *str)
 {
   int n = 0;
@@ -1493,7 +1497,7 @@ xtoi (char const *str)
   return (*str ? -1 : n);
 }
 
-unsigned char *
+static unsigned char *
 tree8_to_bits (unsigned char *bv_0, unsigned char const *hits_tree8)
 {
   unsigned char* bv = bv_0;
@@ -1501,7 +1505,7 @@ tree8_to_bits (unsigned char *bv_0, unsigned char const *hits_tree8)
   return bv_0;
 }
 
-void
+static void
 tree8_to_bits_1 (unsigned char **bv, unsigned char const **hits_tree8, int level)
 {
   int hits = *(*hits_tree8)++;
@@ -1522,7 +1526,7 @@ tree8_to_bits_1 (unsigned char **bv, unsigned char const **hits_tree8, int level
     *(*bv)++ |= hits;
 }
 
-struct file_link **
+static struct file_link **
 bits_to_flinkv (unsigned char const *bv)
 {
   int const reserved_flinkv_slots = 3;
@@ -1561,7 +1565,7 @@ out:
   return &flinkv_0[reserved_flinkv_slots];
 }
 
-struct file_link **
+static struct file_link **
 tree8_to_flinkv (unsigned char const *hits_tree8)
 {
   memset (bits_vec, 0, bits_vec_size);
@@ -1620,7 +1624,7 @@ struct sgttyb savemode;
 
 #if HAVE_TERMIOS_H || HAVE_TERMIO_H
 
-void
+static void
 savetty (void)
 {
   GET_TTY_MODES (&savemode);
@@ -1639,7 +1643,7 @@ savetty (void)
 
 # if HAVE_SGTTY_H
 
-void
+static void
 savetty (void)
 {
 #  ifdef TIOCGETP
@@ -1658,7 +1662,7 @@ savetty (void)
 
 # else /* not HAVE_SGTTY_H */
 
-void
+static void
 savetty (void)
 {
 }
@@ -1666,19 +1670,19 @@ savetty (void)
 # endif /* not HAVE_SGTTY_H */
 #endif /* not (HAVE_TERMIOS_H || HAVE_TERMIO_H) */
 
-void
+static void
 restoretty (void)
 {
   SET_TTY_MODES (&savemode);
 }
 
-void
+static void
 linetty (void)
 {
   SET_TTY_MODES (&linemode);
 }
 
-void
+static void
 chartty (void)
 {
   SET_TTY_MODES (&charmode);

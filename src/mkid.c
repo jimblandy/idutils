@@ -60,30 +60,34 @@ struct summary
 void usage (void);
 static void help_me (void);
 int main (int argc, char **argv);
-int ceil_log_8 (unsigned long n);
-int ceil_log_2 (unsigned long n);
-void assert_writeable (char const *file_name);
-void scan_files (struct idhead *idhp);
-void scan_member_file (struct member_file const *member);
-void scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_FILE);
-void report_statistics (void);
-void write_id_file (struct idhead *idhp);
-unsigned long token_hash_1 (void const *key);
-unsigned long token_hash_2 (void const *key);
-int token_hash_cmp (void const *x, void const *y);
-int token_qsort_cmp (void const *x, void const *y);
-void bump_current_hits_signature (void);
-void init_hits_signature (int i);
-void free_summary_tokens (void);
-void summarize (void);
-void init_summary (void);
-struct summary *make_sibling_summary (struct summary *summary);
-int count_vec_size (struct summary *summary, unsigned char const *tail_hits);
-int count_buf_size (struct summary *summary, unsigned char const *tail_hits);
-void assert_hits (struct summary* summary);
-void write_hits (FILE *fp, struct summary *summary, unsigned char const *tail_hits);
-void sign_token (struct token *token);
-void add_token_to_summary (struct summary *summary, struct token *token);
+static int ceil_log_8 (unsigned long n);
+static int ceil_log_2 (unsigned long n);
+static void assert_writeable (char const *file_name);
+static void scan_files (struct idhead *idhp);
+static void scan_member_file (struct member_file const *member);
+static void scan_member_file_1 (get_token_func_t get_token,
+				void const *args, FILE *source_FILE);
+static void report_statistics (void);
+static void write_id_file (struct idhead *idhp);
+static unsigned long token_hash_1 (void const *key);
+static unsigned long token_hash_2 (void const *key);
+static int token_hash_cmp (void const *x, void const *y);
+static int token_qsort_cmp (void const *x, void const *y);
+static void bump_current_hits_signature (void);
+static void init_hits_signature (int i);
+static void free_summary_tokens (void);
+static void summarize (void);
+static void init_summary (void);
+static struct summary *make_sibling_summary (struct summary *summary);
+static int count_vec_size (struct summary *summary,
+			   unsigned char const *tail_hits);
+static int count_buf_size (struct summary *summary,
+			   unsigned char const *tail_hits);
+static void assert_hits (struct summary* summary);
+static void write_hits (FILE *fp, struct summary *summary,
+			unsigned char const *tail_hits);
+static void sign_token (struct token *token);
+static void add_token_to_summary (struct summary *summary, struct token *token);
 
 struct hash_table token_table;
 
@@ -126,7 +130,7 @@ usage (void)
   exit (1);
 }
 
-static struct option const long_options[] =
+static const struct option const long_options[] =
 {
   { "file", required_argument, 0, 'f' },
   { "output", required_argument, 0, 'o' },
@@ -338,7 +342,7 @@ main (int argc, char **argv)
 
 /* Return the integer ceiling of the base-8 logarithm of N.  */
 
-int
+static int
 ceil_log_8 (unsigned long n)
 {
   int log_8 = 0;
@@ -354,7 +358,7 @@ ceil_log_8 (unsigned long n)
 
 /* Return the integer ceiling of the base-2 logarithm of N.  */
 
-int
+static int
 ceil_log_2 (unsigned long n)
 {
   int log_2 = 0;
@@ -372,7 +376,7 @@ ceil_log_2 (unsigned long n)
    writable.  If it doesn't exist, make sure it can be created.  Exit
    with a diagnostic if this is not so.  */
 
-void
+static void
 assert_writeable (char const *filename)
 {
   if (access (filename, 06) < 0)
@@ -393,7 +397,7 @@ assert_writeable (char const *filename)
 /* Iterate over all eligible files (the members of the set of scannable files).
    Create a tree8 to store the set of files where a token occurs.  */
 
-void
+static void
 scan_files (struct idhead *idhp)
 {
   struct member_file **members_0
@@ -443,7 +447,7 @@ scan_files (struct idhead *idhp)
 
 /* Open a file and scan it.  */
 
-void
+static void
 scan_member_file (struct member_file const *member)
 {
   struct lang_args const *lang_args = member->mf_lang_args;
@@ -486,7 +490,7 @@ scan_member_file (struct member_file const *member)
 /* Iterate over all tokens in the file, and merge the file's tree8
    signature into the token table entry.  */
 
-void
+static void
 scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_FILE)
 {
   struct token **slot;
@@ -538,7 +542,7 @@ scan_member_file_1 (get_token_func_t get_token, void const *args, FILE *source_F
     }
 }
 
-void
+static void
 report_statistics (void)
 {
   printf (_("Name=%ld, "), name_tokens);
@@ -569,7 +573,7 @@ report_statistics (void)
    directory which you have no write access to, so you cannot create
    the ID file.)  */
 
-void
+static void
 write_id_file (struct idhead *idhp)
 {
   struct token **tokens;
@@ -666,26 +670,26 @@ write_id_file (struct idhead *idhp)
 /* Define primary and secondary hash and comparison functions for the
    token table.  */
 
-unsigned long
+static unsigned long
 token_hash_1 (void const *key)
 {
   return_STRING_HASH_1 (TOKEN_NAME ((struct token const *) key));
 }
 
-unsigned long
+static unsigned long
 token_hash_2 (void const *key)
 {
   return_STRING_HASH_2 (TOKEN_NAME ((struct token const *) key));
 }
 
-int
+static int
 token_hash_cmp (void const *x, void const *y)
 {
   return_STRING_COMPARE (TOKEN_NAME ((struct token const *) x),
 			 TOKEN_NAME ((struct token const *) y));
 }
 
-int
+static int
 token_qsort_cmp (void const *x, void const *y)
 {
   return_STRING_COMPARE (TOKEN_NAME (*(struct token const *const *) x),
@@ -698,7 +702,7 @@ token_qsort_cmp (void const *x, void const *y)
 /* Advance the tree8 hit signature that corresponds to the file
    we are now scanning.  */
 
-void
+static void
 bump_current_hits_signature (void)
 {
   unsigned char *hits = current_hits_signature;
@@ -709,7 +713,7 @@ bump_current_hits_signature (void)
 
 /* Initialize the tree8 hit signature for the first file we scan.  */
 
-void
+static void
 init_hits_signature (int i)
 {
   unsigned char *hits = current_hits_signature;
@@ -722,7 +726,7 @@ init_hits_signature (int i)
     }
 }
 
-void
+static void
 free_summary_tokens (void)
 {
   struct summary *summary = summary_leaf;
@@ -733,7 +737,7 @@ free_summary_tokens (void)
     }
 }
 
-void
+static void
 summarize (void)
 {
   unsigned char const *hits_sig = current_hits_signature;
@@ -772,7 +776,7 @@ summarize (void)
   summary_leaf = make_sibling_summary (summary_leaf);
 }
 
-void
+static void
 init_summary (void)
 {
   unsigned long size = INIT_TOKENS_SIZE (0);
@@ -781,7 +785,7 @@ init_summary (void)
   summary_root->sum_tokens = xmalloc (sizeof(struct token *) * size);
 }
 
-struct summary *
+static struct summary *
 make_sibling_summary (struct summary *summary)
 {
   struct summary *parent = summary->sum_parent;
@@ -822,7 +826,7 @@ make_sibling_summary (struct summary *summary)
   return summary;
 }
 
-int
+static int
 count_vec_size (struct summary *summary, unsigned char const *tail_hits)
 {
   struct summary **kids;
@@ -846,7 +850,7 @@ count_vec_size (struct summary *summary, unsigned char const *tail_hits)
     }
 }
 
-int
+static int
 count_buf_size (struct summary *summary, unsigned char const *tail_hits)
 {
   struct summary **kids;
@@ -867,7 +871,7 @@ count_buf_size (struct summary *summary, unsigned char const *tail_hits)
     }
 }
 
-void
+static void
 assert_hits (struct summary* summary)
 {
   struct summary **kids = summary->sum_kids;
@@ -882,7 +886,7 @@ assert_hits (struct summary* summary)
     assert_hits (*kids++);
 }
 
-void
+static void
 write_hits (FILE *fp, struct summary *summary, unsigned char const *tail_hits)
 {
   struct summary **kids;
@@ -902,7 +906,7 @@ write_hits (FILE *fp, struct summary *summary, unsigned char const *tail_hits)
     }
 }
 
-void
+static void
 sign_token (struct token *token)
 {
   unsigned char *tok_hits = TOKEN_HITS (token);
@@ -931,7 +935,7 @@ sign_token (struct token *token)
     }
 }
 
-void
+static void
 add_token_to_summary (struct summary *summary, struct token *token)
 {
   size_t size = summary->sum_tokens_size;

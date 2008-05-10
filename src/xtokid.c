@@ -31,8 +31,8 @@
 #include "idfile.h"
 #include "iduglobal.h"
 
-void scan_files (struct idhead *idhp);
-void scan_member_file (struct member_file const *member);
+static void scan_files (struct idhead *idhp);
+static void scan_member_file (struct member_file const *member);
 void usage (void);
 
 char const *program_name;
@@ -181,7 +181,7 @@ main (int argc, char **argv)
   return 0;
 }
 
-void
+static void
 scan_files (struct idhead *idhp)
 {
   struct member_file **members_0
@@ -201,7 +201,7 @@ scan_files (struct idhead *idhp)
   free (members_0);
 }
 
-void
+static void
 scan_member_file (struct member_file const *member)
 {
   struct lang_args const *lang_args = member->mf_lang_args;

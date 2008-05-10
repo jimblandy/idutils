@@ -1,5 +1,5 @@
 /* fid.c -- list all tokens in the given file(s)
-   Copyright (C) 1986, 1995, 1996 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 2008 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -32,10 +32,10 @@
 #include "idfile.h"
 #include "iduglobal.h"
 
-int get_file_index (char *file_name);
-int is_hit (unsigned char const *hits, int file_number);
-int is_hit_1 (unsigned char const **hits, int level, int file_number);
-void skip_hits (unsigned char const **hits, int level);
+static int get_file_index (char *file_name);
+static int is_hit (unsigned char const *hits, int file_number);
+static int is_hit_1 (unsigned char const **hits, int level, int file_number);
+static void skip_hits (unsigned char const **hits, int level);
 void usage (void);
 
 struct idhead idh;
@@ -205,7 +205,7 @@ main (int argc, char **argv)
   return 0;
 }
 
-int
+static int
 get_file_index (char *file_name)
 {
   struct file_link **members;
@@ -250,13 +250,13 @@ get_file_index (char *file_name)
   return idx;
 }
 
-int
+static int
 is_hit (unsigned char const *hits, int file_number)
 {
   return is_hit_1 (&hits, tree8_levels, file_number);
 }
 
-int
+static int
 is_hit_1 (unsigned char const **hits, int level, int file_number)
 {
   int file_hit = 1 << ((file_number >> (3 * --level)) & 7);
