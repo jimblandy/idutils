@@ -31,7 +31,7 @@ sc_tight_scope: $(all_programs)
 	    exit 1; } || : ;						\
 	( printf '^program_name$$\n';					\
 	  sed -n 's/^extern int \([^ ][^ ]*\);$$/^\1$$/p'		\
-	    $(noinst_HEADERS) ) > $$t;					\
+	    $(noinst_HEADERS) /dev/null ) > $$t;			\
 	nm -e *.$(OBJEXT)						\
 	    | sed -n 's/.* [BD] //p'					\
 	    | grep -Ev -f $$t &&					\
