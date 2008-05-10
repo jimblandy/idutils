@@ -30,7 +30,7 @@
 #include "xnls.h"
 #include "iduglobal.h"
 
-int fgets0 (char *buf0, int size, FILE *in_FILE);
+static int fgets0 (char *buf0, int size, FILE *in_FILE);
 
 
 /****************************************************************************/
@@ -145,7 +145,7 @@ read_idhead (struct idhead *idhp)
    rather than newlines.  Also, we return the number of characters
    read rather than the address of buf0.  */
 
-int
+static int
 fgets0 (char *buf0, int size, FILE * in_FILE)
 {
   char *buf;

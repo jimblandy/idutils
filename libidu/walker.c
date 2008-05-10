@@ -41,36 +41,45 @@
 int walker_verbose_flag = 0;
 off_t largest_member_file = 0;
 
-int walk_dir (struct file_link *dir_link);
-struct member_file *get_member_file (struct file_link *flink);
-struct lang_args *get_lang_args (struct file_link const *flink);
-void print_member_file (struct member_file *member);
-int walk_sub_dirs (struct dynvec *sub_dirs_vec);
-void reparent_children (struct file_link *dlink, struct file_link *slink);
-int classify_link (struct file_link *flink, struct stat *stp);
-struct file_link *get_link_from_dirent (struct dirent *dirent, struct file_link *parent);
-struct file_link *make_link_from_dirent (struct dirent *dirent, struct file_link *parent);
-struct file_link *get_link_from_string (char const *name, struct file_link *parent);
-struct file_link *make_link_from_string (char const *name, struct file_link *parent);
-int lang_wanted (char const *lang_name);
-char **append_strings_to_vector (char **vector_0, char *string, char const *delimiter_class);
-int vector_length (char **vector);
-int string_in_vector (char const *string, char **vector);
+static int walk_dir (struct file_link *dir_link);
+static struct member_file *get_member_file (struct file_link *flink);
+static struct lang_args *get_lang_args (struct file_link const *flink);
+static void print_member_file (struct member_file *member);
+static int walk_sub_dirs (struct dynvec *sub_dirs_vec);
+static void reparent_children (struct file_link *dlink, struct file_link *slink);
+static int classify_link (struct file_link *flink, struct stat *stp);
+static struct file_link *get_link_from_dirent (struct dirent *dirent,
+					       struct file_link *parent);
+static struct file_link *make_link_from_dirent (struct dirent *dirent,
+						struct file_link *parent);
+static struct file_link *get_link_from_string (char const *name,
+					       struct file_link *parent);
+static struct file_link *make_link_from_string (char const *name,
+						struct file_link *parent);
+static int lang_wanted (char const *lang_name);
+static char **append_strings_to_vector (char **vector_0, char *string,
+					char const *delimiter_class);
+static int vector_length (char **vector);
+static int string_in_vector (char const *string, char **vector);
 static int same_as_dot (char const *cwd);
-struct file_link const **fill_link_vector (struct file_link const **vec_buf, struct file_link const *flink);
-struct file_link const **fill_link_vector_1 (struct file_link const **vec_buf, struct file_link const *flink);
-char *fill_dot_dots (char *buf, int levels);
+static struct file_link const
+  **fill_link_vector (struct file_link const **vec_buf,
+		      struct file_link const *flink);
+static struct file_link const
+  **fill_link_vector_1 (struct file_link const **vec_buf,
+			struct file_link const *flink);
+static char *fill_dot_dots (char *buf, int levels);
 static char *absolute_file_name_1 (char *buffer, struct file_link const *flink);
-unsigned long member_file_hash_1 (void const *key);
-unsigned long member_file_hash_2 (void const *key);
-int member_file_hash_compare (void const *x, void const *y);
-unsigned long file_link_hash_1 (void const *key);
-unsigned long file_link_hash_2 (void const *key);
-int file_link_hash_compare (void const *x, void const *y);
-unsigned long dev_ino_hash_1 (void const *key);
-unsigned long dev_ino_hash_2 (void const *key);
-int dev_ino_hash_compare (void const *x, void const *y);
-int symlink_ancestry (struct file_link *flink);
+static unsigned long member_file_hash_1 (void const *key);
+static unsigned long member_file_hash_2 (void const *key);
+static int member_file_hash_compare (void const *x, void const *y);
+static unsigned long file_link_hash_1 (void const *key);
+static unsigned long file_link_hash_2 (void const *key);
+static int file_link_hash_compare (void const *x, void const *y);
+static unsigned long dev_ino_hash_1 (void const *key);
+static unsigned long dev_ino_hash_2 (void const *key);
+static int dev_ino_hash_compare (void const *x, void const *y);
+static int symlink_ancestry (struct file_link *flink);
 
 #ifndef HAVE_LSTAT
 #undef lstat
@@ -82,8 +91,10 @@ int lstat(const char *filename, struct stat *sbuf)
 
 #if HAVE_LINK
 
-struct file_link *find_alias_link (struct file_link *flink, struct stat *stp);
-struct member_file *maybe_get_member_file (struct file_link *flink, struct stat *stp);
+static struct file_link *find_alias_link (struct file_link *flink,
+					  struct stat *stp);
+static struct member_file *maybe_get_member_file (struct file_link *flink,
+						  struct stat *stp);
 
 #endif
 
@@ -103,7 +114,7 @@ char* xgetcwd (void);
 /* Walk the file-system tree rooted at `dir_link', looking for files
    that are eligible for scanning.  */
 
-int
+static int
 walk_dir (struct file_link *dir_link)
 {
   int scannable_files;
@@ -146,7 +157,7 @@ walk_dir (struct file_link *dir_link)
 /* Walk the directories found by walk_dir, calling walk_dir
    recursively for each directory. */
 
-int
+static int
 walk_sub_dirs (struct dynvec *sub_dirs_vec)
 {
   struct file_link **sub_dirs;
@@ -234,7 +245,7 @@ walk_flink (struct file_link *flink, struct dynvec *sub_dirs_vec)
    search the entire hash-table for the children.  With each child, we
    must delete it, reset its parent link, then reinsert.  */
 
-void
+static void
 reparent_children (struct file_link *dlink, struct file_link *slink)
 {
   void **slot = idh.idh_file_link_table.ht_vec;
@@ -293,7 +304,7 @@ mark_member_file_links (struct idhead *idhp)
    hard-links dominate symbolic-links; [2] for two hard-links: first
    come, first served).  */
 
-struct member_file *
+static struct member_file *
 maybe_get_member_file (struct file_link *flink, struct stat *stp)
 {
   struct file_link *alias_link;
@@ -335,7 +346,7 @@ maybe_get_member_file (struct file_link *flink, struct stat *stp)
 
 /* Return a previously registered alias for `flink', if any.  */
 
-struct file_link *
+static struct file_link *
 find_alias_link (struct file_link *flink, struct stat *stp)
 {
   struct dev_ino *dev_ino;
@@ -362,7 +373,7 @@ find_alias_link (struct file_link *flink, struct stat *stp)
    directory.  PATH_MAX is considered an infinite distance (e.g.,
    there are no symlinks between `flink' and the root).  */
 
-int
+static int
 symlink_ancestry (struct file_link *flink)
 {
   int ancestry = 0;
@@ -378,7 +389,7 @@ symlink_ancestry (struct file_link *flink)
 
 #endif /* HAVE_LINK */
 
-struct member_file *
+static struct member_file *
 get_member_file (struct file_link *flink)
 {
   struct member_file *member;
@@ -436,7 +447,7 @@ find_member_file (struct file_link const *flink)
    pattern matches FLINK.  Return the matching lang_args, if a
    scanner exists for that language, otherwise return 0.  */
 
-struct lang_args *
+static struct lang_args *
 get_lang_args (struct file_link const *flink)
 {
   struct lang_args *args = lang_args_list;
@@ -461,7 +472,7 @@ get_lang_args (struct file_link const *flink)
 	  ? lang_args_default : 0);
 }
 
-void
+static void
 print_member_file (struct member_file *member)
 {
   char *file_name = alloca (PATH_MAX);
@@ -476,7 +487,7 @@ print_member_file (struct member_file *member)
 static char **langs_included;
 static char **langs_excluded;
 
-int
+static int
 lang_wanted (char const *lang_name)
 {
   if (langs_excluded)
@@ -503,8 +514,9 @@ exclude_languages (char *lang_names)
   langs_excluded = append_strings_to_vector (langs_excluded, lang_names, white_space);
 }
 
-char **
-append_strings_to_vector (char **vector_0, char *string, char const *delimiter_class)
+static char **
+append_strings_to_vector (char **vector_0, char *string,
+			  char const *delimiter_class)
 {
   char **vector;
   if (vector_0)
@@ -523,7 +535,7 @@ append_strings_to_vector (char **vector_0, char *string, char const *delimiter_c
   return xnrealloc (vector_0, vector - vector_0, sizeof *vector_0);
 }
 
-int
+static int
 vector_length (char **vector)
 {
   int length = 0;
@@ -532,7 +544,7 @@ vector_length (char **vector)
   return length;
 }
 
-int
+static int
 string_in_vector (char const *string, char **vector)
 {
   while (*vector)
@@ -724,7 +736,7 @@ prune_file_names (char *str, struct file_link *from_link)
 /* Gather information about the link at `flink'.  If it's a good
    file or directory, return its mod-time and type.  */
 
-int
+static int
 classify_link (struct file_link *flink, struct stat *stp)
 {
   unsigned int flags = 0;
@@ -765,7 +777,7 @@ classify_link (struct file_link *flink, struct stat *stp)
 /****************************************************************************/
 /* Retrieve an existing flink; or if none exists, create one. */
 
-struct file_link *
+static struct file_link *
 get_link_from_dirent (struct dirent *dirent, struct file_link *parent)
 {
   struct file_link **slot;
@@ -781,7 +793,7 @@ get_link_from_dirent (struct dirent *dirent, struct file_link *parent)
   return *slot;
 }
 
-struct file_link *
+static struct file_link *
 get_link_from_string (char const *name, struct file_link *parent)
 {
   struct file_link **slot;
@@ -811,7 +823,7 @@ make_link_from_dirent (struct dirent* dirent, struct file_link *parent)
   return flink;
 }
 
-struct file_link *
+static struct file_link *
 make_link_from_string (char const* name, struct file_link *parent)
 {
   struct file_link *flink;
@@ -830,16 +842,18 @@ make_link_from_string (char const* name, struct file_link *parent)
 /* Convert a `file_link' chain to a vector of component `file_link's,
    with the root at [0].  Return a pointer beyond the final component.  */
 
-struct file_link const **
-fill_link_vector (struct file_link const **vec_buf, struct file_link const *flink)
+static struct file_link const **
+fill_link_vector (struct file_link const **vec_buf,
+		  struct file_link const *flink)
 {
   vec_buf = fill_link_vector_1 (vec_buf, flink);
   *vec_buf = 0;
   return vec_buf;
 }
 
-struct file_link const **
-fill_link_vector_1 (struct file_link const **vec_buf, struct file_link const *flink)
+static struct file_link const **
+fill_link_vector_1 (struct file_link const **vec_buf,
+		    struct file_link const *flink)
 {
   if (!IS_ROOT_FILE_LINK (flink))
     vec_buf = fill_link_vector_1 (vec_buf, flink->fl_parent);
@@ -937,7 +951,7 @@ out:
 /* Fill `buf' with sequences of "../" in order to ascend so many
    `levels' in a directory tree.  */
 
-char *
+static char *
 fill_dot_dots (char *buf, int levels)
 {
   while (levels--)
@@ -998,19 +1012,19 @@ absolute_file_name_1 (char *buf, struct file_link const *flink)
 /****************************************************************************/
 /* Hash stuff for `struct member_file'.  */
 
-unsigned long
+static unsigned long
 member_file_hash_1 (void const *key)
 {
   return_ADDRESS_HASH_1 (((struct member_file const *) key)->mf_link);
 }
 
-unsigned long
+static unsigned long
 member_file_hash_2 (void const *key)
 {
   return_ADDRESS_HASH_2 (((struct member_file const *) key)->mf_link);
 }
 
-int
+static int
 member_file_hash_compare (void const *x, void const *y)
 {
   return_ADDRESS_COMPARE (((struct member_file const *) x)->mf_link,
@@ -1052,7 +1066,7 @@ member_file_qsort_compare (void const *x, void const *y)
 /****************************************************************************/
 /* Hash stuff for `struct file_link'.  */
 
-unsigned long
+static unsigned long
 file_link_hash_1 (void const *key)
 {
   unsigned long result = 0;
@@ -1063,7 +1077,7 @@ file_link_hash_1 (void const *key)
   return result;
 }
 
-unsigned long
+static unsigned long
 file_link_hash_2 (void const *key)
 {
   unsigned long result = 0;
@@ -1074,7 +1088,7 @@ file_link_hash_2 (void const *key)
   return result;
 }
 
-int
+static int
 file_link_hash_compare (void const *x, void const *y)
 {
   int result;
@@ -1109,7 +1123,7 @@ links_depth (struct file_link const *flink)
 /****************************************************************************/
 /* Hash stuff for `struct dev_ino'.  */
 
-unsigned long
+static unsigned long
 dev_ino_hash_1 (void const *key)
 {
   unsigned long result = 0;
@@ -1118,7 +1132,7 @@ dev_ino_hash_1 (void const *key)
   return result;
 }
 
-unsigned long
+static unsigned long
 dev_ino_hash_2 (void const *key)
 {
   unsigned long result = 0;
@@ -1127,7 +1141,7 @@ dev_ino_hash_2 (void const *key)
   return result;
 }
 
-int
+static int
 dev_ino_hash_compare (void const *x, void const *y)
 {
   int result;

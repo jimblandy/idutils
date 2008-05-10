@@ -47,9 +47,10 @@ extern char *program_name;
 
 /****************************************************************************/
 
-struct lang_args **parse_language_map_file (char const *file_name, struct lang_args **next_ptr);
-char *read_language_map_file (char const *file_name);
-void tokenize_args_string (char *args_string, int *argcp, char ***argvp);
+static struct lang_args **parse_language_map_file (char const *file_name,
+						   struct lang_args **next_ptr);
+static char *read_language_map_file (char const *file_name);
+static void tokenize_args_string (char *args_string, int *argcp, char ***argvp);
 
 static struct token *get_token_c (FILE *in_FILE, void const *args, int *flags);
 static void *parse_args_c (char **argv, int argc);
@@ -157,7 +158,7 @@ parse_language_map (char const *file_name)
   parse_language_map_file (file_name, &lang_args_list);
 }
 
-struct lang_args **
+static struct lang_args **
 parse_language_map_file (char const *file_name, struct lang_args **next_ptr)
 {
   static char white_space[] = " \t\r\n\v\f";
@@ -258,7 +259,7 @@ parse_language_map_file (char const *file_name, struct lang_args **next_ptr)
   return next_ptr;
 }
 
-char *
+static char *
 read_language_map_file (char const *file_name)
 {
   int map_fd;
@@ -291,7 +292,7 @@ read_language_map_file (char const *file_name)
 
 /****************************************************************************/
 
-void
+static void
 tokenize_args_string (char *args_string, int *argcp, char ***argvp)
 {
   static char horizontal_space[] = " \t";

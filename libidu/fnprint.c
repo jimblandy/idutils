@@ -1,5 +1,5 @@
 /* fnprint.c -- print a list of file names
-   Copyright (C) 1986, 1995, 1996, 2007 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 2007-2008 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -29,16 +29,17 @@
 #include "xnls.h"
 #include "iduglobal.h"
 
-char const *root_name (char const *path);
-char const *suff_name (char const *path);
-int common_prefix_suffix (struct file_link const *flink_1, struct file_link const *flink_2);
+static char const *root_name (char const *path);
+static char const *suff_name (char const *path);
+static int common_prefix_suffix (struct file_link const *flink_1,
+				 struct file_link const *flink_2);
 
 extern void usage (void);
 extern struct file_link *cw_dlink;
 
 /* Return the file name with the suffix stripped off.  */
 
-char const *
+static char const *
 root_name (char const *file_name)
 {
   static char file_name_buffer[BUFSIZ];
@@ -58,7 +59,7 @@ root_name (char const *file_name)
 /* Return the suffix, including the dot, or an empty string if there
    is no suffix.  */
 
-char const *
+static char const *
 suff_name (char const *file_name)
 {
   char const *dot = strrchr (file_name, '.');
@@ -69,7 +70,7 @@ suff_name (char const *file_name)
    fully common directory prefix and a common suffix (i.e., they're
    eligible for coalescing with brace notation.  */
 
-int
+static int
 common_prefix_suffix (struct file_link const *flink_1, struct file_link const *flink_2)
 {
   return (flink_1->fl_parent == flink_2->fl_parent

@@ -30,7 +30,7 @@
 #include "xalloc.h"
 #include "xnls.h"
 
-int io_size (FILE *, void *, unsigned int size, int);
+static int io_size (FILE *, void *, unsigned int size, int);
 
 /****************************************************************************/
 
@@ -99,7 +99,7 @@ sizeof_idhead ()
   return io_idhead (0, io_size, 0);
 }
 
-int
+static int
 io_size (FILE *ignore_FILE, void *ignore_addr, unsigned int size, int io_type)
 {
   if (io_type == IO_TYPE_STR)
