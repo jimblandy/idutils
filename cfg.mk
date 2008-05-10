@@ -32,8 +32,7 @@ gpg_key_ID = B9AB9A16
 # files -- otherwise, you'd need to have the upcoming version number
 # at the top of the file for each `make distcheck' run.
 local-checks-to-skip = changelog-check strftime-check patch-check \
-  sc_prohibit_atoi_atof sc_changelog sc_tight_scope \
-  check-AUTHORS
+  sc_prohibit_atoi_atof sc_changelog check-AUTHORS
 
 # The local directory containing the checked-out copy of gnulib used in
 # this release.  Used solely to get a date for the "announcement" target.
