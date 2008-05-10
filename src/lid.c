@@ -109,7 +109,6 @@ static int query_literal_substring (char const *pattern,
 				    report_func_t report_func);
 static void parse_frequency_arg (char const *arg);
 static int desired_frequency (char const *tok);
-char *strcasestr (char const *s1, char const *s2);
 static char const *file_regexp (char const *name_0, char const *left_delimit,
 				char const *right_delimit);
 static off_t query_binary_search (char const *token);
@@ -1122,23 +1121,6 @@ desired_frequency (char const *tok)
 {
   unsigned int count = token_count (tok);
   return (frequency_low <= count && count <= frequency_high);
-}
-
-/* if string `s2' occurs in `s1', return a pointer to the first match.
-   Ignore differences in alphabetic case.  */
-
-char *
-strcasestr (char const *s1, char const *s2)
-{
-  char const *s1p;
-  char const *s2p;
-  char const *s1last;
-
-  for (s1last = &s1[strlen (s1) - strlen (s2)]; s1 <= s1last; s1++)
-    for (s1p = s1, s2p = s2; TOLOWER (*s1p) == TOLOWER (*s2p); s1p++)
-      if (*++s2p == '\0')
-	return (char *) s1;
-  return 0;
 }
 
 /* Convert the regular expression that we used to locate identifiers
