@@ -22,16 +22,16 @@ sc_tight_scope: $(all_programs)
 	@t=exceptions-$$$$;						\
 	trap "s=$$?; rm -f $$t; exit $$s" 0 1 2 13 15;			\
 	( printf '^main$$\n^usage$$\n';					\
-	  grep -h -A1 '^extern .*[^;]$$' $(SOURCES)			\
-	    | grep -vE '^(extern |--)' |sed 's/^/^/;s/ .*/$$/' ) > $$t;	\
+	  perl -ne '/^extern .*?\**(\w+) *\(/ and print "^$$1\$$\n"'	\
+	      $(noinst_HEADERS) $(srcdir)/../libidu/*.h ) > $$t;	\
 	nm -e *.$(OBJEXT) ../libidu/*.$(OBJEXT)				\
 	    | sed -n 's/.* T //p'					\
 	    | grep -Ev -f $$t &&					\
 	  { echo 'the above functions should have static scope' 1>&2;	\
 	    exit 1; } || : ;						\
 	( printf '^program_name$$\n';					\
-	  sed -n 's/^extern int \([^ ][^ ]*\);$$/^\1$$/p'		\
-	    $(noinst_HEADERS) /dev/null ) > $$t;			\
+	  perl -ne '/^extern .*?\**(\w+);/ and print "^$$1\$$\n"'	\
+	      $(noinst_HEADERS) $(srcdir)/../libidu/*.h ) > $$t;	\
 	nm -e *.$(OBJEXT) ../libidu/*.$(OBJEXT)				\
 	    | sed -n 's/.* [BD] //p'					\
 	    | grep -Ev -f $$t &&					\
