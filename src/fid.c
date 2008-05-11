@@ -60,7 +60,7 @@ static struct file_link **members_0;
 static unsigned int bits_vec_size;
 static char *hits_buf;
 
-static struct option const long_options[] =
+static const struct option const long_options[] =
 {
   { "file", required_argument, 0, 'f' },
   { "help", no_argument, &show_help, 1 },

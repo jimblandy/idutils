@@ -38,8 +38,9 @@ void usage (void);
 char const *program_name;
 static int show_version = 0;
 static int show_help = 0;
+static struct file_link *cw_dlink;
+
 struct idhead idh;
-struct file_link *cw_dlink;
 
 /* How shall we separate file names?  */
 

@@ -1,5 +1,5 @@
 /* dynvec.h -- declarations for dynamically growable vectors
-   Copyright (C) 1995, 2007 Free Software Foundation, Inc.
+   Copyright (C) 1995, 2007, 2008 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -26,9 +26,9 @@ struct dynvec
   int dv_fill;
 };
 
-struct dynvec *make_dynvec (int n);
-void dynvec_free (struct dynvec *dv);
-void dynvec_freeze (struct dynvec *dv);
-void dynvec_append (struct dynvec *dv, void *element);
+extern struct dynvec *make_dynvec (int n);
+extern void dynvec_free (struct dynvec *dv);
+extern void dynvec_freeze (struct dynvec *dv);
+extern void dynvec_append (struct dynvec *dv, void *element);
 
 #endif /* not _dynvec_h_ */

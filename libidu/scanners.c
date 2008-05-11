@@ -36,7 +36,7 @@
 #include "tokflags.h"
 #include "iduglobal.h"
 
-struct obstack lang_args_obstack;
+static struct obstack lang_args_obstack;
 struct lang_args *lang_args_default = 0;
 struct lang_args *lang_args_list = 0;
 struct obstack tokens_obstack;
@@ -74,7 +74,7 @@ static struct token *get_token_lisp (FILE *in_FILE, void const *args, int *flags
 static void *parse_args_lisp (char **argv, int argc);
 static void help_me_lisp (void);
 
-struct language languages_0[] =
+static const struct language const languages_0[] =
 {
   { "C", parse_args_c, get_token_c, help_me_c },
   { "C++", parse_args_c, get_token_c, help_me_cpp },
@@ -84,12 +84,13 @@ struct language languages_0[] =
   { "perl", parse_args_perl, get_token_perl, help_me_perl },
   { "lisp", parse_args_lisp, get_token_lisp, help_me_lisp }
 };
-struct language const *languages_N = &languages_0[cardinalityof (languages_0)];
+static struct language const *languages_N
+  = &languages_0[cardinalityof (languages_0)];
 
 void
 language_help_me (void)
 {
-  struct language *lang;
+  const struct language *lang;
   for (lang = languages_0; lang < languages_N; lang++)
     {
       putchar ('\n');
@@ -117,23 +118,21 @@ language_save_arg (char *arg)
 void
 language_getopt (void)
 {
-  struct language *lang;
-
+  const struct language *lang;
   for (lang = languages_0; lang < languages_N; lang++)
     if (lang->lg_argc)
-      lang->lg_parse_args (lang->lg_argv, lang->lg_argc);
+      lang->lg_parse_args ((char**)(lang->lg_argv), lang->lg_argc);
 }
 
 struct language *
 get_language (char const *lang_name)
 {
-  struct language *lang;
-
+  const struct language *lang;
   for (lang = languages_0; lang < languages_N; lang++)
     if (strequ (lang_name, lang->lg_name))
       {
 	DEBUG (("lang=%s", lang_name));
-	return lang;
+	return (struct language *) lang;
       }
   DEBUG (("!lang=%s", lang_name));
   return 0;
@@ -141,7 +140,7 @@ get_language (char const *lang_name)
 
 /****************************************************************************/
 
-int lang_args_index = 0;
+static int lang_args_index = 0;
 
 void
 set_default_language (char const *lang_name)

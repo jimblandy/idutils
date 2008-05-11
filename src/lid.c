@@ -209,7 +209,7 @@ static query_func_t query_function;
 static unsigned int frequency_low = 1;
 static unsigned int frequency_high = USHRT_MAX;
 
-struct file_link *cw_dlink;
+static struct file_link *cw_dlink;
 static struct file_link **members_0;
 
 static struct option const long_options[] =

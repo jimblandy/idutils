@@ -41,6 +41,7 @@
 int walker_verbose_flag = 0;
 off_t largest_member_file = 0;
 
+static char **vectorize_string (char *string, char const *delimiter_class);
 static int walk_dir (struct file_link *dir_link);
 static struct member_file *get_member_file (struct file_link *flink);
 static struct lang_args *get_lang_args (struct file_link const *flink);
@@ -697,7 +698,7 @@ chdir_to_link (struct file_link *dir_link)
     }
 }
 
-char **
+static char **
 vectorize_string (char *string, char const *delimiter_class)
 {
   char **vector_0 = xmalloc (sizeof(char *) * (2 + strlen (string) / 2));

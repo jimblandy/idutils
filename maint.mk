@@ -483,7 +483,7 @@ check-AUTHORS:
 # not @...@ in Makefile.am, now that we can rely on automake
 # to emit a definition for each substituted variable.
 makefile-check:
-	grep -nE '@[A-Z_0-9]+@' `find . -name Makefile.am` \
+	@grep -nE '@[A-Z_0-9]+@' `find . -name Makefile.am` \
 	  && { echo '$(ME): use $$(...), not @...@' 1>&2; exit 1; } || :
 
 news-date-check: NEWS
@@ -513,7 +513,7 @@ m4-check:
 # Verify that all source files using _() are listed in po/POTFILES.in.
 # FIXME: don't hard-code file names below; use a more general mechanism.
 po-check:
-	if test -f po/POTFILES.in; then					\
+	@if test -f po/POTFILES.in; then					\
 	  grep -E -v '^(#|$$)' po/POTFILES.in				\
 	    | grep -v '^src/false\.c$$' | sort > $@-1;			\
 	  files=;							\

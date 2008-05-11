@@ -40,7 +40,7 @@ static char *lang_map_file_name = 0;
 static int show_version = 0;
 static int show_help = 0;
 struct idhead idh;
-struct file_link *cw_dlink;
+static struct file_link *cw_dlink;
 
 void
 usage (void)

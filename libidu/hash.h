@@ -1,5 +1,5 @@
 /* hash.h -- decls for hash table
-   Copyright (C) 1995, 1999, 2007 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1999, 2007, 2008 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -42,22 +42,25 @@ struct hash_table
 
 typedef int (*qsort_cmp_t) (void const *, void const *);
 
-void hash_init (struct hash_table *ht, unsigned long size,
-		hash_func_t hash_1, hash_func_t hash_2, hash_cmp_func_t hash_cmp);
-void hash_load (struct hash_table *ht, void *item_table,
-		    unsigned long cardinality, unsigned long size);
-void **hash_find_slot (struct hash_table *ht, void const *key);
-void *hash_find_item (struct hash_table *ht, void const *key);
-void *hash_insert (struct hash_table *ht, void *item);
-void *hash_insert_at (struct hash_table *ht, void *item, void const *slot);
-void *hash_delete (struct hash_table *ht, void const *item);
-void *hash_delete_at (struct hash_table *ht, void const *slot);
-void hash_delete_items (struct hash_table *ht);
-void hash_free_items (struct hash_table *ht);
-void hash_free (struct hash_table *ht, int free_items);
-void hash_map (struct hash_table *ht, hash_map_func_t map);
-void hash_print_stats (struct hash_table *ht, FILE *out_FILE);
-void **hash_dump (struct hash_table *ht, void **vector_0, qsort_cmp_t compare);
+extern void hash_init (struct hash_table *ht, unsigned long size,
+		       hash_func_t hash_1, hash_func_t hash_2,
+		       hash_cmp_func_t hash_cmp);
+extern void hash_load (struct hash_table *ht, void *item_table,
+		       unsigned long cardinality, unsigned long size);
+extern void **hash_find_slot (struct hash_table *ht, void const *key);
+extern void *hash_find_item (struct hash_table *ht, void const *key);
+extern void *hash_insert (struct hash_table *ht, void *item);
+extern void *hash_insert_at (struct hash_table *ht, void *item,
+			     void const *slot);
+extern void *hash_delete (struct hash_table *ht, void const *item);
+extern void *hash_delete_at (struct hash_table *ht, void const *slot);
+extern void hash_delete_items (struct hash_table *ht);
+extern void hash_free_items (struct hash_table *ht);
+extern void hash_free (struct hash_table *ht, int free_items);
+extern void hash_map (struct hash_table *ht, hash_map_func_t map);
+extern void hash_print_stats (struct hash_table *ht, FILE *out_FILE);
+extern void **hash_dump (struct hash_table *ht, void **vector_0,
+			 qsort_cmp_t compare);
 
 extern void *hash_deleted_item;
 #define HASH_VACANT(item) ((item) == 0 || (void *) (item) == hash_deleted_item)

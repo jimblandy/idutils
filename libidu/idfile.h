@@ -1,5 +1,5 @@
 /* idfile.h -- decls for ID file header and constituent file names
-   Copyright (C) 1986, 1995, 1996, 1999, 2007 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 1999, 2007, 2008 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -175,7 +175,7 @@ extern struct file_link **maybe_read_id_file (char const *id_file_name, struct i
 extern int read_idhead (struct idhead *idhp);
 extern int write_idhead (struct idhead *idhp);
 extern int sizeof_idhead (void);
-struct file_link *init_walker (struct idhead *idhp);
+extern struct file_link *init_walker (struct idhead *idhp);
 extern void init_idh_obstacks (struct idhead *idhp);
 extern void init_idh_tables (struct idhead *idhp);
 
@@ -195,10 +195,9 @@ extern enum separator_style parse_separator_style (char const *arg);
 
 extern void walk_flink (struct file_link *flink, struct dynvec *sub_dirs_vec);
 extern int chdir_to_link (struct file_link* dir_link);
-void prune_file_names (char *str, struct file_link *from_link);
-char **vectorize_string (char *string, char const *delimiter_class);
-void include_languages (char *lang_names);
-void exclude_languages (char *lang_names);
+extern void prune_file_names (char *str, struct file_link *from_link);
+extern void include_languages (char *lang_names);
+extern void exclude_languages (char *lang_names);
 
 extern char *absolute_file_name (char *buffer, struct file_link const *flink);
 extern char *maybe_relative_file_name (char *buffer, struct file_link const *to_link, struct file_link const *from_link);

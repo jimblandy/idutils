@@ -35,7 +35,7 @@ static int common_prefix_suffix (struct file_link const *flink_1,
 				 struct file_link const *flink_2);
 
 extern void usage (void);
-extern struct file_link *cw_dlink;
+static struct file_link *cw_dlink;
 
 /* Return the file name with the suffix stripped off.  */
 
