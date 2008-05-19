@@ -1,6 +1,19 @@
 idutils NEWS - User visible changes.
 
-* Noteworthy changes in release 4.3 (????-??-??) [stable]
+* Noteworthy changes in release 4.4 (????-??-??) [stable]
+
+** Bug fixes
+
+fid: avoid a buffer overrun
+handle failed allocation, e.g., by strdup
+avoid potential realloc overflow
+mkid: avoid an infloop on some .el files
+
+** Miscellaneous improvements
+
+revamp code and infrastructure, bringing it closer to coreutils' standards
+add automatically-generated man pages
+mkid recognize more suffixes: .ac, .mk, .bz2, .lzma.
 
 
 Version 4.2 - August 5, 2006, by Claudio Fontana

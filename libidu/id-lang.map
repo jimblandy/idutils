@@ -79,6 +79,7 @@ ChangeLog*		Cdoc
 *.scm			lisp
 
 *.am			make
+*.mk			make
 Makefile		make
 Makefile.*		make
 
@@ -86,9 +87,12 @@ Makefile.*		make
 *.txt			text
 
 *.m4			m4
+*.ac			m4
 
 *.pl			perl
 *.pm			perl
 
-*.gz			FILTER gzip -d <%s
 *.Z			FILTER gzip -d <%s
+*.gz			FILTER gzip -d <%s
+*.bz2			FILTER bzip2 -d <%s
+*.lzma			FILTER lzma -d <%s
