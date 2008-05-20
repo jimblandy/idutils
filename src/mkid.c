@@ -34,6 +34,7 @@
 #include <xalloc.h>
 #include <error.h>
 
+#include "closeout.h"
 #include "xnls.h"
 #include "idfile.h"
 #include "hash.h"
@@ -59,7 +60,6 @@ struct summary
 
 void usage (void);
 static void help_me (void);
-int main (int argc, char **argv);
 static int ceil_log_8 (unsigned long n);
 static int ceil_log_2 (unsigned long n);
 static void assert_writeable (char const *file_name);
@@ -208,6 +208,8 @@ main (int argc, char **argv)
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
 #endif
+
+  atexit (close_stdout);
 
   for (;;)
     {

@@ -29,6 +29,7 @@
 #include <pathmax.h>
 #include <error.h>
 
+#include "closeout.h"
 #include "xnls.h"
 #include "idfile.h"
 #include "iduglobal.h"
@@ -96,6 +97,8 @@ main (int argc, char **argv)
   bindtextdomain (PACKAGE, LOCALEDIR);
   textdomain (PACKAGE);
 #endif
+
+  atexit (close_stdout);
 
   for (;;)
     {
