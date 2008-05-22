@@ -664,7 +664,7 @@ write_id_file (struct idhead *idhp)
   idhp->idh_vec_size = max_vec_size;
 
   write_idhead (&idh);
-  if (fclose (idhp->idh_FILE) != 0)
+  if (ferror (idhp->idh_FILE) || fclose (idhp->idh_FILE) != 0)
     error (1, errno, _("error closing `%s'"), idhp->idh_file_name);
 }
 
