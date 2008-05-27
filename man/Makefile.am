@@ -13,9 +13,9 @@ lid.1:		$(common_dep)	$(srcdir)/lid.x		../src/lid.c
 fid.1:		$(common_dep)	$(srcdir)/fid.x		../src/fid.c
 fnid.1:		$(common_dep)	$(srcdir)/fnid.x	../src/fnid.c
 xtokid.1:	$(common_dep)	$(srcdir)/xtokid.x	../src/xtokid.c
-eid.1:		$(common_dep)	$(srcdir)/eid.x		../src/eid ../src/lid.c
-aid.1:		$(common_dep)	$(srcdir)/aid.x		../src/aid ../src/lid.c
-gid.1:		$(common_dep)	$(srcdir)/gid.x		../src/gid ../src/lid.c
+aid.1:		$(common_dep)	$(srcdir)/aid.x		../src/lid.c
+eid.1:		$(common_dep)	$(srcdir)/eid.x		../src/lid.c
+gid.1:		$(common_dep)	$(srcdir)/gid.x		../src/lid.c
 
 SUFFIXES = .x .1
 

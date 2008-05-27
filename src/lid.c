@@ -42,6 +42,7 @@
 #include "xnls.h"
 #include "idfile.h"
 #include "iduglobal.h"
+#include "lid.h"
 
 typedef void (*report_func_t) (char const *name, struct file_link **flinkv);
 typedef int (*query_func_t) (char const *arg, report_func_t);
@@ -306,6 +307,29 @@ main (int argc, char **argv)
 #endif
 
   atexit (close_stdout);
+
+  switch (lid_mode)
+    {
+    case LID_MODE_AID: /* -ils */
+      ignore_case_flag = REG_ICASE;
+      pattern_style = ps_literal;
+      delimiter_style = ds_substring;
+      break;
+
+    case LID_MODE_EID: /* -R edit */
+      result_style = rs_edit;
+      break;
+
+    case LID_MODE_GID: /* -R grep */
+      result_style = rs_grep;
+      break;
+
+    case LID_MODE_LID:
+      break;
+
+    default:
+      abort ();
+    }
 
   for (;;)
     {

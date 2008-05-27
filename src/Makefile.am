@@ -1,6 +1,11 @@
+bin_PROGRAMS = mkid lid fid fnid xtokid aid eid gid
+dist_bin_SCRIPTS = defid
 
-bin_PROGRAMS = mkid lid fid fnid xtokid
-dist_bin_SCRIPTS = eid aid gid defid
+noinst_HEADERS = lid.h
+aid_SOURCES = lid.c lid-aid.c
+eid_SOURCES = lid.c lid-eid.c
+gid_SOURCES = lid.c lid-gid.c
+lid_SOURCES = lid.c lid-lid.c
 
 AM_CPPFLAGS = -I$(top_builddir)/intl \
               -I$(top_srcdir)/lib \

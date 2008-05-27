@@ -53,8 +53,11 @@ po/POTFILES
 po/coreutils.pot
 po/idutils.pot
 po/stamp-po
+src/aid
+src/eid
 src/fid
 src/fnid
+src/gid
 src/lid
 src/mkid
 src/xtokid
