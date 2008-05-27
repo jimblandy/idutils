@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = lib libidu src lisp doc man testsuite po gnulib-tests
+SUBDIRS = lib libidu src lisp doc man gnulib-tests testsuite po
 EXTRA_DIST = \
   .prev-version \
   .version \
