@@ -31,12 +31,12 @@
 #include "scanners.h"
 #include "idfile.h"
 #include "iduglobal.h"
+#include "progname.h"
 
 static void scan_files (struct idhead *idhp);
 static void scan_member_file (struct member_file const *member);
 void usage (void);
 
-char const *program_name;
 static char *lang_map_file_name = 0;
 static int show_version = 0;
 static int show_help = 0;
@@ -92,7 +92,7 @@ The following arguments apply to the language-specific scanners:\n\
 int
 main (int argc, char **argv)
 {
-  program_name = argv[0];
+  set_program_name (argv[0]);
 
 #if ENABLE_NLS
   /* Set locale according to user's wishes.  */

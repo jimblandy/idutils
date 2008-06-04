@@ -40,6 +40,7 @@
 #include "hash.h"
 #include "scanners.h"
 #include "iduglobal.h"
+#include "progname.h"
 
 struct summary
 {
@@ -112,8 +113,6 @@ static unsigned char *current_hits_signature;
 #define INIT_TOKENS_SIZE(level) (1 << ((level) + 13))
 static struct summary *summary_root;
 static struct summary *summary_leaf;
-
-char const *program_name;
 
 static char *lang_map_file_name = 0;
 static int show_version = 0;
@@ -196,7 +195,7 @@ static void *get_process_heap(void)
 int
 main (int argc, char **argv)
 {
-  program_name = argv[0];
+  set_program_name (argv[0]);
   heap_initial = get_process_heap();
   idh.idh_file_name = DEFAULT_ID_FILE_NAME;
 

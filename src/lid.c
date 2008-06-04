@@ -43,6 +43,7 @@
 #include "idfile.h"
 #include "iduglobal.h"
 #include "lid.h"
+#include "progname.h"
 
 typedef void (*report_func_t) (char const *name, struct file_link **flinkv);
 typedef int (*query_func_t) (char const *arg, report_func_t);
@@ -152,10 +153,6 @@ struct idhead idh;
 static char *hits_buf_1;
 static char *hits_buf_2;
 static unsigned char *bits_vec;
-
-/* The name this program was run with. */
-
-char const *program_name;
 
 /* If nonzero, display usage information and exit.  */
 
@@ -294,7 +291,7 @@ matched identifier followed by the list of file names in which it occurs.\n\
 int
 main (int argc, char **argv)
 {
-  program_name = argv[0];
+  set_program_name (argv[0]);
   idh.idh_file_name = 0;
 
 #if ENABLE_NLS

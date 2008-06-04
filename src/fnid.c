@@ -33,10 +33,10 @@
 #include "xnls.h"
 #include "idfile.h"
 #include "iduglobal.h"
+#include "progname.h"
 
 void usage (void);
 
-char const *program_name;
 static int show_version = 0;
 static int show_help = 0;
 static struct file_link *cw_dlink;
@@ -86,7 +86,7 @@ using shell-style wildcards.\n\
 int
 main (int argc, char **argv)
 {
-  program_name = argv[0];
+  set_program_name (argv[0]);
   idh.idh_file_name = 0;
 
 #if ENABLE_NLS

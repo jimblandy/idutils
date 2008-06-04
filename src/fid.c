@@ -32,6 +32,7 @@
 #include "xnls.h"
 #include "idfile.h"
 #include "iduglobal.h"
+#include "progname.h"
 
 static int get_file_index (char *file_name);
 static int is_hit (unsigned char const *hits, int file_number);
@@ -41,10 +42,6 @@ void usage (void);
 
 struct idhead idh;
 static int tree8_levels;
-
-/* The name this program was run with. */
-
-char const *program_name;
 
 /* If nonzero, display usage information and exit.  */
 
@@ -101,7 +98,7 @@ main (int argc, char **argv)
   int index_1 = -1;
   int index_2 = -1;
 
-  program_name = argv[0];
+  set_program_name (argv[0]);
   idh.idh_file_name = 0;
 
 
