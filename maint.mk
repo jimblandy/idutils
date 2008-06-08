@@ -144,6 +144,29 @@ sc_error_exit_success:
 	  { echo '$(ME): found error (EXIT_SUCCESS' 1>&2;		\
 	    exit 1; } || :
 
+# `FATAL:' should be fully upper-cased in error messages
+# `WARNING:' should be fully upper-cased, or fully lower-cased
+sc_error_message_warn_fatal:
+	@grep -nEA2 '[^rp]error \(' $$($(VC_LIST_EXCEPT))		\
+	    | grep -E '"Warning|"Fatal|"fatal' &&			\
+	  { echo '$(ME): use FATAL, WARNING or warning'	1>&2;		\
+	    exit 1; } || :
+
+# Error messages should not start with a capital letter
+sc_error_message_uppercase:
+	@grep -nEA2 '[^rp]error \(' $$($(VC_LIST_EXCEPT))		\
+	    | grep -E '"[A-Z]'						\
+	    | grep -vE '"FATAL|"WARNING|"Java|"C#|PRIuMAX' &&		\
+	  { echo '$(ME): found capitalized error message' 1>&2;		\
+	    exit 1; } || :
+
+# Error messages should not end with a period
+sc_error_message_period:
+	@grep -nEA2 '[^rp]error \(' $$($(VC_LIST_EXCEPT))		\
+	    | grep -E '[^."]\."' &&					\
+	  { echo '$(ME): found error message ending in period' 1>&2;	\
+	    exit 1; } || :
+
 sc_file_system:
 	@grep -ni 'file''system' $$($(VC_LIST_EXCEPT)) &&		\
 	  { echo '$(ME): found use of "file''system";'			\
@@ -421,21 +444,14 @@ sc_GPL_version:
 	@grep -n 'either ''version [^3]' $$($(VC_LIST_EXCEPT)) &&	\
 	  { echo '$(ME): GPL vN, N!=3' 1>&2; exit 1; } || :
 
-exec_perl_re = \
-  exec \$$PERL -w -I\$$top_srcdir/tests -MCoreutils \
-    -M"CuTmpdir qw(\$$me)" -- - <<\\EOF
-# Ensure that each test invoking $PERL with -MCoreutils uses the same line.
-sc_perl_coreutils_test:
+# Perl-based tests used to exec perl from a #!/bin/sh script.
+# Now they all start with #!/usr/bin/perl and the portability
+# infrastructure is in tests/Makefile.am.  Make sure no old-style
+# script sneaks back in.
+sc_no_exec_perl_coreutils:
 	@if test -f $(srcdir)/tests/Coreutils.pm; then			\
-	  die=0;							\
-	  for i in $$(grep -l '^exec  *\$$PERL.*MCoreutils'		\
-		$$($(VC_LIST) tests)); do				\
-	    grep '$(exec_perl_re)' $$i > /dev/null			\
-	      && : || { die=1; echo $$i; }				\
-	  done;								\
-	  test $$die = 1 &&						\
-	    { echo 1>&2 '$(ME): each of the above execs PERL differently:'; \
-	      echo 1>&2 '(exit $$fail); exit $$fail';			\
+	  grep '^exec  *\$$PERL.*MCoreutils' $$($(VC_LIST) tests) &&	\
+	    { echo 1>&2 '$(ME): found anachronistic Perl-based tests';	\
 	      exit 1; } || :;						\
 	fi
 
@@ -449,6 +465,29 @@ sc_immutable_NEWS:
 	  test "$(NEWS_hash)" = '$(old_NEWS_hash)' && : ||		\
 	    { echo '$(ME): you have modified old NEWS' 1>&2; exit 1; };	\
 	fi
+
+# Each program that uses proper_name_utf8 must link with
+# one of the ICONV libraries.
+sc_proper_name_utf8_requires_ICONV:
+	progs=$$(grep -l 'proper_name_utf8 ''("' $$($(VC_LIST_EXCEPT)));\
+	if test "x$$progs" != x; then					\
+	  fail=0;							\
+	  for p in $$progs; do						\
+	    dir=$$(dirname "$$p");					\
+	    base=$$(basename "$$p" .c);					\
+	    grep "$${base}_LDADD.*ICONV)" $$dir/Makefile.am > /dev/null	\
+	      || { fail=1; echo 1>&2 "$(ME): $$p uses proper_name_utf8"; }; \
+	  done;								\
+	  test $$fail = 1 &&						\
+	    { echo 1>&2 '$(ME): the above do not link with any ICONV library'; \
+	      exit 1; } || :;						\
+	fi
+
+sc_const_long_option:
+	@grep '^ *static.*struct option ' $$($(VC_LIST_EXCEPT))		\
+	  | grep -v 'const struct option const' && {			\
+	      echo 1>&2 '$(ME): add "const" to the above declarations'; \
+	      exit 1; } || :
 
 # Update the hash stored above.  Do this after each release and
 # for any corrections to old entries.
@@ -689,7 +728,9 @@ endef
 # the build srcdir, these always-failing programs will run.
 # Otherwise, it is too easy to test the wrong programs.
 # Note that "false" itself is a symlink to true, so it too will malfunction.
-my-distcheck: $(DIST_ARCHIVES) $(local-check) check
+my-distcheck: $(DIST_ARCHIVES) $(local-check)
+	$(MAKE) syntax-check
+	$(MAKE) check
 	-rm -rf $(t)
 	mkdir -p $(t)
 	GZIP=$(GZIP_ENV) $(AMTAR) -C $(t) -zxf $(distdir).tar.gz

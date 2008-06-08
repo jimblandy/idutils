@@ -423,7 +423,7 @@ struct args_c
 
 static struct args_c args_c = { 0, ctype_c };
 
-static struct option const long_options_c[] =
+static const struct option const long_options_c[] =
 {
   { "keep", required_argument, 0, 'k' },
   { "ignore", required_argument, 0, 'i' },
@@ -832,7 +832,7 @@ struct args_asm
 
 static struct args_asm args_asm = { 1, 0, ctype_asm };
 
-static struct option const long_options_asm[] =
+static const struct option const long_options_asm[] =
 {
   { "comment", required_argument, 0, 'c' },
   { "keep", required_argument, 0, 'k' },
@@ -1106,7 +1106,7 @@ struct args_text
 
 static struct args_text args_text = { ctype_text };
 
-static struct option const long_options_text[] =
+static const struct option const long_options_text[] =
 {
   { "include", required_argument, 0, 'i' },
   { "exclude", required_argument, 0, 'x' },
@@ -1310,7 +1310,7 @@ struct args_perl
 
 static struct args_perl args_perl = { 1, ctype_perl };
 
-static struct option const long_options_perl[] =
+static const struct option const long_options_perl[] =
 {
   { "include", required_argument, 0, 'i' },
   { "exclude", required_argument, 0, 'x' },

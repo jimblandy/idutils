@@ -51,7 +51,7 @@ usage (void)
   exit (1);
 }
 
-static struct option const long_options[] =
+static const struct option const long_options[] =
 {
   { "include", required_argument, 0, 'i' },
   { "exclude", required_argument, 0, 'x' },
