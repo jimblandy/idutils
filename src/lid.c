@@ -211,7 +211,7 @@ static unsigned int frequency_high = USHRT_MAX;
 static struct file_link *cw_dlink;
 static struct file_link **members_0;
 
-static const struct option const long_options[] =
+static struct option const long_options[] =
 {
   { "file", required_argument, 0, 'f' },
   { "frequency", required_argument, 0, 'F' },

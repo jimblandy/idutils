@@ -55,7 +55,7 @@ usage (void)
   exit (1);
 }
 
-static const struct option const long_options[] =
+static struct option const long_options[] =
 {
   { "file", required_argument, 0, 'f' },
   { "separator", required_argument, 0, 'S' },
