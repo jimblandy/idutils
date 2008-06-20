@@ -469,7 +469,7 @@ sc_immutable_NEWS:
 # Each program that uses proper_name_utf8 must link with
 # one of the ICONV libraries.
 sc_proper_name_utf8_requires_ICONV:
-	progs=$$(grep -l 'proper_name_utf8 ''("' $$($(VC_LIST_EXCEPT)));\
+	@progs=$$(grep -l 'proper_name_utf8 ''("' $$($(VC_LIST_EXCEPT)));\
 	if test "x$$progs" != x; then					\
 	  fail=0;							\
 	  for p in $$progs; do						\
@@ -483,9 +483,17 @@ sc_proper_name_utf8_requires_ICONV:
 	      exit 1; } || :;						\
 	fi
 
+# Warn about "c0nst struct Foo const foo[]",
+# but not about "char const *const foo" or "#define const const".
+sc_redundant_const:
+	@grep -E '\bconst\b[[:space:][:alnum:]]{2,}\bconst\b'		\
+		$$($(VC_LIST_EXCEPT)) &&				\
+	    { echo 1>&2 '$(ME): redundant "const" in declarations';	\
+	      exit 1; } || :
+
 sc_const_long_option:
 	@grep '^ *static.*struct option ' $$($(VC_LIST_EXCEPT))		\
-	  | grep -v 'const struct option const' && {			\
+	  | grep -Ev 'const struct option|struct option const' && {	\
 	      echo 1>&2 '$(ME): add "const" to the above declarations'; \
 	      exit 1; } || :
 
