@@ -142,7 +142,7 @@ static struct option const long_options[] =
   { "statistics", no_argument, 0, 's' },
   { "help", no_argument, &show_help, 1 },
   { "version", no_argument, &show_version, 1 },
-  { 0 }
+  {NULL, 0, NULL, 0}
 };
 
 static void
@@ -555,8 +555,10 @@ report_statistics (void)
   printf (_("Tokens=%ld, "), occurrences);
   printf (_("Bytes=%ld Kb, "), input_chars / 1024);
   printf (_("Heap=%llu+%llu Kb, "),
-	  (unsigned long long) (heap_after_scan - heap_after_walk) / 1024,
-	  (unsigned long long) (heap_after_walk - heap_initial) / 1024);
+	  (unsigned long long) ((char *) heap_after_scan
+				- (char *) heap_after_walk) / 1024,
+	  (unsigned long long) ((char *) heap_after_walk
+				- (char *) heap_initial) / 1024);
   printf (_("Output=%ld (%ld tok, %ld hit)\n"),
 	  output_length, tokens_length, hits_length);
 

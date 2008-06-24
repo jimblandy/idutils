@@ -45,6 +45,10 @@
 #include "lid.h"
 #include "progname.h"
 
+#ifndef ATTRIBUTE_UNUSED
+# define ATTRIBUTE_UNUSED __attribute__ ((__unused__))
+#endif
+
 typedef void (*report_func_t) (char const *name, struct file_link **flinkv);
 typedef int (*query_func_t) (char const *arg, report_func_t);
 
@@ -229,7 +233,7 @@ static struct option const long_options[] =
   { "octal", no_argument, 0, 'o' },
   { "help", no_argument, &show_help, 1 },
   { "version", no_argument, &show_version, 1 },
-  { 0 }
+  {NULL, 0, NULL, 0}
 };
 
 void
@@ -618,11 +622,12 @@ report_grep (char const *name, struct file_link **flinkv)
 }
 
 static char **
-get_editor_argv(char *fullstring, int* argc)
+get_editor_argv(char const *fullstring, int* argc)
 {
   int i;
-  char *mark;
+  char const *mark;
   char **argv;
+  char *p;
 
   static int already_called;
   assert(already_called == 0);	/* call only once, otherwise leaks */
@@ -636,8 +641,8 @@ get_editor_argv(char *fullstring, int* argc)
   }
 
   argv = xmalloc(sizeof(char *) * (*argc + 1));
-  fullstring = xstrdup(fullstring);
-  argv[0] = strtok(fullstring, " ");
+  p = xstrdup(fullstring);
+  argv[0] = strtok(p, " ");
 
   for (i = 1; i < (*argc + 1); i++) {
     argv[i] = strtok(NULL, " ");
@@ -650,7 +655,7 @@ get_editor_argv(char *fullstring, int* argc)
 static void
 report_edit (char const *name, struct file_link **flinkv)
 {
-  static char *editor;		/* editor program name from env   */
+  static char const *editor;	/* editor program name from env   */
   static char **editor_argv;	/* editor base arguments from env */
   static int editor_argc;
 
@@ -804,7 +809,7 @@ editit:
 }
 
 static void
-report_nothing (char const *name, struct file_link **flinkv)
+report_nothing (char const *name, struct file_link **flinkv ATTRIBUTE_UNUSED)
 {
   if (key_style != ks_none)
     puts (name);

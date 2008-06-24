@@ -428,7 +428,7 @@ static struct option const long_options_c[] =
   { "keep", required_argument, 0, 'k' },
   { "ignore", required_argument, 0, 'i' },
   { "strip-underscore", no_argument, 0, 'u' },
-  { 0 }
+  {NULL, 0, NULL, 0}
 };
 
 static void
@@ -839,7 +839,7 @@ static struct option const long_options_asm[] =
   { "ignore", required_argument, 0, 'i' },
   { "strip-underscore", no_argument, 0, 'u' },
   { "no-cpp", no_argument, 0, 'n' },
-  { 0 }
+  {NULL, 0, NULL, 0}
 };
 
 static void
@@ -1110,7 +1110,7 @@ static struct option const long_options_text[] =
 {
   { "include", required_argument, 0, 'i' },
   { "exclude", required_argument, 0, 'x' },
-  { 0 }
+  {NULL, 0, NULL, 0}
 };
 
 static void
@@ -1315,7 +1315,7 @@ static struct option const long_options_perl[] =
   { "include", required_argument, 0, 'i' },
   { "exclude", required_argument, 0, 'x' },
   { "dtags", no_argument, 0, 'd' },
-  { 0 }
+  {NULL, 0, NULL, 0}
 };
 
 static void

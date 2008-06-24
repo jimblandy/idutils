@@ -61,7 +61,7 @@ static struct option const long_options[] =
   { "separator", required_argument, 0, 'S' },
   { "help", no_argument, &show_help, 1 },
   { "version", no_argument, &show_version, 1 },
-  { 0 }
+  {NULL, 0, NULL, 0}
 };
 
 static void
