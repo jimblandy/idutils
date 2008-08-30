@@ -42,8 +42,8 @@ if eval $cmd; then
 	echo "Good.  xtokid and lid agree."
     else
 	mv ID.xti ID.bad-xti
-	mv ID.fid ID.bad-fid
-	1>&2 echo "Oops!  xtokid and lid disagree--look in ID.bad-{xtokid,lid}"
+	mv ID.lid ID.bad-lid
+	1>&2 echo "Oops!  xtokid and lid disagree--look in ID.bad-{xti,lid}"
 	errors=t
     fi
 
@@ -58,7 +58,7 @@ if eval $cmd; then
 	then
 	    echo "Good.  xtokid and fid agree for $file"
 	else
-	    1>&2 echo "Oops!  xtokid and fid disagree for $file--look in $file.bad-{xtokid,fid}"
+	    1>&2 echo "Oops!  xtokid and fid disagree for $file--look in $file.bad-{xti,fid}"
 	    mv $xtokid_file $file.bad-xti
 	    mv $fid_file $file.bad-fid
 	    errors=t
