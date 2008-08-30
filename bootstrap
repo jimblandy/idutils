@@ -165,7 +165,7 @@ do
     usage
     exit;;
   --gnulib-srcdir=*)
-    GNULIB_SRCDIR=`expr "$option" : '--gnulib-srcdir=\(.*\)'`;;
+    GNULIB_SRCDIR=`expr "X$option" : 'X--gnulib-srcdir=\(.*\)'`;;
   --skip-po)
     SKIP_PO=t;;
   --force)
@@ -273,7 +273,7 @@ update_po_files() {
 
   langs=`cd $ref_po_dir && echo *.po|sed 's/\.po//g'`
   test "$langs" = '*' && langs=x
-  for po in `cd $ref_po_dir && echo *.po|sed 's/\.po//g'`; do
+  for po in $langs; do
     case $po in x) continue;; esac
     new_po="$ref_po_dir/$po.po"
     cksum_file="$ref_po_dir/$po.s1"
@@ -383,9 +383,13 @@ cp_mark_as_generated()
 
     if test -z "$c1"; then
       cmp -s "$cp_src" "$cp_dst" || {
+	# Copy the file first to get proper permissions if it
+	# doesn't already exist.  Then overwrite the copy.
 	echo "$0: cp -f $cp_src $cp_dst" &&
 	rm -f "$cp_dst" &&
-	sed "s!$bt_regex/!!g" "$cp_src" > "$cp_dst"
+	cp "$cp_src" "$cp_dst-t" &&
+	sed "s!$bt_regex/!!g" "$cp_src" > "$cp_dst-t" &&
+	mv -f "$cp_dst-t" "$cp_dst"
       }
     else
       # Copy the file first to get proper permissions if it
@@ -525,9 +529,8 @@ if test $with_gettext = yes; then
   cp configure.ac $bt2 &&
   (cd $bt2 && autopoint && rm configure.ac) &&
   slurp $bt2 $bt || exit
-
-  rm -fr $bt $bt2 || exit
 fi
+rm -fr $bt $bt2 || exit
 
 # Remove any dangling symlink matching "*.m4" or "*.[ch]" in some
 # gnulib-populated directories.  Such .m4 files would cause aclocal to fail.
@@ -609,8 +612,5 @@ fi
 m=gnulib-tests/gnulib.mk
 sed 's,\.\./\.\.,..,g' $m > $m-t
 mv -f $m-t $m
-
-# Make tests executable.
-chmod a+x gnulib-tests/test-*.sh
 
 echo "$0: done.  Now you can run './configure'."
