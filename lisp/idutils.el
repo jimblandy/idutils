@@ -24,7 +24,7 @@
 ;;; To install, merely put this file somewhere GNU Emacs will find it,
 ;;; then add the following lines to your .emacs file:
 ;;;
-;;;   (autoload 'gid "idutils")
+;;;   (autoload 'gid "idutils" "run idutils' gid command" t)
 ;;;
 ;;; You may also adjust some customizations variables, below, by defining
 ;;; them in your .emacs file.
