@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in -*-Makefile-*-
-dist_man_MANS = mkid.1 lid.1 fid.1 fnid.1 xtokid.1 eid.1 aid.1 gid.1 defid.1
+dist_man1_MANS = mkid.1 lid.1 fid.1 fnid.1 xtokid.1 eid.1 aid.1 gid.1 defid.1
 
-man_aux = $(dist_man_MANS:.1=.x)
+man_aux = $(dist_man1_MANS:.1=.x)
 EXTRA_DIST = $(man_aux)
-MAINTAINERCLEANFILES = $(man_MANS)
+MAINTAINERCLEANFILES = $(dist_man1_MANS)
 
 # Depend on .version to get version number changes.
 common_dep = $(top_srcdir)/.version
@@ -42,13 +42,13 @@ check-local: check-x-vs-1 check-programs-vs-x
 ASSORT = LC_ALL=C sort
 
 # Ensure that for each .x file in this directory, there is a
-# corresponding .1 file in the definition of $(dist_man_MANS) above.
+# corresponding .1 file in the definition of $(dist_man1_MANS) above.
 .PHONY: check-x-vs-1
 check-x-vs-1:
 	PATH=../src$(PATH_SEPARATOR)$$PATH; export PATH;		\
 	t=ls-files.$$$$;						\
 	(cd $(srcdir) && ls -1 *.x) | sed 's/\.x$$//' | $(ASSORT) > $$t;\
-	echo $(dist_man_MANS) | fmt -w1 | sed 's/\.1$$//' | $(ASSORT)	\
+	echo $(dist_man1_MANS) | fmt -w1 | sed 's/\.1$$//' | $(ASSORT)	\
 	  | diff -u - $$t || { rm $$t; exit 1; };				\
 	rm $$t
 
