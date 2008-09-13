@@ -4,7 +4,7 @@ All programs were written by Greg McGary.  Tom Horsley maintained the
 programs for a time and released mkid2 to comp.sources.unix.  The
 texinfo manual was originally written by Tom Horsley.
 
-Special thanks go to François Pinard worked tirelessly to refine
+Special thanks go to FranÃ§ois Pinard, who worked tirelessly to refine
 mkid's autoconfiscation, ensure mkid's conformance to GNU standards,
 and generally pick all the nits that were fit to pick. 8^)
 
@@ -17,7 +17,7 @@ Help keep this list complete and accurate.
 Tom Horsley		<Tom.Horsley@mail.hcsc.com>
 Wolfgang Rupprecht	<wolfgang@wsrcc.com>
 Marty Leisner		<leisner@sdsp.mc.xerox.com>
-François Pinard		<pinard@iro.umontreal.ca>
+FranÃ§ois Pinard         <pinard@iro.umontreal.ca>
 Hal Peterson		<hrp@ironwood.cray.com>
 Jay Lawlor		<jlawlor@ptdcs2.intel.com>
 Paul Lew		<lew@omocha.tay.dec.com>
@@ -38,3 +38,7 @@ Nelson H. F. Beebe	<beebe@math.utah.edu>
 Erick Branderhorst	<Erick.Branderhorst@asml.nl>
 John Bley		<jbb6@acpub.duke.edu>
 Marco S Hyman		<marc@snafu.org>
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
