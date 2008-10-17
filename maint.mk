@@ -31,7 +31,7 @@ GIT = git
 VC = $(GIT)
 VC-tag = git tag -s -m '$(VERSION)'
 
-VC_LIST = build-aux/vc-list-files
+VC_LIST = $(srcdir)/build-aux/vc-list-files
 
 VC_LIST_EXCEPT = \
   $(VC_LIST) | if test -f .x-$@; then grep -vEf .x-$@; else grep -v ChangeLog; fi
@@ -377,18 +377,18 @@ sc_program_name:
 	fi
 
 # Require that the final line of each test-lib.sh-using test be this one:
-# (exit $fail); exit $fail
+# Exit $fail
 # Note: this test requires GNU grep's --label= option.
 sc_require_test_exit_idiom:
 	@if test -f $(srcdir)/tests/test-lib.sh; then			\
 	  die=0;							\
 	  for i in $$(grep -l -F /../test-lib.sh $$($(VC_LIST) tests)); do \
-	    tail -n1 $$i | grep '^(exit \$$fail); exit \$$fail$$' > /dev/null \
+	    tail -n1 $$i | grep '^Exit \$$fail$$' > /dev/null \
 	      && : || { die=1; echo $$i; }				\
 	  done;								\
 	  test $$die = 1 &&						\
 	    { echo 1>&2 '$(ME): the final line in each of the above is not:'; \
-	      echo 1>&2 '(exit $$fail); exit $$fail';			\
+	      echo 1>&2 'Exit $$fail';			\
 	      exit 1; } || :;						\
 	fi
 
@@ -455,6 +455,21 @@ sc_no_exec_perl_coreutils:
 	      exit 1; } || :;						\
 	fi
 
+# Make sure we don't use st_blocks.  Use ST_NBLOCKS instead.
+# This is a bit of a kludge, since it prevents use of the string
+# even in comments, but for now it does the job with no false positives.
+sc_prohibit_stat_st_blocks:
+	@grep -nE '[.>]st_blocks' $$($(VC_LIST_EXCEPT)) && \
+	  { echo '$(ME): do not use st_blocks; use ST_NBLOCKS'		\
+		1>&2; exit 1; } || :
+
+# Make sure we don't define any S_IS* macros in src/*.c files.
+# They're already defined via gnulib's sys/stat.h replacement.
+sc_prohibit_S_IS_definition:
+	@grep -nE '^ *# *define  *S_IS' $$($(VC_LIST_EXCEPT)) &&	\
+	  { echo '$(ME): do not define S_IS* macros; include <sys/stat.h>' \
+		1>&2; exit 1; } || :
+
 NEWS_hash = \
   $$(sed -n '/^\*.* $(PREV_VERSION_REGEXP) ([0-9-]*)/,$$p' \
      $(srcdir)/NEWS | md5sum -)
@@ -507,13 +522,19 @@ epoch_date = 1970-01-01 00:00:00.000000000 +0000
 # Ensure that the c99-to-c89 patch applies cleanly.
 patch-check:
 	rm -rf src-c89 $@.1 $@.2
-	cp -a src src-c89
-	(cd src-c89; patch -p1 -V never --fuzz=0) < src/c99-to-c89.diff \
+	cp -a $(srcdir)/src src-c89
+	if test "x$(srcdir)" != x.; then \
+	  cp -a src/* src-c89; \
+	  dotfiles=`ls src/.[!.]* 2>/dev/null`; \
+	  test -z "$$dotfiles" || cp -a src/.[!.]* src-c89; \
+	fi
+	(cd src-c89; patch -p1 -V never --fuzz=0) < $(srcdir)/src/c99-to-c89.diff \
 	  > $@.1 2>&1
-	if test "$(REGEN_PATCH)" = yes; then \
-	  diff -upr src src-c89 | sed 's,src-c89/,src/,' \
-	    | grep -vE '^(Only in|File )' \
-	    | perl -pe 's/^((?:\+\+\+|---) \S+\t).*/$${1}$(epoch_date)/' \
+	if test "$(REGEN_PATCH)" = yes; then			\
+	  diff -upr $(srcdir)/src src-c89 | sed 's,$(srcdir)/src-c89/,src/,'	\
+	    | grep -vE '^(Only in|File )'			\
+	    | perl -pe 's/^((?:\+\+\+|---) \S+\t).*/$${1}$(epoch_date)/;' \
+	       -e 's/^ $$//'					\
 	    > new-diff || : ; fi
 	grep -v '^patching file ' $@.1 > $@.2 || :
 	msg=ok; test -s $@.2 && msg='fuzzy patch' || : ;	\
@@ -544,8 +565,12 @@ check-AUTHORS:
 # Ensure that we use only the standard $(VAR) notation,
 # not @...@ in Makefile.am, now that we can rely on automake
 # to emit a definition for each substituted variable.
+# We use perl rather than "grep -nE ..." to exempt a single
+# use of an @...@-delimited variable name in src/Makefile.am.
 makefile-check:
-	@grep -nE '@[A-Z_0-9]+@' `find . -name Makefile.am` \
+	@perl -ne '/\@[A-Z_0-9]+\@/ && !/^cu_install_program =/'	\
+	  -e 'and (print "$$ARGV:$$.: $$_"), $$m=1; END {exit !$$m}'	\
+	    $$($(VC_LIST_EXCEPT) | grep -E '(^|/)Makefile\.am$$')	\
 	  && { echo '$(ME): use $$(...), not @...@' 1>&2; exit 1; } || :
 
 news-date-check: NEWS
@@ -572,17 +597,21 @@ m4-check:
 	  && { echo '$(ME): quote the first arg to AC_DEFUN' 1>&2; \
 	       exit 1; } || :
 
+fix_po_file_diag = \
+'you have changed the set of files with translatable diagnostics;\n\
+apply the above patch\n'
+
 # Verify that all source files using _() are listed in po/POTFILES.in.
-# FIXME: don't hard-code file names below; use a more general mechanism.
+po_file = po/POTFILES.in
 po-check:
-	@if test -f po/POTFILES.in; then					\
-	  grep -E -v '^(#|$$)' po/POTFILES.in				\
+	@if test -f $(po_file); then					\
+	  grep -E -v '^(#|$$)' $(po_file)				\
 	    | grep -v '^src/false\.c$$' | sort > $@-1;			\
 	  files=;							\
 	  for file in $$($(VC_LIST_EXCEPT)) lib/*.[ch]; do		\
 	    case $$file in						\
-	    djgpp/* | man/*) continue;;					\
-	    */c99-to-c89.diff) continue;;				\
+	      *.?|*.??) ;;						\
+	      *) continue;;						\
 	    esac;							\
 	    case $$file in						\
 	    *.[ch])							\
@@ -593,7 +622,8 @@ po-check:
 	  done;								\
 	  grep -E -l '\b(N?_|gettext *)\([^)"]*("|$$)' $$files		\
 	    | sort -u > $@-2;						\
-	  diff -u $@-1 $@-2 || exit 1;					\
+	  diff -u -L $(po_file) -L $(po_file) $@-1 $@-2			\
+	    || { printf '$(ME): '$(fix_po_file_diag) 1>&2; exit 1; };	\
 	  rm -f $@-1 $@-2;						\
 	fi
 
@@ -684,7 +714,9 @@ null_AM_MAKEFLAGS = \
   AUTOHEADER=false \
   MAKEINFO=false
 
-built_programs = $$(cd src && MAKEFLAGS= $(MAKE) -s built_programs.list)
+built_programs = \
+  $$(cd src && echo '_spy:;@echo $$(bin_PROGRAMS)' \
+     | MAKEFLAGS= $(MAKE) -s make -f Makefile -f - _spy)
 
 warn_cflags = -Dlint -O -Werror -Wall -Wformat -Wshadow -Wpointer-arith
 bin=bin-$$$$
@@ -724,6 +756,34 @@ define my-instcheck
     }
 endef
 
+define coreutils-path-check
+  {							\
+    if test -f $(srcdir)/src/true.c; then		\
+      fail=1;						\
+      mkdir $(bin)					\
+	&& ($(write_loser)) > $(bin)/loser		\
+	&& chmod a+x $(bin)/loser			\
+	&& for i in $(built_programs); do		\
+	       case $$i in				\
+		 rm|expr|basename|echo|sort|ls|tr);;	\
+		 cat|dirname|mv|wc);;			\
+		 *) ln $(bin)/loser $(bin)/$$i;;	\
+	       esac;					\
+	     done					\
+	  && ln -sf ../src/true $(bin)/false		\
+	  && PATH=`pwd`/$(bin):$$PATH $(MAKE) -C tests check \
+	  && { test -d gnulib-tests			\
+	         && $(MAKE) -C gnulib-tests check	\
+	         || :; }				\
+	  && rm -rf $(bin)				\
+	  && fail=0;					\
+    else						\
+      fail=0;						\
+    fi;							\
+    test $$fail = 1 && exit 1 || :;			\
+  }
+endef
+
 # Use -Wformat -Werror to detect format-string/arg-list mismatches.
 # Also, check for shadowing problems with -Wshadow, and for pointer
 # arithmetic problems with -Wpointer-arith.
@@ -749,33 +809,11 @@ my-distcheck: $(DIST_ARCHIVES) $(local-check)
 	  && $(MAKE) dvi				\
 	  && $(install-transform-check)			\
 	  && $(my-instcheck)				\
-	  && mkdir $(bin)				\
-	  && ($(write_loser)) > $(bin)/loser            \
-	  && chmod a+x $(bin)/loser                     \
-	  && for i in $(built_programs); do		\
-	       case $$i in				\
-		 rm|expr|basename|echo|sort|ls|tr);;	\
-		 cat|dirname|mv|wc);;			\
-		 *) ln $(bin)/loser $(bin)/$$i;;	\
-	       esac;					\
-	     done					\
-	  && ln -sf ../src/true $(bin)/false		\
-	  && PATH=`pwd`/$(bin):$$PATH $(MAKE) -C tests check \
-	  && { test -d gnulib-tests			\
-	         && $(MAKE) -C gnulib-tests check	\
-	         || :; }				\
-	  && rm -rf $(bin)				\
+	  && $(coreutils-path-check)			\
 	  && $(MAKE) distclean
 	(cd $(t) && mv $(distdir) $(distdir).old	\
 	  && $(AMTAR) -zxf - ) < $(distdir).tar.gz
 	diff -ur $(t)/$(distdir).old $(t)/$(distdir)
-	if test -f $(srcdir)/src/c99-to-c89.diff; then			\
-	  cd $(t)/$(distdir)						\
-	    && (cd src && patch -V never --fuzz=0 <c99-to-c89.diff)	\
-	    && ./configure --disable-largefile				\
-	         CFLAGS='-Werror -ansi -Wno-long-long'			\
-	    && $(MAKE);							\
-	fi
 	-rm -rf $(t)
 	@echo "========================"; \
 	echo "$(distdir).tar.gz is ready for distribution"; \
@@ -855,4 +893,4 @@ alpha beta major: $(local-check) writable-files
 	$(MAKE) update-NEWS-hash
 	perl -pi -e '$$. == 3 and print "$(noteworthy)\n\n\n"' NEWS
 	$(emit-commit-log) > .ci-msg
-	$(VC) commit -F .ci-msg
+	$(VC) commit -F .ci-msg -a
