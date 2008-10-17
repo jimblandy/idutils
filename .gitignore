@@ -31,6 +31,7 @@ idutils-*.tar.gz
 idutils-*.tar.gz.sig
 idutils-*.tar.lzma
 idutils-*.tar.lzma.sig
+idutils.spec
 lib/.cvsignore
 lib/.gitignore
 lib/charset.alias

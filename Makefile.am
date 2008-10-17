@@ -8,6 +8,8 @@ EXTRA_DIST = \
   .x-sc_cast_of_argument_to_free \
   .x-sc_require_config_h \
   cfg.mk \
+  idutils.spec \
+  idutils.spec.in \
   maint.mk \
   bootstrap \
   bootstrap.conf \
@@ -22,6 +24,11 @@ gen-ChangeLog:
 	  rm -f $(distdir)/ChangeLog;					\
 	  mv $(distdir)/cl-t $(distdir)/ChangeLog;			\
 	fi
+
+idutils.spec: idutils.spec.in .version
+	sed 's/@''PACKAGE@/$(PACKAGE)/;s/@''VERSION@/$(VERSION)/' $< > $@-t
+	mv $@-t $@
+MAINTAINERCLEANFILES = idutils.spec
 
 BUILT_SOURCES = .version
 .version:
