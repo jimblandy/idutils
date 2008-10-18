@@ -38,4 +38,4 @@ local-checks-to-skip = changelog-check strftime-check patch-check \
 # this release.  Used solely to get a date for the "announcement" target.
 gnulib_dir = /gnulib
 
-old_NEWS_hash = d41d8cd98f00b204e9800998ecf8427e  -
+old_NEWS_hash = 6fbccb57d103329fd213302624ecd4b5  -
