@@ -611,23 +611,17 @@ struct file_link *
 get_current_dir_link (void)
 {
   struct file_link *dir_link;
-  char *cwd_0;
   char *cwd;
-  char *xcwd = 0;
   char **links_0;
   char **links;
 
   if (current_dir_link)
     return current_dir_link;
 
-  cwd_0 = getenv ("PWD");
-  if (cwd_0)
-    cwd_0 = xstrdup (cwd_0);
-  if (!same_as_dot (cwd_0))
-    cwd_0 = xcwd = xgetcwd ();
-  if (cwd_0 == 0)
+  cwd = getenv ("PWD");
+  cwd = same_as_dot (cwd) ? xstrdup (cwd) : xgetcwd ();
+  if (cwd == NULL)
     error (1, errno, _("can't get working directory"));
-  cwd = cwd_0;
 #if HAVE_LINK
   dir_link = get_link_from_string (SLASH_STRING, 0);
   dir_link->fl_flags = (dir_link->fl_flags & ~FL_TYPE_MASK) | FL_TYPE_DIR;
@@ -645,7 +639,7 @@ get_current_dir_link (void)
     }
   chdir_to_link (dir_link);
   free (links_0);
-  free (xcwd);
+  free (cwd);
   current_dir_link = dir_link;
   return dir_link;
 }
