@@ -36,6 +36,7 @@
 
 *.h			C
 *.h.in			C
+*.in.h			C
 *.H			C++
 *.hh			C++
 *.hpp			C++
@@ -82,15 +83,20 @@ ChangeLog*		Cdoc
 *.mk			make
 Makefile		make
 Makefile.*		make
+GNUmakefile		make
 
 *.doc			text
 *.txt			text
 
 *.m4			m4
 *.ac			m4
+configure.in		m4
 
+*.PL			perl
 *.pl			perl
 *.pm			perl
+
+*.rb			perl
 
 *.Z			FILTER gzip -d <%s
 *.gz			FILTER gzip -d <%s
