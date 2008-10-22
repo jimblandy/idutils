@@ -24,9 +24,9 @@
 #include <string.h>
 #include <obstack.h>
 #include <error.h>
+#include <sys/stat.h>
 
 #include "idfile.h"
-#include "lstat.h"
 #include "xalloc.h"
 #include "xnls.h"
 

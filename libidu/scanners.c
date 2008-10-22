@@ -25,11 +25,11 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <unistd.h>
-#include "lstat.h"
 #include <string.h>
 #include <errno.h>
 #include <xalloc.h>
 #include <error.h>
+#include <sys/stat.h>
 
 #include "xnls.h"
 #include "scanners.h"

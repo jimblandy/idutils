@@ -22,7 +22,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <getopt.h>
-#include "lstat.h"
 #include <stddef.h>
 #include <unistd.h>
 #include <pathmax.h>
@@ -33,6 +32,7 @@
 #include <inttostr.h>
 #include <xalloc.h>
 #include <error.h>
+#include <sys/stat.h>
 
 #include "closeout.h"
 #include "xnls.h"

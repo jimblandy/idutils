@@ -18,7 +18,6 @@
 */
 
 #include <config.h>
-#include "lstat.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -31,6 +30,7 @@
 #include <xalloc.h>
 #include <error.h>
 #include <pathmax.h>
+#include <sys/stat.h>
 
 #include "xnls.h"
 #include "idfile.h"
