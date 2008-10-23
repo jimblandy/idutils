@@ -2,6 +2,12 @@ GNU idutils NEWS                                      -*- outline -*-
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** New features
+
+  mkid and xtokid accept a new option --files0-from=FILE, to make them
+  process only the files named in FILE.  FILE must contain a list of
+  NUL-terminated file names.
+
 
 * Noteworthy changes in release 4.3.92 (2008-10-18) [beta]
 
