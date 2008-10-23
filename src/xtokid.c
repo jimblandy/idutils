@@ -22,16 +22,20 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <xalloc.h>
-#include <pathmax.h>
-#include <error.h>
 
 #include "closeout.h"
+#include "error.h"
+#include "pathmax.h"
+#include "progname.h"
+#include "quote.h"
+#include "quotearg.h"
+#include "readtokens0.h"
+#include "xalloc.h"
+
 #include "xnls.h"
 #include "scanners.h"
 #include "idfile.h"
 #include "iduglobal.h"
-#include "progname.h"
 
 static void scan_files (struct idhead *idhp);
 static void scan_member_file (struct member_file const *member);
@@ -48,8 +52,15 @@ usage (void)
 {
   fprintf (stderr, _("Try `%s --help' for more information.\n"),
 	   program_name);
-  exit (1);
+  exit (EXIT_FAILURE);
 }
+
+/* For long options that have no equivalent short option, use a
+   non-character as a pseudo short option, starting with CHAR_MAX + 1.  */
+enum
+{
+  FILES0_FROM_OPTION = CHAR_MAX +1,
+};
 
 static struct option const long_options[] =
 {
@@ -61,6 +72,7 @@ static struct option const long_options[] =
   { "prune", required_argument, 0, 'p' },
   { "help", no_argument, &show_help, 1 },
   { "version", no_argument, &show_version, 1 },
+  { "files0-from", required_argument, NULL, FILES0_FROM_OPTION },
   {NULL, 0, NULL, 0}
 };
 
@@ -79,7 +91,11 @@ Print all tokens found in a source file.\n\
   -m, --lang-map=MAPFILE  use MAPFILE to map file names onto source language\n\
   -d, --default-lang=LANG  make LANG the default source language\n\
   -p, --prune=NAMES       exclude the named files and/or directories\n\
-      --help              display this help and exit\n\
+\n\
+      --files0-from=F     tokenize only the files specified by\n\
+                           NUL-terminated names in file F\n\
+\n\
+      --help              display this help and exit\n		\
       --version           output version information and exit\n\
 \n\
 The following arguments apply to the language-specific scanners:\n\
@@ -92,6 +108,13 @@ The following arguments apply to the language-specific scanners:\n\
 int
 main (int argc, char **argv)
 {
+  bool ok;
+  int i;
+  int nfiles;
+  char **files;
+  char *files_from = NULL;
+  struct Tokens tok;
+
   set_program_name (argv[0]);
 
 #if ENABLE_NLS
@@ -142,6 +165,10 @@ main (int argc, char **argv)
 	  prune_file_names (optarg, cw_dlink);
 	  break;
 
+	case FILES0_FROM_OPTION:
+	  files_from = optarg;
+	  break;
+
 	default:
 	  usage ();
 	}
@@ -150,20 +177,47 @@ main (int argc, char **argv)
   if (show_version)
     {
       printf ("%s - %s\n", program_name, PACKAGE_VERSION);
-      exit (0);
+      exit (EXIT_SUCCESS);
     }
 
   if (show_help)
     help_me ();
 
-  argc -= optind;
-  argv += optind;
-  if (argc == 0)
+  nfiles = argc - optind;
+  files = argv + optind;
+
+  if (files_from)
     {
+      /* When using --files0-from=F, you may not specify any files
+	 on the command-line.  */
+      if (nfiles != 0)
+	{
+	  error (0, 0, _("extra operand %s"), quote (argv[optind]));
+	  fprintf (stderr, "%s\n",
+		   _("File operands cannot be combined with --files0-from."));
+	  usage();
+	}
+
+      if (! (strequ (files_from, "-") || freopen (files_from, "r", stdin)))
+	error (EXIT_FAILURE, errno, _("cannot open %s for reading"),
+	       quote (files_from));
+
+      readtokens0_init (&tok);
+
+      if (! readtokens0 (stdin, &tok) || fclose (stdin) != 0)
+	error (EXIT_FAILURE, 0, _("cannot read file names from %s"),
+	       quote (files_from));
+
+      nfiles = tok.n_tok;
+      files = tok.tok;
+    }
+  /* If no file or directory options exist, walk the current directory.  */
+  else if (nfiles == 0)
+     {
       static char dot[] = ".";
       static char *dotp = dot;
-      argc = 1;
-      argv = &dotp;
+      nfiles = 1;
+      files = &dotp;
     }
 
   language_getopt ();
@@ -171,17 +225,53 @@ main (int argc, char **argv)
     cw_dlink = init_walker (&idh);
   parse_language_map (lang_map_file_name);
 
-  while (argc--)
+  ok = true;
+  for (i=0; i < nfiles; i++)
     {
-      struct file_link *flink = parse_file_name (*argv++, cw_dlink);
-      if (flink)
-	walk_flink (flink, 0);
+      if (*files)
+	{
+	  struct file_link *flink;
+
+	  if (files_from && strequ(files_from, "-") && strequ(files[i], "-"))
+	    {
+	      ok = false;
+	      /* Give a better diagnostic in an unusual case:
+		 printf - | wc --files0-from=- */
+	      error (0, 0, _("when reading file names from stdin, "
+			     "no file name of %s allowed"),
+		     quote ("-"));
+	      continue;
+	    }
+
+	  /* Diagnose a zero-length file name.  When it's one
+	     among many, knowing the record number may help.  */
+	  if (files[i][0] == '\0')
+	    {
+	      ok = false;
+	      if (files_from)
+		{
+		  /* Using the standard `filename:line-number:' prefix here is
+		     not totally appropriate, since NUL is the separator, not NL,
+		     but it might be better than nothing.  */
+		  unsigned long int file_number = i + 1;
+		  error (0, 0, "%s:%lu: %s", quotearg_colon (files_from),
+			 file_number, _("invalid zero-length file name"));
+		}
+	      else
+		error (0, 0, "%s", _("invalid zero-length file name"));
+	      continue;
+	    }
+
+	  flink = parse_file_name (files[i], cw_dlink);
+	  if (flink)
+	    walk_flink (flink, 0);
+	}
     }
   mark_member_file_links (&idh);
   obstack_init (&tokens_obstack);
   scan_files (&idh);
 
-  return 0;
+  exit (ok ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
 static void

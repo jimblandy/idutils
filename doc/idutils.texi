@@ -313,7 +313,18 @@ One or more file or directory names may appear in @var{names}.  The file
 tree walker will stop short at these files and directories and their
 contents will not be scanned.
 
-@end table
+@itemx --files0-from=@var{FILE}
+@opindex --files0-from=@var{FILE}
+Rather than processing files named on the command line, process those
+named in file @var{FILE}; each name is terminated by a null byte.
+This is useful when the list of file names is so long that it may
+exceed a command line length limitation.
+One way to produce a list of null-byte-terminated file names is with
+@sc{gnu} @command{find}, using its @option{-print0} predicate. Do not
+specify any @var{FILE} on the command line when using this option.
+
+
+ @end table
 
 @c ************* gkm *********************************************************
 @node File listing options

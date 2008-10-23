@@ -24,23 +24,27 @@
 #include <getopt.h>
 #include <stddef.h>
 #include <unistd.h>
-#include <pathmax.h>
 #include <string.h>
-#include <dirname.h>
-#include <alloca.h>
-#include <limits.h>
-#include <inttostr.h>
-#include <xalloc.h>
-#include <error.h>
 #include <sys/stat.h>
+#include <limits.h>
 
+#include "alloca.h"
 #include "closeout.h"
+#include "dirname.h"
+#include "error.h"
+#include "inttostr.h"
+#include "pathmax.h"
+#include "progname.h"
+#include "quote.h"
+#include "quotearg.h"
+#include "readtokens0.h"
+#include "xalloc.h"
+
 #include "xnls.h"
 #include "idfile.h"
 #include "hash.h"
 #include "scanners.h"
 #include "iduglobal.h"
-#include "progname.h"
 
 struct summary
 {
@@ -125,8 +129,15 @@ usage (void)
 {
   fprintf (stderr, _("Try `%s --help' for more information.\n"),
 	   program_name);
-  exit (1);
+  exit (EXIT_FAILURE);
 }
+
+/* For long options that have no equivalent short option, use a
+   non-character as a pseudo short option, starting with CHAR_MAX + 1.  */
+enum
+{
+  FILES0_FROM_OPTION = CHAR_MAX +1,
+};
 
 static struct option const long_options[] =
 {
@@ -142,6 +153,7 @@ static struct option const long_options[] =
   { "statistics", no_argument, 0, 's' },
   { "help", no_argument, &show_help, 1 },
   { "version", no_argument, &show_version, 1 },
+  { "files0-from", required_argument, NULL, FILES0_FROM_OPTION },
   {NULL, 0, NULL, 0}
 };
 
@@ -165,7 +177,10 @@ Build an identifier database.\n\
   -v, --verbose           report per file statistics\n\
   -s, --statistics        report statistics at end of run\n\
 \n\
-      --help              display this help and exit\n\
+      --files0-from=F     tokenize only the files specified by\n\
+                           NUL-terminated names in file F\n\
+\n\
+       --help              display this help and exit\n\
       --version           output version information and exit\n\
 \n\
 FILE may be a file name, or a directory name to recursively search.\n\
@@ -176,7 +191,7 @@ The following arguments apply to the language-specific scanners:\n\
 "));
   language_help_me ();
   printf (_("\nReport bugs to " PACKAGE_BUGREPORT "\n\n"));
-  exit (0);
+  exit (EXIT_SUCCESS);
 }
 
 static void *heap_initial;
@@ -195,6 +210,13 @@ static void *get_process_heap(void)
 int
 main (int argc, char **argv)
 {
+  bool ok;
+  int i;
+  int nfiles;
+  char **files;
+  char *files_from = NULL;
+  struct Tokens tok;
+
   set_program_name (argv[0]);
   heap_initial = get_process_heap();
   idh.idh_file_name = DEFAULT_ID_FILE_NAME;
@@ -252,6 +274,10 @@ main (int argc, char **argv)
 	  prune_file_names (optarg, cw_dlink);
 	  break;
 
+	case FILES0_FROM_OPTION:
+	  files_from = optarg;
+	  break;
+
 	case 'V':
 	  walker_verbose_flag = 1;
 	case 'v':
@@ -274,16 +300,42 @@ main (int argc, char **argv)
   if (show_help)
     help_me ();
 
-  argc -= optind;
-  argv += optind;
+  nfiles = argc - optind;
+  files = argv + optind;
+
+  if (files_from)
+    {
+      /* When using --files0-from=F, you may not specify any files
+	 on the command-line.  */
+      if (nfiles != 0)
+	{
+	  error (0, 0, _("extra operand %s"), quote (argv[optind]));
+	  fprintf (stderr, "%s\n",
+		   _("File operands cannot be combined with --files0-from."));
+	  usage();
+	}
+
+      if (! (strequ (files_from, "-") || freopen (files_from, "r", stdin)))
+	error (EXIT_FAILURE, errno, _("cannot open %s for reading"),
+	       quote (files_from));
+
+      readtokens0_init (&tok);
+
+      if (! readtokens0 (stdin, &tok) || fclose (stdin) != 0)
+	error (EXIT_FAILURE, 0, _("cannot read file names from %s"),
+	       quote (files_from));
+
+      nfiles = tok.n_tok;
+      files = tok.tok;
+    }
 
   /* If no file or directory options exist, walk the current directory.  */
-  if (argc == 0)
+  else if (nfiles == 0)
     {
       static char dot[] = ".";
       static char *dotp = dot;
-      argc = 1;
-      argv = &dotp;
+      nfiles = 1;
+      files = &dotp;
     }
 
   language_getopt ();
@@ -293,11 +345,47 @@ main (int argc, char **argv)
   parse_language_map (lang_map_file_name);
 
   /* Walk the file and directory names given on the command line.  */
-  while (argc--)
+  ok = true;
+  for (i=0; i < nfiles; i++)
     {
-      struct file_link *flink = parse_file_name (*argv++, cw_dlink);
-      if (flink)
-	walk_flink (flink, 0);
+      if (*files)
+	{
+	  struct file_link *flink;
+
+	  if (files_from && strequ(files_from, "-") && strequ(files[i], "-"))
+	    {
+	      ok = false;
+	      /* Give a better diagnostic in an unusual case:
+		 printf - | wc --files0-from=- */
+	      error (0, 0, _("when reading file names from stdin, "
+			     "no file name of %s allowed"),
+		     quote ("-"));
+	      continue;
+	    }
+
+	  /* Diagnose a zero-length file name.  When it's one
+	     among many, knowing the record number may help.  */
+	  if (files[i][0] == '\0')
+	    {
+	      ok = false;
+	      if (files_from)
+		{
+		  /* Using the standard `filename:line-number:' prefix here is
+		     not totally appropriate, since NUL is the separator, not NL,
+		     but it might be better than nothing.  */
+		  unsigned long int file_number = i + 1;
+		  error (0, 0, "%s:%lu: %s", quotearg_colon (files_from),
+			 file_number, _("invalid zero-length file name"));
+		}
+	      else
+		error (0, 0, "%s", _("invalid zero-length file name"));
+	      continue;
+	    }
+
+	  flink = parse_file_name (files[i], cw_dlink);
+	  if (flink)
+	    walk_flink (flink, 0);
+	}
     }
   heap_after_walk = get_process_heap();
 
@@ -337,7 +425,7 @@ main (int argc, char **argv)
   else
     error (0, 0, _("nothing to do"));
 
-  exit (0);
+  exit (ok ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
 /* Return the integer ceiling of the base-8 logarithm of N.  */
