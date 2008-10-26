@@ -232,17 +232,6 @@ main (int argc, char **argv)
 	{
 	  struct file_link *flink;
 
-	  if (files_from && strequ(files_from, "-") && strequ(files[i], "-"))
-	    {
-	      ok = false;
-	      /* Give a better diagnostic in an unusual case:
-		 printf - | wc --files0-from=- */
-	      error (0, 0, _("when reading file names from stdin, "
-			     "no file name of %s allowed"),
-		     quote ("-"));
-	      continue;
-	    }
-
 	  /* Diagnose a zero-length file name.  When it's one
 	     among many, knowing the record number may help.  */
 	  if (files[i][0] == '\0')
