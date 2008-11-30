@@ -1505,7 +1505,6 @@ tree8_to_flinkv (unsigned char const *hits_tree8)
 
 #if HAVE_TERMIOS_H
 
-#include <termios.h>
 static struct termios linemode;
 static struct termios charmode;
 static struct termios savemode;
