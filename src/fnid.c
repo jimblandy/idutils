@@ -21,7 +21,6 @@
 #include <getopt.h>
 #include <fnmatch.h>
 #include <string.h>
-#include <errno.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <alloca.h>
