@@ -1,0 +1,2 @@
+^testsuite/single_file_token_bug\.c$
+^src/lid-[aegl]id\.c$

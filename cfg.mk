@@ -1,5 +1,5 @@
 # Customize maint.mk.                           -*- makefile -*-
-# Copyright (C) 2003-2008 Free Software Foundation, Inc.
+# Copyright (C) 2003-2009 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,3 +39,6 @@ local-checks-to-skip = changelog-check strftime-check patch-check \
 gnulib_dir = /gnulib
 
 old_NEWS_hash = 6fbccb57d103329fd213302624ecd4b5  -
+
+sc_tight_scope:
+	$(MAKE) -C src $@
