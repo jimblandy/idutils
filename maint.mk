@@ -374,7 +374,7 @@ sc_the_the:
 
 sc_trailing_blank:
 	@re='[	 ]$$'							\
-	ignore_case=1 msg='found trailing blank(s)'			\
+	msg='found trailing blank(s)'					\
 	  $(_prohibit_regexp)
 
 # Match lines like the following, but where there is only one space
@@ -641,7 +641,7 @@ maintainer-distcheck:
 # Don't make a distribution if checks fail.
 # Also, make sure the NEWS file is up-to-date.
 vc-dist: $(local-check) cvs-check maintainer-distcheck
-	$(MAKE) dist
+	XZ_OPT=-9ev $(MAKE) dist
 
 # Use this to make sure we don't run these programs when building
 # from a virgin tgz file, below.
@@ -866,8 +866,10 @@ alpha beta major: $(local-check) writable-files
 
 .PHONY: web-manual
 web-manual:
+	@test -z "$(manual_title)" \
+	  && { echo define manual_title in cfg.mk 1>&2; exit 1; } || :
 	@cd '$(srcdir)/doc'; \
 	  $(SHELL) ../build-aux/gendocs.sh -o '$(abs_builddir)/doc/manual' \
 	     --email $(PACKAGE_BUGREPORT) $(PACKAGE) \
-	    "$(PACKAGE_NAME) - Core GNU utilities"
+	    "$(PACKAGE_NAME) - $(manual_title)"
 	@echo " *** Upload the doc/manual directory to web-cvs."
