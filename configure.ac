@@ -7,6 +7,7 @@ AC_INIT([idutils], m4_esyscmd([build-aux/git-version-gen .tarball-version]),
 
 AC_CONFIG_AUX_DIR(build-aux)
 AM_INIT_AUTOMAKE([1.10.1 dist-xz std-options])
+AM_SILENT_RULES([yes]) # make --enable-silent-rules the default.
 
 AC_CONFIG_SRCDIR([src/mkid.c])
 AC_CONFIG_HEADERS([lib/config.h:lib/config.hin])
