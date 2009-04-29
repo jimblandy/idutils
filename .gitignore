@@ -43,6 +43,7 @@ libidu/libidu.a
 lisp/elc-stamp
 lisp/idutils.elc
 m4/.gitignore
+maint.mk
 po/*.gmo
 po/*.po
 po/.gitignore
