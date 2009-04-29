@@ -8,6 +8,7 @@ EXTRA_DIST = \
   .x-sc_cast_of_argument_to_free \
   .x-sc_require_config_h \
   cfg.mk \
+  dist-check.mk \
   idutils.spec \
   idutils.spec.in \
   maint.mk \

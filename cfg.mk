@@ -41,7 +41,9 @@ local-checks-to-skip = changelog-check strftime-check patch-check \
 # this release.  Used solely to get a date for the "announcement" target.
 gnulib_dir = /gnulib
 
-old_NEWS_hash = eb1986d9a01765bcd73053fb1feba356  -
+old_NEWS_hash = eb1986d9a01765bcd73053fb1feba356
 
 sc_tight_scope:
 	$(MAKE) -C src $@
+
+include $(srcdir)/dist-check.mk
