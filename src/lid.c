@@ -93,7 +93,7 @@ enum radix
   radix_all = radix_dec | radix_oct | radix_hex
 };
 
-void usage (void);
+void usage (void) __attribute__((__noreturn__));
 static void help_me (void);
 static void lower_caseify (char *str);
 static enum key_style parse_key_style (char const *arg);

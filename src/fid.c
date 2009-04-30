@@ -1,5 +1,5 @@
 /* fid.c -- list all tokens in the given file(s)
-   Copyright (C) 1986, 1995, 1996, 2008 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 2008, 2009 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -38,7 +38,7 @@ static int get_file_index (char *file_name);
 static int is_hit (unsigned char const *hits, int file_number);
 static int is_hit_1 (unsigned char const **hits, int level, int file_number);
 static void skip_hits (unsigned char const **hits, int level);
-void usage (void);
+void usage (void) __attribute__((__noreturn__));
 
 struct idhead idh;
 static int tree8_levels;

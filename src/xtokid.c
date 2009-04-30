@@ -1,5 +1,5 @@
 /* idx.c -- simple interface for testing scanners scanners
-   Copyright (C) 1986, 1995, 1996, 1999, 2007-2008 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 1999, 2007-2009 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@
 
 static void scan_files (struct idhead *idhp);
 static void scan_member_file (struct member_file const *member);
-void usage (void);
+void usage (void) __attribute__((__noreturn__));
 
 static char *lang_map_file_name = 0;
 static int show_version = 0;

@@ -1,5 +1,5 @@
 /* mkid.c -- build an identifer database
-   Copyright (C) 1986, 1995, 1996, 1999, 2007-2008 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 1999, 2007-2009 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -51,7 +51,6 @@ struct summary
     struct summary *u_kids[8];	/* when sum_level > 0 */
 #define sum_kids sum_u.u_kids
     struct member_file *u_files[8];	/* when sum_level == 0 */
-#define sum_files sum_u.u_files
   } sum_u;
   unsigned long sum_tokens_size;
   unsigned long sum_hits_count;
@@ -120,6 +119,7 @@ static int show_help = 0;
 struct idhead idh;
 static struct file_link *cw_dlink;
 
+void usage (void) __attribute__((__noreturn__));
 void
 usage (void)
 {

@@ -1,5 +1,5 @@
 /* fnid.c -- report which files constitute an ID database
-   Copyright (C) 1996, 2008 Free Software Foundation, Inc.
+   Copyright (C) 1996, 2008, 2009 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -34,8 +34,6 @@
 #include "iduglobal.h"
 #include "progname.h"
 
-void usage (void);
-
 static int show_version = 0;
 static int show_help = 0;
 static struct file_link *cw_dlink;
@@ -46,6 +44,7 @@ struct idhead idh;
 
 static enum separator_style separator_style = ss_contextual;
 
+void usage (void) __attribute__((__noreturn__));
 void
 usage (void)
 {
