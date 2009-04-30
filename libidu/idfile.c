@@ -1,5 +1,5 @@
 /* idfile.c -- read & write mkid database file header
-   Copyright (C) 1986, 1995, 1996, 1999, 2000, 2007-2008
+   Copyright (C) 1986, 1995, 1996, 1999, 2000, 2007-2009
    Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
@@ -94,7 +94,7 @@ locate_id_file_name (char const *arg)
 /****************************************************************************/
 
 int
-sizeof_idhead ()
+sizeof_idhead (void)
 {
   return io_idhead (0, io_size, 0);
 }
