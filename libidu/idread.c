@@ -25,10 +25,11 @@
 #include <xalloc.h>
 #include <error.h>
 
-#include "idfile.h"
 #include "hash.h"
-#include "xnls.h"
+#include "idfile.h"
 #include "iduglobal.h"
+#include "ignore-value.h"
+#include "xnls.h"
 
 static int fgets0 (char *buf0, int size, FILE *in_FILE);
 
@@ -192,7 +193,9 @@ io_read (FILE *input_FILE, void *addr, unsigned int size, int io_type)
   else if (io_type == IO_TYPE_STR)
     fgets0 (addr, size, input_FILE);
   else if (io_type == IO_TYPE_FIX)
-    fread (addr, size, 1, input_FILE);
+    {
+      ignore_value (fread (addr, size, 1, input_FILE));
+    }
   else
     error (0, 0, _("unknown I/O type: %d"), io_type);
   return size;

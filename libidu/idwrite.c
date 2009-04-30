@@ -1,5 +1,5 @@
 /* idwrite.c -- functions to write ID database files
-   Copyright (C) 1995, 1996, 2007, 2008 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1996, 2007, 2008, 2009 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 #include <error.h>
 
 #include "idfile.h"
+#include "ignore-value.h"
 #include "hash.h"
 #include "xnls.h"
 
@@ -163,7 +164,7 @@ io_write (FILE *output_FILE, void *addr, unsigned int size, int io_type)
       putc ('\0', output_FILE);
     }
   else if (io_type == IO_TYPE_FIX)
-    fwrite (addr, size, 1, output_FILE);
+    ignore_value (fwrite (addr, size, 1, output_FILE));
   else
     error (0, 0, _("unknown I/O type: %d"), io_type);
   return size;
