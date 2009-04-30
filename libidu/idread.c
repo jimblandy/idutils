@@ -1,5 +1,5 @@
 /* idread.c -- functions to read ID database files
-   Copyright (C) 1995, 1996, 1999, 2007-2008 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1996, 1999, 2007-2009 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -206,9 +206,6 @@ token_flags (char const *buf)
 {
   return *(unsigned char const *)&buf[strlen (buf) + 1];
 }
-
-#define TOK_COUNT_ADDR(buf) ((unsigned char const *)(TOK_FLAGS_ADDR (buf) + 1))
-#define TOK_HITS_ADDR(buf) ((unsigned char const *)(TOK_COUNT_ADDR (buf) + 2))
 
 unsigned short
 token_count (char const *buf)
