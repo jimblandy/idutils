@@ -1,5 +1,5 @@
 /* scanners.c -- file & directory name manipulations
-   Copyright (C) 1986, 1995, 1996, 1999, 2000, 2007-2008
+   Copyright (C) 1986, 1995, 1996, 1999, 2000, 2007-2009
    Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
@@ -370,7 +370,6 @@ clear_uchar_ctype (unsigned char *ctype, char const *chars, int type)
 #define EF	0x0200		/* EOF */
 #define SK	0x0400		/* Make these chars valid for names within strings */
 #define VH	0x0800		/* VHIL comment introduction char: # */
-#define WS	0x1000		/* White space characters */
 
 /* character class membership macros: */
 
@@ -380,7 +379,6 @@ clear_uchar_ctype (unsigned char *ctype, char const *chars, int type)
 #define ISID1ST(c)	((rct)[c] & (I1))	/* 1st char of an identifier */
 #define ISIDREST(c)	((rct)[c] & (I1|DG))	/* rest of an identifier */
 #define ISSTRKEEP(c)	((rct)[c] & (I1|DG|SK))	/* keep contents of string */
-#define ISSPACE(c)	((rct)[c] & (WS))	/* white space character */
 
 /* The `BORING' classes should be skipped over until something
    interesting comes along... */
@@ -763,14 +761,12 @@ next:
 #undef EF
 #undef SK
 #undef VH
-#undef WS
 #undef ISDIGIT
 #undef ISNUMBER
 #undef ISEOF
 #undef ISID1ST
 #undef ISIDREST
 #undef ISSTRKEEP
-#undef ISSPACE
 #undef ISBORING
 #undef ISCBORING
 #undef ISCCBORING
