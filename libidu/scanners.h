@@ -21,8 +21,8 @@
 
 #include "obstack.h"
 
-extern int log_8_member_files;	/* log base 8 of the # of files.
-				   e.g., log_8 (32768) == 5 */
+extern size_t log_8_member_files;	/* log base 8 of the # of files.
+					   e.g., log_8 (32768) == 5 */
 
 struct token
 {

@@ -40,7 +40,7 @@ static struct obstack lang_args_obstack;
 struct lang_args *lang_args_default = 0;
 struct lang_args *lang_args_list = 0;
 struct obstack tokens_obstack;
-int log_8_member_files = 0;
+size_t log_8_member_files = 0;
 
 extern void usage (void);
 extern char *program_name;
