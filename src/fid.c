@@ -213,7 +213,7 @@ get_file_index (char *file_name)
   struct file_link *fn_flink = 0;
   char *file_name_buf = alloca (PATH_MAX);
   int has_slash = (strchr (file_name, '/') != 0);
-  int file_name_length = strlen (file_name);
+  size_t file_name_length = strlen (file_name);
   int idx = -1;
 
   if (strstr (file_name, "./"))
@@ -229,11 +229,12 @@ get_file_index (char *file_name)
 	}
       else if (has_slash)
 	{
-	  int member_length;
+	  size_t member_length;
 	  maybe_relative_file_name (file_name_buf, flink, cw_dlink);
 	  member_length = strlen (file_name_buf);
 	  if (file_name_length > member_length
-	      || !strequ (&file_name_buf[member_length - file_name_length], file_name))
+	      || !strequ (&file_name_buf[member_length - file_name_length],
+			  file_name))
 	    continue;
 	}
       else if (!strequ (flink->fl_name, file_name))
