@@ -38,6 +38,7 @@ if test "$gl_gcc_warnings" = yes; then
   # Add many warnings, except some...
   nw="$nw -Wdeclaration-after-statement" # too useful to forbid
   nw="$nw -Waggregate-return"       # anachronistic
+  nw="$nw -Wlong-long"              # C90 is anachronistic (lib/gethrxtime.h)
   nw="$nw -Wc++-compat"             # We don't care about C++ compilers
   nw="$nw -Wundef"                  # Warns on '#if GNULIB_FOO' etc in gnulib
   nw="$nw -Wtraditional"            # Warns on #elif which we use often
@@ -56,12 +57,7 @@ if test "$gl_gcc_warnings" = yes; then
   nw="$nw -Wswitch-enum"            # Too many warnings for now
   nw="$nw -Wswitch-default"         # Too many warnings for now
   # things I might fix soon:
-  nw="$nw -Wfloat-equal"            # sort.c, seq.c
-  nw="$nw -Wmissing-format-attribute" # copy.c
-  nw="$nw -Wunsafe-loop-optimizations" # a few src/*.c
-  nw="$nw -Winline"                 # system.h's readdir_ignoring_dot_and_dotdot
-  nw="$nw -Wstrict-overflow"        # expr.c, pr.c, tr.c, factor.c
-  # ?? -Wstrict-overflow
+  nw="$nw -Wstrict-overflow"        # fid.c
 
   gl_MANYWARN_ALL_GCC([ws])
   gl_MANYWARN_COMPLEMENT([ws], [$ws], [$nw])
