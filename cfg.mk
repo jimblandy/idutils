@@ -37,10 +37,6 @@ gpg_key_ID = B9AB9A16
 local-checks-to-skip = changelog-check strftime-check patch-check \
   sc_prohibit_atoi_atof sc_changelog check-AUTHORS
 
-# The local directory containing the checked-out copy of gnulib used in
-# this release.  Used solely to get a date for the "announcement" target.
-gnulib_dir = /gnulib
-
 old_NEWS_hash = eb1986d9a01765bcd73053fb1feba356
 
 sc_tight_scope:
