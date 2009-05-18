@@ -1,5 +1,5 @@
 ;;; idutils.el --- emacs interface to `lid -R grep', a.k.a. `gid'
-;;; Copyright (C) 1995, 1996, 2006-2008 Free Software Foundation, Inc.
+;;; Copyright (C) 1995, 1996, 2006-2009 Free Software Foundation, Inc.
 ;;; Greg McGary <gkm@gnu.ai.mit.edu>.
 
 ;; This file is part of GNU idutils.
@@ -51,7 +51,7 @@
 While gid runs asynchronously, you can use the \\[next-error] command to
 find the text that gid hits refer to. The command actually run is
 defined by the gid-command variable."
-  (interactive (list (read-string
+  (interactive (list (read-shell-command
      (concat "Run " gid-command " (with args): ") (thing-at-point 'symbol))))
   (let (compile-command
 	(compilation-error-regexp-alist grep-regexp-alist)
