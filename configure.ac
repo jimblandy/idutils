@@ -58,6 +58,7 @@ if test "$gl_gcc_warnings" = yes; then
   nw="$nw -Wswitch-default"         # Too many warnings for now
   # things I might fix soon:
   nw="$nw -Wstrict-overflow"        # fid.c
+  nw="$nw -Wunsafe-loop-optimizations" # mkid.c
 
   gl_MANYWARN_ALL_GCC([ws])
   gl_MANYWARN_COMPLEMENT([ws], [$ws], [$nw])
