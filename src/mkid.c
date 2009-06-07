@@ -63,7 +63,7 @@ static void help_me (void);
 static int ceil_log_8 (unsigned long n);
 static int ceil_log_2 (unsigned long n);
 static void assert_writeable (char const *file_name);
-static void scan_files (struct idhead *idhp);
+static void scan_files (struct idhead const *idhp);
 static void scan_member_file (struct member_file const *member);
 static void scan_member_file_1 (get_token_func_t get_token,
 				void const *args, FILE *source_FILE);
@@ -398,7 +398,7 @@ assert_writeable (char const *filename)
    Create a tree8 to store the set of files where a token occurs.  */
 
 static void
-scan_files (struct idhead *idhp)
+scan_files (struct idhead const *idhp)
 {
   struct member_file **members_0
     = (struct member_file **) hash_dump (&idhp->idh_member_file_table,
@@ -432,7 +432,7 @@ scan_files (struct idhead *idhp)
 
   for (;;)
     {
-      struct member_file *member = *members++;
+      const struct member_file *member = *members++;
       scan_member_file (member);
       if (members == end)
 	break;

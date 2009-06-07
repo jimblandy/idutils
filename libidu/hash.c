@@ -1,5 +1,5 @@
 /* hash.c -- hash table maintenance
-   Copyright (C) 1995, 1999, 2007-2008 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1999, 2007-2009 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -259,7 +259,7 @@ hash_rehash (struct hash_table* ht)
 }
 
 void
-hash_print_stats (struct hash_table *ht, FILE *out_FILE)
+hash_print_stats (struct hash_table const *ht, FILE *out_FILE)
 {
   fprintf (out_FILE, _("Load=%ld/%ld=%.0f%%, "), ht->ht_fill, ht->ht_size,
 	   100.0 * (double) ht->ht_fill / (double) ht->ht_size);
@@ -274,7 +274,7 @@ hash_print_stats (struct hash_table *ht, FILE *out_FILE)
    user-supplied vector, or malloc one.  */
 
 void**
-hash_dump (struct hash_table *ht, void **vector_0, qsort_cmp_t compare)
+hash_dump (struct hash_table const *ht, void **vector_0, qsort_cmp_t compare)
 {
   void **vector;
   void **slot;

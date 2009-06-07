@@ -1,5 +1,5 @@
 /* hash.h -- decls for hash table
-   Copyright (C) 1995, 1999, 2007, 2008 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1999, 2007-2009 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -58,8 +58,8 @@ extern void hash_delete_items (struct hash_table *ht);
 extern void hash_free_items (struct hash_table *ht);
 extern void hash_free (struct hash_table *ht, int free_items);
 extern void hash_map (struct hash_table *ht, hash_map_func_t map);
-extern void hash_print_stats (struct hash_table *ht, FILE *out_FILE);
-extern void **hash_dump (struct hash_table *ht, void **vector_0,
+extern void hash_print_stats (struct hash_table const *ht, FILE *out_FILE);
+extern void **hash_dump (struct hash_table const *ht, void **vector_0,
 			 qsort_cmp_t compare);
 
 extern void *hash_deleted_item;
