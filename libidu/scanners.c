@@ -145,6 +145,22 @@ static int lang_args_index = 0;
 void
 set_default_language (char const *lang_name)
 {
+  struct lang_args *new_args;
+  const struct language *lang;
+
+  obstack_init (&lang_args_obstack);
+
+  new_args = obstack_alloc (&lang_args_obstack, sizeof *new_args);
+
+  new_args->la_pattern = obstack_copy0 (&lang_args_obstack, lang_name, strlen(lang_name)+1);
+  new_args->la_args_string = 0;
+  new_args->la_next = 0;
+  lang = new_args->la_language = get_language (lang_name);
+  new_args->la_args_digested = (lang
+				? lang->lg_parse_args (&new_args->la_args_string, 0)
+				: 0);
+  lang_args_default = new_args;
+  DEBUG ((", <default>\n"));
 }
 
 void
