@@ -2,7 +2,7 @@
 #define _iduglobal_h
 
 /* iduglobal.h -- global definitions for libidu
-   Copyright (C) 1995, 1999, 2005, 2007 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1999, 2005, 2007, 2009 Free Software Foundation, Inc.
    Written by Claudio Fontana <sick_soul@users.sourceforge.net>
 
    This program is free software; you can redistribute it and/or modify
@@ -65,5 +65,13 @@
 #define SLASH_CHAR '\\'
 #define DOT_DOT_SLASH "..\\"
 #endif
+
+#define STREQ(a, b) (strcmp (a, b) == 0)
+
+static inline char *
+bad_cast (char const *s)
+{
+  return (char *) s;
+}
 
 #endif /* _iduglobal_h */

@@ -22,14 +22,15 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <assert.h>
 
+#include "argv-iter.h"
 #include "closeout.h"
 #include "error.h"
 #include "pathmax.h"
 #include "progname.h"
 #include "quote.h"
 #include "quotearg.h"
-#include "readtokens0.h"
 #include "xalloc.h"
 
 #include "xnls.h"
@@ -109,11 +110,8 @@ int
 main (int argc, char **argv)
 {
   bool ok;
-  int i;
   int nfiles;
-  char **files;
   char *files_from = NULL;
-  struct Tokens tok;
 
   set_program_name (argv[0]);
 
@@ -184,8 +182,8 @@ main (int argc, char **argv)
     help_me ();
 
   nfiles = argc - optind;
-  files = argv + optind;
 
+  struct argv_iterator *ai;
   if (files_from)
     {
       /* When using --files0-from=F, you may not specify any files
@@ -202,22 +200,15 @@ main (int argc, char **argv)
 	error (EXIT_FAILURE, errno, _("cannot open %s for reading"),
 	       quote (files_from));
 
-      readtokens0_init (&tok);
-
-      if (! readtokens0 (stdin, &tok) || fclose (stdin) != 0)
-	error (EXIT_FAILURE, 0, _("cannot read file names from %s"),
-	       quote (files_from));
-
-      nfiles = tok.n_tok;
-      files = tok.tok;
+      ai = argv_iter_init_stream (stdin);
     }
-  /* If no file or directory options exist, walk the current directory.  */
-  else if (nfiles == 0)
+  else
      {
-      static char dot[] = ".";
-      static char *dotp = dot;
-      nfiles = 1;
-      files = &dotp;
+      static char *cwd_only[2];
+      cwd_only[0] = bad_cast (".");
+      cwd_only[1] = NULL;
+      char **files = (optind < argc ? argv + optind : cwd_only);
+      ai = argv_iter_init_argv (files);
     }
 
   language_getopt ();
@@ -225,37 +216,75 @@ main (int argc, char **argv)
     cw_dlink = init_walker (&idh);
   parse_language_map (lang_map_file_name);
 
+  /* Walk the file and directory names given on the command line.  */
   ok = true;
-  for (i=0; i < nfiles; i++)
+  while (true)
     {
-      if (*files)
-	{
-	  struct file_link *flink;
+      bool skip_file = false;
+      enum argv_iter_err ai_err;
+      char *file_name = argv_iter (ai, &ai_err);
+      if (ai_err == AI_ERR_EOF)
+        break;
+      if (!file_name)
+        {
+          switch (ai_err)
+            {
+            case AI_ERR_READ:
+              error (0, errno, _("%s: read error"), quote (files_from));
+              skip_file = true;
+              continue;
 
-	  /* Diagnose a zero-length file name.  When it's one
-	     among many, knowing the record number may help.  */
-	  if (files[i][0] == '\0')
-	    {
-	      ok = false;
-	      if (files_from)
-		{
-		  /* Using the standard `filename:line-number:' prefix here is
-		     not totally appropriate, since NUL is the separator, not NL,
-		     but it might be better than nothing.  */
-		  unsigned long int file_number = i + 1;
-		  error (0, 0, "%s:%lu: %s", quotearg_colon (files_from),
-			 file_number, _("invalid zero-length file name"));
-		}
-	      else
-		error (0, 0, "%s", _("invalid zero-length file name"));
-	      continue;
-	    }
+            case AI_ERR_MEM:
+              xalloc_die ();
 
-	  flink = parse_file_name (files[i], cw_dlink);
-	  if (flink)
-	    walk_flink (flink, 0);
-	}
+            default:
+              assert (!"unexpected error code from argv_iter");
+            }
+        }
+      if (files_from && STREQ (files_from, "-") && STREQ (file_name, "-"))
+        {
+          /* Give a better diagnostic in an unusual case:
+             printf - | du --files0-from=- */
+          error (0, 0, _("when reading file names from stdin, "
+                         "no file name of %s allowed"),
+                 quote (file_name));
+          skip_file = true;
+        }
+
+      /* Report and skip any empty file names.  */
+      if (!file_name[0])
+        {
+          /* Diagnose a zero-length file name.  When it's one
+             among many, knowing the record number may help.
+             FIXME: currently print the record number only with
+             --files0-from=FILE.  Maybe do it for argv, too?  */
+          if (files_from == NULL)
+            error (0, 0, "%s", _("invalid zero-length file name"));
+          else
+            {
+              /* Using the standard `filename:line-number:' prefix here is
+                 not totally appropriate, since NUL is the separator, not NL,
+                 but it might be better than nothing.  */
+              unsigned long int file_number = argv_iter_n_args (ai);
+              error (0, 0, "%s:%lu: %s", quotearg_colon (files_from),
+                     file_number, _("invalid zero-length file name"));
+            }
+          skip_file = true;
+        }
+
+      if (skip_file)
+        ok = false;
+      else
+        {
+          struct file_link *flink = parse_file_name (file_name, cw_dlink);
+          if (flink)
+            walk_flink (flink, 0);
+	  /* FIXME: walk_flink can fail, so should return status.
+	     Then caller can continue with other arguments.  */
+        }
     }
+
+  argv_iter_free (ai);
   mark_member_file_links (&idh);
   obstack_init (&tokens_obstack);
   scan_files (&idh);
