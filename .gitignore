@@ -44,6 +44,7 @@ lisp/elc-stamp
 lisp/idutils.elc
 m4/.gitignore
 maint.mk
+man/*.1
 po/*.gmo
 po/*.po
 po/.gitignore
