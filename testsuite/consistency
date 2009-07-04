@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# Copyright (C) 2007-2008 Free Software Foundation, Inc.
+# Copyright (C) 2007-2009 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ errors=
 cmd="$bindir/mkid $m_flag $srcdir"
 echo $cmd
 if eval $cmd; then
-    files="`$bindir/fnid || exit 1`"
+    files="`$bindir/fnid | grep -v single_file_token_bug`"
 
     if $bindir/xtokid $m_flag $files |sort -u >ID.xti &&
 	$bindir/lid |sed -e 's/[	 ].*//' |sort -u >ID.lid &&
