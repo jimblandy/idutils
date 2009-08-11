@@ -1,0 +1,3 @@
+#!/bin/sh
+
+../src/mkid --lang-opt=C:'-i $' -l C:'-k f' || exit 1

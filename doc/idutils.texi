@@ -407,13 +407,21 @@ be specified on the command line for a single run.
 @cindex language-specific option
 
 Language-specific scanners also accept options.  @var{Language} denotes
-the desired scanner, and @var{option} are the command-line options that
-should be passed through to it.  For example, to pass the @var{-x
+the desired scanner, and @var{option} is the command-line option that
+should be passed through to it.  For example, to pass the @var{-x foo
 --coke-bottle} options to the scanner for the language @var{swizzle},
-pass this: @var{-l swizzle:"-x --coke-bottle"}, or this:
-@var{-lang-option=swizzle:"-x --coke-bottle"}, or this: @var{-l
-swizzle-x -l swizzle:--coke-bottle}.  Use the @samp{--help} option to
-see the command-line option summary for
+use one of the next two forms, or a mixture of both:
+
+@example
+$ mkid -l swizzle:"-x foo" -l swizzle:--coke-bottle
+$ mkid --lang-option=swizzle:"-x foo" --lang-option=swizzle:--coke-bottle
+@end example
+
+Note the use of quotes when passing an option with arguments.  Quoting is
+optional for options without arguments.
+
+Use the @samp{--help} option to see the command-line option summary for each
+language.
 
 @end table
 

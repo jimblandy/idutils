@@ -74,7 +74,7 @@ static struct token *get_token_lisp (FILE *in_FILE, void const *args, int *flags
 static void *parse_args_lisp (char **argv, int argc);
 static void help_me_lisp (void);
 
-static struct language const languages_0[] =
+static struct language languages_0[] =
 {
   { "C", parse_args_c, get_token_c, help_me_c },
   { "C++", parse_args_c, get_token_c, help_me_cpp },
@@ -112,7 +112,7 @@ language_save_arg (char *arg)
     }
   if (lang->lg_argc == 0)
     lang->lg_argv[lang->lg_argc++] = program_name;
-  lang->lg_argv[lang->lg_argc++] = strsep (&arg, horizontal_space);
+  lang->lg_argv[lang->lg_argc++] = arg;
 }
 
 void

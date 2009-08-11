@@ -8,6 +8,10 @@ GNU idutils NEWS                                      -*- outline -*-
   process only the files named in FILE.  FILE must contain a list of
   NUL-terminated file names.
 
+** Bug fixes
+
+  mkid and xtokid now can receive language specific options from
+  command line. Such options must be single-quoted.
 
 * Noteworthy changes in release 4.3.92 (2008-10-18) [beta]
 
