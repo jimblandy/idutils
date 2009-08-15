@@ -1,5 +1,5 @@
 /* fnid.c -- report which files constitute an ID database
-   Copyright (C) 1996, 2008, 2009 Free Software Foundation, Inc.
+   Copyright (C) 1996, 2008-2009 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
