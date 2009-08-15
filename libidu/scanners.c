@@ -101,7 +101,6 @@ language_help_me (void)
 void
 language_save_arg (char *arg)
 {
-  static char horizontal_space[] = " \t";
   char *lang_name = strsep (&arg, ":");
   struct language *lang = get_language (lang_name);
 
