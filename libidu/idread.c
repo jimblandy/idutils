@@ -25,7 +25,7 @@
 #include <xalloc.h>
 #include <error.h>
 
-#include "hash.h"
+#include "idu-hash.h"
 #include "idfile.h"
 #include "iduglobal.h"
 #include "ignore-value.h"

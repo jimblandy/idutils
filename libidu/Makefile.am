@@ -3,7 +3,7 @@
 noinst_LIBRARIES = libidu.a
 
 libidu_a_SOURCES = dynvec.c dynvec.h \
-                   hash.c hash.h \
+                   idu-hash.c idu-hash.h \
                    idfile.c idfile.h \
                    idread.c  \
                    idwrite.c \

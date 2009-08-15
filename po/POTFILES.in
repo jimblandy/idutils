@@ -7,9 +7,9 @@ lib/quotearg.c
 lib/regcomp.c
 lib/xalloc-die.c
 libidu/fnprint.c
-libidu/hash.c
 libidu/idfile.c
 libidu/idread.c
+libidu/idu-hash.c
 libidu/idwrite.c
 libidu/scanners.c
 libidu/walker.c

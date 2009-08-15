@@ -22,7 +22,7 @@
 #include <xalloc.h>
 #include <error.h>
 
-#include "hash.h"
+#include "idu-hash.h"
 #include "xnls.h"
 
 static void hash_rehash (struct hash_table* ht);

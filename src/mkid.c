@@ -42,7 +42,7 @@
 
 #include "xnls.h"
 #include "idfile.h"
-#include "hash.h"
+#include "idu-hash.h"
 #include "scanners.h"
 #include "iduglobal.h"
 

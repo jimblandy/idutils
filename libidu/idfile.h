@@ -1,5 +1,5 @@
 /* idfile.h -- decls for ID file header and constituent file names
-   Copyright (C) 1986, 1995, 1996, 1999, 2007, 2008 Free Software Foundation, Inc.
+   Copyright (C) 1986, 1995, 1996, 1999, 2007-2009 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "obstack.h"
-#include "hash.h"
+#include "idu-hash.h"
 #include "dynvec.h"
 #include "tokflags.h"
 

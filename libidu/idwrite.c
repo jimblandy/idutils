@@ -24,7 +24,7 @@
 
 #include "idfile.h"
 #include "ignore-value.h"
-#include "hash.h"
+#include "idu-hash.h"
 #include "xnls.h"
 
 static int file_link_qsort_compare (void const *x, void const *y);
