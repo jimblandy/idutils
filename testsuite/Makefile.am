@@ -11,6 +11,7 @@ EXTRA_DIST =			\
   CuTmpdir.pm			\
   check.mk			\
   envvar-check			\
+  mkid-langopt			\
   single_file_token_bug.c
 
 DISTCLEANFILES = ID

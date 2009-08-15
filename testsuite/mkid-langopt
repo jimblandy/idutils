@@ -1,3 +1,4 @@
 #!/bin/sh
 
+# Before the 2009-aug-11 fix, this would segfault.
 ../src/mkid --lang-opt=C:'-i $' -l C:'-k f' || exit 1
