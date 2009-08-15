@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 built_programs = \
-  (cd $(top_builddir)/src && MAKEFLAGS= $(MAKE) -s built_programs.list)
+  echo 'spy:;@echo $$(all_programs)' \
+    | MAKEFLAGS= $(MAKE) -s -C $(top_builddir)/src -f Makefile -f - spy
 
 # Note that the first lines are statements.  They ensure that environment
 # variables that can perturb tests are unset or set to expected values.
@@ -31,9 +31,9 @@ TESTS_ENVIRONMENT =				\
       if $(PERL) -e 'use warnings' > /dev/null 2>&1; then		\
 	grep '^\#!/usr/bin/perl -T' "$$1" > /dev/null && T_=T || T_=;	\
         $(PERL) -w$$T_ -I$(srcdir) -MCoreutils				\
-	      -M"CuTmpdir qw($$tst)" -- "$$1";	\
+	      -M"CuTmpdir qw($$f)" -- "$$1";	\
       else					\
-	echo 1>&2 "$$tst: configure did not find a usable version of Perl," \
+	echo 1>&2 "$$f: configure did not find a usable version of Perl," \
 	  "so skipping this test";		\
 	(exit 77);				\
       fi;					\
@@ -53,7 +53,7 @@ TESTS_ENVIRONMENT =				\
   srcdir='$(srcdir)'				\
   top_srcdir='$(top_srcdir)'			\
   CONFIG_HEADER='$(abs_top_builddir)/lib/config.h' \
-  CU_TEST_NAME=`basename '$(abs_srcdir)'`,$$tst	\
+  CU_TEST_NAME=`basename '$(abs_srcdir)'`,$$f	\
   AWK='$(AWK)'					\
   EGREP='$(EGREP)'				\
   EXEEXT='$(EXEEXT)'				\
