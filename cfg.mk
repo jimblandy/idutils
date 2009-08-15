@@ -43,3 +43,5 @@ sc_tight_scope:
 	$(MAKE) -C src $@
 
 include $(srcdir)/dist-check.mk
+
+update-copyright-env = UPDATE_COPYRIGHT_USE_INTERVALS=1
