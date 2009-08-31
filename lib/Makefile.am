@@ -9,7 +9,7 @@
 
 include gnulib.mk
 
-AM_CFLAGS += $(WARN_CFLAGS) $(WERROR_CFLAGS)
+AM_CFLAGS += $(WARN_CFLAGS)
 
 libgnu_a_LIBADD += $(LIBOBJS)
 libgnu_a_DEPENDENCIES += $(LIBOBJS)
