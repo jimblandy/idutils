@@ -42,7 +42,7 @@ struct lang_args *lang_args_list = 0;
 struct obstack tokens_obstack;
 size_t log_8_member_files = 0;
 
-extern void usage (void);
+extern void usage (void) __attribute__((__noreturn__));
 extern char *program_name;
 
 /****************************************************************************/
