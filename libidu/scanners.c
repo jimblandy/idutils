@@ -104,7 +104,7 @@ language_save_arg (char *arg)
   char *lang_name = strsep (&arg, ":");
   struct language *lang = get_language (lang_name);
 
-  if (lang == 0)
+  if (lang == NULL)
     {
       error (0, 0, _("unrecognized language: `%s'"), lang_name);
       usage ();
