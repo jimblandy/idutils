@@ -22,7 +22,7 @@ gnu_ftp_host-major = ftp.gnu.org
 gnu_rel_host = $(gnu_ftp_host-$(RELEASE_TYPE))
 
 url_dir_list = \
-  ftp://$(gnu_rel_host)/gnu/coreutils
+  ftp://$(gnu_rel_host)/gnu/$(PACKAGE)
 
 # Used in maint.mk's web-manual rule
 manual_title = GNU idutils: ID database utilities
