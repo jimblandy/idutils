@@ -94,7 +94,6 @@ enum radix
 };
 
 void usage (void) __attribute__((__noreturn__));
-static void help_me (void);
 static void lower_caseify (char *str);
 static enum key_style parse_key_style (char const *arg);
 static enum result_style parse_result_style (char const *arg);
@@ -244,7 +243,7 @@ usage (void)
   exit (1);
 }
 
-static void
+static void __attribute__((__noreturn__))
 help_me (void)
 {
   printf (_("\

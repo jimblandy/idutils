@@ -74,7 +74,7 @@ usage (void)
   exit (1);
 }
 
-static void
+static void __attribute__((__noreturn__))
 help_me (void)
 {
   printf (_("\

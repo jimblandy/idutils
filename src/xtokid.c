@@ -77,7 +77,7 @@ static struct option const long_options[] =
   {NULL, 0, NULL, 0}
 };
 
-static void
+static void __attribute__((__noreturn__))
 help_me (void)
 {
   printf (_("\

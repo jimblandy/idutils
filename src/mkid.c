@@ -63,7 +63,6 @@ struct summary
 };
 
 void usage (void);
-static void help_me (void);
 static int ceil_log_8 (unsigned long n);
 static int ceil_log_2 (unsigned long n);
 static void assert_writeable (char const *file_name);
@@ -157,7 +156,7 @@ static struct option const long_options[] =
   {NULL, 0, NULL, 0}
 };
 
-static void
+static void __attribute__((__noreturn__))
 help_me (void)
 {
   printf (_("\
