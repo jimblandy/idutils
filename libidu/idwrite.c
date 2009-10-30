@@ -155,7 +155,7 @@ io_write (FILE *output_FILE, void *addr, unsigned int size, int io_type)
 	  putc (*(unsigned char *)addr, output_FILE);
 	  break;
 	default:
-	  error (1, 0, _("unsupported size in io_write (): %d"), size);
+	  error (EXIT_FAILURE, 0, _("unsupported size in io_write (): %d"), size);
 	}
     }
   else if (io_type == IO_TYPE_STR)

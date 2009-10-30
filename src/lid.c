@@ -240,7 +240,7 @@ usage (void)
 {
   fprintf (stderr, _("Try `%s --help' for more information.\n"),
 	   program_name);
-  exit (1);
+  exit (EXIT_FAILURE);
 }
 
 static void __attribute__((__noreturn__))
@@ -288,7 +288,7 @@ matched identifier followed by the list of file names in which it occurs.\n\
 "),
 	  (separator_style == ss_braces ? _("braces") : _("space")));
   printf (_("\nReport bugs to " PACKAGE_BUGREPORT "\n\n"));
-  exit (0);
+  exit (EXIT_SUCCESS);
 }
 
 int
@@ -411,7 +411,7 @@ main (int argc, char **argv)
   if (show_version)
     {
       printf ("%s - %s\n", program_name, PACKAGE_VERSION);
-      exit (0);
+      exit (EXIT_SUCCESS);
     }
 
   if (show_help)
@@ -440,7 +440,7 @@ main (int argc, char **argv)
   /* Look for the ID database up the tree */
   idh.idh_file_name = locate_id_file_name (idh.idh_file_name);
   if (idh.idh_file_name == 0)
-    error (1, errno, _("can't locate `ID'"));
+    error (EXIT_FAILURE, errno, _("can't locate `ID'"));
 
   init_idh_obstacks (&idh);
   init_idh_tables (&idh);
@@ -477,7 +477,7 @@ main (int argc, char **argv)
     }
 
   fclose (idh.idh_FILE);
-  exit (0);
+  exit (EXIT_SUCCESS);
 }
 
 static void
@@ -582,7 +582,7 @@ report_grep (char const *name, struct file_link **flinkv)
 	    {
 	      char buf[BUFSIZ];
 	      regerror (regcomp_errno, &compiled, buf, sizeof (buf));
-	      error (1, 0, "%s", buf);
+	      error (EXIT_FAILURE, 0, "%s", buf);
 	    }
 	}
     }
@@ -608,7 +608,7 @@ report_grep (char const *name, struct file_link **flinkv)
 	    {
 	      int regexec_errno = regexec (&compiled, line, 0, 0, 0);
 	      if (regexec_errno == REG_ESPACE)
-		error (1, 0,
+		error (EXIT_FAILURE, 0,
 		       _("can't match regular-expression: memory exhausted"));
 	      else if (regexec_errno)
 		continue;
@@ -733,7 +733,7 @@ report_edit (char const *name, struct file_link **flinkv)
 	case 'q':
 	  putchar (c);
 	  putchar ('\n');
-	  exit (0);
+	  exit (EXIT_SUCCESS);
 
 	case 'n':
 	  putchar (c);
@@ -767,7 +767,7 @@ editit:
   switch (fork ())
     {
     case -1:
-      error (1, errno, _("can't fork"));
+      error (EXIT_FAILURE, errno, _("can't fork"));
       break;
 
     case 0:
@@ -915,7 +915,7 @@ query_regexp (char const *pattern_0, report_func_t report_func)
     {
       char buf[BUFSIZ];
       regerror (regcomp_errno, &compiled, buf, sizeof (buf));
-      error (1, 0, "%s", buf);
+      error (EXIT_FAILURE, 0, "%s", buf);
     }
   fseek (idh.idh_FILE, idh.idh_tokens_offset, SEEK_SET);
 

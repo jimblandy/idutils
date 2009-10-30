@@ -290,7 +290,7 @@ main (int argc, char **argv)
   if (show_version)
     {
       printf ("%s - %s\n", program_name, PACKAGE_VERSION);
-      exit (0);
+      exit (EXIT_SUCCESS);
     }
 
   if (show_help)
@@ -486,12 +486,12 @@ assert_writeable (char const *filename)
 	{
 	  char *dirname = dir_name (filename);
 	  if (access (dirname, 06) < 0)
-	    error (1, errno, _("can't create `%s' in `%s'"),
+	    error (EXIT_FAILURE, errno, _("can't create `%s' in `%s'"),
 		   base_name (filename), dirname);
 	  free(dirname);
 	}
       else
-	error (1, errno, _("can't modify `%s'"), filename);
+	error (EXIT_FAILURE, errno, _("can't modify `%s'"), filename);
     }
 }
 
@@ -699,7 +699,7 @@ write_id_file (struct idhead *idhp)
     printf (_("Writing `%s'...\n"), idhp->idh_file_name);
   idhp->idh_FILE = fopen (idhp->idh_file_name, "w+b");
   if (idhp->idh_FILE == NULL)
-    error (1, errno, _("can't create `%s'"), idhp->idh_file_name);
+    error (EXIT_FAILURE, errno, _("can't create `%s'"), idhp->idh_file_name);
 
   idhp->idh_magic[0] = IDH_MAGIC_0;
   idhp->idh_magic[1] = IDH_MAGIC_1;
@@ -767,7 +767,7 @@ write_id_file (struct idhead *idhp)
 
   write_idhead (&idh);
   if (ferror (idhp->idh_FILE) || fclose (idhp->idh_FILE) != 0)
-    error (1, errno, _("error closing `%s'"), idhp->idh_file_name);
+    error (EXIT_FAILURE, errno, _("error closing `%s'"), idhp->idh_file_name);
 }
 
 /* Define primary and secondary hash and comparison functions for the

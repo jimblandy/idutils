@@ -166,7 +166,7 @@ void
 parse_language_map (char const *file_name)
 {
   if (obstack_init (&lang_args_obstack) == 0)
-    error (1, 0, _("can't allocate language args obstack: memory exhausted"));
+    error (EXIT_FAILURE, 0, _("can't allocate language args obstack: memory exhausted"));
   if (file_name == 0)
     file_name = LANGUAGE_MAP_FILE;
   parse_language_map_file (file_name, &lang_args_list);
@@ -220,7 +220,7 @@ parse_language_map_file (char const *file_name, struct lang_args **next_ptr)
 
       new_args = obstack_alloc (&lang_args_obstack, sizeof *new_args);
       if (new_args == 0)
-	error (1, 0, _("can't allocate language args: memory exhausted"));
+	error (EXIT_FAILURE, 0, _("can't allocate language args: memory exhausted"));
       new_args->la_pattern = obstack_copy0 (&lang_args_obstack, lmp, pattern_size);
       new_args->la_args_string = 0;
       new_args->la_next = 0;
@@ -283,22 +283,22 @@ read_language_map_file (char const *file_name)
 
   map_fd = open (file_name, O_RDONLY);
   if (map_fd < 0)
-    error (1, errno, _("can't open language map file `%s'"), file_name);
+    error (EXIT_FAILURE, errno, _("can't open language map file `%s'"), file_name);
   if (fstat (map_fd, &st) < 0)
-    error (1, errno, _("can't get size of map file `%s'"), file_name);
+    error (EXIT_FAILURE, errno, _("can't get size of map file `%s'"), file_name);
 
   lang_map_buffer = xmalloc (sizeof(char) * (st.st_size + 2));
   if (lang_map_buffer == 0)
-    error (1, 0, _("can't allocate language args: memory exhausted"));
+    error (EXIT_FAILURE, 0, _("can't allocate language args: memory exhausted"));
   lang_map_buffer[st.st_size] = '\n';
   lang_map_buffer[st.st_size+1] = '\0';
 
   bytes = read (map_fd, lang_map_buffer, st.st_size);
   if (bytes < 0)
-    error (1, errno, _("can't read language map file `%s'"), file_name);
+    error (EXIT_FAILURE, errno, _("can't read language map file `%s'"), file_name);
   /* FIXME: handle interrupted & partial reads */
   if (bytes != st.st_size)
-    error (1, errno, _("can't read entire language map file `%s'"), file_name);
+    error (EXIT_FAILURE, errno, _("can't read entire language map file `%s'"), file_name);
 
   close (map_fd);
   return lang_map_buffer;

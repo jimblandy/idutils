@@ -46,7 +46,7 @@ read_id_file (char const *id_file_name, struct idhead *idhp)
   struct file_link **flinkv = maybe_read_id_file (id_file_name, idhp);
   if (flinkv)
     return flinkv;
-  error (1, errno, _("can't open `%s'"), id_file_name);
+  error (EXIT_FAILURE, errno, _("can't open `%s'"), id_file_name);
   return NULL;
 }
 
@@ -65,9 +65,9 @@ maybe_read_id_file (char const *id_file_name, struct idhead *idhp)
 
   read_idhead (idhp);
   if (idhp->idh_magic[0] != IDH_MAGIC_0 || idhp->idh_magic[1] != IDH_MAGIC_1)
-    error (1, 0, _("`%s' is not an ID file! (bad magic #)"), id_file_name);
+    error (EXIT_FAILURE, 0, _("`%s' is not an ID file! (bad magic #)"), id_file_name);
   if (idhp->idh_version != IDH_VERSION)
-    error (1, 0, _("`%s' is version %d, but I only grok version %d"),
+    error (EXIT_FAILURE, 0, _("`%s' is version %d, but I only grok version %d"),
 	   id_file_name, idhp->idh_version, IDH_VERSION);
 
   fseek (idhp->idh_FILE, idhp->idh_flinks_offset, 0);
@@ -187,7 +187,7 @@ io_read (FILE *input_FILE, void *addr, unsigned int size, int io_type)
 	  *(unsigned char *)addr = getc (input_FILE);
 	  break;
 	default:
-	  error (1, 0, _("unsupported size in io_read (): %d"), size);
+	  error (EXIT_FAILURE, 0, _("unsupported size in io_read (): %d"), size);
 	}
     }
   else if (io_type == IO_TYPE_STR)

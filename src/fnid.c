@@ -50,7 +50,7 @@ usage (void)
 {
   fprintf (stderr, _("Try `%s --help' for more information.\n"),
 	   program_name);
-  exit (1);
+  exit (EXIT_FAILURE);
 }
 
 static struct option const long_options[] =
@@ -78,7 +78,7 @@ using shell-style wildcards.\n\
       --version          output version information and exit\n\
 "));
   printf (_("\nReport bugs to " PACKAGE_BUGREPORT "\n\n"));
-  exit (0);
+  exit (EXIT_SUCCESS);
 }
 
 int
@@ -125,7 +125,7 @@ main (int argc, char **argv)
   if (show_version)
     {
       printf ("%s - %s\n", program_name, PACKAGE_VERSION);
-      exit (0);
+      exit (EXIT_SUCCESS);
     }
 
   if (show_help)
@@ -152,7 +152,7 @@ main (int argc, char **argv)
   /* Look for the ID database up the tree */
   idh.idh_file_name = locate_id_file_name (idh.idh_file_name);
   if (idh.idh_file_name == 0)
-    error (1, errno, _("can't locate `ID'"));
+    error (EXIT_FAILURE, errno, _("can't locate `ID'"));
 
   init_idh_obstacks (&idh);
   init_idh_tables (&idh);

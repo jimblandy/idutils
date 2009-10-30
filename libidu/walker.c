@@ -503,7 +503,7 @@ void
 include_languages (char *lang_names)
 {
   if (langs_excluded)
-    error (1, 0, _("can't mix --include and --exclude options"));
+    error (EXIT_FAILURE, 0, _("can't mix --include and --exclude options"));
   langs_included = append_strings_to_vector (langs_included, lang_names, white_space);
 }
 
@@ -511,7 +511,7 @@ void
 exclude_languages (char *lang_names)
 {
   if (langs_excluded)
-    error (1, 0, _("can't mix --include and --exclude options"));
+    error (EXIT_FAILURE, 0, _("can't mix --include and --exclude options"));
   langs_excluded = append_strings_to_vector (langs_excluded, lang_names, white_space);
 }
 
@@ -621,7 +621,7 @@ get_current_dir_link (void)
   cwd = getenv ("PWD");
   cwd = same_as_dot (cwd) ? xstrdup (cwd) : xgetcwd ();
   if (cwd == NULL)
-    error (1, errno, _("can't get working directory"));
+    error (EXIT_FAILURE, errno, _("can't get working directory"));
 #if HAVE_LINK
   dir_link = get_link_from_string (SLASH_STRING, 0);
   dir_link->fl_flags = (dir_link->fl_flags & ~FL_TYPE_MASK) | FL_TYPE_DIR;

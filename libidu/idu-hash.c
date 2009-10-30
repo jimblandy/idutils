@@ -48,7 +48,7 @@ hash_init (struct hash_table* ht, unsigned long size,
   ht->ht_empty_slots = ht->ht_size;
   ht->ht_vec = xcalloc (ht->ht_size, sizeof(struct token *));
   if (ht->ht_vec == 0)
-    error (1, 0, _("can't allocate %ld bytes for hash table: memory exhausted"),
+    error (EXIT_FAILURE, 0, _("can't allocate %ld bytes for hash table: memory exhausted"),
 	   ht->ht_size * sizeof(struct token *));
   ht->ht_capacity = ht->ht_size * 15 / 16; /* 93.75% loading factor */
   ht->ht_fill = 0;
