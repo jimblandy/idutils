@@ -103,7 +103,7 @@ AC_TYPE_SIZE_T
 AC_CHECK_TYPES(ptrdiff_t)
 
 AM_GNU_GETTEXT([external], [need-ngettext])
-AM_GNU_GETTEXT_VERSION([0.15])
+AM_GNU_GETTEXT_VERSION([0.17])
 
 AC_CONFIG_FILES([
                  po/Makefile.in
