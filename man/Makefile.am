@@ -6,7 +6,7 @@ EXTRA_DIST = $(man_aux)
 MAINTAINERCLEANFILES = $(dist_man1_MANS)
 
 # Depend on .version to get version number changes.
-common_dep = $(top_srcdir)/.version
+common_dep = ../.version
 
 mkid.1:		$(common_dep)	$(srcdir)/mkid.x	../src/mkid.c
 lid.1:		$(common_dep)	$(srcdir)/lid.x		../src/lid.c
