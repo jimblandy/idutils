@@ -2,7 +2,8 @@
 #define _iduglobal_h
 
 /* iduglobal.h -- global definitions for libidu
-   Copyright (C) 1995, 1999, 2005, 2007, 2009 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1999, 2005, 2007, 2009-2010 Free Software Foundation,
+   Inc.
    Written by Claudio Fontana <sick_soul@users.sourceforge.net>
 
    This program is free software; you can redistribute it and/or modify

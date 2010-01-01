@@ -1,5 +1,5 @@
 /* idu-hash.h -- decls for hash table
-   Copyright (C) 1995, 1999, 2007-2009 Free Software Foundation, Inc.
+   Copyright (C) 1995, 1999, 2007-2010 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify
