@@ -31,4 +31,6 @@ sc_tight_scope:
 
 include $(srcdir)/dist-check.mk
 
-update-copyright-env = UPDATE_COPYRIGHT_USE_INTERVALS=1
+update-copyright-env = \
+  UPDATE_COPYRIGHT_USE_INTERVALS=1 \
+  UPDATE_COPYRIGHT_MAX_LINE_LENGTH=79
