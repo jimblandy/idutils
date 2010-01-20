@@ -710,14 +710,20 @@ write_id_file (struct idhead *idhp)
   /* write out the list of pathnames */
 
   fseek (idhp->idh_FILE, sizeof_idhead (), 0);
-  idhp->idh_flinks_offset = ftell (idhp->idh_FILE);
+  off_t off = ftello (idhp->idh_FILE);
+  if (UINT32_MAX < off)
+    error (EXIT_FAILURE, 0, _("internal limitation: offset of 2^32 or larger"));
+  idhp->idh_flinks_offset = off;
   serialize_file_links (idhp);
 
   /* write out the list of identifiers */
 
   putc ('\0', idhp->idh_FILE);
   putc ('\0', idhp->idh_FILE);
-  idhp->idh_tokens_offset = ftell (idhp->idh_FILE);
+  off = ftello (idhp->idh_FILE);
+  if (UINT32_MAX < off)
+    error (EXIT_FAILURE, 0, _("internal limitation: offset of 2^32 or larger"));
+  idhp->idh_tokens_offset = off;
 
   for (i = 0; i < token_table.ht_fill; i++, tokens++)
     {
@@ -761,7 +767,10 @@ write_id_file (struct idhead *idhp)
     }
   assert_hits (summary_root);
   idhp->idh_tokens = token_table.ht_fill;
-  output_length = ftell (idhp->idh_FILE);
+  off = ftello (idhp->idh_FILE);
+  if (UINT32_MAX < off)
+    error (EXIT_FAILURE, 0, _("internal limitation: offset of 2^32 or larger"));
+  output_length = off;
   idhp->idh_end_offset = output_length - 2;
   idhp->idh_buf_size = max_buf_size;
   idhp->idh_vec_size = max_vec_size;
