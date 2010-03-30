@@ -18,13 +18,15 @@
 @syncodeindex pg cp
 @syncodeindex vr cp
 
+@dircategory Text creation and manipulation
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* ID database: (idutils).              Identifier database utilities.
+* ID utilities: (idutils).             Indexing and searching utilities.
 * mkid: (idutils)mkid invocation.      Creating an ID database.
 * lid: (idutils)lid invocation.        Matching words and patterns.
 * fid: (idutils)fid invocation.        Listing a file's tokens.
+* gid: (idutils)gid invocation.        Token-based grep.
 * fnid: (idutils)fnid invocation.      Looking up file names.
 * xtokid: (idutils)xtokid invocation.  Testing mkid scanners.
 END-INFO-DIR-ENTRY
@@ -78,6 +80,7 @@ This manual documents version @value{VERSION} of the ID utilities.
 * mkid invocation::             Creating an ID database.
 * lid invocation::              Querying an ID database by token.
 * fid invocation::              Listing a file's tokens.
+* gid invocation::              Token-based grep
 * fnid invocation::             Looking up file names.
 * xtokid invocation::           Testing language scanners.
 * Past and Future::             History and future directions.
