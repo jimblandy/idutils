@@ -1259,6 +1259,25 @@ fnid \*.c
 here protects the @samp{*} from being expanded by the shell.)
 
 @c ************* gkm *********************************************************
+@node gid invocation
+@chapter @code{gid}: Token-based grep
+
+@pindex gid
+@cindex searching files, grep
+
+@file{gid} lists each line containing one of the specified tokens.
+
+Running @command{gid} is equivalent to @samp{lid -R grep})
+
+For example, the command:
+
+@example
+gid important_variable
+@end example
+
+@noindent lists each line of each file in the database that contains that token.
+
+@c ************* gkm *********************************************************
 @node xtokid invocation
 @chapter @file{xtokid}: Testing Language Scanners
 
