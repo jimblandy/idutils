@@ -15,8 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 built_programs = \
-  echo 'spy:;@echo $$(all_programs)' \
-    | MAKEFLAGS= $(MAKE) -s -C $(top_builddir)/src -f Makefile -f - spy
+  echo 'spy:;@echo $$(PROGRAMS) $$(SCRIPTS)' \
+    | MAKEFLAGS= $(MAKE) -s -C $(top_builddir)/src -f Makefile -f - spy \
+    | tr -s ' ' '\n' | sed -e 's,$(EXEEXT)$$,,'
 
 # Note that the first lines are statements.  They ensure that environment
 # variables that can perturb tests are unset or set to expected values.
@@ -64,6 +65,7 @@ TESTS_ENVIRONMENT =				\
   PREFERABLY_POSIX_SHELL='$(PREFERABLY_POSIX_SHELL)' \
   REPLACE_GETCWD=$(REPLACE_GETCWD)		\
   PATH="$(abs_top_builddir)/src$(PATH_SEPARATOR)$(abs_top_srcdir)/src$(PATH_SEPARATOR)$$PATH" \
+  VERSION=$(VERSION) \
   ; shell_or_perl_
 
 TEST_LOGS = $(TESTS:=.log)

@@ -3,6 +3,7 @@
 TESTS =			\
   consistency		\
   files0-from		\
+  help-version		\
   infloop-kawa-el
 
 EXTRA_DIST =			\
@@ -11,6 +12,7 @@ EXTRA_DIST =			\
   CuTmpdir.pm			\
   check.mk			\
   envvar-check			\
+  init.sh			\
   mkid-langopt			\
   single_file_token_bug.c
 
