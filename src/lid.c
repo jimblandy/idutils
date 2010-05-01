@@ -1512,9 +1512,7 @@ static struct termios savemode;
 
 #else /* not HAVE_TERMIOS_H */
 
-# if HAVE_SYS_IOCTL_H
-#  include <sys/ioctl.h>
-# endif
+#include <sys/ioctl.h>
 
 # if HAVE_TERMIO_H
 

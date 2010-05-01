@@ -25,9 +25,7 @@
 
 #if ENABLE_NLS
 # define _(Text) gettext (Text)
-# ifdef HAVE_LOCALE_H
-#  include <locale.h>
-# endif
+# include <locale.h>
 #else
 # define _(Text) Text
 #endif
