@@ -44,10 +44,6 @@
 
 #define DEBUG(args) /* printf args */
 
-#ifndef FNM_FILE_NAME
-#define FNM_FILE_NAME FNM_PATHNAME
-#endif
-
 #if HAVE_LINK
 #define MAYBE_FNM_CASEFOLD 0
 #else
