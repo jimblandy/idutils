@@ -183,11 +183,13 @@ shred_setup () { args=$tmp_in; }
 touch_setup () { args=$tmp_in2; }
 truncate_setup () { args="--reference=$tmp_in $tmp_in2"; }
 
-mkid_setup () { printf 'f(){}\ntypedef int t;\n' > f.c; args=. ; }
+# Specify a map, so mkid doesn't try to use the not-yet-installed id-lang.map.
+mkid_setup () {
+  printf 'f(){}\ntypedef int t;\n' > f.c; echo '*.c C' > m; args='-m m .' ; }
 lid_setup () { args=; }
 fid_setup () { args=f.c; }
 fnid_setup () { args=; }
-xtokid_setup () { args=; }
+xtokid_setup () { args='-m m'; }
 aid_setup () { args=f; }
 eid_setup () { args=--version; }
 gid_setup () { args=f; }
