@@ -57,42 +57,7 @@
 #   4. Finally
 #   $ exit
 
-# We require $(...) support unconditionally.
-# We require a few additional shell features only when $EXEEXT is nonempty,
-# in order to support automatic $EXEEXT emulation:
-# - hyphen-containing alias names
-# - we prefer to use ${var#...} substitution, rather than having
-#   to work around lack of support for that feature.
-# The following code attempts to find a shell with support for these features
-# and re-exec's it.  If not, it skips the current test.
-
-gl_shell_test_script_='
-test $(echo y) = y || exit 1
-test -z "$EXEEXT" && exit 0
-shopt -s expand_aliases
-alias a-b="echo zoo"
-v=abx
-     test ${v%x} = ab \
-  && test ${v#a} = bx \
-  && test $(a-b) = zoo
-'
-
-if test "x$1" = "x--no-reexec"; then
-  shift
-else
-  for re_shell_ in "${CONFIG_SHELL:-no_shell}" /bin/sh bash dash zsh pdksh fail
-  do
-    test "$re_shell_" = no_shell && continue
-    test "$re_shell_" = fail && skip_ failed to find an adequate shell
-    if "$re_shell_" -c "$gl_shell_test_script_" 2>/dev/null; then
-      exec "$re_shell_" "$0" --no-reexec "$@"
-      echo "$ME_: exec failed" 1>&2
-      exit 127
-    fi
-  done
-fi
-
-test -n "$EXEEXT" && shopt -s expand_aliases
+ME_=`expr "./$0" : '.*/\(.*\)$'`
 
 # We use a trap below for cleanup.  This requires us to go through
 # hoops to get the right exit status transported through the handler.
@@ -112,16 +77,77 @@ Exit () { set +e; (exit $1); exit $1; }
 warn_() { echo "$@" 1>&$stderr_fileno_; }
 fail_() { warn_ "$ME_: failed test: $@"; Exit 1; }
 skip_() { warn_ "$ME_: skipped test: $@"; Exit 77; }
-framework_failure_() { warn_ "$ME_: set-up failure: $@"; Exit 1; }
+framework_failure_() { warn_ "$ME_: set-up failure: $@"; Exit 99; }
+
+# We require $(...) support unconditionally.
+# We require a few additional shell features only when $EXEEXT is nonempty,
+# in order to support automatic $EXEEXT emulation:
+# - hyphen-containing alias names
+# - we prefer to use ${var#...} substitution, rather than having
+#   to work around lack of support for that feature.
+# The following code attempts to find a shell with support for these features.
+# If the current shell passes the test, we're done.  Otherwise, test other
+# shells until we find one that passes.  If one is found, re-exec it.
+# If no acceptable shell is found, skip the current test.
+#
+# Use "9" to indicate success (rather than 0), in case some shell acts
+# like Solaris 10's /bin/sh but exits successfully instead of with status 2.
+
+gl_shell_test_script_='
+test $(echo y) = y || exit 1
+test -z "$EXEEXT" && exit 9
+shopt -s expand_aliases
+alias a-b="echo zoo"
+v=abx
+     test ${v%x} = ab \
+  && test ${v#a} = bx \
+  && test $(a-b) = zoo \
+  && exit 9
+'
+
+if test "x$1" = "x--no-reexec"; then
+  shift
+else
+  # 'eval'ing the above code makes Solaris 10's /bin/sh exit with $? set to 2.
+  # It does not evaluate any of the code after the "unexpected" `('.  Thus,
+  # we must run it in a subshell.
+  ( eval "$gl_shell_test_script_" ) > /dev/null 2>&1
+  if test $? = 9; then
+    : # The current shell is adequate.  No re-exec required.
+  else
+    # Search for a shell that meets our requirements.
+    for re_shell_ in "${CONFIG_SHELL:-no_shell}" /bin/sh bash dash zsh pdksh fail
+    do
+      test "$re_shell_" = no_shell && continue
+      test "$re_shell_" = fail && skip_ failed to find an adequate shell
+      "$re_shell_" -c "$gl_shell_test_script_" 2>/dev/null
+      if test $? = 9; then
+        # Found an acceptable shell.
+        exec "$re_shell_" "$0" --no-reexec "$@"
+        echo "$ME_: exec failed" 1>&2
+        exit 127
+      fi
+    done
+  fi
+fi
+
+test -n "$EXEEXT" && shopt -s expand_aliases
+
+# Enable glibc's malloc-perturbing option.
+# This is cheap and useful for exposing code that depends on the fact that
+# malloc-related functions often return memory that is mostly zeroed.
+# If you have the time and cycles, use valgrind to do an even better job.
+: ${MALLOC_PERTURB_=87}
+export MALLOC_PERTURB_
 
 # This is a stub function that is run upon trap (upon regular exit and
 # interrupt).  Override it with a per-test function, e.g., to unmount
 # a partition, or to undo any other global state changes.
 cleanup_() { :; }
 
-if ( diff --version < /dev/null 2>&1 | grep GNU ) 2>&1 > /dev/null; then
+if ( diff --version < /dev/null 2>&1 | grep GNU ) > /dev/null 2>&1; then
   compare() { diff -u "$@"; }
-elif ( cmp --version < /dev/null 2>&1 | grep GNU ) 2>&1 > /dev/null; then
+elif ( cmp --version < /dev/null 2>&1 | grep GNU ) > /dev/null 2>&1; then
   compare() { cmp -s "$@"; }
 else
   compare() { cmp "$@"; }
@@ -223,7 +249,6 @@ setup_()
   test "$VERBOSE" = yes && set -x
 
   initial_cwd_=$PWD
-  ME_=`expr "./$0" : '.*/\(.*\)$'`
 
   pfx_=`testdir_prefix_`
   test_dir_=`mktempd_ "$initial_cwd_" "$pfx_-$ME_.XXXX"` \
