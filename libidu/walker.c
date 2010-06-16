@@ -82,14 +82,6 @@ static unsigned long dev_ino_hash_2 (void const *key);
 static int dev_ino_hash_compare (void const *x, void const *y);
 static int symlink_ancestry (struct file_link *flink);
 
-#ifndef HAVE_LSTAT
-#undef lstat
-int lstat(const char *filename, struct stat *sbuf)
-{
-  return stat(filename, sbuf);
-}
-#endif /* !HAVE_LSTAT */
-
 #if HAVE_LINK
 
 static struct file_link *find_alias_link (struct file_link *flink,
