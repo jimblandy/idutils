@@ -17,25 +17,15 @@
 
 export LANG; LANG=C
 
-case $# in
-0) exec make consistency-real;;
-esac
-
-srcdir=$1
-bindir=$2
-libdir=$srcdir/libidu
-
-m_flag="-m $libdir/id-lang.map"
+lang_map="$abs_top_srcdir/libidu/id-lang.map"
 
 errors=
 
-cmd="$bindir/mkid $m_flag $srcdir"
-echo $cmd
-if eval $cmd; then
-    files="`$bindir/fnid | grep -v single_file_token_bug`"
+if mkid -m "$lang_map" $abs_top_srcdir/src; then
+    files="`fnid | grep -v single_file_token_bug`"
 
-    if $bindir/xtokid $m_flag $files |sort -u >ID.xti &&
-	$bindir/lid |sed -e 's/[	 ].*//' |sort -u >ID.lid &&
+    if xtokid -m "$lang_map" $files |sort -u >ID.xti &&
+	lid |sed -e 's/[	 ].*//' |sort -u >ID.lid &&
 	cmp -s ID.xti ID.lid
     then
 	rm -f ID.xti ID.lid
@@ -52,8 +42,8 @@ if eval $cmd; then
 
     for file in $files
     do
-	if $bindir/fid $file >$fid_file &&
-	    $bindir/xtokid $m_flag $file |sort -u >$xtokid_file &&
+	if fid $file >$fid_file &&
+	    xtokid -m "$lang_map" $file |sort -u >$xtokid_file &&
 	    cmp -s $xtokid_file $fid_file;
 	then
 	    echo "Good.  xtokid and fid agree for $file"
@@ -70,9 +60,7 @@ else
     errors=t
 fi
 
-cmd="$bindir/mkid $m_flag"
-echo $cmd
-if eval $cmd; then
+if mkid -m "$lang_map"; then
     echo "Good.  No crash when dealing with single file"
 else
     1>&2 echo "Oops!  mkid failed."

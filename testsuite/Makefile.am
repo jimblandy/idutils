@@ -18,8 +18,5 @@ EXTRA_DIST =			\
 
 DISTCLEANFILES = ID
 
-consistency-real: all
-	$(SHELL) $(srcdir)/consistency $(top_srcdir) $(top_builddir)/src
-
 AUTOMAKE_OPTIONS =
 include $(srcdir)/check.mk
