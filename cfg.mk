@@ -24,7 +24,7 @@ manual_title = GNU idutils: ID database utilities
 local-checks-to-skip = changelog-check strftime-check patch-check \
   sc_prohibit_atoi_atof sc_changelog check-AUTHORS
 
-old_NEWS_hash = f4306613b611173d9c781781acec9aa9
+old_NEWS_hash = f1968c68d6b8ed206f0e876abe1ffaf0
 
 sc_tight_scope:
 	$(MAKE) -C src $@
