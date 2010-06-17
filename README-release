@@ -40,28 +40,25 @@ Here are most of the steps we (maintainers) follow when making a release.
   it builds and passes all tests.
 
 * While that's happening, write the release announcement that you will
-  soon post.
+  soon post.  Start with the template, $HOME/announce-idutils-X.Y
+  that was just created by that "make" command.
 
 Once all the builds and tests have passed,
 
-* Run the gnupload command that was suggested by your "make major" run above.
+* Run the gnupload command that was suggested by your "make stable" run above.
 
 * Wait a few minutes (maybe up to 30?) and then use the release URLs to
   download all tarball/signature pairs and use gpg --verify to ensure
   that they're all valid.
 
-* Push the new tag:
+* Push the NEWS-updating changes and the new tag:
 
     v=$(cat .prev-version)
-    git push origin tag v$v
+    git push origin master tag v$v
 
-* Send the gpg-signed announcement mail, e.g.,
+* Announce it on Savannah first, so you can include the preferable
+  savannah.org announcement link in the email message.
 
-    To: info-gnu@gnu.org
-    Cc: coordinator@translationproject.org, bug-idutils@gnu.org
-    Subject: idutils-4.4 released [beta]
-
-* Announce it on Savannah, too:
   From here:
     https://savannah.gnu.org/projects/idutils/
   click on the "submit news", then write something like the following:
@@ -69,15 +66,20 @@ Once all the builds and tests have passed,
    the Main -> "Select Features" menu item, or via this link:
    https://savannah.gnu.org/project/admin/editgroupfeatures.php?group=idutils)
 
-    Subject: idutils-4.4 released [beta]
-    The announcement is here:
-      http://article.gmane.org/gmane.comp.gnu.idutils.bugs/105
+    Subject: idutils-X.Y released [stable]
+    +verbatim+
+    ...paste the announcement here...
+    -verbatim-
 
   Then go here to approve it:
     https://savannah.gnu.org/news/approve.php?group=idutils
 
+* Send the announcement email message.
+
 * After each non-alpha release, update the on-line manual accessible via
 
     http://www.gnu.org/software/idutils/manual/
+
+  by running this:
 
     build-aux/gnu-web-doc-update
