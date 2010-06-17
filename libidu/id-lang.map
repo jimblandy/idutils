@@ -102,4 +102,5 @@ configure.in		m4
 *.Z			FILTER gzip -d <%s
 *.gz			FILTER gzip -d <%s
 *.bz2			FILTER bzip2 -d <%s
-*.lzma			FILTER lzma -d <%s
+*.xz			FILTER xz -d <%s
+*.lzma			FILTER xz -d <%s
