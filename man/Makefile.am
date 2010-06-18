@@ -48,7 +48,7 @@ check-x-vs-1:
 	PATH=../src$(PATH_SEPARATOR)$$PATH; export PATH;		\
 	t=ls-files.$$$$;						\
 	(cd $(srcdir) && ls -1 *.x) | sed 's/\.x$$//' | $(ASSORT) > $$t;\
-	echo $(dist_man1_MANS) | fmt -w1 | sed 's/\.1$$//' | $(ASSORT)	\
+	echo $(dist_man1_MANS) | fmt -w 1 | sed 's/\.1$$//' | $(ASSORT)	\
 	  | diff -u - $$t || { rm $$t; exit 1; };				\
 	rm $$t
 
