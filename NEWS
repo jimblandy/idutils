@@ -34,6 +34,8 @@ GNU idutils NEWS                                      -*- outline -*-
   revamp code and infrastructure, bringing it closer to coreutils' standards
   add automatically-generated man pages
   mkid recognize more suffixes: .ac, .mk, .bz2, .lzma.
+  idutils is now licensed under the General Public License version 3
+    or later (GPLv3+).
 
 
 Version 4.2 - August 5, 2006, by Claudio Fontana
