@@ -20,6 +20,9 @@ See file `NEWS' for a list of major changes in the current release.
 See file `THANKS' for a list of contributors.
 See file `TODO' for planned enhancements.
 
+For any copyright year range specified as YYYY-ZZZZ in this package
+note that the range specifies every single year in that closed interval.
+
 Mail suggestions and bug reports for these programs to
 <bug-idutils@gnu.org>.
 
