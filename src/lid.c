@@ -135,15 +135,9 @@ static void tree8_to_bits_1 (unsigned char **bits_vec,
 static struct file_link **tree8_to_flinkv (unsigned char const *hits_tree8);
 static struct file_link **bits_to_flinkv (unsigned char const *bits_vec);
 
-#if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTY_H
-#endif
-
 static void savetty (void);
 static void restoretty (void);
 static void chartty (void);
-
-#if HAVE_TERMIOS_H || HAVE_TERMIO_H || HAVE_SGTTY_H
-#endif
 
 #define	TOLOWER(c)	(isupper (c) ? tolower (c) : (c))
 #define IS_ALNUM(c)	(isalnum (c) || (c) == '_')
