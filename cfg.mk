@@ -18,11 +18,10 @@
 manual_title = GNU idutils: ID database utilities
 
 # Tests not to run as part of "make distcheck".
-# Exclude changelog-check here so that there's less churn in ChangeLog
-# files -- otherwise, you'd need to have the upcoming version number
-# at the top of the file for each `make distcheck' run.
-local-checks-to-skip = changelog-check strftime-check patch-check \
-  sc_prohibit_atoi_atof sc_changelog check-AUTHORS
+local-checks-to-skip =			\
+  sc_bindtextdomain			\
+  sc_changelog				\
+  sc_prohibit_atoi_atof
 
 old_NEWS_hash = 7c42fc431cadd9164dde6f9a7113b920
 
