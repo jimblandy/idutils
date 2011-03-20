@@ -35,3 +35,12 @@ update-copyright-env = \
   UPDATE_COPYRIGHT_MAX_LINE_LENGTH=79
 
 _hv_file = $(srcdir)/testsuite/help-version
+
+exclude_file_name_regexp--sc_cast_of_argument_to_free = ^src/lid\.c$$
+exclude_file_name_regexp--sc_program_name = ^testsuite/
+exclude_file_name_regexp--sc_prohibit_always_true_header_tests = src/lid\.c$$
+exclude_file_name_regexp--sc_prohibit_strcmp = ^libidu/iduglobal\.h$$
+
+config_h_exempt = ^(testsuite/single_file_token_bug\.c|src/lid-[aegl]id\.c)$$
+exclude_file_name_regexp--sc_require_config_h = $(config_h_exempt)
+exclude_file_name_regexp--sc_require_config_h_first = $(config_h_exempt)

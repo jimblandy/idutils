@@ -5,8 +5,6 @@ SUBDIRS = lib libidu src lisp doc man gnulib-tests testsuite po
 EXTRA_DIST = \
   .prev-version \
   .version \
-  .x-sc_cast_of_argument_to_free \
-  .x-sc_require_config_h \
   cfg.mk \
   dist-check.mk \
   idutils.spec \
