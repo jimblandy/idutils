@@ -4,7 +4,8 @@ TESTS =			\
   consistency		\
   files0-from		\
   help-version		\
-  infloop-kawa-el
+  infloop-kawa-el	\
+  lid-range
 
 EXTRA_DIST =			\
   $(TESTS)			\

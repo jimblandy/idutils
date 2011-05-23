@@ -2,6 +2,10 @@ GNU idutils NEWS                                      -*- outline -*-
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** Bug fixes
+
+  lid -L no longer mishandles open-ended ranges like "..2" and "2.."
+
 
 * Noteworthy changes in release 4.5 (2010-06-17) [stable]
 
