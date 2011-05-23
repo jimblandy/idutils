@@ -1111,6 +1111,8 @@ query_literal_substring (char const *arg, report_func_t report_func)
 static void
 parse_frequency_arg (char const *arg)
 {
+  int range = 0;
+
   if (strnequ (arg, "..", 2))
     frequency_low = 1;
   else
@@ -1118,12 +1120,15 @@ parse_frequency_arg (char const *arg)
       frequency_low = atoi (arg);
       while (isdigit (*arg))
 	arg++;
-      if (strnequ (arg, "..", 2))
-	arg += 2;
+    }
+  if (strnequ (arg, "..", 2))
+    {
+      range = 1;
+      arg += 2;
     }
   if (*arg)
     frequency_high = atoi (arg);
-  else if (strnequ (&arg[-1], "..", 2))
+  else if (range)
     frequency_high = USHRT_MAX;
   else
     frequency_high = frequency_low;
