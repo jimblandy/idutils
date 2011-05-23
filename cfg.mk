@@ -25,9 +25,6 @@ local-checks-to-skip =			\
 
 old_NEWS_hash = 7c42fc431cadd9164dde6f9a7113b920
 
-sc_tight_scope:
-	$(MAKE) -C src $@
-
 include $(srcdir)/dist-check.mk
 
 update-copyright-env = \
@@ -44,3 +41,6 @@ exclude_file_name_regexp--sc_prohibit_strcmp = ^libidu/iduglobal\.h$$
 config_h_exempt = ^(testsuite/single_file_token_bug\.c|src/lid-[aegl]id\.c)$$
 exclude_file_name_regexp--sc_require_config_h = $(config_h_exempt)
 exclude_file_name_regexp--sc_require_config_h_first = $(config_h_exempt)
+
+export _gl_TS_headers = lid.h $(srcdir)/../libidu/*.h
+export _gl_TS_obj_files = *.$(OBJEXT) ../libidu/*.$(OBJEXT)
