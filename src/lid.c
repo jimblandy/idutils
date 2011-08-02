@@ -161,7 +161,7 @@ static int show_version;
 
 /* Which radixes do we want? */
 
-static int radix_flag = radix_all;
+static int radix_flag = 0;
 
 /* If nonzero, ignore differences in alphabetic case while matching.  */
 
@@ -411,6 +411,8 @@ main (int argc, char **argv)
   if (show_help)
     help_me ();
 
+  if (radix_flag == 0)
+    radix_flag = radix_all;
   if (separator_style == ss_contextual)
     {
       if (isatty (STDOUT_FILENO))
