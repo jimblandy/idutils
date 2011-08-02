@@ -1,0 +1,50 @@
+#!/bin/sh
+# Demonstrate how lid's -o, -d and -x options work
+
+# Copyright (C) 2011 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+. "${srcdir=.}/init.sh"; path_prepend_ ../src
+
+echo 255  > d.txt || framework_failure_
+echo 0255 >d2.txt || framework_failure_
+echo 0377 > o.txt || framework_failure_
+echo 377 > o2.txt || framework_failure_
+echo 0xff > x.txt || framework_failure_
+echo ff  > x2.txt || framework_failure_
+
+echo '*.txt text' > map || framework_failure_
+
+mkid -m map || framework_failure_
+
+cat <<EOF > exp.all
+d.txt
+o.txt
+x.txt
+EOF
+
+for i in d o x; do
+  echo $i.txt > exp.$i || framework_failure_
+done
+
+lid --key=none 0xff > out || fail=1
+compare out exp.all || fail=1
+
+for i in d o x; do
+  lid --key=none -$i 0xff > out || fail=1
+  compare out exp.$i || fail=1
+done
+
+Exit $fail

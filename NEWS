@@ -6,6 +6,8 @@ GNU idutils NEWS                                      -*- outline -*-
 
   lid -L no longer mishandles open-ended ranges like "..2" and "2.."
 
+  lid's -d, -o and -x options now work properly
+
 
 * Noteworthy changes in release 4.5 (2010-06-17) [stable]
 

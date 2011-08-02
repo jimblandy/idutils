@@ -5,6 +5,7 @@ TESTS =			\
   files0-from		\
   help-version		\
   infloop-kawa-el	\
+  lid-radix		\
   lid-range
 
 EXTRA_DIST =			\
