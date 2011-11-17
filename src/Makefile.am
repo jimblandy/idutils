@@ -16,3 +16,8 @@ AM_CPPFLAGS = -I$(top_srcdir)/lib \
 AM_CFLAGS = $(WARN_CFLAGS) $(WERROR_CFLAGS)
 
 LDADD = ../libidu/libidu.a ../lib/libgnu.a $(LIBINTL) ../lib/libgnu.a
+
+# Tell automake's installcheck-binPROGRAMS rule that defid
+# need not be checked for --help and --version support.
+# Otherwise, it would usually fail when gid is not already installed.
+AM_INSTALLCHECK_STD_OPTIONS_EXEMPT = defid
