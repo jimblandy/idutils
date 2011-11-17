@@ -4,7 +4,7 @@
 .gdb-history
 .tarball-version
 .version
-ABOUT-NLS
+/ABOUT-NLS
 ChangeLog
 GNUmakefile
 INSTALL
