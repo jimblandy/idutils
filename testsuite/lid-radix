@@ -40,11 +40,11 @@ for i in d o x; do
 done
 
 lid --key=none 0xff > out || fail=1
-compare out exp.all || fail=1
+compare exp.all out || fail=1
 
 for i in d o x; do
   lid --key=none -$i 0xff > out || fail=1
-  compare out exp.$i || fail=1
+  compare exp.$i out || fail=1
 done
 
 Exit $fail

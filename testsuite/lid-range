@@ -34,7 +34,7 @@ one            in.txt
 two            in.txt
 EOF
 lid -F ..2 > out || fail=1
-compare out exp || fail=1
+compare exp out || fail=1
 
 cat <<\EOF > exp || framework_failure_
 four           in.txt
@@ -42,6 +42,6 @@ three          in.txt
 two            in.txt
 EOF
 lid -F 2.. > out || fail=1
-compare out exp || fail=1
+compare exp out || fail=1
 
 Exit $fail
