@@ -21,9 +21,7 @@
 #define _idfile_h_ 1
 
 #include <config.h>
-#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
+#include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
 #include "obstack.h"
