@@ -1,5 +1,5 @@
 /* scanners.h -- defs for interface to scanners.c
-   Copyright (C) 1986, 1995-1996, 1999, 2007-2011 Free Software Foundation,
+   Copyright (C) 1986, 1995-1996, 1999, 2007-2012 Free Software Foundation,
    Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 

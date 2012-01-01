@@ -1,5 +1,5 @@
 /* xnls.h -- NLS declarations
-   Copyright (C) 1996, 2007, 2009-2011 Free Software Foundation, Inc.
+   Copyright (C) 1996, 2007, 2009-2012 Free Software Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
    This program is free software; you can redistribute it and/or modify

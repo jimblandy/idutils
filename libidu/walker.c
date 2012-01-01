@@ -1,5 +1,5 @@
 /* walker.c -- nifty file-tree walker
-   Copyright (C) 1986, 1995-1996, 1999-2000, 2008-2011 Free Software
+   Copyright (C) 1986, 1995-1996, 1999-2000, 2008-2012 Free Software
    Foundation, Inc.
    Written by Greg McGary <gkm@gnu.ai.mit.edu>
 
