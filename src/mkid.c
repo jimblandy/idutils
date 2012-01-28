@@ -86,7 +86,7 @@ static int count_vec_size (struct summary *summary,
 			   unsigned char const *tail_hits);
 static int count_buf_size (struct summary *summary,
 			   unsigned char const *tail_hits);
-static void assert_hits (struct summary* summary);
+static int check_hits (struct summary* summary) _GL_ATTRIBUTE_PURE;
 static void write_hits (FILE *fp, struct summary *summary,
 			unsigned char const *tail_hits);
 static void sign_token (struct token *token);
@@ -764,7 +764,7 @@ write_id_file (struct idhead *idhp)
       putc ('\0', idhp->idh_FILE);
       putc ('\0', idhp->idh_FILE);
     }
-  assert_hits (summary_root);
+  assert (check_hits (summary_root) == 0);
   idhp->idh_tokens = token_table.ht_fill;
   off = ftello (idhp->idh_FILE);
   if (UINT32_MAX < off)
@@ -983,19 +983,25 @@ count_buf_size (struct summary *summary, unsigned char const *tail_hits)
     }
 }
 
-static void
-assert_hits (struct summary* summary)
+/* Sanity-check hit counts.  Return nonzero if there's a problem.
+   Otherwise, return 0.  */
+static int
+check_hits (struct summary* summary)
 {
   struct summary **kids = summary->sum_kids;
   struct summary **end = &kids[8];
 
-  assert (summary->sum_hits == NULL || *summary->sum_hits == 0);
+  if ( ! (summary->sum_hits == NULL || *summary->sum_hits == 0))
+    return 1;
 
   if (end[-1] == 0)
     while (*--end == 0)
       ;
   while (kids < end)
-    assert_hits (*kids++);
+    if (check_hits (*kids++))
+      return 1;
+
+  return 0;
 }
 
 static void
