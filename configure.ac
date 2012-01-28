@@ -57,6 +57,7 @@ if test "$gl_gcc_warnings" = yes; then
   nw="$nw -Wnested-externs"         # use of XARGMATCH/verify_function__
   nw="$nw -Wswitch-enum"            # Too many warnings for now
   nw="$nw -Wswitch-default"         # Too many warnings for now
+  nw="$nw -Winline"
   # things I might fix soon:
   nw="$nw -Wstrict-overflow"        # fid.c
   nw="$nw -Wunsafe-loop-optimizations" # mkid.c
@@ -71,6 +72,7 @@ if test "$gl_gcc_warnings" = yes; then
   gl_WARN_ADD([-Wno-pointer-sign])     # Too many warnings for now
   gl_WARN_ADD([-Wno-unused-parameter]) # Too many warnings for now
   gl_WARN_ADD([-fdiagnostics-show-option])
+  gl_WARN_ADD([-Wno-format-nonliteral])
 
   AC_SUBST([WARN_CFLAGS])
 
