@@ -16,22 +16,13 @@ xtokid.1:	$(common_dep)	$(srcdir)/xtokid.x	../src/xtokid.c
 aid.1:		$(common_dep)	$(srcdir)/aid.x		../src/lid.c
 eid.1:		$(common_dep)	$(srcdir)/eid.x		../src/lid.c
 gid.1:		$(common_dep)	$(srcdir)/gid.x		../src/lid.c
+defid.1:	$(common_dep)	$(srcdir)/defid.x	../src/lid.c
 
 SUFFIXES = .x .1
-
-# Ensure that help2man runs the ../src/ginstall binary as
-# `install' when creating install.1.
-# Similarly, ensure that it uses the ../src/[ binary to create test.1.
-t = $*.td
-mapped_name = `echo $*|sed 's/install/ginstall/; s/test/[/'`
-
-# That is necessary to avoid failures for programs that are also shell built-in
-# functions like echo, false, printf, pwd.
 .x.1:
-	@echo "Updating man page $@";				\
-	PATH=../src$(PATH_SEPARATOR)$$PATH; export PATH;	\
-	$(HELP2MAN)						\
-	    --include=$(srcdir)/$*.x				\
+	$(AM_V_GEN)PATH=../src$(PATH_SEPARATOR)$$PATH; export PATH;	\
+	$(HELP2MAN)							\
+	    --include=$(srcdir)/$*.x					\
 	    --output=$@ $*$(EXEEXT)
 
 check-local: check-x-vs-1 check-programs-vs-x
@@ -45,22 +36,21 @@ ASSORT = LC_ALL=C sort
 # corresponding .1 file in the definition of $(dist_man1_MANS) above.
 .PHONY: check-x-vs-1
 check-x-vs-1:
-	PATH=../src$(PATH_SEPARATOR)$$PATH; export PATH;		\
+	$(AM_V_GEN)PATH=../src$(PATH_SEPARATOR)$$PATH; export PATH;	\
 	t=ls-files.$$$$;						\
 	(cd $(srcdir) && ls -1 *.x) | sed 's/\.x$$//' | $(ASSORT) > $$t;\
-	echo $(dist_man1_MANS) | fmt -w 1 | sed 's/\.1$$//' | $(ASSORT)	\
-	  | diff -u - $$t || { rm $$t; exit 1; };				\
+	echo $(dist_man1_MANS) | tr -s ' ' '\012' | sed 's/\.1$$//'	\
+	  | $(ASSORT) | diff - $$t || { rm $$t; exit 1; };		\
 	rm $$t
 
 programs =								\
-  echo 'spy:;@echo $$(all_programs)'					\
+  echo 'spy:;@echo $$(PROGRAMS) $$(SCRIPTS)'				\
     | MAKEFLAGS= $(MAKE) -s -C $(srcdir)/../src -f Makefile -f - spy	\
-    | fmt -1 | $(ASSORT) -u | grep -v '\['
+    | tr -s ' ' '\012' | $(ASSORT) -u
 
 .PHONY: check-programs-vs-x
 check-programs-vs-x:
-	for p in `$(programs)`; do			\
-	  test $$p = ginstall && p=install || : ;	\
+	$(AM_V_GEN)for p in `$(programs)`; do		\
 	  test -f $(srcdir)/$$p.x			\
 	    || { echo missing $$p.x 1>&2; missing=1; };	\
 	done;						\
