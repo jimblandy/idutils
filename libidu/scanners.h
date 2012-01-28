@@ -63,7 +63,8 @@ struct lang_args
 extern void language_help_me (void);
 extern void language_getopt (void);
 extern void language_save_arg (char *arg);
-extern struct language *get_language (char const *lang_name);
+extern struct language *get_language (char const *lang_name)
+  _GL_ATTRIBUTE_PURE;
 extern void parse_language_map (char const *file_name);
 extern void set_default_language (char const *lang_name);
 

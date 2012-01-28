@@ -59,7 +59,6 @@ static struct file_link *make_link_from_string (char const *name,
 static int lang_wanted (char const *lang_name);
 static char **append_strings_to_vector (char **vector_0, char *string,
 					char const *delimiter_class);
-static int vector_length (char **vector);
 static int string_in_vector (char const *string, char **vector);
 static int same_as_dot (char const *cwd);
 static struct file_link const
@@ -365,7 +364,7 @@ find_alias_link (struct file_link *flink, struct stat *stp)
    directory.  PATH_MAX is considered an infinite distance (e.g.,
    there are no symlinks between `flink' and the root).  */
 
-static int
+static int _GL_ATTRIBUTE_PURE
 symlink_ancestry (struct file_link *flink)
 {
   int ancestry = 0;
@@ -506,6 +505,15 @@ exclude_languages (char *lang_names)
   langs_excluded = append_strings_to_vector (langs_excluded, lang_names, white_space);
 }
 
+static int _GL_ATTRIBUTE_PURE
+vector_length (char **vector)
+{
+  int length = 0;
+  while (*vector++)
+    length++;
+  return length;
+}
+
 static char **
 append_strings_to_vector (char **vector_0, char *string,
 			  char const *delimiter_class)
@@ -527,16 +535,7 @@ append_strings_to_vector (char **vector_0, char *string,
   return xnrealloc (vector_0, vector - vector_0, sizeof *vector_0);
 }
 
-static int
-vector_length (char **vector)
-{
-  int length = 0;
-  while (*vector++)
-    length++;
-  return length;
-}
-
-static int
+static int _GL_ATTRIBUTE_PURE
 string_in_vector (char const *string, char **vector)
 {
   while (*vector)
@@ -1052,7 +1051,7 @@ member_file_qsort_compare (void const *x, void const *y)
 /****************************************************************************/
 /* Hash stuff for `struct file_link'.  */
 
-static unsigned long
+static unsigned long _GL_ATTRIBUTE_PURE
 file_link_hash_1 (void const *key)
 {
   unsigned long result = 0;
@@ -1063,7 +1062,7 @@ file_link_hash_1 (void const *key)
   return result;
 }
 
-static unsigned long
+static unsigned long _GL_ATTRIBUTE_PURE
 file_link_hash_2 (void const *key)
 {
   unsigned long result = 0;
@@ -1074,7 +1073,7 @@ file_link_hash_2 (void const *key)
   return result;
 }
 
-static int
+static int _GL_ATTRIBUTE_PURE
 file_link_hash_compare (void const *x, void const *y)
 {
   int result;

@@ -443,7 +443,7 @@ main (int argc, char **argv)
 
 /* Return the integer ceiling of the base-8 logarithm of N.  */
 
-static int
+static int _GL_ATTRIBUTE_CONST
 ceil_log_8 (unsigned long n)
 {
   int log_8 = 0;
@@ -459,7 +459,7 @@ ceil_log_8 (unsigned long n)
 
 /* Return the integer ceiling of the base-2 logarithm of N.  */
 
-static int
+static int _GL_ATTRIBUTE_CONST
 ceil_log_2 (unsigned long n)
 {
   int log_2 = 0;
@@ -782,26 +782,26 @@ write_id_file (struct idhead *idhp)
 /* Define primary and secondary hash and comparison functions for the
    token table.  */
 
-static unsigned long
+static unsigned long _GL_ATTRIBUTE_PURE
 token_hash_1 (void const *key)
 {
   return_STRING_HASH_1 (TOKEN_NAME ((struct token const *) key));
 }
 
-static unsigned long
+static unsigned long _GL_ATTRIBUTE_PURE
 token_hash_2 (void const *key)
 {
   return_STRING_HASH_2 (TOKEN_NAME ((struct token const *) key));
 }
 
-static int
+static int _GL_ATTRIBUTE_PURE
 token_hash_cmp (void const *x, void const *y)
 {
   return_STRING_COMPARE (TOKEN_NAME ((struct token const *) x),
 			 TOKEN_NAME ((struct token const *) y));
 }
 
-static int
+static int _GL_ATTRIBUTE_PURE
 token_qsort_cmp (void const *x, void const *y)
 {
   return_STRING_COMPARE (TOKEN_NAME (*(struct token const *const *) x),
@@ -938,7 +938,7 @@ make_sibling_summary (struct summary *summary)
   return summary;
 }
 
-static int
+static int _GL_ATTRIBUTE_PURE
 count_vec_size (struct summary *summary, unsigned char const *tail_hits)
 {
   struct summary **kids;
@@ -962,7 +962,7 @@ count_vec_size (struct summary *summary, unsigned char const *tail_hits)
     }
 }
 
-static int
+static int _GL_ATTRIBUTE_PURE
 count_buf_size (struct summary *summary, unsigned char const *tail_hits)
 {
   struct summary **kids;

@@ -810,7 +810,7 @@ report_nothing (char const *name, struct file_link **flinkv ATTRIBUTE_UNUSED)
     puts (name);
 }
 
-static int
+static int _GL_ATTRIBUTE_PURE
 vector_cardinality (void *vector)
 {
   void **v = (void **) vector;
@@ -1239,7 +1239,7 @@ query_binary_search (char const *token_0)
 
 /* Are there any regexp meta-characters in name?? */
 
-static int
+static int _GL_ATTRIBUTE_PURE
 is_regexp (char *name)
 {
   int backslash = 0;
@@ -1284,7 +1284,7 @@ has_right_delimiter (char const *pattern)
 
 /* Does `name' occur in `line' delimited by non-alphanumerics?? */
 
-static int
+static int _GL_ATTRIBUTE_PURE
 word_match (char const *name_0, char const *line)
 {
   char const *name = name_0;
@@ -1319,7 +1319,7 @@ word_match (char const *name_0, char const *line)
    apply.  In particular, it is impossible to determine the radix of
    0, so return all possibilities.  */
 
-static int
+static int _GL_ATTRIBUTE_PURE
 get_radix (char const *str)
 {
   if (!isdigit (*str))
@@ -1374,7 +1374,7 @@ stoi (char const *str)
 
 /* Convert an ascii octal number to an integer. */
 
-static int
+static int _GL_ATTRIBUTE_PURE
 otoi (char const *str)
 {
   int n = 0;
@@ -1391,7 +1391,7 @@ otoi (char const *str)
 
 /* Convert an ascii decimal number to an integer. */
 
-static int
+static int _GL_ATTRIBUTE_PURE
 dtoi (char const *str)
 {
   int n = 0;
@@ -1408,7 +1408,7 @@ dtoi (char const *str)
 
 /* Convert an ascii hex number to an integer. */
 
-static int
+static int _GL_ATTRIBUTE_PURE
 xtoi (char const *str)
 {
   int n = 0;

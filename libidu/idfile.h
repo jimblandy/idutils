@@ -144,9 +144,10 @@ extern struct hash_table dev_ino_table;
 /* token flags (struct token is defined in scanners.h) */
 
 #define token_string(buf) (buf)
-extern unsigned int token_flags (char const *buf);
-extern unsigned short token_count (char const *buf);
-extern unsigned char const *token_hits_addr (char const *buf);
+extern unsigned int token_flags (char const *buf) _GL_ATTRIBUTE_PURE;
+extern unsigned short token_count (char const *buf) _GL_ATTRIBUTE_PURE;
+extern unsigned char const *token_hits_addr (char const *buf)
+  _GL_ATTRIBUTE_PURE;
 
 #define MAYBE_RETURN_PREFIX_MATCH(arg, str, val) do { \
     char const *_s_ = (str); \
@@ -187,7 +188,8 @@ extern struct file_link **deserialize_file_links (struct idhead *idhp);
 extern void serialize_file_links (struct idhead *idhp);
 
 extern void mark_member_file_links (struct idhead *idhp);
-extern int member_file_qsort_compare (void const *x, void const *y);
+extern int member_file_qsort_compare (void const *x, void const *y)
+  _GL_ATTRIBUTE_PURE;
 extern struct file_link *parse_file_name (char *file_name, struct file_link *relative_dir_link);
 extern void print_filenames (struct file_link **flinkv, enum separator_style separator_style);
 extern enum separator_style parse_separator_style (char const *arg);
@@ -202,11 +204,11 @@ extern char *absolute_file_name (char *buffer, struct file_link const *flink);
 extern char *maybe_relative_file_name (char *buffer, struct file_link const *to_link, struct file_link const *from_link);
 extern char const *locate_id_file_name (char const *arg);
 
-extern int tree8_count_levels (unsigned int cardinality);
+extern int tree8_count_levels (unsigned int cardinality) _GL_ATTRIBUTE_CONST;
 extern int gets_past_00 (char *tok, FILE *input_FILE);
 extern int skip_past_00 (FILE *input_FILE);
 
-extern int links_depth (struct file_link const *flink);
+extern int links_depth (struct file_link const *flink) _GL_ATTRIBUTE_PURE;
 
 #if HAVE_LINK
 

@@ -296,7 +296,7 @@ hash_dump (struct hash_table const *ht, void **vector_0, qsort_cmp_t compare)
 
 /* Round a given number up to the nearest power of 2. */
 
-static unsigned long
+static unsigned long _GL_ATTRIBUTE_CONST
 round_up_2 (unsigned long rough)
 {
   int round;
