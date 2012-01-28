@@ -29,7 +29,8 @@ old_NEWS_hash = 7c42fc431cadd9164dde6f9a7113b920
 -include $(srcdir)/dist-check.mk
 
 update-copyright-env = \
-  UPDATE_COPYRIGHT_USE_INTERVALS=1 \
+  UPDATE_COPYRIGHT_FORCE=1 \
+  UPDATE_COPYRIGHT_USE_INTERVALS=2 \
   UPDATE_COPYRIGHT_MAX_LINE_LENGTH=79
 
 _hv_file = $(srcdir)/testsuite/help-version
