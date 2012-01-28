@@ -19,6 +19,16 @@ built_programs = \
     | MAKEFLAGS= $(MAKE) -s -C $(top_builddir)/src -f Makefile -f - spy \
     | tr -s ' ' '\n' | sed -e 's,$(EXEEXT)$$,,'
 
+## '$f' is set by the Automake-generated test harness to the path of the
+## current test script stripped of VPATH components, and is used by the
+## shell-or-perl script to determine the name of the temporary files to be
+## used.  Note that $f is a shell variable, not a make macro, so the use of
+## '$$f' below is correct, and not a typo.
+LOG_COMPILER = \
+  $(SHELL) $(srcdir)/shell-or-perl \
+  --test-name "$$f" --srcdir '$(srcdir)' \
+  --shell '$(SHELL)' --perl '$(PERL)' --
+
 # Note that the first lines are statements.  They ensure that environment
 # variables that can perturb tests are unset or set to expected values.
 # The rest are envvar settings that propagate build-related Makefile
@@ -27,21 +37,6 @@ TESTS_ENVIRONMENT =				\
   tmp__=$$TMPDIR; test -d "$$tmp__" || tmp__=.;	\
   . $(srcdir)/envvar-check;			\
   TMPDIR=$$tmp__; export TMPDIR;		\
-  shell_or_perl_() {				\
-    if grep '^\#!/usr/bin/perl' "$$1" > /dev/null; then			\
-      if $(PERL) -e 'use warnings' > /dev/null 2>&1; then		\
-	grep '^\#!/usr/bin/perl -T' "$$1" > /dev/null && T_=T || T_=;	\
-        $(PERL) -w$$T_ -I$(srcdir) -MCoreutils				\
-	      -M"CuTmpdir qw($$f)" -- "$$1";	\
-      else					\
-	echo 1>&2 "$$f: configure did not find a usable version of Perl," \
-	  "so skipping this test";		\
-	(exit 77);				\
-      fi;					\
-    else					\
-      $(SHELL) "$$1";				\
-    fi;						\
-  };						\
   export					\
   LOCALE_FR='$(LOCALE_FR)'			\
   LOCALE_FR_UTF8='$(LOCALE_FR_UTF8)'		\
@@ -66,7 +61,7 @@ TESTS_ENVIRONMENT =				\
   REPLACE_GETCWD=$(REPLACE_GETCWD)		\
   PATH="$(abs_top_builddir)/src$(PATH_SEPARATOR)$(abs_top_srcdir)/src$(PATH_SEPARATOR)$$PATH" \
   VERSION=$(VERSION) \
-  ; shell_or_perl_
+  ; 9>&2
 
 TEST_LOGS = $(TESTS:=.log)
 

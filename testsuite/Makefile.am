@@ -11,11 +11,13 @@ TESTS =			\
 EXTRA_DIST =			\
   $(TESTS)			\
   Coreutils.pm			\
+  CuSkip.pm			\
   CuTmpdir.pm			\
   check.mk			\
   envvar-check			\
   init.sh			\
   mkid-langopt			\
+  shell-or-perl			\
   single_file_token_bug.c
 
 DISTCLEANFILES = ID
