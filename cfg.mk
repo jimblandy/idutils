@@ -24,7 +24,7 @@ local-checks-to-skip =			\
   sc_prohibit_atoi_atof			\
   sc_prohibit_path_max_allocation
 
-old_NEWS_hash = 7c42fc431cadd9164dde6f9a7113b920
+old_NEWS_hash = 4679385bd7319eb972b36685fca28c2e
 
 -include $(srcdir)/dist-check.mk
 
