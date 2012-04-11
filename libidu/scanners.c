@@ -57,6 +57,10 @@ static void help_me_c (void);
 static void help_me_cpp (void);
 static void help_me_java (void);
 
+static struct token *get_token_javascript (FILE *in_FILE, void const *args, int *flags);
+static void *parse_args_javascript (char **argv, int argc);
+static void help_me_javascript (void);
+
 static struct token *get_token_asm (FILE *in_FILE, void const *args, int *flags);
 static void *parse_args_asm (char **argv, int argc);
 static void help_me_asm (void);
@@ -78,6 +82,7 @@ static struct language languages_0[] =
   { "C", parse_args_c, get_token_c, help_me_c },
   { "C++", parse_args_c, get_token_c, help_me_cpp },
   { "Java", parse_args_c, get_token_c, help_me_java },
+  { "JavaScript", parse_args_javascript, get_token_javascript, help_me_javascript },
   { "asm", parse_args_asm, get_token_asm, help_me_asm },
   { "text", parse_args_text, get_token_text, help_me_text },
   { "perl", parse_args_perl, get_token_perl, help_me_perl },
@@ -786,6 +791,469 @@ next:
 #undef ISCCBORING
 #undef ISQ1BORING
 #undef ISQ2BORING
+
+/*************** JavaScript *************************************************/
+
+/* For now, we're going to punt on support for non-ASCII characters, and
+   treat anything above 0x7f as an identifier component. Correct support
+   would probably entail using iconv to convert the locale's coded
+   character set to UTF-16, and adopting UTF-8 for storage in ID
+   databases. */
+
+/* Fundamental character types, for indexing the main switch statement. */
+#define TYPE_MASK 0xf
+#define EF 0x00         /* end of file */
+#define PU 0x01         /* punctuation, indifferent to division */
+#define PN 0x02         /* punctuation, cannot precede division */
+#define PD 0x03         /* punctuation, can    precede division */
+#define I1 0x04         /* initial character in an identifier */
+#define SQ 0x05         /* string quote */
+#define SS 0x06         /* comment, regexp, or division starter */
+#define PM 0x07         /* + or - */
+#define LS 0x08         /* < */
+#define GT 0x09         /* > */
+
+/* Flags, to be mixed in with other types. */
+#define I2 0x10         /* subsequent character in an identifier */
+#define SK 0x20         /* treat as identifier component if in string */
+
+/* Complete codes for characters. */
+#define XX (PU)         /* illegal characters - ignore */
+#define __ (PN)         /* most random punctuation */
+#define SP (PU)         /* whitespace */
+#define DG (PD|I2)      /* digit */
+#define DT (PD|SK)      /* dot */
+#define LT (I1|I2)      /* letter */
+#define SL (SS|SK)      /* slash */
+
+static unsigned char ctype_javascript[1 + 256] = {
+  EF,
+/*         0       1       2       3       4       5       6       7   */
+/*       -----   -----   -----   -----   -----   -----   -----   ----- */
+/* 00 */ XX,     XX,     XX,     XX,     XX,     XX,     XX,     XX,
+/* 08 */ XX,     SP,     SP,     SP,     SP,     SP,     XX,     XX,
+/* 10 */ XX,     XX,     XX,     XX,     XX,     XX,     XX,     XX,
+/* 18 */ XX,     XX,     XX,     XX,     XX,     XX,     XX,     XX,
+/* 20 */ SP,     __,     SQ,     __,     __,     __,     __,     SQ,
+/* 28 */ __,     PD,     __,     PM,     __,     PM,     DT,     SL,
+/* 30 */ DG,     DG,     DG,     DG,     DG,     DG,     DG,     DG,
+/* 38 */ DG,     DG,     __,     __,     LS,     __,     GT,     __,
+/* 40 */ __,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* 48 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* 50 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* 58 */ LT,     LT,     LT,     __,     __,     PD,     __,     LT,
+/* 60 */ __,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* 68 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* 70 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* 78 */ LT,     LT,     LT,     __,     __,     __,     __,     __,
+
+/* 80 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* 88 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* 90 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* 98 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* a0 */ SP,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* a8 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* b0 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* b8 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* c0 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* c8 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* d0 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* d8 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* e0 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* e8 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* f0 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+/* f8 */ LT,     LT,     LT,     LT,     LT,     LT,     LT,     LT,
+};
+
+#define JS_CTYPE(c)              ((ctype_javascript+1)[c] & TYPE_MASK)
+#define JS_IDENT_PART(c)         ((ctype_javascript+1)[c] & I2)
+#define JS_STRINGY_IDENT_PART(c) ((ctype_javascript+1)[c] & (I2|SK))
+
+static struct token *
+get_token_javascript (FILE *in_FILE, void const *args, int *flags)
+{
+  /* Distinguishing regular expression literals from division operators:
+
+     ECMAScript has division operators, '/', and regular expression
+     literals, '/regexp/'. The two token kinds are distinguished by their
+     syntactical context --- the grammar and the lexical processing phases
+     interact. This tokenizer must distinguish division from regexps too:
+     the regexp /"/ is not the beginning of a quoted string.
+
+     Whether a '/' character is a division operator (or division-assignment
+     operator) or the start of a regular expression literal depends on the
+     syntactic context:
+
+       foo =  /2/i;      -- regular expression with an 'ignore case' flag
+       foo = x/2/i;      -- two uses of the division operator
+
+     (I include the 'ignore case' flag in the regexp examples to show that
+     one can't disambiguate by looking ahead: /2/i is *both* a valid regexp
+     literal *and* a valid suffix of a MultiplicativeExpression.)
+
+     A similar situation exists with E4X tags (E4X is an extension to
+     JavaScript that allows one to write XML right into the code, as a new
+     kind of literal; unfortunately, the elements are not Web DOM elements,
+     so it's kind of useless): whether a '<' is a less-than operator, or
+     the beginning of a <tag>, depends on its syntactic context.
+
+     Fortunately, I think a simple state machine can recognize the contexts
+     in which a division operator may occur and those in which E4X tags
+     can occur well enough for our purposes, without doing a full
+     JavaScript parse.
+
+     We divide tokens into three categories. Tokens in the first category
+     put the stream in the state in which an infix operator may occur
+     (essentially, these are the tokens expressions can end with):
+
+       identifier
+       string
+       number
+       ) ]
+       but not }; see below
+
+     Tokens in the second category have no effect on the state:
+
+       whitespace
+       comments
+       ++ and --
+
+     (The increment and decrement operators can appear in both postfix and
+     prefix positions, so we can't put them in the first category.)
+
+     All other tokens are in the third category: they put the stream in the
+     state in which an infix operator may not occur, and a '/' is taken
+     as the start of a regexp literal.
+
+     So, for example:
+
+       x /...           -- division
+       (x) /...         -- division
+       x++ /...         -- division
+       x + /...         -- regexp start
+
+     One failure of this approach is that MultiplicativeExpressions can end
+     with a } token, but we can't include } in the first category. This
+     should be parsed as two division operators:
+
+       ({}/2/i)
+
+     However, statements can also end with a }: this should be parsed as a
+     statement followed by a regexp:
+
+       if (true) {} /2/i
+
+     Since the kinds of expressions that end with {} (function expressions;
+     object initializers) can't be divided, the division operator is
+     unlikely to appear in this context in real JavaScript programs; on the
+     other hand, regular expressions are perfectly useful at the front of
+     an expression following a block statement. So, we put } in the third
+     category.
+
+     A second simplification: to avoid needing to parse numeric literals
+     carefully, we assume that a division operator may follow a '.'. That
+     is, even though ECMAScript says that this is a regexp:
+
+       x./2/i
+
+     since division operators are recognized only where they may occur
+     syntactically, we're going to tokenize it as a division, because that
+     makes it easier to get this case right:
+
+       3./2/i
+
+     (two divisions, starting with a floating-point numeric literal). This
+     simplification is wrong, but only academically so, since the former is
+     a syntax error anyway.
+
+     We treat '<' as the beginning of an E4X tag if it appears at a point
+     where infix operators are *not* allowed to appear. We tokenize the
+     interior of the tag and any content text as if it were source code, so
+     we'll pick up tag names and attributes as identifiers; this seems
+     good. It's not so good (that is, it's totally wrong) to parse content
+     text as source code --- what if it contains an unmatched quote? ---
+     but really, you shouldn't be using E4X anyway. */
+
+  /* True if the next token could be an infix operator, like division. */
+  static int infix_op_possible = 0;
+
+  /* True if we are in the midst of an E4X XML tag:
+     <tag possibly="with attributes">. */
+  static int in_e4x_tag = 0;
+
+  /* Depth of nesting within E4X elements. */
+  static int e4x_element_depth = 0;
+
+ next:;
+  int next = getc (in_FILE);
+
+ retry:
+  switch (JS_CTYPE (next)) {
+  case EF: /* End of file. */
+    return 0;
+
+  case PU: /* Generic punctuation; skip. */
+    goto next;
+
+  case PN: /* Punctuation that cannot precede a division operator. */
+    infix_op_possible = 0;
+    goto next;
+
+  case PD: /* Punctuation that can precede a division operator. */
+    infix_op_possible = 1;
+    goto next;
+
+  case I1: /* Identifier start. */
+    {
+      if (!in_e4x_tag && e4x_element_depth > 0)
+        /* E4X XML element content text is text, not identifiers. Skip. */
+        goto next;
+
+      obstack_blank (&tokens_obstack, OFFSETOF_TOKEN_NAME);
+      while (JS_IDENT_PART(next)) {
+        obstack_1grow (&tokens_obstack, next);
+        next = getc (in_FILE);
+      }
+      if (next != EOF)
+        ungetc (next, in_FILE);
+      infix_op_possible = 1;
+      obstack_1grow (&tokens_obstack, '\0');
+      *flags = TOK_NAME;
+      return (struct token *) obstack_finish (&tokens_obstack);
+    }
+
+  case SQ:
+    {
+      if (!in_e4x_tag && e4x_element_depth > 0)
+        /* Quotes aren't special in E4X XML element content text. Skip. */
+        goto next;
+
+      int quote = next;
+      obstack_blank(&tokens_obstack, OFFSETOF_TOKEN_NAME);
+      for (;;) {
+        next = getc (in_FILE);
+        if (next == EOF) {
+          obstack_free(&tokens_obstack, obstack_finish(&tokens_obstack));
+          return 0;
+        } else if (next == '\n') {
+          /* Strings can't contain unescaped newlines. */
+          break;
+        }
+        if (next == quote)
+          break;
+        obstack_1grow (&tokens_obstack, next);
+        /* Include escape sequences in the token as written. */
+        if (next == '\\')
+          obstack_1grow (&tokens_obstack, getc (in_FILE));
+      }
+
+      /* Did we get a complete string? */
+      if (next == quote) {
+        /* If this string's contents are an identifier longer than one
+           character, or would be if we included the "SK" characters, then we
+           return that as a token. */
+        const char *start = obstack_base(&tokens_obstack) + OFFSETOF_TOKEN_NAME;
+        const char *end = obstack_next_free(&tokens_obstack);
+        if (end >= start + 1) {
+          const char *p;
+          for (p = start; p < end; p++)
+            if (!JS_STRINGY_IDENT_PART(*p))
+              break;
+          if (p == end) {
+            obstack_1grow (&tokens_obstack, '\0');
+            *flags = TOK_STRING;
+            return (struct token *) obstack_finish (&tokens_obstack);
+          }
+        }
+      }
+
+      /* We started growing a token in the obstack, but then abandoned it;
+         free the space we allocated. */
+      obstack_free(&tokens_obstack, obstack_finish(&tokens_obstack));
+
+      infix_op_possible = 1;
+      goto next;
+    }
+
+  case SS:
+    {
+      int first = next;
+      next = getc (in_FILE);
+      if (in_e4x_tag) {
+        if (next == '>') {
+          /* The end of an E4X XML empty-element tag. We incremented the
+             depth when we began the tag, so we need to decrement it here. */
+          in_e4x_tag = 0;
+          e4x_element_depth--;
+          /* If we've closed all our tags, then an infix op could follow.
+             Otherwise, the infix_op_possible state doesn't matter. */
+          infix_op_possible = 1;
+          goto next;
+        } else {
+          /* Stray slashes are not permitted within XML tags. Skip the slash. */
+          goto retry;
+        }
+      } else if (e4x_element_depth > 0) {
+        /* This slash appears within E4X XML element content text. It's not
+           a special character. Skip. */
+        goto retry;
+      } else if (next == '/') {
+        /* C++-style comment. Scan to end of line and skip. */
+        do
+          next = getc (in_FILE);
+        while (next != EOF && next != '\n' && next != '\r');
+        goto next;
+      } else if (next == '*') {
+        /* C-style comment. Scan to closing sequence and skip. */
+        do {
+          next = getc (in_FILE);
+          if (next == '*') {
+            next = getc (in_FILE);
+            if (next == '/')
+              goto next;
+          }
+        } while (next != EOF);
+        return 0;
+      } else if (infix_op_possible) { /* A division operator. Skip. */
+        infix_op_possible = 0;
+        /* Continue processing with this character. */
+        goto retry;
+      } else {
+        /* A regular expression literal. Scan and skip. */
+        int in_class = 0;
+        do {
+          switch (next) {
+          case EOF:             /* Abrupt end of file. */
+            return 0;
+
+          case '\n':            /* Newlines aren't permitted in regexps. */
+            goto next;
+
+          case '\\':            /* An escaped character. */
+            next = getc (in_FILE);
+            if (next == '\n')   /* Newlines can't be escaped. */
+              goto next;
+            break;
+
+          case '[':             /* Starting a character class. */
+            in_class = 1;
+            break;
+
+          case ']':             /* Ending a character class. */
+            in_class = 0;
+            break;
+          }
+          next = getc (in_FILE);
+        } while (next != '/');
+
+        /* Scan past any flags following the regexp. */
+        do
+          next = getc (in_FILE);
+        while (JS_IDENT_PART(next));
+        if (next != EOF)
+          ungetc (next, in_FILE);
+
+        infix_op_possible = 1;
+        goto next;
+      }
+    }
+
+  case PM:
+    {
+      int start = next;
+      next = getc(in_FILE);
+      /* ++ and -- may or may not precede division operators; they have no
+         effect on the flag. Plain + and - may not precede division
+         operators. */
+      if (next != start)
+        infix_op_possible = 0;
+      /* Continue processing with this new character. */
+      goto retry;
+    }
+
+  case LS:
+    if (in_e4x_tag) {
+      /* Another '<' isn't permitted inside an E4X XML tag; ignore it. */
+      goto next;
+    } else if (e4x_element_depth == 0 && infix_op_possible) {
+      /* It's a less-than operator; another infix operator can't be next. */
+      infix_op_possible = 0;
+      goto next;
+    } else {
+      /* It's the start of an E4X tag. Figure out whether it's an opening
+         or closing tag. The infix state doesn't matter so much. */
+      next = getc (in_FILE);
+      if (next == '>') {
+        /* We've finished reading a nameless opening tag; we need to find
+           the closing tag. We're not inside a tag, but we know in_e4x_tag
+           is clear already. */
+        e4x_element_depth++;
+        goto next;
+      } else if (next == '/') {
+        /* We've entered a closing tag. */
+        in_e4x_tag = 1;
+        e4x_element_depth--;
+        goto next;
+      } else {
+        /* We've entered an opening tag. */
+        in_e4x_tag = 1;
+        e4x_element_depth++;
+        goto retry;
+      }
+    }
+
+  case GT: /* Either a greater-than operator, or the end of an E4X XML tag. */
+    /* Either way, we're no longer in an E4X XML tag. */
+    in_e4x_tag = 0;
+    /* We adjust the nesting depth when we see the start of the tag, or the
+       end of an empty-element tag (processed under 'case SS'), so there's
+       no need to worry about that here. */
+    infix_op_possible = 0;
+    goto next;
+
+  default:
+    abort();
+  }
+}
+
+static void *
+parse_args_javascript (char **argv, int argc)
+{
+  return NULL;
+}
+
+static void
+help_me_javascript (void)
+{
+  printf (_("\
+JavaScript language (encoded as UTF-8):\n\
+  No special flags.\n\
+"));
+}
+
+#undef TYPE_MASK
+#undef EF
+#undef PU
+#undef PN
+#undef PD
+#undef I1
+#undef SQ
+#undef SS
+#undef PM
+#undef LS
+#undef GT
+#undef I2
+#undef SK
+#undef XX
+#undef __
+#undef SP
+#undef DG
+#undef DT
+#undef LT
+#undef SL
+#undef JS_CTYPE
+#undef JS_IDENT_PART
+#undef JS_STRINGY_IDENT_PART
 
 /*************** Assembly ***************************************************/
 

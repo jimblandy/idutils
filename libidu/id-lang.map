@@ -55,6 +55,9 @@
 
 *.java			Java
 
+*.js                    JavaScript
+*.jsm                   JavaScript
+
 ChangeLog*		Cdoc
 
 *.[sS]			asm --comment=;
