@@ -61,7 +61,7 @@
 2006-08-22  Claudio Fontana  <claudio@gnu.org>
 
 	* doc/idutils.texi: fix wrong example .emacs entry, where
-	  a non existant 'gid' lisp is loaded instead of 'idutils'.
+	  a nonexistent 'gid' lisp is loaded instead of 'idutils'.
 
 2006-08-05  Claudio Fontana  <claudio@gnu.org>
 

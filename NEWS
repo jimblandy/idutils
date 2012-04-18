@@ -179,7 +179,7 @@ Version 3.0.9 - May 30, 1996, by Greg McGary
 * id-utils now uses automake.
 
 * gid, aid and eid are now shell-script wrappers that
-  call `lid' with the apropriate argument.
+  call `lid' with the appropriate argument.
 
 * A new environment `IDPATH' contains a colon-separated list of ID file
   names for use by `fid' and `lid'.  It is only partially implemented at

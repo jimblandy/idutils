@@ -672,7 +672,7 @@ report_statistics (void)
    we are generating the ID file in a remote directory, then adjust
    the file names to be relative to the location of the ID database.
 
-   (This would be a common useage if you want to make a database for a
+   (This would be a common usage if you want to make a database for a
    directory which you have no write access to, so you cannot create
    the ID file.)  */
 
