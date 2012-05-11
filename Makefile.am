@@ -39,3 +39,6 @@ BUILT_SOURCES = .version
 # See the rm_subst comment for details.
 dist-hook: gen-ChangeLog
 	echo $(VERSION) > $(distdir)/.tarball-version
+
+ALL_RECURSIVE_TARGETS = distcheck-hook
+distcheck-hook: syntax-check
