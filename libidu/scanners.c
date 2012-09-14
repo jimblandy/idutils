@@ -972,7 +972,10 @@ get_token_javascript (FILE *in_FILE, void const *args, int *flags)
      we'll pick up tag names and attributes as identifiers; this seems
      good. It's not so good (that is, it's totally wrong) to parse content
      text as source code --- what if it contains an unmatched quote? ---
-     but really, you shouldn't be using E4X anyway. */
+     but really, you shouldn't be using E4X anyway.
+
+     We do not properly parse E4X XML CDATA elements. As I say, you
+     shouldn't be using E4X anyway. */
 
   /* True if the next token could be an infix operator, like division. */
   static int infix_op_possible = 0;
@@ -990,7 +993,7 @@ get_token_javascript (FILE *in_FILE, void const *args, int *flags)
  retry:
   switch (JS_CTYPE (next)) {
   case EF: /* End of file. */
-    return 0;
+    goto eof;
 
   case PU: /* Generic punctuation; skip. */
     goto next;
@@ -1034,7 +1037,7 @@ get_token_javascript (FILE *in_FILE, void const *args, int *flags)
         next = getc (in_FILE);
         if (next == EOF) {
           obstack_free(&tokens_obstack, obstack_finish(&tokens_obstack));
-          return 0;
+          goto eof;
         } else if (next == '\n') {
           /* Strings can't contain unescaped newlines. */
           break;
@@ -1113,7 +1116,7 @@ get_token_javascript (FILE *in_FILE, void const *args, int *flags)
               goto next;
           }
         } while (next != EOF);
-        return 0;
+        goto eof;
       } else if (infix_op_possible) { /* A division operator. Skip. */
         infix_op_possible = 0;
         /* Continue processing with this character. */
@@ -1124,7 +1127,7 @@ get_token_javascript (FILE *in_FILE, void const *args, int *flags)
         do {
           switch (next) {
           case EOF:             /* Abrupt end of file. */
-            return 0;
+            goto eof;
 
           case '\n':            /* Newlines aren't permitted in regexps. */
             goto next;
@@ -1210,10 +1213,19 @@ get_token_javascript (FILE *in_FILE, void const *args, int *flags)
        no need to worry about that here. */
     infix_op_possible = 0;
     goto next;
-
-  default:
-    abort();
   }
+
+  /* Every possible character type should have an entry in the switch, and
+     every cases should explicitly return or jump to the head of the
+     loop. */
+  abort();
+
+ eof:
+  /* Clean up static state and return EOF. */
+  infix_op_possible = 0;
+  in_e4x_tag = 0;
+  e4x_element_depth = 0;
+  return 0;
 }
 
 static void *
@@ -1226,7 +1238,7 @@ static void
 help_me_javascript (void)
 {
   printf (_("\
-JavaScript language (encoded as UTF-8):\n\
+JavaScript language:\n\
   No special flags.\n\
 "));
 }
