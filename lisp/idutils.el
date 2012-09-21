@@ -51,8 +51,15 @@
 While gid runs asynchronously, you can use the \\[next-error] command to
 find the text that gid hits refer to. The command actually run is
 defined by the gid-command variable."
-  (interactive (list (read-shell-command
-     (concat "Run " gid-command " (with args): ") (thing-at-point 'symbol))))
+  (interactive
+   (let* ((sym (thing-at-point 'symbol))
+          (cmd (read-shell-command
+                (format "Run %s with args (default '%s'): " gid-command sym)
+                nil 'grep-history)))
+     ;; The default-value argument to read-from-minibuffer doesn't get
+     ;; returned on empty input when the READ argument is nil. Instead, you
+     ;; get an empty string. This is the documented behavior.
+     (list (if (string= cmd "") sym cmd))))
   (let (compile-command
 	(compilation-error-regexp-alist grep-regexp-alist)
 	(compilation-directory default-directory)
