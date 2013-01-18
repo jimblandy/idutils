@@ -174,7 +174,7 @@ main (int argc, char **argv)
 	*patv++ = arg;
 	if (*arg != '*' && *arg != '/')
 	  {
-	    char *pat = xmalloc (strlen (arg) + 2);
+	    char *pat = xmalloc (strlen (arg) + 3);
 	    sprintf (pat, "*/%s", arg);
 	    *patv++ = pat;
 	  }
